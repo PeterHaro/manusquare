@@ -18,7 +18,7 @@ public class SparqlQuery {
 		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
 		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
 		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
-		strQuery += "SELECT distinct ?processChain ?supplierId ?processType ?materialType ?certificationType \n";
+		strQuery += "SELECT distinct ?processChain ?supplier ?processType ?materialType ?certificationType \n";
 		strQuery += "WHERE { \n";
 
 		strQuery += "?process rdf:type ?processType .\n";
@@ -26,13 +26,16 @@ public class SparqlQuery {
 		strQuery += "?processChain core:hasProcess ?process .\n";		
 
 		strQuery += "?processChain core:hasSupplier ?supplier .\n";
-		strQuery += "?supplier core:hasId ?supplierId . \n";
-		strQuery += "?supplier core:hasCertification ?certification . \n";
+
+		strQuery += "optional {?supplier core:hasId ?supplierId .  }\n";
+		strQuery += "optional {?supplier core:hasCertification ?certification . }\n";
 		
 		strQuery += "optional { ?process core:hasAttribute ?attribute . } \n";
 		strQuery += "optional { ?attribute core:hasValue ?material . } \n";		
 		strQuery += "optional { ?material rdf:type ?materialType . } \n";		
 		strQuery += "optional { ?certification rdf:type ?certificationType . } \n";
+
+//"FILTER (?superProcessType in ( " + filteredProcesses + " )\n || ?processType in ( " + filteredProcesses + " ))";
 
 		strQuery += createSubsumptionFilter(processes);
 

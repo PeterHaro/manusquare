@@ -4,35 +4,20 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.SetMultimap;
 import com.google.common.graph.MutableGraph;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
 import edm.SparqlRecord;
 import graph.SimpleGraph;
-
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.impl.TreeModel;
-import org.eclipse.rdf4j.model.util.GraphUtil;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
-import org.eclipse.rdf4j.repository.config.RepositoryConfig;
-import org.eclipse.rdf4j.repository.config.RepositoryConfigSchema;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
-import org.eclipse.rdf4j.repository.manager.RemoteRepositoryManager;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.rio.helpers.StatementCollector;
-import org.neo4j.graphdb.DynamicLabel;
-import org.neo4j.graphdb.Label;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import query.ConsumerQuery;
@@ -44,8 +29,9 @@ import supplierdata.Supplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
-import java.io.*;
-import java.text.ParseException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -65,8 +51,10 @@ public class SemanticMatching_MVP {
 
     //configuration of the MANUSQUARE Semantic Infrastructure
     //OLD SPARQL ENDPOINT static String SPARQL_ENDPOINT = "http://116.203.187.118/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-    static String SPARQL_ENDPOINT = "http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
-    static String AUTHORISATION_TOKEN = "c5ec0a8b494a30ed41d4d6fe3107990b";
+    static String WorkshopSpaql = "http://manusquare.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
+    static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
+    static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
+    static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
 
     //if the MANUSQUARE ontology is fetched from url
     static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
@@ -74,19 +62,19 @@ public class SemanticMatching_MVP {
     /**
      * Matches a consumer query against a set of resources offered by suppliers and returns a ranked list of the [numResult] suppliers having the highest semantic similarity as a JSON file.
      *
-     * @param inputJson an input json file (or json string) holding process(es) and certifications from the RFQ creation process.
-     * @param numResults    number of relevant suppliers to be returned from the matching
-     * @param isWeighted      true if the facets (process, material, certifications) should be weighted, false if not.
+     * @param inputJson  an input json file (or json string) holding process(es) and certifications from the RFQ creation process.
+     * @param numResults number of relevant suppliers to be returned from the matching
+     * @param isWeighted true if the facets (process, material, certifications) should be weighted, false if not.
      * @throws IOException
-     * @throws OWLOntologyStorageException  Oct 31, 2019
+     * @throws OWLOntologyStorageException Oct 31, 2019
      */
     public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted) throws OWLOntologyStorageException, IOException {
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
         String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
-        if(sparql_endpoint_by_env != null) {
+        if (sparql_endpoint_by_env != null) {
             SPARQL_ENDPOINT = sparql_endpoint_by_env;
         }
-        if(System.getenv("ONTOLOGY_KEY") != null) {
+        if (System.getenv("ONTOLOGY_KEY") != null) {
             AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
         }
 
@@ -102,7 +90,7 @@ public class SemanticMatching_MVP {
         //save a local copy of the ontology for graph processing //WHY?
         //AUDUN: The (updated) copy of the ontology retrieved from SI is used for constructing the graph used for the wu-palmer computation.
         File localOntoFile = new File("./files/ONTOLOGIES/updatedOntology.owl");
-        
+
         //we need to save the ontology locally in order to construct the ontology graph using Guava´s graphs structures.
         manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI())); // I have NO idea whether or not this is needed, or should be a one time thing. TODO: AUDUN CHECK
 
@@ -111,19 +99,19 @@ public class SemanticMatching_MVP {
         for (Process p : query.getProcesses()) {
             processes.add(p.getName());
         }
-        
+
         //create graph using Guava´s graph library instead of using Neo4j
         MutableGraph<String> graph = null;
-      	try {
-			graph = SimpleGraph.createGraph(ontology);
-		} catch (OWLOntologyCreationException e) {
-			System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
-			e.printStackTrace();
-		}
+        try {
+            graph = SimpleGraph.createGraph(ontology);
+        } catch (OWLOntologyCreationException e) {
+            System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
+            e.printStackTrace();
+        }
 
         //re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
         List<Supplier> supplierData = createSupplierData(query, testing);
-        
+
         Map<Supplier, Double> supplierScores = new HashMap<Supplier, Double>();
         //for each supplier get the list of best matching processes (and certifications)
         List<Double> supplierSim = new LinkedList<Double>();
@@ -146,7 +134,7 @@ public class SemanticMatching_MVP {
         }
 
     }
-    
+
 
     /**
      * Retrieves (relevant) data / concepts from the Semantic Infrastructure using the content of a consumer query as input.
@@ -216,18 +204,32 @@ public class SemanticMatching_MVP {
                 while (result.hasNext()) {
                     BindingSet solution = result.next();
                     //omit the NamedIndividual types from the query result
-                    if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-                            && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-                            && !solution.getValue("materialType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
+                    if (solution.hasBinding("materialType")) {
+                        if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
+                                && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
+                                && !solution.getValue("materialType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
 
-                        record = new SparqlRecord();
-                        record.setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
-                        record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
-                        record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
-                        record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+                            record = new SparqlRecord();
+                            record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                            record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                            record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
+                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 
-                        recordSet.add(record);
+                            recordSet.add(record);
+                        }
+                    } else {
+                        if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
+                                && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
+
+                            record = new SparqlRecord();
+                            record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                            record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+
+                            recordSet.add(record);
+                        }
                     }
+
                 }
 
             } catch (Exception e) {
@@ -457,7 +459,7 @@ public class SemanticMatching_MVP {
         return finalSupplierMap;
 
     }
-    
+
     /**
      * Prints a ranked list of suppliers along with similarity scores to a JSON file
      *
