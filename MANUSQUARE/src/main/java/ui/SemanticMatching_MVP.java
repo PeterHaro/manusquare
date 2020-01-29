@@ -213,7 +213,7 @@ public class SemanticMatching_MVP {
                             record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
                             record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
                             record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
-                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+                            record.setCertification(stripIRI(solution.getValue("cergit tificationType").stringValue().replaceAll("\\s+", "")));
 
                             recordSet.add(record);
                         }
@@ -228,7 +228,7 @@ public class SemanticMatching_MVP {
 
                             recordSet.add(record);
                         }
-                    }
+            }
 
                 }
 

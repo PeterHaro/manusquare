@@ -14,34 +14,34 @@ public class SparqlQuery {
 	 */
 	public static String createQueryMVP(List<String> processes) {
 		
-		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
-		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
-		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
-		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
-		strQuery += "SELECT distinct ?processChain ?supplier ?processType ?materialType ?certificationType \n";
-		strQuery += "WHERE { \n";
+					String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
+					strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
+					strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
+					strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
+					strQuery += "SELECT distinct ?processChain ?supplier ?processType ?materialType ?certificationType \n";
+					strQuery += "WHERE { \n";
 
-		strQuery += "?process rdf:type ?processType .\n";
-		strQuery += "?processType rdfs:subClassOf ?superProcessType .\n";
-		strQuery += "?processChain core:hasProcess ?process .\n";		
+					strQuery += "?process rdf:type ?processType .\n";
+					strQuery += "?processType rdfs:subClassOf ?superProcessType .\n";
+					strQuery += "?processChain core:hasProcess ?process .\n";
 
-		strQuery += "?processChain core:hasSupplier ?supplier .\n";
+					strQuery += "?processChain core:hasSupplier ?supplier .\n";
 
-		strQuery += "optional {?supplier core:hasId ?supplierId .  }\n";
-		strQuery += "optional {?supplier core:hasCertification ?certification . }\n";
-		
-		strQuery += "optional { ?process core:hasAttribute ?attribute . } \n";
-		strQuery += "optional { ?attribute core:hasValue ?material . } \n";		
-		strQuery += "optional { ?material rdf:type ?materialType . } \n";		
-		strQuery += "optional { ?certification rdf:type ?certificationType . } \n";
+					strQuery += "optional {?supplier core:hasId ?supplierId .  }\n";
+					strQuery += "optional {?supplier core:hasCertification ?certification . }\n";
 
-//"FILTER (?superProcessType in ( " + filteredProcesses + " )\n || ?processType in ( " + filteredProcesses + " ))";
+					strQuery += "optional { ?process core:hasAttribute ?attribute . } \n";
+					strQuery += "optional { ?attribute core:hasValue ?material . } \n";
+					strQuery += "optional { ?material rdf:type ?materialType . } \n";
+					strQuery += "optional { ?certification rdf:type ?certificationType . } \n";
 
-		strQuery += createSubsumptionFilter(processes);
+			//"FILTER (?superProcessType in ( " + filteredProcesses + " )\n || ?processType in ( " + filteredProcesses + " ))";
 
-		strQuery += "}";
-		
-		return strQuery;
+					strQuery += createSubsumptionFilter(processes);
+
+					strQuery += "}";
+
+					return strQuery;
 	}
 	
 	/**
