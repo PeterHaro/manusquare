@@ -1,5 +1,6 @@
 package javalin;
 
+import data.SimulationDataSingletonManager;
 import io.javalin.Javalin;
 import io.javalin.plugin.openapi.InitialConfigurationCreator;
 import io.javalin.plugin.openapi.OpenApiOptions;
@@ -16,6 +17,10 @@ import javalin.models.ErrorResponse;
 
 public class OpenAPIEndpoint {
     public static void main(String[] args) {
+        // seed the fake data
+        SimulationDataSingletonManager manager = SimulationDataSingletonManager.getInstance();
+
+
         Javalin app = Javalin.create(config -> {
             config.enableWebjars();
             config.addStaticFiles("/public");

@@ -6,6 +6,12 @@ import java.util.List;
 public class Buyer {
     private int BuyerId;
     private List<TransactionalData> HistoricalData;
+    //TODO: Consider removing these fields
+    int averageQuality;
+    int averageDeliveryTime;
+    int averagePacking;
+    int averageReponseRate;
+    int averageOverallSatesfaction;
 
     public Buyer(int buyerId)  {
         BuyerId = buyerId;
