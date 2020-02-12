@@ -11,8 +11,12 @@ import io.javalin.plugin.openapi.ui.ReDocOptions;
 import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import javalin.controllers.MatchmakingController;
 import javalin.controllers.SemanticMatchingController;
 import javalin.models.ErrorResponse;
+
+import static io.javalin.apibuilder.ApiBuilder.get;
+import static io.javalin.apibuilder.ApiBuilder.path;
 
 
 public class OpenAPIEndpoint {
@@ -25,11 +29,27 @@ public class OpenAPIEndpoint {
             config.enableWebjars();
             config.addStaticFiles("/public");
             config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+        }).routes(() -> {
+            path("matchmaking", () -> {
+                path("/getAllBuyers", () -> {
+                    get(MatchmakingController::getAllBuyers);
+                });
+                path("/getAllSuppliers", () -> {
+                    get(MatchmakingController::getAllSuppliers);
+                });
+                path("/getAllTransactionalData", () -> {
+                    get(MatchmakingController::getAllTransactionalData);
+                });
+                path(":orderId", () -> {
+                    get(MatchmakingController::getOffers);
+                });
+            });
         });
 
         //OpenApiDocumentation performMatchmakingDocumentation = OpenApiBuilder.document().body(Rfq.class).json("200", Rfq.class);
 
         app.post("/matching", SemanticMatchingController.PerformSemanticMatching);
+        app.post("/matchmaking", SemanticMatchingController.PerformSemanticMatching);
         app.start(1337);
 
     }
@@ -60,8 +80,8 @@ public class OpenAPIEndpoint {
                 .activateAnnotationScanningFor("javalin.controllers") // Activate annotation scanning (Required for annotation api with static java methods)
                 .toJsonMapper(JacksonToJsonMapper.INSTANCE) // Custom json mapper
                 .modelConverterFactory(JacksonModelConverterFactory.INSTANCE) // Custom OpenApi model converter
-                .swagger(new SwaggerOptions("/swagger").title("My Swagger Documentation")) // Activate the swagger ui
-                .reDoc(new ReDocOptions("/redoc").title("My ReDoc Documentation"));// Active the ReDoc UI
+                .swagger(new SwaggerOptions("/swagger").title("Manusquare matchmaking")) // Activate the swagger ui
+                .reDoc(new ReDocOptions("/redoc").title("Manusquare matchmaking ReDoc Documentation"));// Active the ReDoc UI
         return opts;
     }
 }

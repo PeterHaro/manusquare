@@ -33,7 +33,7 @@ public class SimulationDataSingletonManager {
 
     private static final SimulationDataSingletonManager instance = new SimulationDataSingletonManager();
 
-    public static AtomicInteger lastOfferId;
+    public static AtomicInteger lastOfferId = new AtomicInteger();
 
     public static SimulationDataSingletonManager getInstance() {
         return instance;
@@ -91,7 +91,7 @@ public class SimulationDataSingletonManager {
 
             // Add reference to buyer for his supplier
             for (Buyer buyer : buyers) {
-                if (buyer.getBuyerId() == datum.getBuyerId()) {
+                if (buyer.getId() == datum.getBuyerId()) {
                     buyer.addTransactionalData(datum);
                 }
             }
@@ -106,7 +106,7 @@ public class SimulationDataSingletonManager {
         }
 
         for (Buyer buyer : buyers) {
-            System.out.println("Dumping information for buyer: " + buyer.getBuyerId());
+            System.out.println("Dumping information for buyer: " + buyer.getId());
             int averageQuality = 0;
             int averageDeliveryTime = 0;
             int averagePacking = 0;

@@ -1,6 +1,8 @@
 package javalin.controllers;
 
+import com.google.api.client.json.Json;
 import data.SimulationDataSingletonManager;
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.*;
 import javalin.models.ErrorResponse;
@@ -8,10 +10,16 @@ import matchmaking.models.Buyer;
 import matchmaking.models.Offer;
 import matchmaking.models.Supplier;
 import matchmaking.models.TransactionalData;
+import org.json.simple.JSONObject;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import ui.SemanticMatching_MVP;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -62,9 +70,11 @@ public class MatchmakingController {
     }
 
     // TODO: Reworke me for prod. This is generating fake offers for the mm algo
+    // Call python API
+
     @OpenApi(
-            summary = "Get user by orderId",
-            operationId = "getByOrderId",
+            summary = "Get offers by user ID",
+            operationId = "getOffersById",
             path = "/matchmaking/:orderId",
             method = HttpMethod.GET,
             pathParams = {@OpenApiParam(name = "orderId", type = Integer.class, description = "The order ID")},
@@ -84,7 +94,7 @@ public class MatchmakingController {
 
         List<Offer> retval = new ArrayList<>();
         int length = GenerateRandomNumberInRange(3, 10);
-        List<Integer> suppliersId = manager.getSuppliers().stream().map(Supplier::getSupplierId).collect(Collectors.toList());
+        List<Integer> suppliersId = manager.getSuppliers().stream().map(Supplier::getId).collect(Collectors.toList());
         // Offers doesnt exist, so fetch em!
         for (int i = 0; i < length; i++) {
             Offer offer = new Offer();
@@ -99,10 +109,24 @@ public class MatchmakingController {
         manager.addOffersForOrderId(orderId, retval);
         ctx.json(retval);
     }
+    public static void PerformMatchmaking(Context ctx) throws IOException, OWLOntologyStorageException {
+        String rfq = ctx.pathParam(("rfq")); // Change if needed!
+        if (rfq.isEmpty()) {
+            throw new BadRequestResponse();
+        } else {
+            String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
+            StringWriter sw = new StringWriter();
+            BufferedWriter writer = new BufferedWriter(sw);
 
-    // Call python API
-    public static void PerformMatchmaking(Context ctx) {
+            SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true);
+            System.out.println(sw.toString());
+            // AWAIT INFO HERE TO TO NEXT PART
+            //ctx.json(sw.toString());
 
+
+
+            ctx.status(200);
+        }
     }
 
     private static int GetSupplierId(int amountOfSuppliers) {

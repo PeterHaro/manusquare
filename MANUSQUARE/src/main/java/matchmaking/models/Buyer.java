@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Buyer {
-    private int BuyerId;
+    private int id;
     private List<TransactionalData> HistoricalData;
     //TODO: Consider removing these fields
     int averageQuality;
@@ -13,12 +13,12 @@ public class Buyer {
     int averageReponseRate;
     int averageOverallSatesfaction;
 
-    public Buyer(int buyerId)  {
-        BuyerId = buyerId;
+    public Buyer(int id)  {
+        this.id = id;
     }
 
-    public int getBuyerId() {
-        return BuyerId;
+    public int getId() {
+        return id;
     }
 
     public void addTransactionalData(TransactionalData datum) {
