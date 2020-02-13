@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BasicMatchmaking_MVP {
-
+	
 
 	public static void main(String[] args) throws OWLOntologyCreationException, IOException, ParseException, JSONException, OWLOntologyStorageException {
 		long startTime = System.currentTimeMillis();
@@ -25,21 +25,24 @@ public class BasicMatchmaking_MVP {
 
 
 		//if test == true -> local KB + additional test data written to console, if test == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = false;
+		boolean testing = true;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
+		
+		//used for situations where a process chain has no certifications|materials|attributes and this is required by the consumer in the RFQ JSON
+		double hard_coded_weight = 0.9;
 
 
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
 			System.out.println(args[0]);
-			SemanticMatching_MVP.performSemanticMatching(args[0], 10, writer, testing, true);
+			SemanticMatching_MVP.performSemanticMatching(args[0], 10, writer, testing, true, hard_coded_weight);
 			return;
 		} else {
 			System.err.println("No arguments provided!");
 			String jsonIn = "./MANUSQUARE/files/rfq-attributes.json";
- 			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted);
+ 			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
 		long stopTime = System.currentTimeMillis();

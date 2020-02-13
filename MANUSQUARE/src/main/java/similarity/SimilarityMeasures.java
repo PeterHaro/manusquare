@@ -23,7 +23,7 @@ import utilities.StringUtilities;
 
 public class SimilarityMeasures {
 
-	public static List<Double> computeSemanticSimilarity (ConsumerQuery query, Supplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing) {		
+	public static List<Double> computeSemanticSimilarity (ConsumerQuery query, Supplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {		
 
 		//get the list of processes and certifications for this supplier
 		List<Process> processList = supplier.getProcesses();
@@ -62,14 +62,10 @@ public class SimilarityMeasures {
 				supplierResourceProcessNode = ps.getName();
 
 				Set<String> equivalentProcesses = pc.getEquivalentProcesses();
-				if (equivalentProcesses != null) {
-					//System.out.println("Equivalent processes to " + pc.getName() + ": " + StringUtilities.printSetItems(equivalentProcesses));
-					debuggingOutput.append("\nEquivalent processes to " + pc.getName() + ": " + StringUtilities.printSetItems(equivalentProcesses));
-				}
-				//compute similarity for processes
 
 				//if supplier process ps is a part of the equivalent process concepts of consumer process pc, the processSim is 1.0
 				if (equivalentProcesses != null && equivalentProcesses.contains(ps.getName())) {
+					debuggingOutput.append("\nEquivalent processes to " + pc.getName() + ": " + StringUtilities.printSetItems(equivalentProcesses));
 					processSim = 1.0;
 				} else {
 					parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerQueryProcessNode, supplierResourceProcessNode, onto, graph);
@@ -82,7 +78,7 @@ public class SimilarityMeasures {
 				//Check if there are materials specified in the query
 				if (pc.getMaterials() == null || pc.getMaterials().isEmpty()) {
 					//processAndMaterialSim = processSim;
-					processAndMaterialSim = processSim * 0.90; //Audun: Reduce process similarity if there are no supplier materials specified.
+					processAndMaterialSim = processSim * hard_coded_weight; //Audun: Reduce process similarity if there are no supplier materials specified.
 					debuggingOutput.append("\nNo materials associated with process so processAndMaterialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processAndMaterialSim);
 					
 				} else {
@@ -121,15 +117,13 @@ public class SimilarityMeasures {
 
 				//consider attributeWeight if a weighted process and if the consumer has defined any...							
 				Set<Attribute> consumerAttributes = pc.getAttributes();
-				
-				System.out.println("Test: There are " + consumerAttributes.size() + " attributes associated with consumer process " + pc.getName());
-				
+								
 				//if there are any consumer attributes, we use these to influence the processAndMaterialSim
 				if (consumerAttributes != null || consumerAttributes.isEmpty()) {
-				debuggingOutput.append("\nAttributes with consumer process " + pc.getName() + ":");
+				debuggingOutput.append("\nAttributes with consumer process " + pc.getName() + ": ");
 				
 				for (Attribute a : consumerAttributes) {
-					debuggingOutput.append("\n" + a.getKey());
+					debuggingOutput.append(a.getKey());
 				}
 
 				double attributeWeight = 0;
@@ -145,13 +139,13 @@ public class SimilarityMeasures {
 							attributeWeight = 1.0;
 						} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("O")) {
 							debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
-							attributeWeight = 0.95;
+							attributeWeight = hard_coded_weight;
 						} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("N")) {
 							debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
 							attributeWeight = 0.9;
 						}
 					} else {//this means that the supplier attributes are different from the consumer attributes TODO: Shouldn´t the same weight as for "O" be imposed?
-						attributeWeight = 1.0;
+						attributeWeight = hard_coded_weight;
 						debuggingOutput.append("\nThere are no equivalent attributeKeys for process " + ps.getName());
 					}
 
@@ -182,7 +176,7 @@ public class SimilarityMeasures {
 					if (certificationList == null || certificationList.isEmpty()) {
 
 						//Audun: Reduce allCombined similarity if there are no supplier certifications specified and the consumer has certification requirements.
-						allCombinedSim = processAndMaterialSim * 0.9;
+						allCombinedSim = processAndMaterialSim * hard_coded_weight;
 
 					} else {
 

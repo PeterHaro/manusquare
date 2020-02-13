@@ -86,7 +86,7 @@ public class SemanticMatching_MVP {
 	 * @throws IOException
 	 * @throws OWLOntologyStorageException Oct 31, 2019
 	 */
-	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted) throws OWLOntologyStorageException, IOException {
+	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 		if (sparql_endpoint_by_env != null) {
@@ -132,7 +132,7 @@ public class SemanticMatching_MVP {
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> supplierSim = new LinkedList<Double>();
 		for (Supplier supplier : supplierData) {
-			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing);
+			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
 			supplierScores.put(supplier, getHighestScore(supplierSim));
 		}
