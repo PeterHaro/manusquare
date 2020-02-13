@@ -36,6 +36,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLProperty;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -57,40 +58,54 @@ public class OntologyOperations {
 		File ontoFile = new File("./files/ONTOLOGIES/updatedOntology.owl");
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
-		
-		String source = "CNCMilling";
+
+		String source = "SinkerEDM";
 		String target = "CNCMilling";
-		
+
 		OWLClass sourceClass = getClass(source, onto);
-		OWLClass targetClass = getClass(target, onto);
-		
+		//OWLClass targetClass = getClass(target, onto);
+
 		Set<OWLClassExpression> superclasses = sourceClass.getSuperClasses(onto);
 		System.out.println("Printing superclasses:");
 		for (OWLClassExpression oce : superclasses) {
 			System.out.println(oce.asOWLClass().getIRI().getFragment());
 		}
-		
+
 		Set<String> sourceSuperClasses = getEntitySuperclasses(onto, sourceClass);
-		Set<String> targetSuperClasses = getEntitySuperclasses(onto, targetClass);
-		
+		//Set<String> targetSuperClasses = getEntitySuperclasses(onto, targetClass);
+
 		System.out.println("\n" + source + " has the following superclasses:");
 		for (String s : sourceSuperClasses) {
 			System.out.println(s);
 		}
-		
+
 		System.out.println("Trying with the Pellet reasoner");
 		PelletReasonerFactory reasonerFactory =  new PelletReasonerFactory();
 		PelletReasoner reasoner = reasonerFactory.createReasoner(onto);
-		
+
 		NodeSet<OWLClass> inferredSuperclasses = reasoner.getSuperClasses(sourceClass, false);
 
 		for (OWLClass c : inferredSuperclasses.getFlattened()) {
 			System.out.println(c.getIRI().getFragment());
 		}
+
+//		Set<OWLClass> equivalents = getEquivalentClasses(sourceClass, onto);
+//
+//		System.out.println("Equivalent classes to " + sourceClass.getIRI().getFragment());
+//		for (OWLClass c : equivalents) {
+//			System.out.println(c.getIRI().getFragment());
+//		}
 		
+		//public static boolean isEquivalentTo (String source, String target, OWLOntology o) {
+		String sourceConcept = "ThermalSubtraction";
+		String targetConcept = "SinkerEDM";
 		
-		
-		
+		OWLClass mfgProcess = getClass("MfgProcess", onto);
+		Set<String> subclasses = getEntitySubclassesFragments(onto, mfgProcess);
+		System.out.println("Subclasses of " + mfgProcess.getIRI().getFragment());
+		for (String s : subclasses) {
+			System.out.println(s);
+		}
 
 	}
 
@@ -103,7 +118,7 @@ public class OntologyOperations {
 	 * The OWLReasonerFactory represents a reasoner creation point.
 	 */
 	static OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
-	
+
 	/**
 	 * 
 	 */
@@ -123,22 +138,71 @@ public class OntologyOperations {
 
 	}
 	
-//	public Set<String> getAllSuperclassesFromPellet (OWLClass cl, OWLOntology onto) {
-//		Set<String> superClasses = new HashSet<String>();
-//		
-//		PelletReasonerFactory reasonerFactory =  new PelletReasonerFactory();
-//		PelletReasoner reasoner = reasonerFactory.createReasoner(onto);
-//		
-//		NodeSet<OWLClass> inferredSuperclasses = reasoner.getSuperClasses(cl, false);
-//		
-//		for (OWLClass c : inferredSuperclasses.getFlattened()) {
-//			superClasses.add(c.getIRI().getFragment());
-//			
-//		}
-//		
-//		return superClasses;
-//	}
-	
+
+
+	//	public Set<String> getAllSuperclassesFromPellet (OWLClass cl, OWLOntology onto) {
+	//		Set<String> superClasses = new HashSet<String>();
+	//		
+	//		PelletReasonerFactory reasonerFactory =  new PelletReasonerFactory();
+	//		PelletReasoner reasoner = reasonerFactory.createReasoner(onto);
+	//		
+	//		NodeSet<OWLClass> inferredSuperclasses = reasoner.getSuperClasses(cl, false);
+	//		
+	//		for (OWLClass c : inferredSuperclasses.getFlattened()) {
+	//			superClasses.add(c.getIRI().getFragment());
+	//			
+	//		}
+	//		
+	//		return superClasses;
+	//	}
+
+	/** Returns a set of OWL classes being equivalent to cls
+	 * 
+	 * @param cls
+	 * @param o
+	 * @return
+	   Feb 10, 2020
+	 */
+	public static Set<OWLClass> getEquivalentClasses(OWLClassExpression cls, OWLOntology o) {
+
+		PelletReasoner reasoner = pelletReasonerFactory.createReasoner(o);
+		Node<OWLClass> equivalentClasses = reasoner.getEquivalentClasses(cls);
+		Set<OWLClass> result = null;
+		if (cls.isAnonymous()) {
+			result = equivalentClasses.getEntities();
+		} else {
+			result = equivalentClasses.getEntitiesMinus(cls.asOWLClass()); //get (equivalent) entities minus cls
+		}
+		return result;
+	}
+
+	/** Returns a set of OWL classes being equivalent to cls
+	 * 
+	 * @param cls
+	 * @param o
+	 * @return
+		   Feb 10, 2020
+	 */
+	public static Set<String> getEquivalentClassesAsString(OWLClassExpression cls, OWLOntology o) {
+		Set<String> result = new HashSet<String>();
+
+		PelletReasoner reasoner = pelletReasonerFactory.createReasoner(o);
+		Node<OWLClass> equivalentClasses = reasoner.getEquivalentClasses(cls);
+		Set<OWLClass> owlSet = null;
+		if (cls.isAnonymous()) {
+			owlSet = equivalentClasses.getEntities();
+		} else {
+			owlSet = equivalentClasses.getEntitiesMinus(cls.asOWLClass()); //get (equivalent) entities minus cls
+		}
+
+		for (OWLClass c : owlSet) {
+			result.add(c.getIRI().getFragment());
+		}
+
+		return result;
+	}
+
+
 	/**
 	 * Returns a Map holding a class as key and its superclass as value. This version uses the Pellet reasoner, since the structural reasoner does not include all inferred superclasses of a class.
 	 * 
@@ -184,11 +248,11 @@ public class OntologyOperations {
 
 	public static Set<String> getClassesAsString (OWLOntology onto) {
 		Set<String> classesAsString = new HashSet<String>();
-		
+
 		for (OWLClass c : onto.getClassesInSignature()) {
 			classesAsString.add(c.getIRI().getFragment());
 		}
-		
+
 		return classesAsString;
 	}
 
@@ -316,7 +380,7 @@ public class OntologyOperations {
 		return subclsSet;
 
 	}
-	
+
 	/**
 	 * Helper method that retrieves ALL subclasses (fragments or proper name without URI) for an OWLClass (provided as parameter along with the OWLOntology which is needed for allowing the reasoner to get all subclasses for an OWLClass)
 	 * @param onto the input OWLOntology
@@ -519,10 +583,10 @@ public class OntologyOperations {
 		return classesAndSuperClasses;
 
 	}
-	
-	
-	
-	
+
+
+
+
 
 	/**
 	 * Returns a Map holding a class as key and all its superclasses in a Set<String>
@@ -565,7 +629,7 @@ public class OntologyOperations {
 		return classesAndSuperClasses;
 
 	}
-	
+
 
 	/**
 	 * Returns a Map holding a class as key and all its subclasses in a Set<String>
@@ -636,13 +700,13 @@ public class OntologyOperations {
 
 
 	}
-	
+
 	public static OWLObjectProperty getObjectProperty(String objectPropertyName, OWLOntology ontology) {
-		
+
 		OWLObjectProperty relevantOP = null;
-		
+
 		Set<OWLObjectProperty> ops = ontology.getObjectPropertiesInSignature();
-		
+
 		for (OWLObjectProperty op : ops) {
 			if (op.getIRI().getFragment().equals(objectPropertyName)) {
 				relevantOP = op;
@@ -651,17 +715,17 @@ public class OntologyOperations {
 				relevantOP = null;
 			}
 		}
-		
+
 		return relevantOP;
-		
+
 	}
-	
+
 	public static OWLDataProperty getDataProperty(String objectPropertyName, OWLOntology ontology) {
-		
+
 		OWLDataProperty relevantDP = null;
-		
+
 		Set<OWLDataProperty> dps = ontology.getDataPropertiesInSignature();
-		
+
 		for (OWLDataProperty dp : dps) {
 			if (dp.getIRI().getFragment().equals(objectPropertyName)) {
 				relevantDP = dp;
@@ -670,9 +734,9 @@ public class OntologyOperations {
 				relevantDP = null;
 			}
 		}
-		
+
 		return relevantDP;
-		
+
 	}
 
 
@@ -906,7 +970,7 @@ public class OntologyOperations {
 	}
 
 
-	
+
 
 
 
@@ -1295,11 +1359,11 @@ public class OntologyOperations {
 		return definitions;
 
 	}
-	
+
 	public static String getClassDefinition(OWLOntology onto, OWLClass c) {
-		
+
 		String definition = null;
-		
+
 		for (OWLClass cls : onto.getClassesInSignature()) {
 			if (cls.equals(c)) {
 				for (OWLAnnotationAssertionAxiom a : onto.getAnnotationAssertionAxioms(cls.getIRI())) {

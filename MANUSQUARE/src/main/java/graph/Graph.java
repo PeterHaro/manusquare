@@ -43,8 +43,6 @@ public class Graph {
         ArrayList<Node> parentsToTarget = Graph.getAllParentNodes(targetNode, label);
         ArrayList<Node> commonParentsList = new ArrayList<>();
 
-        //TODO: If sourceNode is a parent to target or vice versa I suppose this should be considered as LCS?
-        //Or, if they are the same node
         for (Node s : parentsToSource) {
             for (Node t : parentsToTarget) {
                 if (s.equals(t)) {
@@ -93,7 +91,6 @@ public class Graph {
         //create new graphs
         Label labelO1 = Label.label(ontologyParameter);
 
-        //TODO: the below code is strange, no need for two createOntologyGraph methods in Graph - fix it!
         Graph creator = new Graph(db);
         creator.createOntologyGraph(sourceOnto, labelO1);
         
@@ -295,8 +292,6 @@ public class Graph {
 
         return td.traverse(classNode);
     }
-
-    // TODO: Why is this an ArrayList and not a Node being returned?
 
     /**
      * Returns an ArrayList holding the parent node of the node provided as

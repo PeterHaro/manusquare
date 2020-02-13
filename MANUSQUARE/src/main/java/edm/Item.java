@@ -14,7 +14,6 @@ public class Item {
 	private Set<Supplier> suppliers;
 	
 	public Item(Material value) {
-		// TODO Auto-generated constructor stub
 	}
 
 }

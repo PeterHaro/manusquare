@@ -24,7 +24,7 @@ public class BasicMatchmaking_MVP {
 		String jsonOut = "./files/matchingResults.json";
 
 
-		//if test == true -> local KB + additional data written to console, if test == false, MANUSQUARE Semantic Infrastructure
+		//if test == true -> local KB + additional test data written to console, if test == false, MANUSQUARE Semantic Infrastructure
 		boolean testing = false;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
@@ -38,8 +38,8 @@ public class BasicMatchmaking_MVP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-//			String jsonIn = "./files/rfq.json";
-//			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted);
+			String jsonIn = "./MANUSQUARE/files/rfq-attributes.json";
+ 			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted);
 		}
 
 		long stopTime = System.currentTimeMillis();

@@ -60,7 +60,6 @@ public class Certification {
 		this.hasCertification = hasCertification;
 	}
 	
-	//TODO: See if a better approach exist: Use an overridden equals method to ensure that certifications with the same id are not contained within the same list.
 	@Override
 	public boolean equals (Object o) {
 		if ( o instanceof Certification && ((Certification) o).getId().equals(this.id) ) {

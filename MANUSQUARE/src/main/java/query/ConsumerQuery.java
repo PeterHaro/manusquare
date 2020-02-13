@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -20,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+import edm.Attribute;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
@@ -51,6 +51,17 @@ public class ConsumerQuery {
 
 	public Set<Process> getProcesses() {
 		return processes;
+	}
+	
+	public Set<Attribute> getAttributes() {
+		Set<Attribute> attributes = new HashSet<Attribute>();
+		Set<Process> processes = getProcesses();
+		for (Process p : processes) {
+			attributes.addAll(p.getAttributes());
+		}
+		
+		return attributes;
+		
 	}
 
 	public void setProcesses(Set<Process> processes) {
@@ -104,38 +115,49 @@ public class ConsumerQuery {
 				processNames.add(projectAttributes.processName);
 			}
 		}
-
-		//get materials and map them to process
-		Map<String, Set<Material>> materialMap = new HashMap<String, Set<Material>>();
+		
+		//get attribute and materials and map them to process
 		for (String process : processNames) {
+			Set<Attribute> attributeSet = new HashSet<Attribute>();
 			Set<Material> materialSet = new HashSet<Material>();
+			Set<String> equivalentProcesses = new HashSet<String>();
+			
 			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
-				if (projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) {
+				//get the attributes
+				if (!projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) {
+					attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue));
+				} else if (projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) { //get the materials
 					materialSet.add(new Material(projectAttributes.attributeValue));
-					materialMap.put(process, validateMaterials(materialSet, onto));
-				}			
-			}			
-		}
-
-		//if there are materials specified...
-		if (materialMap.size() != 0) {
-			for (Entry<String, Set<Material>> e : materialMap.entrySet()) {
-				processes.add(new Process(e.getKey(), e.getValue()));
+				}
 			}
-		} else {
-			for (String processName : processNames) {
-				processes.add(new Process(processName));
-			}
-		}
 
-		//validate processes to ensure that we only operate with concepts in the ontology
-		Set<Process> validatedProcesses = validateProcesses(processes, onto);
+			//FIXME: Don´t trust this process of validating process names, but will look at it later.
+			//10.02.2020: get equivalent process concepts to process (after we have ensured the process is included in the ontology)
+			process = validateProcessName(process, onto);
+
+			equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
+			
+			if (equivalentProcesses.isEmpty() || equivalentProcesses == null) {
+							
+			processes.add(new Process(process, validateMaterials(materialSet, onto), validateAttributeKeys(attributeSet, onto)));
+			
+			
+			} else {
+				for (String s : equivalentProcesses) {
+					
+					processes.add(new Process(process, validateMaterials(materialSet, onto), validateAttributeKeys(attributeSet, onto), equivalentProcesses));
+					processes.add(new Process (s, validateMaterials(materialSet, onto), validateAttributeKeys(attributeSet, onto), updateEquivalenceSet(equivalentProcesses, s, process)));
+				}
+			}
+			
+		}
+		
 		ConsumerQuery query = null;
 
 		//get certifications if they are specified by the consumer
 		if (rfq.supplierAttributes == null || rfq.supplierAttributes.isEmpty()) {
 			//if no certifications, we only add the processes to the ConsumerQuery object
-			query = new ConsumerQuery(validatedProcesses);
+			query = new ConsumerQuery(processes);
 
 		} else {
 			for (SupplierAttributeKeys supplierAttributes : rfq.supplierAttributes) {
@@ -144,36 +166,37 @@ public class ConsumerQuery {
 				}
 			}
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
-			query = new ConsumerQuery(validatedProcesses, validateCertifications(certifications, onto));
+			query = new ConsumerQuery(processes, validateCertifications(certifications, onto));
 		}
 		return query;
 	}
+	
 
-	/**
-	 * Checks if all processes specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
-	 * @param initialProcesses set of processes specified by the consumer in the RFQ process
-	 * @param ontology the MANUSQUARE ontology
-	 * @return set of processes we´re sure exist as concepts in the ontology
-	   Nov 13, 2019
-	 */
-	private static Set<Process> validateProcesses (Set<Process> initialProcesses, OWLOntology ontology) {
-		Set<Process> validatedProcesses = new HashSet<Process>();
-
-		//check if all processes in [initialProcesses] are represented as concepts in the ontology
-		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(ontology);
-
-		for (Process p : initialProcesses) {
-			if (!ontologyClassesAsString.contains(p.getName())) { //if not, get the concept from the ontology with the highest similarity
-				p.setName(getMostSimilarConcept(p.getName(), ontologyClassesAsString, "levenshtein"));
-				validatedProcesses.add(p);
-			} else {
-				validatedProcesses.add(p);
-			}
-		}
-
-		return validatedProcesses;
-
+	//FIXME: Not very elegant, but seems to work.
+	private static Set<String> updateEquivalenceSet (Set<String> equivalentProcesses, String toBeRemoved, String toBeAdded) {
+		Set<String> updatedEquivalentProcesses = new HashSet<>(equivalentProcesses);	
+		updatedEquivalentProcesses.remove(toBeRemoved);		
+		updatedEquivalentProcesses.add(toBeAdded);
+		
+		return updatedEquivalentProcesses;
 	}
+
+
+	
+	private static String validateProcessName (String processName, OWLOntology ontology) {
+		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(ontology);
+		String validatedProcessName = null;
+
+		if (!ontologyClassesAsString.contains(processName)) {
+			validatedProcessName = getMostSimilarConcept(processName, ontologyClassesAsString, "levenshtein");
+		} else {
+			validatedProcessName = processName;
+		}
+				
+		return validatedProcessName;
+		
+	}
+	
 
 	/**
 	 * Checks if all materials specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
@@ -184,6 +207,10 @@ public class ConsumerQuery {
 	 */
 	private static Set<Material> validateMaterials (Set<Material> initialMaterials, OWLOntology ontology) {
 		Set<Material> validatedMaterials = new HashSet<Material>();
+		
+		if (initialMaterials.isEmpty() || initialMaterials == null) {
+			return null;
+		} else {
 
 		//check if all processes in [initialProcesses] are represented as concepts in the ontology
 		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(ontology);
@@ -196,8 +223,42 @@ public class ConsumerQuery {
 				validatedMaterials.add(m);
 			}
 		}
+		
 
 		return validatedMaterials;
+		
+		}
+
+	}
+	
+	/**
+	 * Checks if all attribute keys specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
+	 * @param initialAttributes set of attribute keys specified by the consumer in the RFQ process
+	 * @param ontology the MANUSQUARE ontology
+	 * @return set of attribute keys we´re sure exist as concepts in the ontology
+	   Jan 7, 2020
+	 */
+	private static Set<Attribute> validateAttributeKeys (Set<Attribute> initialAttributes, OWLOntology ontology) {
+		Set<Attribute> validatedAttributes = new HashSet<Attribute>();
+		
+		if (initialAttributes.isEmpty() || initialAttributes == null) {
+			return null;
+		} else {
+
+		//check if all processes in [initialProcesses] are represented as concepts in the ontology
+		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(ontology);
+
+		for (Attribute a : initialAttributes) {
+			if (!ontologyClassesAsString.contains(a.getKey())) { //if not, get the concept from the ontology with the highest similarity
+				a.setKey(getMostSimilarConcept(a.getKey(), ontologyClassesAsString, "levenshtein"));
+				validatedAttributes.add(a);
+			} else {
+				validatedAttributes.add(a);
+			}
+		}
+
+		return validatedAttributes;
+		}
 
 	}
 
@@ -248,17 +309,18 @@ public class ConsumerQuery {
 		if (method.equals("levenshtein")) {
 
 			for (String s : ontologyClassesAsString) {
-		//		similarityMap.put(s, 1-fr.inrialpes.exmo.ontosim.string.StringDistances.levenshteinDistance(input, s));
+				//uncommented this ontosim Levenshtein implementation, is that a problem?
+				similarityMap.put(s, 1-fr.inrialpes.exmo.ontosim.string.StringDistances.levenshteinDistance(input, s));
 			}
 
 			mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-			//System.out.println("The ontology concept with highest sim to " + input + " is " + mostSimilarConcept + " with sim: " + similarityMap.get(mostSimilarConcept));
 		}
 		//n-gram distance
 		else if (method.equals("ngram")) {
 
 			for (String s : ontologyClassesAsString) {
-			//	similarityMap.put(s, fr.inrialpes.exmo.ontosim.string.StringDistances.ngramDistance(input, s));
+				//uncommented this ontosim n-gram implementation, is that a problem?
+			similarityMap.put(s, fr.inrialpes.exmo.ontosim.string.StringDistances.ngramDistance(input, s));
 			}
 
 			mostSimilarConcept = getConceptWithHighestSim(similarityMap);
@@ -310,7 +372,7 @@ public class ConsumerQuery {
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, OWLOntologyCreationException {
 
-		String filename = "./files/rfq.json";
+		String filename = "./MANUSQUARE/files/rfq-attributes.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -321,14 +383,17 @@ public class ConsumerQuery {
 		System.out.println("Printing query:");
 
 		for (Process p : query.getProcesses()) {
-			System.out.println(p.getName());
+			System.out.println("Process: " + p.getName());
 			for (Material m : p.getMaterials()) {
-				System.out.println(m.getName());
+				System.out.println("   Material: " + m.getName());
+			}
+			for (Attribute a : p.getAttributes()) {
+				System.out.println("   Attribute: " + a.getKey());
 			}
 		}
 
 		for (Certification cert : query.getCertifications()) {
-			System.out.println(cert.getId());
+			System.out.println("Certification: " + cert.getId());
 		}
 	}
 

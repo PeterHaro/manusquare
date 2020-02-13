@@ -13,6 +13,17 @@ public class Attribute extends Resource {
 		this.type = type;
 	}
 	
+	public Attribute(String key, String value) {
+		this.key = key;
+		this.value = value;
+
+	}
+	
+	public Attribute(String key) {
+		this.key = key;
+	}
+	
+	
 	public Attribute() {}
 
 	public String getKey() {

@@ -3,7 +3,6 @@ package supplierdata;
 import java.util.List;
 
 import edm.Certification;
-import edm.Material;
 import edm.Process;
 
 
@@ -15,18 +14,10 @@ public class Supplier {
 	String supplierCity;
 	List<Certification> certifications;
 	List<Process> processes;
-	//List<Material> materials;
 	
 	public Supplier (String id, List<Process> processes, List<Certification> certifications) {
 		this.id = id;
 		this.processes = processes;
-		this.certifications = certifications;
-	}
-	
-	public Supplier (String id, List<Process> processes, List<Material> materials, List<Certification> certifications) {
-		this.id = id;
-		this.processes = processes;
-		//this.materials = materials;
 		this.certifications = certifications;
 	}
 	
@@ -87,13 +78,5 @@ public class Supplier {
 	public void setProcesses(List<Process> processes) {
 		this.processes = processes;
 	}
-
-//	public List<Material> getMaterials() {
-//		return materials;
-//	}
-//
-//	public void setMaterials(List<Material> materials) {
-//		this.materials = materials;
-//	}
 
 }
