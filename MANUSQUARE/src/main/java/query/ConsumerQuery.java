@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -188,7 +189,7 @@ public class ConsumerQuery {
 		String validatedProcessName = null;
 
 		if (!ontologyClassesAsString.contains(processName)) {
-			validatedProcessName = getMostSimilarConcept(processName, ontologyClassesAsString, "levenshtein");
+			validatedProcessName = getMostSimilarConcept(processName, ontologyClassesAsString);
 		} else {
 			validatedProcessName = processName;
 		}
@@ -217,7 +218,7 @@ public class ConsumerQuery {
 
 		for (Material m : initialMaterials) {
 			if (!ontologyClassesAsString.contains(m.getName())) { //if not, get the concept from the ontology with the highest similarity
-				m.setName(getMostSimilarConcept(m.getName(), ontologyClassesAsString, "levenshtein"));
+				m.setName(getMostSimilarConcept(m.getName(), ontologyClassesAsString));
 				validatedMaterials.add(m);
 			} else {
 				validatedMaterials.add(m);
@@ -250,7 +251,7 @@ public class ConsumerQuery {
 
 		for (Attribute a : initialAttributes) {
 			if (!ontologyClassesAsString.contains(a.getKey())) { //if not, get the concept from the ontology with the highest similarity
-				a.setKey(getMostSimilarConcept(a.getKey(), ontologyClassesAsString, "levenshtein"));
+				a.setKey(getMostSimilarConcept(a.getKey(), ontologyClassesAsString));
 				validatedAttributes.add(a);
 			} else {
 				validatedAttributes.add(a);
@@ -278,7 +279,7 @@ public class ConsumerQuery {
 		for (Certification c : initialCertifications) {
 			if (!ontologyClassesAsString.contains(c.getId())) { //if not, get the concept from the ontology with the highest similarity
 				System.out.println("The ontology does not contain " + c.getId());
-				c.setId(getMostSimilarConcept(c.getId(), ontologyClassesAsString, "levenshtein"));
+				c.setId(getMostSimilarConcept(c.getId(), ontologyClassesAsString));
 				validatedMaterials.add(c);
 			} else {
 				validatedMaterials.add(c);
@@ -297,7 +298,7 @@ public class ConsumerQuery {
 	 * @return the best matching concept from the MANUSQUARE ontology
 	   Nov 13, 2019
 	 */
-	private static String getMostSimilarConcept(String input, Set<String> ontologyClassesAsString, String method) {
+	private static String getMostSimilarConcept(String input, Set<String> ontologyClassesAsString) {
 
 		Map<String, Double> similarityMap = new HashMap<String, Double>();
 		String mostSimilarConcept = null;
@@ -305,26 +306,16 @@ public class ConsumerQuery {
 		//remove whitespace in input string
 		input.replaceAll("\\s+","");
 
-		//levenshtein distance
-		if (method.equals("levenshtein")) {
+		//jaroWinkler distance
 
 			for (String s : ontologyClassesAsString) {
-				//uncommented this ontosim Levenshtein implementation, is that a problem?
-				similarityMap.put(s, 1-fr.inrialpes.exmo.ontosim.string.StringDistances.levenshteinDistance(input, s));
+				//new JaroWinklerSimilarity().apply(s1, s2)
+				similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
+				System.out.println("Test: Putting " + s + " with a Jaro Winkler score of " + new JaroWinklerSimilarity().apply(input, s) + " into the similarityMap");
 			}
 
 			mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-		}
-		//n-gram distance
-		else if (method.equals("ngram")) {
-
-			for (String s : ontologyClassesAsString) {
-				//uncommented this ontosim n-gram implementation, is that a problem?
-			similarityMap.put(s, fr.inrialpes.exmo.ontosim.string.StringDistances.ngramDistance(input, s));
-			}
-
-			mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-		}
+	
 
 		return mostSimilarConcept;
 
