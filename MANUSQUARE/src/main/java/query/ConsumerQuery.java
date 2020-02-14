@@ -34,12 +34,24 @@ public class ConsumerQuery {
 
 	private Set<Process> processes;
 	private Set<Certification> certifications;
+	private double supplierMaxDistance;
+	private Map<String, String> customerLocationInfo;
 
 	//if the consumer specifies both processes (incl. materials) and certifications.
 	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications) {
 		super();
 		this.processes = processes;
 		this.certifications = certifications;
+	}
+	
+	//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
+	//if the consumer specifies both processes (incl. materials), certifications, and supplierMaxDistance.
+	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
+		super();
+		this.processes = processes;
+		this.certifications = certifications;
+		this.supplierMaxDistance = supplierMaxDistance;
+		this.customerLocationInfo = customerLocationInfo;
 	}
 
 	//if only processes (incl. materials) are specified by the consumer
@@ -76,6 +88,23 @@ public class ConsumerQuery {
 	public void setCertifications(Set<Certification> certifications) {
 		this.certifications = certifications;
 	}
+	
+	public double getSupplierMaxDistance() {
+		return supplierMaxDistance;
+	}
+
+	public void setSupplierMaxDistance(double supplierMaxDistance) {
+		this.supplierMaxDistance = supplierMaxDistance;
+	}
+	
+
+	public Map<String, String> getCustomerLocationInfo() {
+		return customerLocationInfo;
+	}
+
+	public void setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
+		this.customerLocationInfo = customerLocationInfo;
+	}
 
 	// I am so sorry for this. TODO: Hack warning
 	public static boolean isJSONValid(String jsonInString) {
@@ -102,12 +131,15 @@ public class ConsumerQuery {
 		Set<Process> processes = new HashSet<>();
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> processNames = new HashSet<String>();
+		
 		RequestForQuotation rfq;
+		
 		if(isJSONValid(filename)) {
 			rfq = new Gson().fromJson(filename, RequestForQuotation.class);
 		} else {
 			rfq = new Gson().fromJson(new FileReader(filename), RequestForQuotation.class);
 		}
+		
 
 		if (rfq.projectAttributes == null || rfq.projectAttributes.isEmpty()) {
 			throw new NoProcessException ("Processes must be included!");
@@ -154,6 +186,10 @@ public class ConsumerQuery {
 		}
 		
 		ConsumerQuery query = null;
+		
+		//add geographical information to consumer query
+		double supplierMaxDistance = rfq.supplierMaxDistance;
+		Map<String, String> customerLocation = rfq.customer.customerInfo;
 
 		//get certifications if they are specified by the consumer
 		if (rfq.supplierAttributes == null || rfq.supplierAttributes.isEmpty()) {
@@ -167,8 +203,9 @@ public class ConsumerQuery {
 				}
 			}
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
-			query = new ConsumerQuery(processes, validateCertifications(certifications, onto));
+			query = new ConsumerQuery(processes, validateCertifications(certifications, onto), supplierMaxDistance, customerLocation);
 		}
+		
 		return query;
 	}
 	
@@ -386,6 +423,8 @@ public class ConsumerQuery {
 		for (Certification cert : query.getCertifications()) {
 			System.out.println("Certification: " + cert.getId());
 		}
+		
+		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
 	}
 
 }

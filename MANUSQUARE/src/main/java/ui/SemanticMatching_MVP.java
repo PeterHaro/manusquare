@@ -65,7 +65,7 @@ public class SemanticMatching_MVP {
 
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "AttributeTest2";
+	static final String REPOSITORY_ID = "MANUSQUARE-INFERENCE-TESTDATA";
 
 	//configuration of the MANUSQUARE Semantic Infrastructure
 	//OLD SPARQL ENDPOINT static String SPARQL_ENDPOINT = "http://116.203.187.118/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";

@@ -1,6 +1,7 @@
 package json;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class RequestForQuotation {
@@ -9,7 +10,6 @@ public class RequestForQuotation {
 	String projectName;
 	String projectDescription;
 	String selectionType;
-	String supplierMaxDistance;
 	String servicePolicy;
 	Set<String> processNames;
 	String projectId;
@@ -18,9 +18,11 @@ public class RequestForQuotation {
 
 	public List<ProjectAttributeKeys> projectAttributes;
 	public List<SupplierAttributeKeys> supplierAttributes;
+	public double supplierMaxDistance;
+	public Customer customer;
 
-	public RequestForQuotation(String nda, String projectName, String projectDescription, String selectionType, String supplierMaxDistance,
-			String servicePolicy, Set<String> processnames, String projectId, String id, String projectType,
+	public RequestForQuotation(String nda, String projectName, String projectDescription, String selectionType, double supplierMaxDistance,
+			Customer customer, String servicePolicy, Set<String> processnames, String projectId, String id, String projectType,
 			List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
 		super();
 		this.nda = nda;
@@ -28,6 +30,7 @@ public class RequestForQuotation {
 		this.projectDescription = projectDescription;
 		this.selectionType = selectionType;
 		this.supplierMaxDistance = supplierMaxDistance;
+		this.customer = customer;
 		this.servicePolicy = servicePolicy;
 		this.processNames = processnames;
 		this.id = id;
@@ -38,10 +41,24 @@ public class RequestForQuotation {
 
 	}
 	
+	public RequestForQuotation(double supplierMaxDistance, List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
+		super();
+		this.supplierMaxDistance = supplierMaxDistance;
+		this.projectAttributes = projectAttributes;
+		this.supplierAttributes = supplierAttributes;
+	}
+	
 	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
 		super();
 		this.projectAttributes = projectAttributes;
 		this.supplierAttributes = supplierAttributes;
+	}
+	
+	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes, Customer customer) {
+		super();
+		this.projectAttributes = projectAttributes;
+		this.supplierAttributes = supplierAttributes;
+		this.customer = customer;
 	}
 	
 	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes) {
@@ -135,6 +152,45 @@ public class RequestForQuotation {
 		public void setAttributeValue(String attributeValue) {
 			this.attributeValue = attributeValue;
 		}
+	}
+	
+	public class Customer {
+		
+		public String customerName;		
+		public Map<String, String> customerInfo;
+
+		public Customer(String customerName, Map<String, String> customerInfo) {
+			super();
+			this.customerName = customerName;
+			this.customerInfo = customerInfo;
+		}
+
+		public Customer(Map<String, String> customerInfo) {
+			super();
+			this.customerInfo = customerInfo;
+
+		}
+		
+		public Customer() {}
+
+		public String getCustomerName() {
+			return customerName;
+		}
+
+		public void setCustomerName(String customerName) {
+			this.customerName = customerName;
+		}
+
+		public Map<String, String> getCustomerInfo() {
+			return customerInfo;
+		}
+
+		public void setCustomerInfo(Map<String, String> customerInfo) {
+			this.customerInfo = customerInfo;
+		}
+
+		
+		
 	}
 
 

@@ -41,7 +41,7 @@ public class BasicMatchmaking_MVP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./MANUSQUARE/files/rfq-attributes.json";
+			String jsonIn = "./MANUSQUARE/files/rfq-attributes-custInfo.json";
  			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 

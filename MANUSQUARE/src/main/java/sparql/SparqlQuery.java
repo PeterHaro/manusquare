@@ -24,7 +24,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, OWLOntologyCreationException {
 
-		String filename = "./MANUSQUARE/files/rfq-attributes.json";
+		String filename = "./MANUSQUARE/files/rfq-attributes-custInfo.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -42,6 +42,12 @@ public class SparqlQuery {
 		Set<Material> materials = new HashSet<Material>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<Process> processes = cq.getProcesses();
+		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
+		double supplierMaxDistance = cq.getSupplierMaxDistance();
+		Map<String, String> customerLocationInfo = cq.getCustomerLocationInfo();
+		double lat = Double.valueOf(customerLocationInfo.get("lat"));
+		double lon = Double.valueOf(customerLocationInfo.get("lon"));
+		
 
 		//get the attributes and materials associated with processes included in the consumer query
 		for (Process p : processes) {
@@ -58,9 +64,18 @@ public class SparqlQuery {
 		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
 		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
 		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
+		
+		//include necessary prefixes if supplier distance is to be included
+		if (supplierMaxDistance != 0) {
+			strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
+			strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/> \n";
+			strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
+			strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+			strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n";
+		}
 
 		//for each attribute key we add a variable
-		//FIXME: Dead code warning from Eclips?
+		//FIXME: Dead code warning from Eclipse?
 		StringBuilder attributeQuery = new StringBuilder();
 
 		if (attributes == null) {
@@ -100,11 +115,18 @@ public class SparqlQuery {
 		//this is taken care of by the matchmaking algo)
 		strQuery += "\nOPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType .} \n";
 
+		//filter suppliers
+		if (supplierMaxDistance != 0) {
+			
+			strQuery += "\n?supplier geo:asWKT ?location .\n"; 	
+			strQuery += "BIND((geof:distance(?location, \"POINT("+lat+" "+lon+ ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n"; 	
+			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n"; 	
+		}
 
 		strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
 		strQuery += "\n}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 	}
