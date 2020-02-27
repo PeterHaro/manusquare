@@ -85,8 +85,9 @@ public class SemanticMatching_MVP {
 	 * @param isWeighted true if the facets (process, material, certifications) should be weighted, false if not.
 	 * @throws IOException
 	 * @throws OWLOntologyStorageException Oct 31, 2019
+	 * @throws OWLOntologyCreationException 
 	 */
-	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException, OWLOntologyCreationException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 		if (sparql_endpoint_by_env != null) {
@@ -126,7 +127,7 @@ public class SemanticMatching_MVP {
 		}
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<Supplier> supplierData = createSupplierData(query, testing);
+		List<Supplier> supplierData = createSupplierData(query, testing, ontology);
 
 		Map<Supplier, Double> supplierScores = new HashMap<Supplier, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
@@ -157,8 +158,9 @@ public class SemanticMatching_MVP {
 	 * @param query content of a consumer query
 	 * @return list of suppliers along with the processes (including relevant materials) and certifications registered in the Semantic Infrastructure.
 	 * Nov 9, 2019
+	 * @throws OWLOntologyCreationException 
 	 */
-	private static List<Supplier> createSupplierData(ConsumerQuery query, boolean testing) {
+	private static List<Supplier> createSupplierData(ConsumerQuery query, boolean testing, OWLOntology onto) throws OWLOntologyCreationException {
 		Repository repository;
 
 		//use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
@@ -201,7 +203,7 @@ public class SemanticMatching_MVP {
 
 		//creates a SPARQL query that is run against the Semantic Infrastructure
 		//09.02.2020: Added dynamicAttributeQuery
-		String strQuery = SparqlQuery.dynamicAttributeQuery(query);
+		String strQuery = SparqlQuery.dynamicAttributeQuery(query, onto);
 
 		//System.out.println(strQuery);
 

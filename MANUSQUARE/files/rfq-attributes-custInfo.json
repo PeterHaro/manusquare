@@ -39,12 +39,6 @@
 			"processName": "HoleMaking",
 			"attributeKey": "Axis",
 			"attributeValue": "4"
-		},
-		{
-			"attributeId": "I",
-			"processName": "HoleMaking",
-			"attributeKey": "Length",
-			"attributeValue": "2000"
 		}
 	],
 	"supplierAttributes": [

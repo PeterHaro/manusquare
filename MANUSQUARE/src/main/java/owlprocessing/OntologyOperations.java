@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -514,6 +515,66 @@ public class OntologyOperations {
 		}
 
 		return superclsSet;
+
+	}
+	
+	/**
+	 * Helper method that retrieves a set of ALL superclasses (their fragments or proper name without URI) for an OWLClass (provided as parameter along with the OWLOntology which is needed for allowing the reasoner to get all superclasses for an OWLClass)
+	 * @param onto the input OWLOntology
+	 * @param inputClass the OWLClass for which superclasses will be retrieved
+	 * @return Set<String> of superclasses for an OWLClass
+	 */
+	public static List<String> getEntitySuperclassesFragmentsAsList (OWLOntology onto, OWLClass inputClass) {
+		//PelletReasoner reasoner = pelletReasonerFactory.createReasoner(onto); //Pellet reasoner is slower than the StructuralReasoner so using the latter.
+		
+		OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
+		OWLReasoner reasoner = reasonerFactory.createReasoner(onto);
+
+		Set<OWLClass> superclasses = reasoner.getSuperClasses(inputClass, false).getFlattened();
+
+
+		List<String> superclsList = new LinkedList<String>();
+
+		for (OWLClass cls : superclasses) {
+			if (!cls.isOWLNothing() && !cls.isOWLThing()) {
+				superclsList.add(cls.getIRI().getFragment().toString());
+			}
+		}
+
+		return superclsList;
+
+	}
+	
+	/**
+	 * Helper method that retrieves a set of ALL superclasses (their fragments or proper name without URI) for an OWLClass (provided as parameter along with the OWLOntology which is needed for allowing the reasoner to get all superclasses for an OWLClass)
+	 * @param onto the input OWLOntology
+	 * @param inputClass the OWLClass for which superclasses will be retrieved
+	 * @return Set<String> of superclasses for an OWLClass
+	 */
+	public static List<String> getEntitySuperclassesFragmentsInOrder (OWLOntology onto, OWLClass inputClass) {
+		//OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
+		//OWLReasoner reasoner = reasonerFactory.createReasoner(onto);
+		
+		PelletReasoner reasoner = pelletReasonerFactory.createReasoner(onto);
+
+		Iterator<Node<OWLClass>> superclasses = reasoner.getSuperClasses(inputClass, false).iterator();
+		
+		List<String> supers = new LinkedList<String>();
+		
+		while (superclasses.hasNext()) {
+			System.out.println(superclasses.next().getRepresentativeElement().getIRI().getFragment());
+			//supers.add(superclasses.next().getRepresentativeElement().getIRI().getFragment());
+		}
+
+//		List<String> supers = new LinkedList<String>();
+//
+//		for (OWLClass cls : superclasses) {
+//			if (!cls.isOWLNothing() && !cls.isOWLThing()) {
+//				supers.add(cls.getIRI().getFragment().toString());
+//			}
+//		}
+
+		return supers;
 
 	}
 

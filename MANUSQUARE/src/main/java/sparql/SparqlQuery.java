@@ -2,23 +2,38 @@ package sparql;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import com.google.common.collect.Iterables;
+import com.google.common.graph.MutableGraph;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import edm.Attribute;
 import edm.Material;
 import edm.Process;
+import graph.SimpleGraph;
+import owlprocessing.OntologyOperations;
 import query.ConsumerQuery;
+import supplierdata.Supplier;
 
 public class SparqlQuery {
 
@@ -32,22 +47,32 @@ public class SparqlQuery {
 
 		ConsumerQuery query = ConsumerQuery.createConsumerQuery (filename, onto);
 
-		String test = dynamicAttributeQuery(query);
+		String test = dynamicAttributeQuery(query, onto);
 
 
 	}
 
-	public static String dynamicAttributeQuery(ConsumerQuery cq) {
+	public static String dynamicAttributeQuery(ConsumerQuery cq, OWLOntology onto) throws OWLOntologyCreationException {
 
 		Set<Material> materials = new HashSet<Material>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<Process> processes = cq.getProcesses();
+
+		System.out.println("Test: Processes: ");
+		for (Process p : processes) {
+			System.out.println(p.getName());
+		}
+
+		//27.02.2020: get the Least Common Subsumer (LCS) of the process concepts included by the consumer
+		//we need the ontology in order to fetch the superclasses
+		String lcs = getLCS(processes, onto);
+
 		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
 		double supplierMaxDistance = cq.getSupplierMaxDistance();
 		Map<String, String> customerLocationInfo = cq.getCustomerLocationInfo();
 		double lat = Double.valueOf(customerLocationInfo.get("lat"));
 		double lon = Double.valueOf(customerLocationInfo.get("lon"));
-		
+
 
 		//get the attributes and materials associated with processes included in the consumer query
 		for (Process p : processes) {
@@ -64,7 +89,7 @@ public class SparqlQuery {
 		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
 		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
 		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
-		
+
 		//include necessary prefixes if supplier distance is to be included
 		if (supplierMaxDistance != 0) {
 			strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
@@ -79,7 +104,7 @@ public class SparqlQuery {
 		StringBuilder attributeQuery = new StringBuilder();
 
 		if (attributes == null) {
-			
+
 			strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType \n";
 		}
 
@@ -96,7 +121,7 @@ public class SparqlQuery {
 		//get all subclasses of MfgProcess 
 		strQuery += "?processChain core:hasProcess ?process .\n";
 		strQuery += "?process rdf:type ?processType .\n";
-		strQuery += "?processType rdfs:subClassOf* ind:MfgProcess .\n";
+		strQuery += "?processType rdfs:subClassOf* ind:" + lcs + " .\n";
 		strQuery += "?processChain core:hasSupplier ?supplier .\n";
 
 		//get attributes
@@ -117,7 +142,7 @@ public class SparqlQuery {
 
 		//filter suppliers
 		if (supplierMaxDistance != 0) {
-			
+
 			strQuery += "\n?supplier geo:asWKT ?location .\n"; 	
 			strQuery += "BIND((geof:distance(?location, \"POINT("+lat+" "+lon+ ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n"; 	
 			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n"; 	
@@ -129,6 +154,50 @@ public class SparqlQuery {
 		System.out.println(strQuery);
 
 		return strQuery;
+	}
+
+	private static String getLCS (Set<Process> consumerProcesses, OWLOntology onto) throws OWLOntologyCreationException {
+		
+		//27.02.2020: Find the LCS of an arbitrary set of process concepts
+		List<List<String>> supersList = new LinkedList<List<String>>();
+
+		for (Process p : consumerProcesses) {
+			supersList.add(OntologyOperations.getEntitySuperclassesFragmentsAsList(onto, OntologyOperations.getClass(p.getName(), onto)));
+		}
+
+		System.out.println("Test: Number of supersets: " + supersList.size());
+
+		//collect all super-lists into a common list
+		List<List<String>> lists = new ArrayList<List<String>>();
+		for (List<String> l : supersList) {
+			lists.add(l);
+		}
+
+		Set<String> commonSupers = getCommonElements(lists);
+
+		System.out.println("\nTest: The common superclasses are:");
+		for (String s : commonSupers) {
+			System.out.println(s);
+		}
+		//get the depth of the superclasses and let the superclass with highest depth be the LCS
+		MutableGraph<String> ontoGraph = SimpleGraph.createGraph (onto); 
+		Map<String, Integer> ontologyHierarchyMap = SimpleGraph.getOntologyHierarchy (onto, ontoGraph);
+
+		Map<String, Integer> supersAndDepthsMap = new LinkedHashMap<String, Integer>();
+		for (String s : commonSupers) {
+			if (ontologyHierarchyMap.containsKey(s)) {
+				supersAndDepthsMap.put(s, ontologyHierarchyMap.get(s));
+			}
+		}
+
+		Map<String, Integer> sortedOntologyHierarchy = sortDescending(supersAndDepthsMap);
+
+		Map.Entry<String,Integer> entry = sortedOntologyHierarchy.entrySet().iterator().next();
+		String lcs = entry.getKey();
+
+		System.out.println("The LCS is " + lcs + " with depth: " + ontologyHierarchyMap.get(lcs));
+
+		return lcs;
 	}
 
 
@@ -211,6 +280,48 @@ public class SparqlQuery {
 		}
 
 		return opposite;
+	}
+
+	/**
+	 * Get the elements that are common from a variable number of sets
+	 * @param collections input sets
+	 * @return set of common elements in the input sets
+	   Feb 27, 2020
+	 */
+	public static <T> Set<T> getCommonElements(Collection<? extends Collection<T>> collections) {
+
+		Set<T> common = new LinkedHashSet<T>();
+		if (!collections.isEmpty()) {
+			Iterator<? extends Collection<T>> iterator = collections.iterator();
+			common.addAll(iterator.next());
+			while (iterator.hasNext()) {
+				common.retainAll(iterator.next());
+			}
+		}
+		return common;
+	}
+
+
+	/**
+	 * Sorts a map based on similarity scores (values in the map)
+	 *
+	 * @param map the input map to be sorted
+	 * @return map with sorted values
+	 * May 16, 2019
+	 */
+	private static <K, V extends Comparable<V>> Map<K, V> sortDescending(final Map<K, V> map) {
+		Comparator<K> valueComparator = new Comparator<K>() {
+			public int compare(K k1, K k2) {
+				int compare = map.get(k2).compareTo(map.get(k1));
+				if (compare == 0) return 1;
+				else return compare;
+			}
+		};
+		Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
+
+		sortedByValues.putAll(map);
+
+		return sortedByValues;
 	}
 
 
