@@ -101,12 +101,7 @@ public class OntologyOperations {
 		String sourceConcept = "ThermalSubtraction";
 		String targetConcept = "SinkerEDM";
 		
-		OWLClass mfgProcess = getClass("MfgProcess", onto);
-		Set<String> subclasses = getEntitySubclassesFragments(onto, mfgProcess);
-		System.out.println("Subclasses of " + mfgProcess.getIRI().getFragment());
-		for (String s : subclasses) {
-			System.out.println(s);
-		}
+
 
 	}
 

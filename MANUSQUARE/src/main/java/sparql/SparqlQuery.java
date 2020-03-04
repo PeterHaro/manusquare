@@ -2,6 +2,7 @@ package sparql;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -37,7 +38,7 @@ import supplierdata.Supplier;
 
 public class SparqlQuery {
 
-	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException, OWLOntologyCreationException {
+	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
 		String filename = "./MANUSQUARE/files/rfq-attributes-custInfo.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
@@ -57,11 +58,6 @@ public class SparqlQuery {
 		Set<Material> materials = new HashSet<Material>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<Process> processes = cq.getProcesses();
-
-		System.out.println("Test: Processes: ");
-		for (Process p : processes) {
-			System.out.println(p.getName());
-		}
 
 		//27.02.2020: get the Least Common Subsumer (LCS) of the process concepts included by the consumer
 		//we need the ontology in order to fetch the superclasses
@@ -151,7 +147,7 @@ public class SparqlQuery {
 		strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
 		strQuery += "\n}";
 
-		System.out.println(strQuery);
+		//System.out.println(strQuery);
 
 		return strQuery;
 	}
@@ -165,8 +161,6 @@ public class SparqlQuery {
 			supersList.add(OntologyOperations.getEntitySuperclassesFragmentsAsList(onto, OntologyOperations.getClass(p.getName(), onto)));
 		}
 
-		System.out.println("Test: Number of supersets: " + supersList.size());
-
 		//collect all super-lists into a common list
 		List<List<String>> lists = new ArrayList<List<String>>();
 		for (List<String> l : supersList) {
@@ -175,10 +169,6 @@ public class SparqlQuery {
 
 		Set<String> commonSupers = getCommonElements(lists);
 
-		System.out.println("\nTest: The common superclasses are:");
-		for (String s : commonSupers) {
-			System.out.println(s);
-		}
 		//get the depth of the superclasses and let the superclass with highest depth be the LCS
 		MutableGraph<String> ontoGraph = SimpleGraph.createGraph (onto); 
 		Map<String, Integer> ontologyHierarchyMap = SimpleGraph.getOntologyHierarchy (onto, ontoGraph);
@@ -194,8 +184,6 @@ public class SparqlQuery {
 
 		Map.Entry<String,Integer> entry = sortedOntologyHierarchy.entrySet().iterator().next();
 		String lcs = entry.getKey();
-
-		System.out.println("The LCS is " + lcs + " with depth: " + ontologyHierarchyMap.get(lcs));
 
 		return lcs;
 	}

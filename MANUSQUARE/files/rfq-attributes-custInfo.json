@@ -18,13 +18,13 @@
 	"projectAttributes": [
 		{
 			"attributeId": "E",
-			"processName": "SinkerEDM",
+			"processName": "ram edm",
 			"attributeKey": "material",
 			"attributeValue": "Steel"
 		},
 		{
 			"attributeId": "F",
-			"processName": "SinkerEDM",
+			"processName": "ram edm",
 			"attributeKey": "Tolerance",
 			"attributeValue": "3"
 		},

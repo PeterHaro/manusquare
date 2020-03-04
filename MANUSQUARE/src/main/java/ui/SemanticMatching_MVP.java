@@ -603,13 +603,14 @@ public class SemanticMatching_MVP {
 		return attributeWeight / (double) attVars.size();
 	}
 
-	/**
+	/*
+	*//**
 	 * Returns the average score of all scores for each resource offered by a supplier
 	 *
 	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
 	 * @return the average score of all scores for each supplier resource
 	 * Oct 30, 2019
-	 */
+	 *//*
 	private static double getAverageScore(List<Double> inputScores) {
 		double sum = 0;
 
@@ -619,6 +620,7 @@ public class SemanticMatching_MVP {
 
 		return sum / inputScores.size();
 	}
+	*/
 
 	/**
 	 * Sorts a map based on similarity scores (values in the map)
