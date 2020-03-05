@@ -1,0 +1,6 @@
+1. Check if suppliers offering semantically equivalent processes (e.g. PlungeEDM) are considered equally as syntactically equivalent processes.
+2. Validation of missing processes, materials, attributes, certifications in RFQ JSON
+3. Supplier processes perfectly aligned with RFQ JSON should have sim score 1.0
+4. Check if super concepts and sub concepts are included (e.g. EndMilling-Milling scenario from Lugano)
+5. Check influence of attribute weight, material weight, certification weight. Do the current weight values make sense?
+6. Check results weighted vs unweighted matching
