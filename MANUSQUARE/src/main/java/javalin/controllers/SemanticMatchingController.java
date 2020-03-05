@@ -33,7 +33,8 @@ public class SemanticMatchingController {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true);
+        //Audun: added a 'hardcoded_weight' parameter of 0.9
+        SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
         System.out.println(sw.toString());
         ctx.json(sw.toString());
     };

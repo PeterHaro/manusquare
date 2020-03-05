@@ -11,6 +11,7 @@ import matchmaking.models.Offer;
 import matchmaking.models.Supplier;
 import matchmaking.models.TransactionalData;
 import org.json.simple.JSONObject;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import ui.SemanticMatching_MVP;
 
@@ -109,7 +110,7 @@ public class MatchmakingController {
         manager.addOffersForOrderId(orderId, retval);
         ctx.json(retval);
     }
-    public static void PerformMatchmaking(Context ctx) throws IOException, OWLOntologyStorageException {
+    public static void PerformMatchmaking(Context ctx) throws IOException, OWLOntologyStorageException, OWLOntologyCreationException {
         String rfq = ctx.pathParam(("rfq")); // Change if needed!
         if (rfq.isEmpty()) {
             throw new BadRequestResponse();
@@ -118,7 +119,8 @@ public class MatchmakingController {
             StringWriter sw = new StringWriter();
             BufferedWriter writer = new BufferedWriter(sw);
 
-            SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true);
+            //Audun: added a 'hardcoded_weight' parameter of 0.9           
+            SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
             System.out.println(sw.toString());
             // AWAIT INFO HERE TO TO NEXT PART
             //ctx.json(sw.toString());
