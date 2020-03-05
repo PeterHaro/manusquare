@@ -31,6 +31,7 @@ import com.google.gson.JsonSyntaxException;
 import edm.Attribute;
 import edm.Material;
 import edm.Process;
+import exceptions.NoAttributeException;
 import graph.SimpleGraph;
 import owlprocessing.OntologyOperations;
 import query.ConsumerQuery;
@@ -40,7 +41,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./MANUSQUARE/files/rfq-attributes-custInfo.json";
+		String filename = "./MANUSQUARE/files/rfq-testing_040320.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -65,10 +66,9 @@ public class SparqlQuery {
 
 		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
 		double supplierMaxDistance = cq.getSupplierMaxDistance();
-		Map<String, String> customerLocationInfo = cq.getCustomerLocationInfo();
-		double lat = Double.valueOf(customerLocationInfo.get("lat"));
-		double lon = Double.valueOf(customerLocationInfo.get("lon"));
 
+		Map<String, String> customerLocationInfo = cq.getCustomerLocationInfo();
+		double lat = 0, lon = 0;
 
 		//get the attributes and materials associated with processes included in the consumer query
 		for (Process p : processes) {
@@ -86,8 +86,17 @@ public class SparqlQuery {
 		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
 		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
 
-		//include necessary prefixes if supplier distance is to be included
+		//if supplier max distance is no 0, we should consider geo distance
 		if (supplierMaxDistance != 0) {
+			
+			if (customerLocationInfo != null) {
+				lat = Double.valueOf(customerLocationInfo.get("lat"));
+				lon = Double.valueOf(customerLocationInfo.get("lon"));
+			} else {
+				throw new NoAttributeException("No latitude or longitude values are included in the JSON file!");
+			}
+			
+			//include necessary prefixes if supplier distance is to be included
 			strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
 			strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/> \n";
 			strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
@@ -147,13 +156,13 @@ public class SparqlQuery {
 		strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
 		strQuery += "\n}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 	}
 
 	private static String getLCS (Set<Process> consumerProcesses, OWLOntology onto) throws OWLOntologyCreationException {
-		
+
 		//27.02.2020: Find the LCS of an arbitrary set of process concepts
 		List<List<String>> supersList = new LinkedList<List<String>>();
 
@@ -234,14 +243,14 @@ public class SparqlQuery {
 
 		Map<String, String> attributeConditions = new HashMap<String, String>();
 		for (Attribute a : attributes) {
-			if (a.getKey().equals("Length") || a.getKey().equals("Width") || a.getKey().equals("Depth") || a.getKey().equals("Min Feature Size")
-					|| a.getKey().equals("Min Layer Thickness") || a.getKey().equals("Min Kerf Width")) {
+			if (a.getKey().equals("Length") || a.getKey().equals("Width") || a.getKey().equals("Depth") || a.getKey().equals("MinFeatureSize")
+					|| a.getKey().equals("MinLayerThickness") || a.getKey().equals("MinKerfWidth")) {
 				attributeConditions.put(a.getKey(), ">=");
-			} else if (a.getKey().equals("Tolerance") || a.getKey().equals("Surface Finishing") || a.getKey().equals("Max Wall Thickness")
-					|| a.getKey().equals("Max Part Size X") || a.getKey().equals("Max Part Size Y") || a.getKey().equals("Max Part Size Z")
-					|| a.getKey().equals("Max Kerf Width")) {
+			} else if (a.getKey().equals("Tolerance") || a.getKey().equals("SurfaceFinishing") || a.getKey().equals("MaxWallThickness")
+					|| a.getKey().equals("MaxPartSizeX") || a.getKey().equals("MaxPartSizeY") || a.getKey().equals("MaxPartSizeZ")
+					|| a.getKey().equals("MaxKerfWidth")) {
 				attributeConditions.put(a.getKey(), "<=");
-			} else if (a.getKey().equals("Axis") || a.getKey().equals("Cutting Speed")) {
+			} else if (a.getKey().equals("Axis") || a.getKey().equals("CuttingSpeed")) {
 				attributeConditions.put(a.getKey(), "=");
 			}
 		}
@@ -257,6 +266,7 @@ public class SparqlQuery {
 	   Feb 8, 2020
 	 */
 	public static String getOpposite (String inputCondition) {
+		
 		String opposite = null;
 
 		if (inputCondition.equals("<=")) {

@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -44,11 +44,11 @@ public class ConsumerQuery {
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
-	
+
 	private static final int NUM_VECTOR_DIMS = 300;
 	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/manusquare_wikipedia_trained.txt";
 	private static final VectorAggregationMethod VAM = VectorAggregationMethod.AVG;
-	
+
 
 	//if the consumer specifies both processes (incl. materials) and certifications.
 	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications) {
@@ -56,8 +56,8 @@ public class ConsumerQuery {
 		this.processes = processes;
 		this.certifications = certifications;
 	}
-	
-	//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
+
+
 	//if the consumer specifies both processes (incl. materials), certifications, and supplierMaxDistance.
 	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
 		super();
@@ -68,9 +68,12 @@ public class ConsumerQuery {
 	}
 
 	//if only processes (incl. materials) are specified by the consumer
-	public ConsumerQuery(Set<Process> processes) {
+	public ConsumerQuery(Set<Process> processes, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
 		super();
+
 		this.processes = processes;
+		this.supplierMaxDistance = supplierMaxDistance;
+		this.customerLocationInfo = customerLocationInfo;
 	}
 
 	public ConsumerQuery() {}
@@ -78,16 +81,16 @@ public class ConsumerQuery {
 	public Set<Process> getProcesses() {
 		return processes;
 	}
-	
+
 	public Set<Attribute> getAttributes() {
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<Process> processes = getProcesses();
 		for (Process p : processes) {
 			attributes.addAll(p.getAttributes());
 		}
-		
+
 		return attributes;
-		
+
 	}
 
 	public void setProcesses(Set<Process> processes) {
@@ -101,7 +104,7 @@ public class ConsumerQuery {
 	public void setCertifications(Set<Certification> certifications) {
 		this.certifications = certifications;
 	}
-	
+
 	public double getSupplierMaxDistance() {
 		return supplierMaxDistance;
 	}
@@ -109,7 +112,7 @@ public class ConsumerQuery {
 	public void setSupplierMaxDistance(double supplierMaxDistance) {
 		this.supplierMaxDistance = supplierMaxDistance;
 	}
-	
+
 
 	public Map<String, String> getCustomerLocationInfo() {
 		return customerLocationInfo;
@@ -143,15 +146,15 @@ public class ConsumerQuery {
 		Set<Process> processes = new HashSet<>();
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> processNames = new HashSet<String>();
-		
+		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
+
 		RequestForQuotation rfq;
-		
+
 		if(isJSONValid(filename)) {
 			rfq = new Gson().fromJson(filename, RequestForQuotation.class);
 		} else {
 			rfq = new Gson().fromJson(new FileReader(filename), RequestForQuotation.class);
 		}
-		
 
 		if (rfq.projectAttributes == null || rfq.projectAttributes.isEmpty()) {
 			throw new NoProcessException ("Processes must be included!");
@@ -160,51 +163,55 @@ public class ConsumerQuery {
 				processNames.add(projectAttributes.processName);
 			}
 		}
-		
+
 		//get attribute and materials and map them to process
 		for (String process : processNames) {
 			Set<Attribute> attributeSet = new HashSet<Attribute>();
 			Set<Material> materialSet = new HashSet<Material>();
 			Set<String> equivalentProcesses = new HashSet<String>();
-			
-			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
-				//get the attributes
-				if (!projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) {
-					attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue));
-				} else if (projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) { //get the materials
-					materialSet.add(new Material(projectAttributes.attributeValue));
+
+			//get the materials and other attributes if they´re present
+			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {	
+				if (projectAttributes.attributeKey != null) {
+					if (!projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) {
+						attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue));
+					} else if (projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) { //get the materials
+						materialSet.add(new Material(projectAttributes.attributeValue));
+					}
+				} else {
+					System.out.println("There are no attributes in the JSON file!");
 				}
 			}
 
-			//FIXME: Don´t trust this process of validating process names, but will look at it later.
 			//10.02.2020: get equivalent process concepts to process (after we have ensured the process is included in the ontology)
-			process = validateProcessName(process, onto);
+			process = validateProcessName(process, onto, allOntologyClasses);
 			equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
-			
+
 			if (equivalentProcesses.isEmpty() || equivalentProcesses == null) {
-							
-			processes.add(new Process(process, validateMaterials(materialSet, onto), validateAttributeKeys(attributeSet, onto)));
-			
+
+				processes.add(new Process(process, validateMaterials(materialSet, onto, allOntologyClasses), validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
+
 			} else {
 				for (String s : equivalentProcesses) {
-					
-					processes.add(new Process(process, validateMaterials(materialSet, onto), validateAttributeKeys(attributeSet, onto), equivalentProcesses));
-					processes.add(new Process (s, validateMaterials(materialSet, onto), validateAttributeKeys(attributeSet, onto), updateEquivalenceSet(equivalentProcesses, s, process)));
+
+					processes.add(new Process(process, validateMaterials(materialSet, onto, allOntologyClasses), validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
+					processes.add(new Process (s, validateMaterials(materialSet, onto, allOntologyClasses), validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
 				}
 			}
-			
+
 		}
-		
+
 		ConsumerQuery query = null;
-		
+
 		//add geographical information to consumer query
 		double supplierMaxDistance = rfq.supplierMaxDistance;
-		Map<String, String> customerLocation = rfq.customer.customerInfo;
+		Map<String, String> customerInformation = rfq.customer.customerInfo;
 
 		//get certifications if they are specified by the consumer
 		if (rfq.supplierAttributes == null || rfq.supplierAttributes.isEmpty()) {
-			//if no certifications, we only add the processes to the ConsumerQuery object
-			query = new ConsumerQuery(processes);
+			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
+			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
+			query = new ConsumerQuery(processes, supplierMaxDistance, customerInformation);
 
 		} else {
 			for (SupplierAttributeKeys supplierAttributes : rfq.supplierAttributes) {
@@ -213,39 +220,38 @@ public class ConsumerQuery {
 				}
 			}
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
-			query = new ConsumerQuery(processes, validateCertifications(certifications, onto), supplierMaxDistance, customerLocation);
+			query = new ConsumerQuery(processes, validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
 		}
-		
+
+
 		return query;
 	}
-	
 
-	//FIXME: Not very elegant, but seems to work.
+
 	private static Set<String> updateEquivalenceSet (Set<String> equivalentProcesses, String toBeRemoved, String toBeAdded) {
 		Set<String> updatedEquivalentProcesses = new HashSet<>(equivalentProcesses);	
 		updatedEquivalentProcesses.remove(toBeRemoved);		
 		updatedEquivalentProcesses.add(toBeAdded);
-		
+
 		return updatedEquivalentProcesses;
 	}
 
 
-	
-	private static String validateProcessName (String processName, OWLOntology onto) throws IOException {
-		//FIXME: Do we really need this with the new getMostSimilarConcept method?
-		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(onto);
+
+	private static String validateProcessName (String processName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+
 		String validatedProcessName = null;
 
-		if (!ontologyClassesAsString.contains(processName)) {
+		if (!allOntologyClasses.contains(processName)) {
 			validatedProcessName = getMostSimilarConcept(processName, QueryConceptType.PROCESS, onto, EMBEDDING_FILE, VAM);
 		} else {
 			validatedProcessName = processName;
 		}
-				
+
 		return validatedProcessName;
-		
+
 	}
-	
+
 
 	/**
 	 * Checks if all materials specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
@@ -255,32 +261,28 @@ public class ConsumerQuery {
 	   Nov 13, 2019
 	 * @throws IOException 
 	 */
-	private static Set<Material> validateMaterials (Set<Material> initialMaterials, OWLOntology onto) throws IOException {
+	private static Set<Material> validateMaterials (Set<Material> initialMaterials, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 		Set<Material> validatedMaterials = new HashSet<Material>();
-		
+
 		if (initialMaterials.isEmpty() || initialMaterials == null) {
 			return null;
 		} else {
 
-		//FIXME: Do we really need this with the new getMostSimilarConcept method?
-		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(onto);
-
-		for (Material m : initialMaterials) {
-			if (!ontologyClassesAsString.contains(m.getName())) { //if not, get the concept from the ontology with the highest similarity
-				m.setName(getMostSimilarConcept(m.getName(), QueryConceptType.MATERIAL, onto, EMBEDDING_FILE, VAM));
-				validatedMaterials.add(m);
-			} else {
-				validatedMaterials.add(m);
+			for (Material m : initialMaterials) {
+				if (!allOntologyClasses.contains(m.getName())) { //if not, get the concept from the ontology with the highest similarity
+					m.setName(getMostSimilarConcept(m.getName(), QueryConceptType.MATERIAL, onto, EMBEDDING_FILE, VAM));
+					validatedMaterials.add(m);
+				} else {
+					validatedMaterials.add(m);
+				}
 			}
-		}
-		
 
-		return validatedMaterials;
-		
+			return validatedMaterials;
+
 		}
 
 	}
-	
+
 	/**
 	 * Checks if all attribute keys specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
 	 * @param initialAttributes set of attribute keys specified by the consumer in the RFQ process
@@ -289,26 +291,23 @@ public class ConsumerQuery {
 	   Jan 7, 2020
 	 * @throws IOException 
 	 */
-	private static Set<Attribute> validateAttributeKeys (Set<Attribute> initialAttributes, OWLOntology onto) throws IOException {
+	private static Set<Attribute> validateAttributeKeys (Set<Attribute> initialAttributes, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 		Set<Attribute> validatedAttributes = new HashSet<Attribute>();
-		
+
 		if (initialAttributes.isEmpty() || initialAttributes == null) {
 			return null;
 		} else {
 
-		//FIXME: Do we really need this with the new getMostSimilarConcept method?
-		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(onto);
-
-		for (Attribute a : initialAttributes) {
-			if (!ontologyClassesAsString.contains(a.getKey())) { //if not, get the concept from the ontology with the highest similarity
-				a.setKey(getMostSimilarConcept(a.getKey(), QueryConceptType.ATTRIBUTE, onto, EMBEDDING_FILE, VAM));
-				validatedAttributes.add(a);
-			} else {
-				validatedAttributes.add(a);
+			for (Attribute a : initialAttributes) {
+				if (!allOntologyClasses.contains(a.getKey())) { //if not, get the concept from the ontology with the highest similarity
+					a.setKey(getMostSimilarConcept(a.getKey(), QueryConceptType.ATTRIBUTE, onto, EMBEDDING_FILE, VAM));
+					validatedAttributes.add(a);
+				} else {
+					validatedAttributes.add(a);
+				}
 			}
-		}
 
-		return validatedAttributes;
+			return validatedAttributes;
 		}
 
 	}
@@ -321,14 +320,11 @@ public class ConsumerQuery {
 	   Nov 13, 2019
 	 * @throws IOException 
 	 */
-	private static Set<Certification> validateCertifications (Set<Certification> initialCertifications, OWLOntology onto) throws IOException {
+	private static Set<Certification> validateCertifications (Set<Certification> initialCertifications, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 		Set<Certification> validatedMaterials = new HashSet<Certification>();
 
-		//FIXME: Do we really need this with the new getMostSimilarConcept method?
-		Set<String> ontologyClassesAsString = OntologyOperations.getClassesAsString(onto);
-
 		for (Certification c : initialCertifications) {
-			if (!ontologyClassesAsString.contains(c.getId())) { //if not, get the concept from the ontology with the highest similarity
+			if (!allOntologyClasses.contains(c.getId())) { //if not, get the concept from the ontology with the highest similarity
 				System.out.println("The ontology does not contain " + c.getId());
 				c.setId(getMostSimilarConcept(c.getId(), QueryConceptType.CERTIFICATION, onto, EMBEDDING_FILE, VAM));
 				validatedMaterials.add(c);
@@ -340,7 +336,7 @@ public class ConsumerQuery {
 		return validatedMaterials;
 
 	}
-	
+
 	/**
 	 * Retrieves the most semantically similar concept using embeddings created by Word2Vec
 	 * @param consumerInput the input (e.g. requested process or material) from the consumer
@@ -356,7 +352,7 @@ public class ConsumerQuery {
 
 		//basic pre-processing of the consumerInput
 		String preProcessedConsumerProcess = preProcess(consumerInput);
-		
+
 		//create a vector map for the entire embeddingsfile
 		Map<String, double[]> vectorMap = createVectorMap (embeddingsFile);
 
@@ -383,7 +379,6 @@ public class ConsumerQuery {
 		//if there are no relevant embedding vectors for the consumer input
 		if (consumerInputVectors == null) {
 
-			System.err.println(preProcessedConsumerProcess + " does not have any embedding vectors, so using a syntactic matching approach instead...");
 			return getMostSimilarConceptSyntactically(preProcessedConsumerProcess, classes);
 
 		} else {
@@ -392,13 +387,12 @@ public class ConsumerQuery {
 			if (vectorOntologyMap.containsKey(preProcessedConsumerProcess.toLowerCase())) {
 
 				mostSemanticallySimilarConcept = preProcessedConsumerProcess;
-
+				
 			} else { //if not, retrieve the most similar concept based on vector similarity
 
 				mostSemanticallySimilarConcept = findMostSimilarVector(consumerInputVectors, vectorOntologyMap);
-
+				
 			}
-
 			return findConceptName(mostSemanticallySimilarConcept, classes);
 
 		}
@@ -451,7 +445,6 @@ public class ConsumerQuery {
 		}
 
 		return mostSimilar;
-
 	}
 
 	/**
@@ -714,82 +707,11 @@ public class ConsumerQuery {
 
 	private static String preProcess (String input) {
 
-		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+", ""));
+		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+|\\d+", ""));
 
 		return input;
 	}
-	
-//	
-//
-//	/**
-//	 * Uses (string) similarity techniques to find most similar ontology concept to a consumer-specified process/material/certification
-//	 * @param input the input process/material/certification specified by the consumer
-//	 * @param ontologyClassesAsString set of ontology concepts represented as strings
-//	 * @param method the similarity method applied
-//	 * @return the best matching concept from the MANUSQUARE ontology
-//	   Nov 13, 2019
-//	 */
-//	private static String getMostSimilarConcept(String input, Set<String> ontologyClassesAsString) {
-//
-//		Map<String, Double> similarityMap = new HashMap<String, Double>();
-//		String mostSimilarConcept = null;
-//
-//		//remove whitespace in input string
-//		input.replaceAll("\\s+","");
-//
-//		//jaroWinkler distance
-//
-//			for (String s : ontologyClassesAsString) {
-//				//new JaroWinklerSimilarity().apply(s1, s2)
-//				similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
-//				System.out.println("Test: Putting " + s + " with a Jaro Winkler score of " + new JaroWinklerSimilarity().apply(input, s) + " into the similarityMap");
-//			}
-//
-//			mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-//	
-//
-//		return mostSimilarConcept;
-//
-//	}
-//
-//	/**
-//	 * Returns the concept (name) with the highest (similarity) score from a map of concepts
-//	 * @param similarityMap a map of concepts along with their similarity scores
-//	 * @return single concept (name) with highest similarity score
-//	   Nov 13, 2019
-//	 */
-//	private static String getConceptWithHighestSim (Map<String, Double> similarityMap) {
-//
-//		Map<String, Double> rankedResults = sortDescending(similarityMap);
-//
-//		Map.Entry<String,Double> entry = rankedResults.entrySet().iterator().next();
-//		String conceptWithHighestSim = entry.getKey();
-//
-//
-//		return conceptWithHighestSim;
-//
-//	}
-//
-//	/** 
-//	 * Sorts a map based on similarity scores (values in the map)
-//	 * @param map the input map to be sorted
-//	 * @return map with sorted values
-//	   May 16, 2019
-//	 */
-//	private static <K, V extends Comparable<V>> Map<K, V> sortDescending(final Map<K, V> map) {
-//		Comparator<K> valueComparator =  new Comparator<K>() {
-//			public int compare(K k1, K k2) {
-//				int compare = map.get(k2).compareTo(map.get(k1));
-//				if (compare == 0) return 1;
-//				else return compare;
-//			}
-//		};
-//		Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
-//
-//		sortedByValues.putAll(map);
-//
-//		return sortedByValues;
-//	}
+
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
@@ -817,7 +739,7 @@ public class ConsumerQuery {
 		for (Certification cert : query.getCertifications()) {
 			System.out.println("Certification: " + cert.getId());
 		}
-		
+
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
 	}
 

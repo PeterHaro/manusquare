@@ -60,7 +60,6 @@ import utilities.StringUtilities;
  */
 public class SemanticMatching_MVP {
 
-
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
 	//configuration of the local GraphDB knowledge base (testing)
@@ -68,7 +67,6 @@ public class SemanticMatching_MVP {
 	static final String REPOSITORY_ID = "MANUSQUARE-INFERENCE-TESTDATA";
 
 	//configuration of the MANUSQUARE Semantic Infrastructure
-	//OLD SPARQL ENDPOINT static String SPARQL_ENDPOINT = "http://116.203.187.118/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
 	static String WorkshopSpaql = "http://manusquare.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
 	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
 	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
@@ -77,31 +75,38 @@ public class SemanticMatching_MVP {
 	//if the MANUSQUARE ontology is fetched from url
 	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
 
+
 	/**
 	 * Matches a consumer query against a set of resources offered by suppliers and returns a ranked list of the [numResult] suppliers having the highest semantic similarity as a JSON file.
-	 *
-	 * @param inputJson  an input json file (or json string) holding process(es) and certifications from the RFQ creation process.
+	 * @param inputJson an input json file (or json string) holding process(es), materials, attributes and certifications from the RFQ creation process.
 	 * @param numResults number of relevant suppliers to be returned from the matching
+	 * @param writer writes the results to a buffer
+	 * @param testing whether or not the matching is performed "live" or in testing mode
 	 * @param isWeighted true if the facets (process, material, certifications) should be weighted, false if not.
+	 * @param hard_coded_weight used for reducing the overall similarity score if a facet (e.g. material) requested by the consumer is not present in a process chain.
+	 * @throws OWLOntologyStorageException
 	 * @throws IOException
-	 * @throws OWLOntologyStorageException Oct 31, 2019
-	 * @throws OWLOntologyCreationException 
+	 * @throws OWLOntologyCreationException
+	   Mar 5, 2020
 	 */
 	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException, OWLOntologyCreationException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
-		if (sparql_endpoint_by_env != null) {
-			SPARQL_ENDPOINT = sparql_endpoint_by_env;
+
+		if (sparql_endpoint_by_env != null) {	
+			SPARQL_ENDPOINT = sparql_endpoint_by_env;	
 		}
-		if (System.getenv("ONTOLOGY_KEY") != null) {
+
+		if (System.getenv("ONTOLOGY_KEY") != null) {		
 			AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
 		}
 
 
 		OWLOntology ontology = null;
-		try {
-			ontology = manager.loadOntology(MANUSQUARE_ONTOLOGY_IRI);
-		} catch (OWLOntologyCreationException e) {
+
+		try {			
+			ontology = manager.loadOntology(MANUSQUARE_ONTOLOGY_IRI);			
+		} catch (OWLOntologyCreationException e) {			
 			System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
 			e.printStackTrace();
 		}
@@ -113,17 +118,34 @@ public class SemanticMatching_MVP {
 
 		ConsumerQuery query = ConsumerQuery.createConsumerQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 		List<String> processes = new ArrayList<>();
-		for (Process p : query.getProcesses()) {
+
+		for (Process p : query.getProcesses()) {			
 			processes.add(p.getName());
+
 		}
+		
+//		System.out.println("Test: The consumer query is:");
+//		System.out.println("Processes: " + processes.toString());
+//		Set<Process> p = query.getProcesses();
+//		
+//		for (Process pr : p) {
+//			System.out.println("Process: " + pr.getName());
+//			Set<Material> material = pr.getMaterials();
+//			for (Material m : material) {
+//				System.out.println(m.getName());
+//			}
+//		}
+		
+		
 
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
-		try {
-			graph = SimpleGraph.createGraph(ontology);
-		} catch (OWLOntologyCreationException e) {
+
+		try {			
+			graph = SimpleGraph.createGraph(ontology);			
+		} catch (OWLOntologyCreationException e) {			
 			System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
-			e.printStackTrace();
+			e.printStackTrace();			
 		}
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
@@ -132,10 +154,11 @@ public class SemanticMatching_MVP {
 		Map<Supplier, Double> supplierScores = new HashMap<Supplier, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> supplierSim = new LinkedList<Double>();
-		for (Supplier supplier : supplierData) {
-			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+
+		for (Supplier supplier : supplierData) {			
+			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);		
 			//get the highest score for the process chains offered by supplier n
-			supplierScores.put(supplier, getHighestScore(supplierSim));
+			supplierScores.put(supplier, getHighestScore(supplierSim));	
 		}
 
 		//extract the n suppliers with the highest similarity scores
@@ -145,8 +168,8 @@ public class SemanticMatching_MVP {
 		writeResultToOutput(bestSuppliers, writer);
 
 		//prints additional data to console for testing/validation
-		if (testing == true) {
-			printResultsToConsole(supplierData, query, supplierScores, numResults);
+		if (testing == true) {			
+			printResultsToConsole(supplierData, query, supplierScores, numResults);			
 		}
 
 	}
@@ -166,14 +189,13 @@ public class SemanticMatching_MVP {
 		//use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
 		List<String> processNames = new ArrayList<String>();
 
-		if (query.getProcesses() == null || query.getProcesses().isEmpty()) {
-			System.err.println("There are no processes specified!");
-		} else {
-			for (Process process : query.getProcesses()) {
-				processNames.add(process.getName());
+		if (query.getProcesses() == null || query.getProcesses().isEmpty()) {			
+			System.err.println("There are no processes specified!");			
+		} else {			
+			for (Process process : query.getProcesses()) {				
+				processNames.add(process.getName());			
 			}
 		}
-
 
 		long startTime = System.currentTimeMillis();
 
@@ -184,36 +206,24 @@ public class SemanticMatching_MVP {
 			repository = new SPARQLRepository(SPARQL_ENDPOINT);
 			repository.initialize();
 			((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
-
 		} else {
-
 			//connect to GraphDB
 			repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
 			HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
-			//repo.setPreferredRDFFormat();
 			System.out.println(repo.getRepositoryURL());
 			System.out.println(repo.getPreferredRDFFormat());
 			repository.initialize();
-			//repository.getConnection().add();
 			System.out.println(repository.isInitialized());
 		}
 
-		//creates a SPARQL query that is run against the Semantic Infrastructure
-		//String strQuery = SparqlQuery.querySI_MVP(processNames);
-
-		//creates a SPARQL query that is run against the Semantic Infrastructure
-		//09.02.2020: Added dynamicAttributeQuery
 		String strQuery = SparqlQuery.dynamicAttributeQuery(query, onto);
-
-		//System.out.println(strQuery);
 
 		//open connection to GraphDB and run SPARQL query
 		Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
 		SparqlRecord record;
 		int counter = 0;
-		
-		try (RepositoryConnection conn = repository.getConnection()) {
 
+		try (RepositoryConnection conn = repository.getConnection()) {
 			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
 
 			//if querying the local KB, we need to set setIncludeInferred to false, otherwise inference will include irrelevant results.
@@ -224,28 +234,22 @@ public class SemanticMatching_MVP {
 			}
 
 			try (TupleQueryResult result = tupleQuery.evaluate()) {
-
 				while (result.hasNext()) {
 					Map<String, String> attributeMap = new HashMap<String, String>();
 					counter++;
 					BindingSet solution = result.next();  
-					
-					//testing method for dynamic attribute weighting
-					
+
 					Set<String> bindings = solution.getBindingNames();
-					
+
 					//if there are attributes in the query results
 					if (containsAttributes(bindings) == true) {
-						
+
 						for (String s : bindings) {
-							if (s.endsWith("Attr")) {
-								
+							if (s.endsWith("Attr")) {						
 								attributeMap.put(s.replace("Attr", ""), solution.getValue(s).stringValue());
 							}
 						}
-
 					} 
-					
 
 					//omit the NamedIndividual types from the query result
 					if (solution.hasBinding("materialType") ) {
@@ -255,18 +259,13 @@ public class SemanticMatching_MVP {
 
 							record = new SparqlRecord();
 							record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-							
-
 							record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
 							record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));                           
 							record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
-							
-							
-							//added 11.02.2020
+
 							if (containsAttributes(bindings) == true) {
 								record.setAttributeWeightMap(attributeMap);
 							}
-
 							recordSet.add(record);
 						}
 					} else {
@@ -277,8 +276,7 @@ public class SemanticMatching_MVP {
 							record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
 							record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
 							record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
-							
-							//added 11.02.2020
+
 							if (containsAttributes(bindings) == true) {
 								record.setAttributeWeightMap(attributeMap);
 							}
@@ -292,11 +290,10 @@ public class SemanticMatching_MVP {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
 
 		if (testing == true) {
-		System.out.println("Number of results returned from Semantic Infrastructure: " + counter + "\n");
+			System.out.println("Number of results returned from Semantic Infrastructure: " + counter + "\n");
 		}
 		//close connection to KB repository
 		repository.shutDown();
@@ -308,7 +305,6 @@ public class SemanticMatching_MVP {
 			System.out.println("The SPARQL querying process took " + elapsedTime / 1000 + " seconds.");
 		}
 
-		
 		//get unique supplier ids used for constructing the supplier structure below
 		Set<String> supplierIds = new HashSet<String>();
 		for (SparqlRecord sr : recordSet) {
@@ -319,27 +315,19 @@ public class SemanticMatching_MVP {
 		Supplier supplier = null;
 		List<Supplier> suppliersList = new ArrayList<Supplier>();
 
-		// TODO: Replace the use of Map with Set<process, Set<Material, Set<Attribute>> and establish Supplier objects without the use of Map.
-		//create a map of processes and materials relevant for each supplier
-		Map<String, SetMultimap<Object, Object>> multimap = new HashMap<String, SetMultimap<Object, Object>>();
+		Map<String, SetMultimap<Object, Object>> supplierToProcessMap = new HashMap<String, SetMultimap<Object, Object>>();
 
 		for (String id : supplierIds) {
 			SetMultimap<Object, Object> map = HashMultimap.create();
-
 			String supplierID = null;
 
 			for (SparqlRecord sr : recordSet) {
-
 				if (sr.getSupplierId().equals(id)) {
-
 					map.put(sr.getProcess(), sr.getMaterial());
-
 					supplierID = sr.getSupplierId();
-
 				}
-
 			}
-			multimap.put(supplierID, map);
+			supplierToProcessMap.put(supplierID, map);
 		}
 
 		Process process = null;
@@ -352,9 +340,7 @@ public class SemanticMatching_MVP {
 			List<Process> processes = new ArrayList<Process>();
 
 			for (SparqlRecord sr : recordSet) {
-
 				if (sr.getSupplierId().equals(id)) {
-
 					//add certifications
 					certification = new Certification(sr.getCertification());
 					if (!certifications.contains(certification)) {
@@ -362,22 +348,18 @@ public class SemanticMatching_MVP {
 					}
 
 					//add processes and associated materials
-					processAndMaterialMap = multimap.get(sr.getSupplierId());
-
+					processAndMaterialMap = supplierToProcessMap.get(sr.getSupplierId());
 					String processName = null;
-
 					Set<Object> list = new HashSet<Object>();
 
 					//iterate processAndMaterialMap and extract process and relevant materials for that process
 					for (Entry<Object, Collection<Object>> e : processAndMaterialMap.asMap().entrySet()) {
-
 						Set<Material> materialsSet = new HashSet<Material>();
-
 						//get list/set of materials
 						list = new HashSet<>(e.getValue());
 
-
 						//transform to Set<Material>
+						//FIXME: Is this transformation really necessary? Why not stick to *either* list or set?
 						for (Object o : list) {
 							if (o != null) { //Audun: if there are no suppliers materials retrieved from SPARQL, don´t add null-valued Material objects to the set of materials (should be handled properly with !isEmpty check in SimilarityMeasures.java)
 								materialsSet.add(new Material((String) o));
@@ -387,7 +369,6 @@ public class SemanticMatching_MVP {
 						processName = (String) e.getKey();
 
 						//add relevant set of materials together with process name
-						//11.02.2020: Adding attributeWeight to process
 						process = new Process(processName, materialsSet, sr.getAttributeWeightMap());
 
 						//add processes
@@ -396,12 +377,9 @@ public class SemanticMatching_MVP {
 						}
 
 					}
-
 					supplier = new Supplier(id, processes, certifications);
-
 				}
 			}
-
 			suppliersList.add(supplier);
 		}
 
@@ -474,7 +452,6 @@ public class SemanticMatching_MVP {
 
 			//check if the query includes materials
 			if (p.getMaterials() == null || p.getMaterials().isEmpty()) {
-				//System.err.println("Note: No materials specified in the query!");
 			} else {
 				for (Material m : p.getMaterials()) {
 					System.out.println(" - Material: " + m.getName());
@@ -603,8 +580,8 @@ public class SemanticMatching_MVP {
 		return attributeWeight / (double) attVars.size();
 	}
 
-	/*
-	*//**
+	/* NOT IN USE
+	 *//**
 	 * Returns the average score of all scores for each resource offered by a supplier
 	 *
 	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
@@ -620,7 +597,7 @@ public class SemanticMatching_MVP {
 
 		return sum / inputScores.size();
 	}
-	*/
+	  */
 
 	/**
 	 * Sorts a map based on similarity scores (values in the map)
@@ -643,7 +620,5 @@ public class SemanticMatching_MVP {
 
 		return sortedByValues;
 	}
-
-
 
 }

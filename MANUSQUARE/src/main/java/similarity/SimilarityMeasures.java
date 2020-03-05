@@ -85,7 +85,10 @@ public class SimilarityMeasures {
 					//materials related to consumer process
 					for (Material m : pc.getMaterials()) {
 						consumerMaterials.add(m.getName());
+						debuggingOutput.append("\nMaterial associated with consumer process pc is " + m.getName());
 					}
+					
+					
 
 					//materials related to supplier process
 					Set<Material> materials = ps.getMaterials();
@@ -119,7 +122,7 @@ public class SimilarityMeasures {
 				Set<Attribute> consumerAttributes = pc.getAttributes();
 								
 				//if there are any consumer attributes, we use these to influence the processAndMaterialSim
-				if (consumerAttributes != null || consumerAttributes.isEmpty()) {
+				if (consumerAttributes != null) {
 				debuggingOutput.append("\nAttributes with consumer process " + pc.getName() + ": ");
 				
 				for (Attribute a : consumerAttributes) {

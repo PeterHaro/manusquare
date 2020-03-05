@@ -23,9 +23,8 @@ public class BasicMatchmaking_MVP {
 		// String jsonIn = "./files/rfq.json";
 		String jsonOut = "./files/matchingResults.json";
 
-
-		//if test == true -> local KB + additional test data written to console, if test == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = false;
+		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
+		boolean testing = true;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
