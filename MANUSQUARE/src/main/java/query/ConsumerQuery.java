@@ -46,7 +46,7 @@ public class ConsumerQuery {
 	private Map<String, String> customerLocationInfo;
 
 	private static final int NUM_VECTOR_DIMS = 300;
-	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/manusquare_wikipedia_trained.txt";
+	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/manusquare_wikipedia_trained_NN_VBG.txt";
 	private static final VectorAggregationMethod VAM = VectorAggregationMethod.AVG;
 
 
@@ -247,9 +247,7 @@ public class ConsumerQuery {
 		} else {
 			validatedProcessName = processName;
 		}
-
 		return validatedProcessName;
-
 	}
 
 
@@ -278,9 +276,7 @@ public class ConsumerQuery {
 			}
 
 			return validatedMaterials;
-
 		}
-
 	}
 
 	/**

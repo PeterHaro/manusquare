@@ -123,20 +123,7 @@ public class SemanticMatching_MVP {
 			processes.add(p.getName());
 
 		}
-		
-//		System.out.println("Test: The consumer query is:");
-//		System.out.println("Processes: " + processes.toString());
-//		Set<Process> p = query.getProcesses();
-//		
-//		for (Process pr : p) {
-//			System.out.println("Process: " + pr.getName());
-//			Set<Material> material = pr.getMaterials();
-//			for (Material m : material) {
-//				System.out.println(m.getName());
-//			}
-//		}
-		
-		
+
 
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;

@@ -18,13 +18,13 @@
 	"projectAttributes": [
 		{
 			"attributeId": "E",
-			"processName": "ram edm",
+			"processName": "sinker edm",
 			"attributeKey": "material",
 			"attributeValue": "Steel"
 		},
 		{
 			"attributeId": "F",
-			"processName": "ram edm",
+			"processName": "sinker edm",
 			"attributeKey": "Tolerance",
 			"attributeValue": "3"
 		},
@@ -32,7 +32,7 @@
 			"attributeId": "G",
 			"processName": "HoleMaking",
 			"attributeKey": "material",
-			"attributeValue": "Steel"
+			"attributeValue": "CarbonSteel"
 		},
 		{
 			"attributeId": "H",
