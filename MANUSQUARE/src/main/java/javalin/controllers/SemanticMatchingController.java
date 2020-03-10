@@ -1,9 +1,11 @@
 package javalin.controllers;
 
 import io.javalin.http.Handler;
-import io.javalin.plugin.openapi.annotations.*;
+import io.javalin.plugin.openapi.annotations.OpenApi;
+import io.javalin.plugin.openapi.annotations.OpenApiContent;
+import io.javalin.plugin.openapi.annotations.OpenApiFormParam;
+import io.javalin.plugin.openapi.annotations.OpenApiResponse;
 import javalin.models.Rfq;
-import json.RequestForQuotation;
 import ui.SemanticMatching_MVP;
 
 import java.io.BufferedWriter;
@@ -33,7 +35,6 @@ public class SemanticMatchingController {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        //Audun: added a 'hardcoded_weight' parameter of 0.9
         SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
         System.out.println(sw.toString());
         ctx.json(sw.toString());

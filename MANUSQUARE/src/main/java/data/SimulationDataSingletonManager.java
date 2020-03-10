@@ -13,10 +13,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SimulationDataSingletonManager {
-    private static final int NUMBER_OF_HISTORICAL_DATA_ENTRIES = 25000;
-    private static final int NUMBER_OF_BUYERS = 10;
-    private static final int NUMBER_OF_SUPPLIERS = 75;
+    private static final int NUMBER_OF_HISTORICAL_DATA_ENTRIES =75000;
+    private static final int NUMBER_OF_BUYERS = 35;
+    private static final int NUMBER_OF_SUPPLIERS = 110;
     private static final DataGenerationMethodology dataGenerationMethodology = DataGenerationMethodology.RANDOM;
+    private static final DataGenerationMethodology buyerGenerationMethodology = DataGenerationMethodology.WEIGHTED_FIRST_25_PERCENTILE;
     private static final DataGenerationMethodology qualityGenerationMethodology = DataGenerationMethodology.WEIGHTED_LAST_25_PERCENTILE;
     private static final DataGenerationMethodology deliveryTimeGenerationMethodology = DataGenerationMethodology.WEIGHTED_FIRST_25_PERCENTILE;
     private static final DataGenerationMethodology packagingGenerationMethodology = DataGenerationMethodology.RANDOM;
@@ -100,10 +101,10 @@ public class SimulationDataSingletonManager {
         System.out.println("Number of transactions: " + NUMBER_OF_HISTORICAL_DATA_ENTRIES);
         System.out.println("Number of buyers: " + NUMBER_OF_BUYERS);
         System.out.println("Number of suppliers: " + NUMBER_OF_SUPPLIERS);
-        System.out.println("========== dumping supplier info ==========");
-        for (Supplier supplier : suppliers) {
-            System.out.println(supplier.getSupplierInfo());
-        }
+     //   System.out.println("========== dumping supplier info ==========");
+    //    for (Supplier supplier : suppliers) {
+      //      System.out.println(supplier.getSupplierInfo());
+      //  }
 
         for (Buyer buyer : buyers) {
             System.out.println("Dumping information for buyer: " + buyer.getId());
@@ -132,6 +133,7 @@ public class SimulationDataSingletonManager {
             System.out.println("\tAverage packing is: " + averagePacking);
             System.out.println("\tAverage response rate is: " + averageReponseRate);
             System.out.println("\tAverage overall satesfaction is: " + averageOverallSatesfaction);
+            System.out.println("\tContains: " + buyer.getHistoricalData().size() + " historical entries");
             System.out.println("\n");
         }
         _historicalData = historicalData;
@@ -219,7 +221,25 @@ public class SimulationDataSingletonManager {
     }
 
     private static int generateBuyerId(int seed) {
-        return GenerateRandomNumberFromGivenDistribution(seed, NUMBER_OF_BUYERS);
+        return GenerateWeightedBuyer(seed, NUMBER_OF_BUYERS);
+    }
+
+    private static int GenerateWeightedBuyer(int seed, int max_range) {
+        switch (buyerGenerationMethodology) {
+            case SEQUENTIAL:
+                return seed;
+            case RANDOM:
+                return GenerateRandomNumberInRange(0, (max_range - 1));
+            case WEIGHTED_FIRST_25_PERCENTILE:
+                int twentyFifthPercentile = Math.round(max_range / 4);
+                int random_num = GenerateRandomNumberInRange(0, max_range);
+                if (random_num < twentyFifthPercentile) {
+                    return GenerateRandomNumberInRange(0, twentyFifthPercentile);
+                }
+                return GenerateRandomNumberInRange(0, (max_range - 1));
+            default:
+                throw new InvalidParameterException("The data generation methodology requires a fixed method");
+        }
     }
 
     private static int GenerateRandomNumberFromGivenDistribution(int seed, int max_range) {

@@ -1538,6 +1538,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#Lead -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#Lead">
+        <rdfs:label xml:lang="en">Lead</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#MaterialType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#Link -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#Link">
@@ -1547,6 +1557,16 @@
         <rdfs:comment>Link is the connection between an idea and a stakeholder. This connection is meant to encapsulate any kind of connection between these two classes through a Mediator Pattern . In this way, we can represent connections between an idea and many stakeholders by simply instantiating Link several times (and vice versa).</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
         <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#Magnesium -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#Magnesium">
+        <rdfs:label xml:lang="en">Magnesium</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#MaterialType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
 
@@ -3364,7 +3384,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Boring">
         <rdfs:label xml:lang="en">Boring</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MfgProcess"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -3465,7 +3484,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Broaching">
         <rdfs:label xml:lang="en">Broaching</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MultiPointCutting"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -3741,6 +3759,17 @@
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#CathodeTubes">
         <rdfs:label xml:lang="en">Cathode Tubes</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ElectronicValvesAndTubes"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#CavityTypeEDM -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#CavityTypeEDM">
+        <rdfs:label xml:lang="en">Cavity type EDM</rdfs:label>
+        <owl:equivalentClass rdf:resource="http://manusquare.project.eu/industrial-manusquare#SinkerEDM"/>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ElectricalDischargeMachining"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -4776,7 +4805,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Drilling">
         <rdfs:label xml:lang="en">Drilling</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MultiPointCutting"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#SinglePointCutting"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
@@ -5000,7 +5028,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#ElectricalDischargeMachining">
         <rdfs:label xml:lang="en">Electrical Discharge Machining</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#Non-TraditionalMachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ThermalSubtraction"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -6144,7 +6171,6 @@
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Grinding">
         <rdfs:label xml:lang="en">Grinding</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#AbrasiveMachining"/>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -6335,7 +6361,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#HighEnergyBeamMachining">
         <rdfs:label xml:lang="en">High Energy Beam Machining</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#Non-TraditionalMachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ThermalSubtraction"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -7895,7 +7920,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#MechanicalSubtraction">
         <rdfs:label xml:lang="en">Mechanical Subtraction</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#SubtractionProcess"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -8222,7 +8246,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Milling">
         <rdfs:label xml:lang="en">Milling</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MultiPointCutting"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -10186,6 +10209,17 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#PlungeEDM -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#PlungeEDM">
+        <rdfs:label xml:lang="en">Plunge EDM</rdfs:label>
+        <owl:equivalentClass rdf:resource="http://manusquare.project.eu/industrial-manusquare#SinkerEDM"/>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ElectricalDischargeMachining"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#Polishing -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Polishing">
@@ -10911,6 +10945,18 @@
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#RailwayLocomotivesAndRollingStock">
         <rdfs:label xml:lang="en">Railway Locomotives And Rolling Stock</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#TransportEquipment"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#RamEDM -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#RamEDM">
+        <rdfs:label xml:lang="en">RAM EDM</rdfs:label>
+        <owl:equivalentClass rdf:resource="http://manusquare.project.eu/industrial-manusquare#SinkerEDM"/>
+        <owl:equivalentClass rdf:resource="http://manusquare.project.eu/industrial-manusquare#VolumeEDM"/>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ElectricalDischargeMachining"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -12385,6 +12431,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm) -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm)">
+        <rdfs:label xml:lang="en">Surface Finishing (μm)</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#SurfaceHardening -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceHardening">
@@ -12711,7 +12767,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#ThermalSubtraction">
         <rdfs:label xml:lang="en">Thermal Subtraction</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#SubtractionProcess"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -13045,7 +13100,6 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Turning">
         <rdfs:label xml:lang="en">Turning</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MachiningService"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#SinglePointCutting"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -13292,6 +13346,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#VolumeEDM -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#VolumeEDM">
+        <rdfs:label xml:lang="en">Volume EDM</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ElectricalDischargeMachining"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#Washability -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Washability">
@@ -13347,7 +13411,6 @@
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WaterJetCutting">
         <rdfs:label xml:lang="en">Water Jet Cutting</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ChemicalSubtraction"/>
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#Non-TraditionalMachiningService"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -13523,10 +13586,40 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#WorkingAreaX -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingAreaX">
+        <rdfs:label xml:lang="en">Working Area X</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#WorkingAreaY -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingAreaY">
+        <rdfs:label xml:lang="en">Working Area Y</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#WorkingAreaZ -->
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingAreaZ">
+        <rdfs:label xml:lang="en">Working Area Z</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#WorkingVolumeX -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingVolumeX">
-        <rdfs:label xml:lang="en">Working VolumeX</rdfs:label>
+        <rdfs:label xml:lang="en">Working Volume X</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -13536,7 +13629,7 @@
     <!-- http://manusquare.project.eu/industrial-manusquare#WorkingVolumeY -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingVolumeY">
-        <rdfs:label xml:lang="en">Working VolumeY</rdfs:label>
+        <rdfs:label xml:lang="en">Working Volume Y</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -13546,7 +13639,7 @@
     <!-- http://manusquare.project.eu/industrial-manusquare#WorkingVolumeZ -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingVolumeZ">
-        <rdfs:label xml:lang="en">Working VolumeZ</rdfs:label>
+        <rdfs:label xml:lang="en">Working Volume Z</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -13623,21 +13716,6 @@
     
 
 
-    <!-- http://manusquare.project.eu/industrial-manusquare#random -->
-
-    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#random"/>
-    
-
-
-    <!-- http://manusquare.project.eu/industrial-manusquare#random9170fcf9-69b9-4f69-9d42-ff22184a45d7 -->
-
-    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#random9170fcf9-69b9-4f69-9d42-ff22184a45d7">
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#random9170fcf9-69b9-4f69-9d42-ff22184a45d7"/>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    </owl:Class>
-    
-
-
     <!-- http://manusquare.project.eu/industrial-manusquare#xAxis -->
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#xAxis">
@@ -13670,13 +13748,17 @@
 
     <!-- http://www.w3.org/1999/02/22-rdf-syntax-ns#Property -->
 
-    <owl:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <owl:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
     
 
 
     <!-- http://www.w3.org/2000/01/rdf-schema#Class -->
 
-    <owl:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <owl:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
     
 
 
@@ -14241,6 +14323,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#Lead -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#Lead">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Lead</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#Link -->
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#Link">
@@ -14249,6 +14340,15 @@
         <rdfs:comment>Link is the connection between an idea and a stakeholder. This connection is meant to encapsulate any kind of connection between these two classes through a Mediator Pattern . In this way, we can represent connections between an idea and many stakeholders by simply instantiating Link several times (and vice versa).</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
         <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#Magnesium -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#Magnesium">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Magnesium</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -16835,6 +16935,14 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#CNCTurnMachine -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CNCTurnMachine">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#CNCTurning -->
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CNCTurning">
@@ -16975,6 +17083,15 @@
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CathodeTubes">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:label xml:lang="en">Cathode Tubes</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#CavityTypeEDM -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CavityTypeEDM">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Cavity type EDM</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -17236,6 +17353,14 @@
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CompactedGraphiteIron">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:label xml:lang="en">Compacted Graphite Iron</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#CompanyCertification -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CompanyCertification">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
 
@@ -22685,6 +22810,14 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#PlasmaArcCutting -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#PlasmaArcCutting">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#PlasmaArcWelding -->
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#PlasmaArcWelding">
@@ -22753,6 +22886,15 @@
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#PlumbingFixtureFittingAndTrimManufacturing">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:label xml:lang="en">Plumbing Fixture Fitting And Trim Manufacturing</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#PlungeEDM -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#PlungeEDM">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Plunge EDM</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -23401,6 +23543,15 @@
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#RailwayLocomotivesAndRollingStock">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:label xml:lang="en">Railway Locomotives And Rolling Stock</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#RamEDM -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#RamEDM">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">RAM EDM</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -24710,6 +24861,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm) -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm)">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Surface Finishing (μm)</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#SurfaceHardening -->
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceHardening">
@@ -25520,6 +25680,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#VolumeEDM -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#VolumeEDM">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Volume EDM</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#Washability -->
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#Washability">
@@ -25727,11 +25896,38 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#WorkingAreaX -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingAreaX">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Working Area X</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#WorkingAreaY -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingAreaY">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Working Area Y</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#WorkingAreaZ -->
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingAreaZ">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:label xml:lang="en">Working Area Z</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#WorkingVolumeX -->
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingVolumeX">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-        <rdfs:label xml:lang="en">Working VolumeX</rdfs:label>
+        <rdfs:label xml:lang="en">Working Volume X</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -25740,7 +25936,7 @@
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingVolumeY">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-        <rdfs:label xml:lang="en">Working VolumeY</rdfs:label>
+        <rdfs:label xml:lang="en">Working Volume Y</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -25749,7 +25945,7 @@
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#WorkingVolumeZ">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-        <rdfs:label xml:lang="en">Working VolumeZ</rdfs:label>
+        <rdfs:label xml:lang="en">Working Volume Z</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -25813,22 +26009,6 @@
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#lowOxidationLevel">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:label xml:lang="en">low Oxidation Level</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://manusquare.project.eu/industrial-manusquare#random -->
-
-    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#random">
-        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://manusquare.project.eu/industrial-manusquare#random9170fcf9-69b9-4f69-9d42-ff22184a45d7 -->
-
-    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#random9170fcf9-69b9-4f69-9d42-ff22184a45d7">
-        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
 

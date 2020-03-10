@@ -1,9 +1,13 @@
 package javalin.controllers;
 
-import com.google.api.client.json.Json;
+import ch.qos.logback.classic.sift.GSiftingAppender;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import data.SimulationDataSingletonManager;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
+import io.javalin.plugin.json.JavalinJson;
 import io.javalin.plugin.openapi.annotations.*;
 import javalin.models.ErrorResponse;
 import matchmaking.models.Buyer;
@@ -15,9 +19,10 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import ui.SemanticMatching_MVP;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class MatchmakingController {
-
+    private static final String MatchmakingEndpoint = "http://localhost:1335/mm";
     static SimulationDataSingletonManager manager = SimulationDataSingletonManager.getInstance();
 
     @OpenApi(
@@ -93,6 +98,11 @@ public class MatchmakingController {
             return;
         }
 
+        List<Offer> retval = GenerateOffers(orderId);
+        ctx.json(retval);
+    }
+
+    private static List<Offer> GenerateOffers(int orderId) {
         List<Offer> retval = new ArrayList<>();
         int length = GenerateRandomNumberInRange(3, 10);
         List<Integer> suppliersId = manager.getSuppliers().stream().map(Supplier::getId).collect(Collectors.toList());
@@ -108,8 +118,9 @@ public class MatchmakingController {
             retval.add(offer);
         }
         manager.addOffersForOrderId(orderId, retval);
-        ctx.json(retval);
+        return retval;
     }
+
     public static void PerformMatchmaking(Context ctx) throws IOException, OWLOntologyStorageException, OWLOntologyCreationException {
         String rfq = ctx.pathParam(("rfq")); // Change if needed!
         if (rfq.isEmpty()) {
@@ -118,17 +129,42 @@ public class MatchmakingController {
             String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
             StringWriter sw = new StringWriter();
             BufferedWriter writer = new BufferedWriter(sw);
-
-            //Audun: added a 'hardcoded_weight' parameter of 0.9           
             SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
             System.out.println(sw.toString());
+            
             // AWAIT INFO HERE TO TO NEXT PART
             //ctx.json(sw.toString());
 
 
-
             ctx.status(200);
         }
+    }
+
+    private String CallMatchmaking() throws IOException {
+        final URL matchmakingUrl = new URL(MatchmakingEndpoint);
+        StringBuilder response = new StringBuilder();
+        HttpURLConnection con = (HttpURLConnection) matchmakingUrl.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+
+        String offers = new Gson().toJson(GenerateOffers(1));
+        try(OutputStream os = con.getOutputStream()){
+            byte[] input = offers.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        //TODO: Multiple actions depending on MM status code!
+        int code = con.getResponseCode();
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))){
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+        return response.toString();
     }
 
     private static int GetSupplierId(int amountOfSuppliers) {
