@@ -1,5 +1,6 @@
 package javalin;
 
+import data.EmbeddingSingletonDataManager;
 import data.SimulationDataSingletonManager;
 import io.javalin.Javalin;
 import io.javalin.plugin.openapi.InitialConfigurationCreator;
@@ -22,7 +23,8 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 public class OpenAPIEndpoint {
     public static void main(String[] args) {
         // seed the fake data
-        SimulationDataSingletonManager manager = SimulationDataSingletonManager.getInstance();
+        SimulationDataSingletonManager manager = SimulationDataSingletonManager.getInstance(); // FLYTT VEKTOR HIT
+        EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
 
 
         Javalin app = Javalin.create(config -> {

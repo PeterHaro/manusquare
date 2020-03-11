@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import data.EmbeddingSingletonDataManager;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -27,10 +28,10 @@ public class EmbeddingEvaluation {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
 		String embeddingsFile = "./files/EMBEDDINGS/manusquare_wikipedia_trained_NN_VBG.txt";
-		Set<String> cls = OntologyOperations.getClassesAsString(onto);		
-
-		Map<String, double[]> ontologyVectorMap = ConsumerQuery.createOntologyVectorMap(cls, embeddingsFile, VectorAggregationMethod.SUM);
-		Map<String, double[]> vectorMap = ConsumerQuery.createVectorMap(embeddingsFile);
+		Set<String> cls = OntologyOperations.getClassesAsString(onto);
+		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
+		Map<String, double[]> ontologyVectorMap = embeddingManager.createOntologyVectorMap(cls, VectorAggregationMethod.SUM);
+		Map<String, double[]> vectorMap = embeddingManager.getVectorMap();
 
 		double minThreshold = 0.8;
 		double maxThreshold = 0.9;
