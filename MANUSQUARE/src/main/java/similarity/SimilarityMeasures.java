@@ -28,6 +28,7 @@ public class SimilarityMeasures {
 		//get the list of processes and certifications for this supplier
 		List<Process> processList = supplier.getProcesses();
 
+		//get the list of certifications for this supplier
 		List<Certification> certificationList = supplier.getCertifications();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
@@ -38,9 +39,6 @@ public class SimilarityMeasures {
 
 		SimilarityParameters parameters = null;
 
-		Set<String> consumerMaterials = new HashSet<String>();
-		Set<String> supplierMaterials = new HashSet<String>();
-
 		double processAndMaterialSim = 0;
 		double processSim = 0;
 		double materialSim = 0;
@@ -50,6 +48,11 @@ public class SimilarityMeasures {
 		List<Double> similarityList = new LinkedList<Double>();
 
 		for (Process pc : query.getProcesses()) {
+			
+			Set<String> consumerMaterials = new HashSet<String>();
+			for (Material m : pc.getMaterials()) {
+				consumerMaterials.add(m.getName());
+			}
 
 			for (Process ps : processList) {		
 				
@@ -72,30 +75,24 @@ public class SimilarityMeasures {
 					processSim = similarityMethodology.ComputeSimilaritySimpleGraph(parameters);
 				}
 				
-				//System.out.println("Test: The processSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processSim);
 				debuggingOutput.append("\nprocessSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processSim);
 
 				//Check if there are materials specified in the query
 				if (pc.getMaterials() == null || pc.getMaterials().isEmpty()) {
-					//processAndMaterialSim = processSim;
 					processAndMaterialSim = processSim * hard_coded_weight; //Audun: Reduce process similarity if there are no supplier materials specified.
 					debuggingOutput.append("\nNo materials associated with process so processAndMaterialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processAndMaterialSim);
 					
 				} else {
-					//materials related to consumer process
-					for (Material m : pc.getMaterials()) {
-						consumerMaterials.add(m.getName());
-						debuggingOutput.append("\nMaterial associated with consumer process pc is " + m.getName());
-					}
 					
+					debuggingOutput.append("\nMaterials associated with consumer process " + pc.getName() + " is " + consumerMaterials.toString());
 					
-
 					//materials related to supplier process
-					Set<Material> materials = ps.getMaterials();
-					for (Material material : materials) {
+					Set<String> supplierMaterials = new HashSet<String>();
+					for (Material material : ps.getMaterials()) {
 						supplierMaterials.add(material.getName());
 					}
-
+					
+					debuggingOutput.append("\nMaterials associated with supplier process " + ps.getName() + " is " + supplierMaterials.toString());
 
 					//if the set of materials in the supplier process contains all materials requested by the consumer --> 1.0, otherwise compute Jaccard
 					//TODO: Use Wu-Palmer instead of Jaccard?
@@ -104,6 +101,7 @@ public class SimilarityMeasures {
 						debuggingOutput.append("\nAll supplier materials match consumer materials so materialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + materialSim);
 					} else { //if not, localMaterialSim is the Jaccard set similarity between the supplierMaterials and the consumerMaterials
 						materialSim = Jaccard.jaccardSetSim(supplierMaterials, consumerMaterials);
+						debuggingOutput.append("\nSupplier " + supplier.getId() + " provides the following materials: " + supplierMaterials.toString());
 						debuggingOutput.append("\nEither no matching or some matching materials between pc and ps so materialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + materialSim);
 					}
 
