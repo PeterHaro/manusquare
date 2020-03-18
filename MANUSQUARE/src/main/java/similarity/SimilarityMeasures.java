@@ -208,7 +208,8 @@ public class SimilarityMeasures {
 						debuggingOutput.append("\nThe certificateSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + certificateSim);
 
 						if (weighted) {
-							allCombinedSim = (processAndMaterialSim * 0.75)  + (certificateSim * 0.25);
+							allCombinedSim = (processAndMaterialSim * 0.90)  + (certificateSim * 0.10);
+							//allCombinedSim = (processAndMaterialSim * 0.75)  + (certificateSim * 0.25);
 						} else {
 							allCombinedSim = (processAndMaterialSim + certificateSim) / 2;
 						}
