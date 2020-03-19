@@ -1,5 +1,6 @@
 package query;
 
+import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -234,6 +235,7 @@ public class ConsumerQuery {
 		} else {
 			validatedProcessName = processName;
 		}
+				
 		return validatedProcessName;
 	}
 
@@ -325,7 +327,7 @@ public class ConsumerQuery {
 	 * @return the ontology concept having the highest (semantic) similarity with the consumerInput
 	 * @throws IOException Mar 3, 2020
 	 */
-	private static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
+	public static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
 		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
 
 		Set<String> classes = new HashSet<String>();
@@ -342,7 +344,10 @@ public class ConsumerQuery {
 
 		//if the consumerInput equals an ontology concept we return this
 		if (containsIgnoreCase(classes, consumerInput)) {
-			return preProcess(consumerInput);//TODO: Test this!
+			
+			//return preProcess(consumerInput);//TODO: Test this!
+			return findConceptName(consumerInput, classes);
+			
 		} else {//if not, we do the semantic and syntactic matching process
 
 			//basic pre-processing of the consumerInput
@@ -352,22 +357,31 @@ public class ConsumerQuery {
 			Map<String, double[]> vectorOntologyMap = embeddingManager.createOntologyVectorMap(classes, vectorAggregationMethod);
 			double[] consumerInputVectors = embeddingManager.getLabelVector(preProcessedConsumerProcess, vectorAggregationMethod);
 			String mostSemanticallySimilarConcept = null;
+			
 			//if there are no relevant embedding vectors for the consumer input, we do to the syntactic matching
 			if (consumerInputVectors == null) {
 				return getMostSimilarConceptSyntactically(preProcessedConsumerProcess, classes);
+				
 			} else {
+				
 				//check if vectormap/embeddings file contains consumerProcess as-is
 				if (vectorOntologyMap.containsKey(preProcessedConsumerProcess.toLowerCase())) {
+					
 					mostSemanticallySimilarConcept = preProcessedConsumerProcess;
+					
 				} else { //if not, retrieve the most similar concept based on vector similarity
+					
 					mostSemanticallySimilarConcept = findMostSimilarVector(consumerInputVectors, vectorOntologyMap);
 				}
+				
 				return findConceptName(mostSemanticallySimilarConcept, classes);
 
 			}
 		}
 
 	}
+
+
 
 	/**
 	 * Returns an ontology concept name (with proper casing) from a word in the embeddings file
@@ -389,6 +403,7 @@ public class ConsumerQuery {
 		}
 		return conceptName;
 	}
+
 
 
 	/**
@@ -441,6 +456,7 @@ public class ConsumerQuery {
 
 	}
 
+
 	/**
 	 * Returns the concept (name) with the highest (similarity) score from a map of concepts
 	 *
@@ -478,8 +494,11 @@ public class ConsumerQuery {
 	}
 
 	private static String preProcess(String input) {
+		
 
-		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+|\\d+", ""));
+//		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+|\\d+", ""));
+		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+", ""));
+		
 
 		return input;
 	}
@@ -492,9 +511,125 @@ public class ConsumerQuery {
 		}
 		return false;
 	}
-	
 
-	
+	/**
+	 * USED FOR EVALUATION OF EMBEDDINGS ONLY!
+	 */
+	public static Map<String, Double> getMostSimilarConceptWithScore(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
+		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
+
+		Map<String, Double> mostSimilarConceptMap = new HashMap<String, Double>();
+
+		Set<String> classes = new HashSet<String>();
+		//we only consider the classes below the stated ontology classes (e.g. MfgProcess for processes)
+		if (conceptType == QueryConceptType.PROCESS) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MfgProcess", onto));
+		} else if (conceptType == QueryConceptType.MATERIAL) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
+		} else if (conceptType == QueryConceptType.CERTIFICATION) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("Certification", onto));
+		} else if (conceptType == QueryConceptType.ATTRIBUTE) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("AttributeType", onto));
+		}
+
+		//if the consumerInput equals an ontology concept we return this
+		if (containsIgnoreCase(classes, consumerInput)) {
+			mostSimilarConceptMap.put(findConceptName(consumerInput, classes), 1.0);
+			return mostSimilarConceptMap;
+		
+		} else {//if not, we do the semantic and syntactic matching process
+
+			//basic pre-processing of the consumerInput (whitespace removal, etc.)
+			String preProcessedConsumerProcess = preProcess(consumerInput);
+
+			//create a vector map from the embeddings file for ontology concepts
+			Map<String, double[]> vectorOntologyMap = embeddingManager.createOntologyVectorMap(classes, vectorAggregationMethod);
+			double[] consumerInputVectors = embeddingManager.getLabelVector(preProcessedConsumerProcess, vectorAggregationMethod);
+
+			//if there are no relevant embedding vectors for the consumer input, we do to the syntactic matching
+			if (consumerInputVectors == null) {
+				
+				mostSimilarConceptMap = getMostSimilarConceptSyntacticallyMap(preProcessedConsumerProcess, classes);
+				
+			} else {
+				//check if vectormap/embeddings file contains consumerProcess as-is
+				if (vectorOntologyMap.containsKey(preProcessedConsumerProcess.toLowerCase())) {
+					
+					mostSimilarConceptMap.put(preProcessedConsumerProcess, 1.0);
+					
+				} else { //if not, retrieve the most similar concept based on vector similarity
+					
+					mostSimilarConceptMap = findMostSimilarVectorMapEntry(consumerInputVectors, vectorOntologyMap);
+					
+				}
+
+			}
+		}
+
+		return mostSimilarConceptMap;
+
+	}
+
+	/**
+	 * USED FOR EVALUATION OF EMBEDDINGS ONLY!
+	 */
+	private static Map<String, Double> extractHighestMapEntry(Map<String, Double> supplierScores, int numResults) {
+		//sort the results from highest to lowest score and return the [numResults] highest scores
+		Map<String, Double> rankedResults = sortDescending(supplierScores);
+		Iterable<Entry<String, Double>> firstEntries =
+				Iterables.limit(rankedResults.entrySet(), numResults);
+
+		//return the [numResults] best embedding words according to highest scores
+		Map<String, Double> finalEmbeddingMap = new LinkedHashMap<String, Double>();
+		for (Entry<String, Double> e : firstEntries) {
+			finalEmbeddingMap.put(e.getKey(), e.getValue());
+		}
+
+		return finalEmbeddingMap;
+
+	}
+
+	/**
+	 * USED FOR EVALUATION OF EMBEDDINGS ONLY!
+	 */
+	private static Map<String, Double> getMostSimilarConceptSyntacticallyMap(String input, Set<String> ontologyClassesAsString) {
+
+		Map<String, Double> similarityMap = new HashMap<String, Double>();
+
+		for (String s : ontologyClassesAsString) {
+
+			similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
+		}
+
+		Map<String, Double> mostSimilarConceptSyntactically = extractHighestMapEntry(similarityMap, 1);
+
+
+		return mostSimilarConceptSyntactically;
+
+	}
+
+	/**
+	 * USED FOR EVALUATION OF EMBEDDINGS ONLY!
+	 */
+	public static Map<String, Double> findMostSimilarVectorMapEntry(double[] consumerConceptVectors, Map<String, double[]> vectorOntologyMap) {
+		Map<String, Double> mostSimilarVectorMapEntry = new HashMap<String, Double>();
+		double sim = 0;
+		double localSim = 0;
+		String mostSimilar = null;
+
+		for (Entry<String, double[]> e : vectorOntologyMap.entrySet()) {
+			localSim = Cosine.cosineSimilarity(consumerConceptVectors, e.getValue());
+			if (localSim > sim) {
+				mostSimilar = e.getKey();
+				sim = localSim;
+			}
+		}
+
+		mostSimilarVectorMapEntry.put(mostSimilar, sim);
+
+		return mostSimilarVectorMapEntry;
+	}
+
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
