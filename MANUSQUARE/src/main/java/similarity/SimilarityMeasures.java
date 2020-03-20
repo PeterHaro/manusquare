@@ -19,16 +19,14 @@ import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
 import supplierdata.Supplier;
+import utilities.MathUtils;
 import utilities.StringUtilities;
 
 public class SimilarityMeasures {
 
 	public static List<Double> computeSemanticSimilarity (ConsumerQuery query, Supplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {		
 
-		//get the list of processes and certifications for this supplier
 		List<Process> processList = supplier.getProcesses();
-
-		//get the list of certifications for this supplier
 		List<Certification> certificationList = supplier.getCertifications();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
@@ -42,24 +40,26 @@ public class SimilarityMeasures {
 		double processAndMaterialSim = 0;
 		double processSim = 0;
 		double materialSim = 0;
-		double certificateSim = 0;
+		double certificationSim = 0;
 		double allCombinedSim = 0;
 
 		List<Double> similarityList = new LinkedList<Double>();
 
 		for (Process pc : query.getProcesses()) {
-			
+
 			Set<String> consumerMaterials = new HashSet<String>();
 			for (Material m : pc.getMaterials()) {
 				consumerMaterials.add(m.getName());
 			}
 
 			for (Process ps : processList) {		
-				
+
 				StringBuffer debuggingOutput = new StringBuffer();
-				
+
 				debuggingOutput.append("\n------------------ Test: Matching Consumer Process: " + pc.getName() + " + and Supplier Process: " + ps.getName() + " ( " + supplier.getId() + " ) ------------------");
 
+				/* PROCESS SIMILARITY */	
+				
 				//represent processes as graph nodes
 				consumerQueryProcessNode = pc.getName();
 				supplierResourceProcessNode = ps.getName();
@@ -74,159 +74,148 @@ public class SimilarityMeasures {
 					parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerQueryProcessNode, supplierResourceProcessNode, onto, graph);
 					processSim = similarityMethodology.ComputeSimilaritySimpleGraph(parameters);
 				}
-				
+
 				debuggingOutput.append("\nprocessSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processSim);
+				
+				/* MATERIAL SIMILARITY */	
 
-				//Check if there are materials specified in the query
-				if (pc.getMaterials() == null || pc.getMaterials().isEmpty()) {
-					processAndMaterialSim = processSim * hard_coded_weight; //Audun: Reduce process similarity if there are no supplier materials specified.
-					debuggingOutput.append("\nNo materials associated with process so processAndMaterialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processAndMaterialSim);
-					
-				} else {
-					
-					debuggingOutput.append("\nMaterials associated with consumer process " + pc.getName() + " is " + consumerMaterials.toString());
-					
-					//materials related to supplier process
-					Set<String> supplierMaterials = new HashSet<String>();
-					for (Material material : ps.getMaterials()) {
-						supplierMaterials.add(material.getName());
-					}
-					
-					debuggingOutput.append("\nMaterials associated with supplier process " + ps.getName() + " is " + supplierMaterials.toString());
-
-					//if the set of materials in the supplier process contains all materials requested by the consumer --> 1.0, otherwise compute Jaccard
-					//TODO: Use Wu-Palmer instead of Jaccard?
-					if (supplierMaterials.containsAll(consumerMaterials)) {
-						materialSim = 1.0;
-						debuggingOutput.append("\nAll supplier materials match consumer materials so materialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + materialSim);
-					} else { //if not, localMaterialSim is the Jaccard set similarity between the supplierMaterials and the consumerMaterials
-						materialSim = Jaccard.jaccardSetSim(supplierMaterials, consumerMaterials);
-						debuggingOutput.append("\nSupplier " + supplier.getId() + " provides the following materials: " + supplierMaterials.toString());
-						debuggingOutput.append("\nEither no matching or some matching materials between pc and ps so materialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + materialSim);
-					}
-
-					//we should probably prioritise processes over materials
-					if (weighted) {
-						debuggingOutput.append("\nMultiplying processSim: " + processSim + " and materialSim: " + materialSim);
-						processAndMaterialSim = (processSim * 0.75) + (materialSim * 0.25);
-					} else {
-						processAndMaterialSim = (processSim + materialSim) / 2;
-					}
-
-					debuggingOutput.append("\nFinal processAndMaterialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processAndMaterialSim);
+				Set<String> supplierMaterials = new HashSet<String>();
+				for (Material material : ps.getMaterials()) {
+					supplierMaterials.add(material.getName());
 				}
 
-				//consider attributeWeight if a weighted process and if the consumer has defined any...							
+				debuggingOutput.append("\nComputing materialSim between consumerMaterials:" + consumerMaterials + " and supplierMaterials: " + supplierMaterials);
+				materialSim = computeWUPSetSim (consumerMaterials, supplierMaterials, processSim, similarityMethod, onto, graph, hard_coded_weight);
+				debuggingOutput.append("\nMaterialSim is: " + materialSim);
+
+				//we should probably prioritise processes over materials
+				if (weighted) {
+					debuggingOutput.append("\nCombining processSim: " + processSim + " and materialSim: " + materialSim);
+					processAndMaterialSim = (processSim * 0.75) + (materialSim * 0.25);
+				} else {
+					processAndMaterialSim = (processSim + materialSim) / 2;
+				}
+
+				debuggingOutput.append("\nFinal processAndMaterialSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + processAndMaterialSim);
+
+				/* ATTRIBUTE SIMILARITY */		
+				
 				Set<Attribute> consumerAttributes = pc.getAttributes();
-								
+
 				//if there are any consumer attributes, we use these to influence the processAndMaterialSim
 				if (consumerAttributes != null) {
-				debuggingOutput.append("\nAttributes with consumer process " + pc.getName() + ": ");
-				
-				for (Attribute a : consumerAttributes) {
-					debuggingOutput.append(a.getKey());
-				}
+					debuggingOutput.append("\nAttributes with consumer process " + pc.getName() + ": ");
 
-				double attributeWeight = 0;
+					for (Attribute a : consumerAttributes) {
+						debuggingOutput.append(a.getKey());
+					}
 
+					double attributeWeight = 0;
 
-				//check which value ("Y", "N" or "O") the corresponding supplier process has
-				for (Attribute a_c : consumerAttributes) {
+					//check which value ("Y", "N" or "O") the corresponding supplier process has
+					for (Attribute a_c : consumerAttributes) {
 
-					if (ps.getAttributeWeightMap().containsKey(a_c.getKey())) {
+						if (ps.getAttributeWeightMap().containsKey(a_c.getKey())) {
 
-						if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("Y")) {
-							debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey()) + " for attributeKey: " + a_c.getKey());
-							attributeWeight = 1.0;
-						} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("O")) {
-							debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
+							if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("Y")) {
+								debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey()) + " for attributeKey: " + a_c.getKey());
+								attributeWeight = 1.0;
+							} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("O")) {
+								debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
+								attributeWeight = hard_coded_weight;
+							} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("N")) {
+								debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
+								attributeWeight = 0.9;
+							}
+						} else {
 							attributeWeight = hard_coded_weight;
-						} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("N")) {
-							debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
-							attributeWeight = 0.9;
+							debuggingOutput.append("\nThere are no equivalent attributeKeys for process " + ps.getName());
 						}
-					} else {//this means that the supplier attributes are different from the consumer attributes TODO: Shouldn´t the same weight as for "O" be imposed?
-						attributeWeight = hard_coded_weight;
-						debuggingOutput.append("\nThere are no equivalent attributeKeys for process " + ps.getName());
+
 					}
 
-				}
+					debuggingOutput.append("\nThe initial processAndMaterialSim for process " + ps.getName() + " is " + processAndMaterialSim);
 
-				debuggingOutput.append("\nThe initial processAndMaterialSim for process " + ps.getName() + " is " + processAndMaterialSim);
+					//test
+					double initialProcessAndMaterialSim = processAndMaterialSim;
 
-				//test
-				double initialProcessAndMaterialSim = processAndMaterialSim;
+					if (weighted) {
+						processAndMaterialSim = processAndMaterialSim * attributeWeight;
+					}
 
-				if (weighted) {
-					processAndMaterialSim = processAndMaterialSim * attributeWeight;
-				}
-				
-				debuggingOutput.append("\nThe processAndMaterialSim for process " + ps.getName() + " after attributeWeight is " + processAndMaterialSim + " (- " + (processAndMaterialSim / initialProcessAndMaterialSim) * 100 + " % )");
+					debuggingOutput.append("\nThe processAndMaterialSim for process " + ps.getName() + " after attributeWeight is " + processAndMaterialSim + " (- " + (processAndMaterialSim / initialProcessAndMaterialSim) * 100 + " % )");
 				} 
+
+				/* CERTIFICATION SIMILARITY */
 				
-				//certificate facet similarity
-
-				//if the consumer hasn´t specified any required certifications we only compute similarity based on processes (and materials)
-				if (query.getCertifications() == null || query.getCertifications().isEmpty()) {
-
-					allCombinedSim = processAndMaterialSim;
-
-				} else { //if the consumer has specified required certifications we compute similarity based on processes (and materials) and certifications
-
-					//if the supplier has no certifications
-					if (certificationList == null || certificationList.isEmpty()) {
-
-						//Audun: Reduce allCombined similarity if there are no supplier certifications specified and the consumer has certification requirements.
-						allCombinedSim = processAndMaterialSim * hard_coded_weight;
-
-					} else {
-
-						//get required certifications 
-						Set<String> requiredCertificates= new HashSet<String>();
-
-						for (Certification c : query.getCertifications()) {
-							requiredCertificates.add(c.getId());
-						}
-						
-						debuggingOutput.append("\nRequired certificates by consumer: " + StringUtilities.printSetItems(requiredCertificates));
-						
-						//get supplier certifications
-						Set<String> possessedCertificates = new HashSet<String>();
-						for (Certification c : certificationList) {
-							possessedCertificates.add(c.getId());
-							
-						}
-
-						debuggingOutput.append("\nPossessed certificates by supplier: " + StringUtilities.printSetItems(possessedCertificates));
-						
-						if (possessedCertificates.containsAll(requiredCertificates)) {
-							certificateSim = 1.0;
-						} else {
-							certificateSim = Jaccard.jaccardSetSim(requiredCertificates, possessedCertificates);
-						} 
-
-						debuggingOutput.append("\nThe certificateSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + certificateSim);
-
-						if (weighted) {
-							allCombinedSim = (processAndMaterialSim * 0.90)  + (certificateSim * 0.10);
-							//allCombinedSim = (processAndMaterialSim * 0.75)  + (certificateSim * 0.25);
-						} else {
-							allCombinedSim = (processAndMaterialSim + certificateSim) / 2;
-						}
-					}
+				Set<Certification> initialConsumerCertifications = query.getCertifications();
+				Set<String> consumerCertifications = new HashSet<String>();
+				for (Certification c : initialConsumerCertifications) {
+					consumerCertifications.add(c.getId());				
+				}
+				
+				Set<String> supplierCertifications = new HashSet<String>();
+				for (Certification c : certificationList) {
+					supplierCertifications.add(c.getId());
+				}
+				
+				certificationSim = computeWUPSetSim (consumerCertifications, supplierCertifications, processAndMaterialSim, similarityMethod, onto, graph, hard_coded_weight);
+				debuggingOutput.append("\nRequired certificates by consumer: " + StringUtilities.printSetItems(consumerCertifications));
+				debuggingOutput.append("\nCertifications possessed by supplier: " + StringUtilities.printSetItems(supplierCertifications));
+				debuggingOutput.append("\ncertificationSim is: " + certificationSim);
+				
+				if (weighted) {
+					allCombinedSim = (processAndMaterialSim * 0.90)  + (certificationSim * 0.10);
+				} else {
+					allCombinedSim = (processAndMaterialSim + certificationSim) / 2;
 				}
 
 				debuggingOutput.append("\nThe allCombinedSim for supplier process " + ps.getName() + " ( " + supplier.getId() + " ) is: " + allCombinedSim);
 				similarityList.add(allCombinedSim);
-				
+
 				if (testing == true) {
-				System.out.println(debuggingOutput.toString());
+					System.out.println(debuggingOutput.toString());
 				}
 			}			
 		}	
 
-
 		return similarityList;
+
+	}
+
+	public static double computeWUPSetSim (Set<String> consumerSet, Set<String> supplierSet, double initialSim, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
+		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
+		SimilarityParameters parameters = null;		
+		List<Double> simList = new LinkedList<Double>();
+
+		if (consumerSet == null || consumerSet.isEmpty()) {
+			return 1.0;
+		}
+
+		else if (supplierSet == null || supplierSet.isEmpty()) {
+			return initialSim * hard_coded_weight;
+		}
+
+		else {
+			if (supplierSet.containsAll(consumerSet)) {
+				return 1.0;
+			}
+
+			else {
+
+				for (String c : consumerSet) {
+					for (String s : supplierSet) {
+
+						parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
+						simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
+
+					}
+				}
+
+				return MathUtils.sum(simList) / (double)simList.size();
+
+			}
+		}
 
 	}
 

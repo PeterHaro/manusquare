@@ -1,6 +1,7 @@
 package utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author audunvennesland
@@ -107,5 +108,13 @@ public class MathUtils {
         return (int) (Math.log(x) / Math.log(2));
 
     }
+    
+	public static double sum(List<Double> list) {
+	    double sum = 0;
+	    for (double i: list) {
+	        sum += i;
+	    }
+	    return sum;
+	}
 
 }
