@@ -43,6 +43,15 @@ public class ConsumerQuery {
 		this.processes = processes;
 		this.certifications = certifications;
 	}
+	
+	//if processes (incl. materials) and supplierMaxDistance are specified by the consumer
+	public ConsumerQuery(Set<Process> processes, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
+		super();
+
+		this.processes = processes;
+		this.supplierMaxDistance = supplierMaxDistance;
+		this.customerLocationInfo = customerLocationInfo;
+	}
 
 
 	//if the consumer specifies both processes (incl. materials), certifications, and supplierMaxDistance.
@@ -54,14 +63,7 @@ public class ConsumerQuery {
 		this.customerLocationInfo = customerLocationInfo;
 	}
 
-	//if only processes (incl. materials) are specified by the consumer
-	public ConsumerQuery(Set<Process> processes, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
-		super();
 
-		this.processes = processes;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customerLocationInfo = customerLocationInfo;
-	}
 
 	public ConsumerQuery() {
 	}
@@ -176,11 +178,12 @@ public class ConsumerQuery {
 			process = validateProcessName(process, onto, allOntologyClasses);
 			equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
 
+			//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
 			if (equivalentProcesses.isEmpty() || equivalentProcesses == null) {
 
 				processes.add(new Process(process, validateMaterials(materialSet, onto, allOntologyClasses), validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
 
-			} else {
+			} else {//if there are equivalent processes in the ontology we add those to the set of processes together with the process included by the consumer
 				for (String s : equivalentProcesses) {
 
 					processes.add(new Process(process, validateMaterials(materialSet, onto, allOntologyClasses), validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
@@ -216,7 +219,14 @@ public class ConsumerQuery {
 		return query;
 	}
 
-
+	/**
+	 * Removes and adds a process to a set of processes
+	 * @param equivalentProcesses the set of processes
+	 * @param toBeRemoved the process to be removed from the set of processes
+	 * @param toBeAdded the process to be added to the set of processes
+	 * @return set of processes
+	   Mar 27, 2020
+	 */
 	private static Set<String> updateEquivalenceSet(Set<String> equivalentProcesses, String toBeRemoved, String toBeAdded) {
 		Set<String> updatedEquivalentProcesses = new HashSet<>(equivalentProcesses);
 		updatedEquivalentProcesses.remove(toBeRemoved);
@@ -226,6 +236,15 @@ public class ConsumerQuery {
 	}
 
 
+	/**
+	 * Ensures that a process included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
+	 * @param processName process included by the consumer
+	 * @param onto the MANU-SQUARE ontology
+	 * @param allOntologyClasses string representation of all ontology concepts
+	 * @return a process name verified to exist in the MANU-SQUARE ontology
+	 * @throws IOException
+	   Mar 27, 2020
+	 */
 	private static String validateProcessName(String processName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 
 		String validatedProcessName = null;
@@ -306,7 +325,6 @@ public class ConsumerQuery {
 
 		for (Certification c : initialCertifications) {
 			if (!allOntologyClasses.contains(c.getId())) { //if not, get the concept from the ontology with the highest similarity
-				System.out.println("The ontology does not contain " + c.getId());
 				c.setId(getMostSimilarConcept(c.getId(), QueryConceptType.CERTIFICATION, onto, EmbeddingSingletonDataManager.VAM));
 				validatedMaterials.add(c);
 			} else {
@@ -318,16 +336,18 @@ public class ConsumerQuery {
 
 	}
 
+	
 	/**
-	 * Retrieves the most semantically similar concept using embeddings created by Word2Vec
-	 *
-	 * @param consumerInput the input (e.g. requested process or material) from the consumer
-	 * @param conceptType   the ontology class from which a relevant subset of concepts to be compared is retrieved (for processes this is 'MfgProcess', for materials this is 'MaterialType')
-	 * @param onto          the ontology from which the most semantically similar concept is retrieved
-	 * @return the ontology concept having the highest (semantic) similarity with the consumerInput
-	 * @throws IOException Mar 3, 2020
+	 * Retrieves the most similar concept from a concept included by the consumer in the GUI. 
+	 * @param consumerInput				the input (i.e. requested process, material, attribute type or certification) from the consumer
+	 * @param conceptType   				the ontology class from which a relevant subset of concepts to be compared is retrieved (for processes this is 'MfgProcess', for materials this is 'MaterialType')
+	 * @param onto 						the ontology from which the most semantically similar concept is retrieved
+	 * @param vectorAggregationMethod	whether the embedding vectors associated with a concept (if compound) are summed or averaged.
+	 * @return 							the most similar ontology concept given the consumerInput
+	 * @throws IOException
+	   Mar 27, 2020
 	 */
-	public static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
+	private static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
 		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
 
 		Set<String> classes = new HashSet<String>();
@@ -342,10 +362,9 @@ public class ConsumerQuery {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("AttributeType", onto));
 		}
 
-		//if the consumerInput equals an ontology concept we return this
+		//if the consumerInput equals an ontology concept we return this without using syntactic/semantic matching
 		if (containsIgnoreCase(classes, consumerInput)) {
 			
-			//return preProcess(consumerInput);//TODO: Test this!
 			return findConceptName(consumerInput, classes);
 			
 		} else {//if not, we do the semantic and syntactic matching process
@@ -414,7 +433,7 @@ public class ConsumerQuery {
 	 * @return the ontology concept having the vector most similar to the vector of the consumer input (process or material)
 	 * Mar 3, 2020
 	 */
-	public static String findMostSimilarVector(double[] consumerConceptVectors, Map<String, double[]> vectorOntologyMap) {
+	private static String findMostSimilarVector(double[] consumerConceptVectors, Map<String, double[]> vectorOntologyMap) {
 		double sim = 0;
 		double localSim = 0;
 		String mostSimilar = null;
@@ -493,18 +512,30 @@ public class ConsumerQuery {
 		return sortedByValues;
 	}
 
+	/**
+	 * (currently) removes whitespace from the consumer input received in the JSON file
+	 * @param input consumer input (i.e. process, material, attribute, certification)
+	 * @return pre-processed consumer input
+	   Mar 27, 2020
+	 */
 	private static String preProcess(String input) {
 		
 
-//		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+|\\d+", ""));
 		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+", ""));
 		
 
 		return input;
 	}
 
-	private static boolean containsIgnoreCase(Set<String> list, String soughtFor) {
-		for (String current : list) {
+	/**
+	 * Checks if a set of strings includes the given string while ignoring the casing
+	 * @param set set of strings
+	 * @param soughtFor the string to check if exists in the set of strings
+	 * @return true if the set of strings contains the given string, false otherwise
+	   Mar 27, 2020
+	 */
+	private static boolean containsIgnoreCase(Set<String> set, String soughtFor) {
+		for (String current : set) {
 			if (current.equalsIgnoreCase(soughtFor)) {
 				return true;
 			}
