@@ -49,12 +49,12 @@ public class SparqlQuery {
 
 		ConsumerQuery query = ConsumerQuery.createConsumerQuery (filename, onto);
 
-		String test = dynamicAttributeQuery(query, onto);
+		String test = createSparqlQuery(query, onto);
 
 
 	}
 
-	public static String dynamicAttributeQuery(ConsumerQuery cq, OWLOntology onto) throws OWLOntologyCreationException {
+	public static String createSparqlQuery (ConsumerQuery cq, OWLOntology onto) throws OWLOntologyCreationException {
 
 		Set<Material> materials = new HashSet<Material>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
@@ -156,7 +156,7 @@ public class SparqlQuery {
 		strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
 		strQuery += "\n}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 	}
@@ -199,6 +199,7 @@ public class SparqlQuery {
 
 
 	private static String queryAttributes (Set<Attribute> attributes) {
+		
 		StringBuilder attributeQuery = new StringBuilder();
 
 		String attribute, attributeType, attributeClass, attributeValue, attributeVariable = null;
@@ -209,9 +210,9 @@ public class SparqlQuery {
 		Map<String, String> attributeConditions = mapAttributeConditions(attributes);
 
 		for (Attribute att : attributes) {
-
+			
 			attKey = att.getKey();
-			attValue = att.getValue();
+			attValue = att.getValue();						
 			attribute = "?" + att.getKey().toLowerCase() + "Attribute";
 			attributeType = "?" + att.getKey().toLowerCase() + "AttributeType";
 			attributeClass = "ind:" + att.getKey();
@@ -239,16 +240,19 @@ public class SparqlQuery {
 	 * @return a map of attribute (key) and the conditions (value) used for determining whether they satisfy attribute reqs from the consumer.
 	   Feb 8, 2020
 	 */
-	public static Map<String, String> mapAttributeConditions (Set<Attribute> attributes) {
+	private static Map<String, String> mapAttributeConditions (Set<Attribute> attributes) {
 
 		Map<String, String> attributeConditions = new HashMap<String, String>();
 		for (Attribute a : attributes) {
 			if (a.getKey().equals("Length") || a.getKey().equals("Width") || a.getKey().equals("Depth") || a.getKey().equals("MinFeatureSize")
-					|| a.getKey().equals("MinLayerThickness") || a.getKey().equals("MinKerfWidth")) {
+					|| a.getKey().equals("MinLayerThickness") || a.getKey().equals("MinKerfWidth") || a.getKey().equals("WorkingVolumeX")
+					|| a.getKey().equals("MinSheetThickness") || a.getKey().equals("PartSizeX") || a.getKey().equals("PartSizeY") || a.getKey().equals("PartSizeZ")
+					|| a.getKey().equals("MoldSizeX") || a.getKey().equals("MoldSizeY") || a.getKey().equals("MoldSizeZ") || a.getKey().equals("Capacity")
+					|| a.getKey().equals("WorkingAreaX") || a.getKey().equals("WorkingAreaY") || a.getKey().equals("WorkingAreaZ")) {
 				attributeConditions.put(a.getKey(), ">=");
 			} else if (a.getKey().equals("Tolerance") || a.getKey().equals("SurfaceFinishing") || a.getKey().equals("MaxWallThickness")
 					|| a.getKey().equals("MaxPartSizeX") || a.getKey().equals("MaxPartSizeY") || a.getKey().equals("MaxPartSizeZ")
-					|| a.getKey().equals("MaxKerfWidth")) {
+					|| a.getKey().equals("MaxKerfWidth") || a.getKey().equals("MaxSheetThickness")) {
 				attributeConditions.put(a.getKey(), "<=");
 			} else if (a.getKey().equals("Axis") || a.getKey().equals("CuttingSpeed")) {
 				attributeConditions.put(a.getKey(), "=");
@@ -265,10 +269,10 @@ public class SparqlQuery {
 	 * @return
 	   Feb 8, 2020
 	 */
-	public static String getOpposite (String inputCondition) {
+	private static String getOpposite (String inputCondition) {
 		
 		String opposite = null;
-
+		
 		if (inputCondition.equals("<=")) {
 			opposite = ">";
 		} else if (inputCondition.equals(">=")) {
@@ -286,7 +290,7 @@ public class SparqlQuery {
 	 * @return set of common elements in the input sets
 	   Feb 27, 2020
 	 */
-	public static <T> Set<T> getCommonElements(Collection<? extends Collection<T>> collections) {
+	private static <T> Set<T> getCommonElements(Collection<? extends Collection<T>> collections) {
 
 		Set<T> common = new LinkedHashSet<T>();
 		if (!collections.isEmpty()) {
