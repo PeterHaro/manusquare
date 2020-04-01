@@ -498,6 +498,9 @@ public class StringUtilities {
 	 */
 	public static String printSetItems(Set<String> set) {
 		StringBuffer sb = new StringBuffer();
+		
+		if (!set.isEmpty()) {
+		
 		for (String s : set) {
 			sb.append(s + ", ");
 		}
@@ -505,6 +508,9 @@ public class StringUtilities {
 		String setItem = sb.deleteCharAt(sb.lastIndexOf(",")).toString();
 
 		return setItem;
+		} else {
+			return null;
+		}
 
 	}
 
