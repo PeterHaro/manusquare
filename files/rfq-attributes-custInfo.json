@@ -3,9 +3,10 @@
 	"projectName": "Project1",
 	"projectDescription": "ProjectDescription",
 	"selectionType": "Manual",
-	"supplierMaxDistance": "100",
+	"supplierMaxDistance": "0",
 	 "customer": {
         "customerInfo": {
+        		"customerId": "urn:stakeholders:1",
             "location": "Valencia",
             "lat": "39.474858",
             "lon": "-0.358250"
@@ -17,35 +18,11 @@
 	"projectType": "Capacity Sharing",
 	"projectAttributes": [
 		{
-			"attributeId": "E",
-			"processName": "sinker edm",
-			"attributeKey": "material",
-			"attributeValue": "Steel"
-		},
-		{
-			"attributeId": "F",
-			"processName": "sinker edm",
-			"attributeKey": "Tolerance",
-			"attributeValue": "3"
-		},
-		{
-			"attributeId": "G",
-			"processName": "HoleMaking",
-			"attributeKey": "material",
-			"attributeValue": "CarbonSteel"
-		},
-		{
-			"attributeId": "H",
-			"processName": "HoleMaking",
-			"attributeKey": "Axis",
-			"attributeValue": "4"
-		}
-	],
-	"supplierAttributes": [
-		{
-			"id": "supplier-attribute-430396576",
-			"attributeKey": "certification",
-			"attributeValue": "ISO9001"
+			"attributeId": "A",
+			"processName": "Drilling",
+			"attributeKey": "AspectRatio",
+			"attributeValue": "1.1",
+			"attributeUnitOfMeasurement": "rpm"
 		}
 	]
 }

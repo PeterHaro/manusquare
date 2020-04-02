@@ -1,19 +1,23 @@
 package javalin.controllers;
 
-import com.google.gson.Gson;
-import io.javalin.http.BadRequestResponse;
-import io.javalin.http.Handler;
-import io.javalin.plugin.openapi.annotations.*;
-import javalin.models.ErrorResponse;
-import javalin.models.Rfq;
-import json.RequestForQuotation;
-import query.ConsumerQuery;
-import ui.SemanticMatching_MVP;
-import validation.JSONValidation;
-
 import java.io.BufferedWriter;
 import java.io.StringWriter;
 import java.util.Objects;
+
+import com.google.gson.Gson;
+
+import io.javalin.http.BadRequestResponse;
+import io.javalin.http.Handler;
+import io.javalin.plugin.openapi.annotations.HttpMethod;
+import io.javalin.plugin.openapi.annotations.OpenApi;
+import io.javalin.plugin.openapi.annotations.OpenApiContent;
+import io.javalin.plugin.openapi.annotations.OpenApiFormParam;
+import io.javalin.plugin.openapi.annotations.OpenApiResponse;
+import javalin.models.ErrorResponse;
+import javalin.models.Rfq;
+import json.RequestForQuotation;
+import ui.SemanticMatching_MVP;
+import validation.JSONValidation;
 
 public class SemanticMatchingController {
     @OpenApi(

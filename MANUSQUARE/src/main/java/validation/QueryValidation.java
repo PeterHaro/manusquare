@@ -22,7 +22,7 @@ import edm.Material;
 import embedding.vectoraggregation.VectorAggregationMethod;
 import owlprocessing.OntologyOperations;
 import query.QueryConceptType;
-import utilities.Cosine;
+import similarity.Cosine;
 import utilities.StringUtilities;
 
 public class QueryValidation {
