@@ -156,7 +156,7 @@ public class SparqlQuery {
 		strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
 		strQuery += "\n}";
 
-		System.out.println(strQuery);
+		//System.out.println(strQuery);
 
 		return strQuery;
 	}

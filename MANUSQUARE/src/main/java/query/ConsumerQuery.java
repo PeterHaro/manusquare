@@ -156,8 +156,6 @@ public class ConsumerQuery {
 			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
 				if (projectAttributes.attributeKey != null) {
 					if (!projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) {
-						System.out.println("initial attributeValue is: " + projectAttributes.attributeValue);
-						System.out.println("converted attributeValue is " + UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.attributeUnitOfMeasurement));
 						attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.attributeUnitOfMeasurement), projectAttributes.attributeUnitOfMeasurement));
 					} else if (projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) { //get the materials
 						materialSet.add(new Material(projectAttributes.attributeValue));

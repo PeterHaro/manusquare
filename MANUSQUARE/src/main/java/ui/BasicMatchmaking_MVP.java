@@ -1,17 +1,14 @@
 package ui;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.ParseException;
+
 import org.codehaus.jettison.json.JSONException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class BasicMatchmaking_MVP {
 	
@@ -24,14 +21,13 @@ public class BasicMatchmaking_MVP {
 		String jsonOut = "./files/matchingResults.json";
 
 		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = true;
+		boolean testing = false;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
 		
 		//used for situations where a process chain has no certifications|materials|attributes and this is required by the consumer in the RFQ JSON
 		double hard_coded_weight = 0.9;
-
 
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
@@ -40,7 +36,7 @@ public class BasicMatchmaking_MVP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "../MANUSQUARE/files/rfq-attributes-custInfo.json";
+			String jsonIn = "./files/rfq-attributes-custInfo.json";
  			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
@@ -49,24 +45,6 @@ public class BasicMatchmaking_MVP {
 
 		if (testing) {
 			System.out.println("The entire Matchmaking process completed in " + elapsedTime / 1000 + " seconds.");
-		}
-
-	}
-
-
-	private static void logging(boolean logging) {
-		Set<String> loggers = new HashSet<>(Arrays.asList("org.apache.http", "org.eclipse.rdf4j"));
-
-		if (!logging) {
-			for (String log : loggers) {
-				Logger logger = (Logger) LoggerFactory.getLogger(log);
-				logger.setLevel(Level.ERROR);
-				logger.setAdditive(false);
-			}
-		} else {
-
-			System.out.println("Logging:");
-
 		}
 
 	}
