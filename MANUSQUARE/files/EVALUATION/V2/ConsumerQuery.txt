@@ -1,2 +1,0 @@
-WaterJetCutting; AlloySteel; WaterJetCuttingMachine; ISO9000,ISO9004; 125
-PrecisionMilling; CarbonSteel; ComputerControlledMachineTool; ISO9000,LEED,ISO9004; 50
