@@ -72,13 +72,25 @@ public class RequestForQuotation {
 		public String processName;
 		public String attributeKey;
 		public String attributeValue;
+		public String attributeUnitOfMeasurement;
 		
+		//if attribute is material
 		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue) {
 			super();
 			this.attributeId = attributeId;
 			this.processName = processId;
 			this.attributeKey = attributeKey;
 			this.attributeValue = attributeValue;
+		}
+		
+		//if attribute is other attribute than material
+		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue, String attributeUnitOfMeasurement) {
+			super();
+			this.attributeId = attributeId;
+			this.processName = processId;
+			this.attributeKey = attributeKey;
+			this.attributeValue = attributeValue;
+			this.attributeUnitOfMeasurement = attributeUnitOfMeasurement;
 		}
 
 		public String getAttributeId() {
@@ -112,8 +124,16 @@ public class RequestForQuotation {
 		public void setAttributeValue(String attributeValue) {
 			this.attributeValue = attributeValue;
 		}
+
+		public String getAttributeUnitOfMeasurement() {
+			return attributeUnitOfMeasurement;
+		}
+
+		public void setAttributeUnitOfMeasurement(String attributeUnitOfMeasurement) {
+			this.attributeUnitOfMeasurement = attributeUnitOfMeasurement;
+		}
 		
-		
+
 	}
 	
 	public class SupplierAttributeKeys {
