@@ -46,10 +46,14 @@ public class SimilarityMeasures {
 		List<Double> similarityList = new LinkedList<Double>();
 
 		for (Process pc : query.getProcesses()) {
-
 			Set<String> consumerMaterials = new HashSet<String>();
+			
+			//check if there are any materials specified in the consumer query
+			if (pc.getMaterials() != null) {
+			
 			for (Material m : pc.getMaterials()) {
 				consumerMaterials.add(m.getName());
+			}
 			}
 
 			for (Process ps : processList) {		
@@ -150,8 +154,11 @@ public class SimilarityMeasures {
 				
 				Set<Certification> initialConsumerCertifications = query.getCertifications();
 				Set<String> consumerCertifications = new HashSet<String>();
+				
+				if (initialConsumerCertifications != null) {
 				for (Certification c : initialConsumerCertifications) {
 					consumerCertifications.add(c.getId());				
+				}
 				}
 				
 				Set<String> supplierCertifications = new HashSet<String>();
