@@ -41,7 +41,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./MANUSQUARE/files/rfq-testing_040320.json";
+		String filename = "./files/rfq-attributes-custInfo.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -50,6 +50,8 @@ public class SparqlQuery {
 		ConsumerQuery query = ConsumerQuery.createConsumerQuery (filename, onto);
 
 		String test = createSparqlQuery(query, onto);
+		
+		System.out.println(test);
 
 
 	}
@@ -221,18 +223,48 @@ public class SparqlQuery {
 
 			attributeQuery.append("\nOPTIONAL {?process core:hasAttribute " + attribute + " . \n");
 			attributeQuery.append(attribute + " rdf:type " + attributeType + " . \n");
+			
+			//if unit of measurement is included
+			if (att.getunitOfMeasurement() != null) {
+			attributeQuery.append(attribute + " core:hasUnitOfMeasure " + "?uomInd .\n");
+			attributeQuery.append("?uomInd" + " core:hasName " + "?uom .\n");
+			
 			attributeQuery.append(" VALUES " + attributeType + " {"+ attributeClass + "} . \n");
 			attributeQuery.append(attribute + " core:hasValue " + attributeValue + " . \n");
+
 			attributeQuery.append("} \n");
+			
+			attributeQuery.append("BIND ( \n");
+			attributeQuery.append("IF (bound(?uom) && ?uom = \"m/min\", " + attributeValue + " * 1000, \n");
+			attributeQuery.append("IF (bound(?uom) && ?uom = \"dm/min\", " + attributeValue + " * 100,\n");
+			attributeQuery.append("IF (bound(?uom) && ?uom = \"cm/min\", " + attributeValue + " * 10,\n");
+			attributeQuery.append(attributeValue + "))) as ?newAttributeValue) \n");
+			
+			attributeQuery.append("\n");
+			
+			attributeQuery.append("BIND ( \n");
+			attributeQuery.append("IF (bound(?newAttributeValue)" + " && " + "?newAttributeValue" + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
+			attributeQuery.append("IF (bound(?newAttributeValue)" + " && " + "?newAttributeValue" + " " + getOpposite (attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
+			attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
+			
+		} else {
+			
+			attributeQuery.append(" VALUES " + attributeType + " {"+ attributeClass + "} . \n");
+			attributeQuery.append(attribute + " core:hasValue " + attributeValue + " . \n");
+			
 			attributeQuery.append("BIND ( \n");
 			attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
 			attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + getOpposite (attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
 			attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
 		}
+			
+		}
 
 		return attributeQuery.toString();
 
 	}
+	
+
 
 	/**
 	 * Finds the relevant conditions ('<=', '>=' or '=') for a given sample of attributes.
