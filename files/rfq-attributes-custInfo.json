@@ -21,8 +21,15 @@
 			"attributeId": "A",
 			"processName": "Drilling",
 			"attributeKey": "AspectRatio",
-			"attributeValue": "1.1",
-			"attributeUnitOfMeasurement": "rpm"
+			"attributeValue": "13",
+			"attributeUnitOfMeasurement": "mm"
+		},
+		{
+			"attributeId": "B",
+			"processName": "Milling",
+			"attributeKey": "Tolerance",
+			"attributeValue": "15",
+			"attributeUnitOfMeasurement": "mm"
 		}
 	]
 }

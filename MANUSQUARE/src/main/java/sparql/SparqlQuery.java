@@ -204,12 +204,14 @@ public class SparqlQuery {
 		
 		StringBuilder attributeQuery = new StringBuilder();
 
-		String attribute, attributeType, attributeClass, attributeValue, attributeVariable = null;
+		String attribute, attributeType, attributeClass, attributeValue, attributeVariable, updatedAttributeValue = null;
 
 		//retrieved from Attribute object
 		String attKey, attValue = null;
 
 		Map<String, String> attributeConditions = mapAttributeConditions(attributes);
+		
+		int attCounter = 0;
 
 		for (Attribute att : attributes) {
 			
@@ -220,6 +222,7 @@ public class SparqlQuery {
 			attributeClass = "ind:" + att.getKey();
 			attributeValue = "?" + att.getKey().toLowerCase() + "Value";
 			attributeVariable = "?" + att.getKey() + "Attr";
+			updatedAttributeValue = "?updated" + attKey + "Value" + attCounter;
 
 			attributeQuery.append("\nOPTIONAL {?process core:hasAttribute " + attribute + " . \n");
 			attributeQuery.append(attribute + " rdf:type " + attributeType + " . \n");
@@ -238,14 +241,16 @@ public class SparqlQuery {
 			attributeQuery.append("IF (bound(?uom) && ?uom = \"m/min\", " + attributeValue + " * 1000, \n");
 			attributeQuery.append("IF (bound(?uom) && ?uom = \"dm/min\", " + attributeValue + " * 100,\n");
 			attributeQuery.append("IF (bound(?uom) && ?uom = \"cm/min\", " + attributeValue + " * 10,\n");
-			attributeQuery.append(attributeValue + "))) as ?newAttributeValue) \n");
+			attributeQuery.append(attributeValue + "))) as " + updatedAttributeValue + ") \n");
 			
 			attributeQuery.append("\n");
 			
 			attributeQuery.append("BIND ( \n");
-			attributeQuery.append("IF (bound(?newAttributeValue)" + " && " + "?newAttributeValue" + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
-			attributeQuery.append("IF (bound(?newAttributeValue)" + " && " + "?newAttributeValue" + " " + getOpposite (attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
+			attributeQuery.append("IF (bound("+ updatedAttributeValue + ") && " + updatedAttributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
+			attributeQuery.append("IF (bound("+ updatedAttributeValue + ") && " + updatedAttributeValue + " " + getOpposite (attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
 			attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
+			
+			attCounter++;
 			
 		} else {
 			
@@ -256,6 +261,8 @@ public class SparqlQuery {
 			attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
 			attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + getOpposite (attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
 			attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
+			
+			attributeQuery.append("} \n");
 		}
 			
 		}

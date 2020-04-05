@@ -116,7 +116,8 @@ public class TripleStoreConnection {
 					if (containsAttributes(bindings) == true) {
 
 						for (String s : bindings) {
-							if (s.endsWith("Attr")) {						
+														
+							if (s.endsWith("Attr")) {					
 								attributeMap.put(s.replace("Attr", ""), solution.getValue(s).stringValue());
 							}
 						}
