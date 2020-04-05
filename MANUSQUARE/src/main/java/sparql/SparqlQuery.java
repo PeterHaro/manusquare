@@ -257,12 +257,14 @@ public class SparqlQuery {
 			attributeQuery.append(" VALUES " + attributeType + " {"+ attributeClass + "} . \n");
 			attributeQuery.append(attribute + " core:hasValue " + attributeValue + " . \n");
 			
+			attributeQuery.append("} \n");
+			
 			attributeQuery.append("BIND ( \n");
 			attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
 			attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + getOpposite (attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
 			attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
 			
-			attributeQuery.append("} \n");
+			
 		}
 			
 		}
