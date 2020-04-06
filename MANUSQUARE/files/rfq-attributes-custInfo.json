@@ -1,0 +1,34 @@
+{
+	"nda": "no",
+	"projectName": "Project1",
+	"projectDescription": "ProjectDescription",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "1000",
+	 "customer": {
+        "customerInfo": {
+        		"customerId": "urn:stakeholders:1",
+            "location": "Valencia",
+            "lat": "39.474858",
+            "lon": "-0.358250"
+        }
+    },
+	"servicePolicy": "true",
+	"projectId": "project-1254161155",
+	"id": "project-1254161155",
+	"projectType": "Capacity Sharing",
+	"projectAttributes": [
+		{
+			"attributeId": "A",
+			"processName": "Drilling",
+			"attributeKey": "AspectRatio",
+			"attributeValue": "13"
+		},
+		{
+			"attributeId": "B",
+			"processName": "Milling",
+			"attributeKey": "Tolerance",
+			"attributeValue": "15",
+			"attributeUnitOfMeasurement": "mm"
+		}
+	]
+}
