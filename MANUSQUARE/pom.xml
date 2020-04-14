@@ -14,7 +14,7 @@
 					<appendAssemblyId>false</appendAssemblyId>
 					<archive>
 						<manifest>
-							<mainClass>ui.BasicMatchmaking_MVP</mainClass>
+							<mainClass>javalin.OpenAPIEndpoint</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

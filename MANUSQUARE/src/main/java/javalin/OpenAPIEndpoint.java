@@ -52,7 +52,7 @@ public class OpenAPIEndpoint {
 
         app.post("/matching", SemanticMatchingController.PerformSemanticMatching);
         app.post("/matchmaking", SemanticMatchingController.PerformSemanticMatching);
-        app.start(1337);
+        app.start(7000);
 
     }
 

@@ -8,11 +8,7 @@ import com.google.gson.Gson;
 
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Handler;
-import io.javalin.plugin.openapi.annotations.HttpMethod;
-import io.javalin.plugin.openapi.annotations.OpenApi;
-import io.javalin.plugin.openapi.annotations.OpenApiContent;
-import io.javalin.plugin.openapi.annotations.OpenApiFormParam;
-import io.javalin.plugin.openapi.annotations.OpenApiResponse;
+import io.javalin.plugin.openapi.annotations.*;
 import javalin.models.ErrorResponse;
 import javalin.models.Rfq;
 import json.RequestForQuotation;
@@ -33,10 +29,10 @@ public class SemanticMatchingController {
             //requestBody = @OpenApiRequestBody(content = @OpenApiContent(from = Rfq.class, type = "applicatiton/json")),
             formParams = @OpenApiFormParam(name = "rfq", type = Rfq.class),
             responses = {
-                    @OpenApiResponse(status = "200", content = @OpenApiContent(from = Rfq.class)),
+                    @OpenApiResponse(status = "200", content = {@OpenApiContent(from = Rfq[].class)}),
                     @OpenApiResponse(status = "400", content = {@OpenApiContent(from = ErrorResponse.class)}),
                     @OpenApiResponse(status = "404", content = {@OpenApiContent(from = ErrorResponse.class)}),
-                    @OpenApiResponse(status = "200", content = @OpenApiContent(type = "application/json"))
+                    @OpenApiResponse(status = "200", content = {@OpenApiContent(type = "application/json")})
             }
 
     )
