@@ -7,19 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_abstract_service_loader_abstract_service_loader_0_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_api_3_4_9_2_ansell.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_impl_3_4_9_2_ansell.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_parsers_3_4_9_2_ansell.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_tools_3_4_9_2_ansell.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openrdf_sesame_sesame_model_2_7_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openrdf_sesame_sesame_rio_api_2_7_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openrdf_sesame_sesame_util_2_7_8.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MANUSQUARE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MANUSQUARE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/ONTOLOGIES/updatedOntology.owl" beforeDir="false" afterPath="$PROJECT_DIR$/files/ONTOLOGIES/updatedOntology.owl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/owlprocessing/OntologyOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/owlprocessing/OntologyOperations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +80,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Manusquare">
+  <component name="RunManager" selected="Application.BasicMatchmaking_MVP">
     <configuration name="BasicMatchmaking_MVP" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.BasicMatchmaking_MVP" />
       <module name="MANUSQUARE" />
