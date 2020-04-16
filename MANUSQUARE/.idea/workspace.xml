@@ -7,23 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_babel__runtime_7_8_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_babel__runtime_7_9_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_emojis_list_2_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_emojis_list_3_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_format_util_1_0_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_format_util_1_0_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_loader_utils_1_2_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_loader_utils_1_4_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_minimist_1_2_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_minimist_1_2_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_perfect_scrollbar_1_4_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_perfect_scrollbar_1_5_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_is_16_12_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_is_16_13_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_regenerator_runtime_0_13_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_regenerator_runtime_0_13_5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_tslib_1_10_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_tslib_1_11_1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_yaml_1_7_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_yaml_1_8_3.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_abstract_service_loader_abstract_service_loader_0_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_api_3_4_9_2_ansell.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_impl_3_4_9_2_ansell.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_parsers_3_4_9_2_ansell.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_ansell_owlapi_owlapi_tools_3_4_9_2_ansell.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openrdf_sesame_sesame_model_2_7_8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openrdf_sesame_sesame_rio_api_2_7_8.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openrdf_sesame_sesame_util_2_7_8.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MANUSQUARE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MANUSQUARE.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javalin/OpenAPIEndpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javalin/OpenAPIEndpoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javalin/controllers/MatchmakingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javalin/controllers/MatchmakingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javalin/controllers/SemanticMatchingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javalin/controllers/SemanticMatchingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/owlprocessing/OntologyOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/owlprocessing/OntologyOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -94,7 +90,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JAR Application.matchmaking.jar">
+  <component name="RunManager" selected="Application.Manusquare">
     <configuration name="BasicMatchmaking_MVP" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.BasicMatchmaking_MVP" />
       <module name="MANUSQUARE" />
@@ -165,9 +161,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JAR Application.matchmaking.jar" />
-        <item itemvalue="Application.OpenAPIEndpoint" />
         <item itemvalue="Application.BasicMatchmaking_MVP" />
+        <item itemvalue="Application.OpenAPIEndpoint" />
+        <item itemvalue="JAR Application.matchmaking.jar" />
         <item itemvalue="Kotlin.javalin.MainKt" />
         <item itemvalue="JUnit.All in MANUSQUARE" />
       </list>
@@ -208,7 +204,8 @@
       <workItem from="1581492329666" duration="9829000" />
       <workItem from="1581674747759" duration="6644000" />
       <workItem from="1583827620724" duration="22291000" />
-      <workItem from="1586862102954" duration="5272000" />
+      <workItem from="1586862102954" duration="5439000" />
+      <workItem from="1587054422426" duration="3794000" />
     </task>
     <servers />
   </component>
@@ -246,7 +243,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java</url>
-          <line>147</line>
+          <line>146</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -263,6 +260,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/javalin/controllers/SemanticMatchingController.java</url>
           <line>40</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java</url>
+          <line>105</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

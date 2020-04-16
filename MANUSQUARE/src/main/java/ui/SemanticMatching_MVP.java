@@ -89,7 +89,6 @@ public class SemanticMatching_MVP {
 			AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
 		}
 
-
 		OWLOntology ontology = null;
 
 		try {			
@@ -100,9 +99,9 @@ public class SemanticMatching_MVP {
 		}
 
 		//save a local copy of the ontology for constructing an (up-to-date) (guava) graph used for the wu-palmer computation. 
-		File localOntoFile = new File("./files/ONTOLOGIES/updatedOntology.owl");
+		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
 
-		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI())); 
+		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
 		ConsumerQuery query = ConsumerQuery.createConsumerQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 		List<String> processes = new ArrayList<>();

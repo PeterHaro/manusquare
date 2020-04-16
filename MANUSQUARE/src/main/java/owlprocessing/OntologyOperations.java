@@ -204,7 +204,8 @@ public class OntologyOperations {
 
 	public static Set<String> getClassesAsString (OWLOntology onto) {
 		Set<String> classesAsString = new HashSet<String>();
-
+		System.out.println("ONTO IS: ");
+		System.out.println(onto);
 		for (OWLClass c : onto.getClassesInSignature()) {
 			classesAsString.add(c.getIRI().getFragment());
 		}
