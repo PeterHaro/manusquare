@@ -1,46 +1,27 @@
 package utilities;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLOntology;
-
 import edu.cmu.lti.lexical_db.ILexicalDatabase;
 import edu.cmu.lti.lexical_db.NictWordNet;
 import edu.cmu.lti.lexical_db.data.Concept;
-import edu.cmu.lti.ws4j.impl.HirstStOnge;
-import edu.cmu.lti.ws4j.impl.JiangConrath;
-import edu.cmu.lti.ws4j.impl.LeacockChodorow;
-import edu.cmu.lti.ws4j.impl.Lesk;
-import edu.cmu.lti.ws4j.impl.Lin;
-import edu.cmu.lti.ws4j.impl.Path;
-import edu.cmu.lti.ws4j.impl.Resnik;
-import edu.cmu.lti.ws4j.impl.WuPalmer;
+import edu.cmu.lti.ws4j.impl.*;
 import edu.cmu.lti.ws4j.util.WS4JConfiguration;
-//import edu.stanford.nlp.simple.Sentence;
-//import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import net.didion.jwnl.JWNL;
 import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.IndexWord;
 import net.didion.jwnl.data.POS;
-import net.didion.jwnl.data.PointerUtils;
 import net.didion.jwnl.data.Synset;
-import net.didion.jwnl.data.Word;
-import net.didion.jwnl.data.list.PointerTargetTree;
 import net.didion.jwnl.dictionary.Dictionary;
+import org.apache.commons.lang3.StringUtils;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLOntology;
 import rita.RiWordNet;
 
+import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
+
+//import edu.stanford.nlp.simple.Sentence;
+//import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 
 /**
@@ -598,10 +579,10 @@ public class WordNet {
 	 * @param s1
 	 * @param s2
 	 * @return
-	 * @throws JWNLException 
+	 * @throws JWNLException
 	 * @throws FileNotFoundException 
 	 */
-	public static double computeWuPalmer(String s1, String s2) throws FileNotFoundException, JWNLException  {
+	public static double computeWuPalmer(String s1, String s2) throws FileNotFoundException, JWNLException {
 
 		double sim = 0;
 		if (containedInWordNet(s1) && containedInWordNet(s2)) {

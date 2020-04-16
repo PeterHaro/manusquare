@@ -12,8 +12,7 @@ public class Jaccard {
 	 * @param s2
 	 * @return
 	 */
-	public static double jaccardSetSim (Set<String> set1, Set<String> set2) {
-		
+	public static double jaccardSetSim (Set<String> set1, Set<String> set2) {		
 
 		int intersection = 0;
 		
@@ -62,19 +61,6 @@ public class Jaccard {
 	public static void main(String[] args) {
 		Set<String> set1 = new HashSet<String>();
 		Set<String> set2 = new HashSet<String>();
-		
-//		set1.add("audi");
-//		set1.add("vw");
-//		set1.add("seat");
-//		set1.add("toyota");
-//		set1.add("mitsubishi");
-//		
-//		set2.add("audi");
-//		set2.add("vw");
-//		set2.add("seat");
-//		set2.add("jaguar");
-//		set2.add("rollsroyce");
-//		set2.add("landrover");
 		
 		set1.add("links");
 		set1.add("flight");

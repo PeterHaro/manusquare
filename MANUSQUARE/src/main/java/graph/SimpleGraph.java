@@ -1,31 +1,24 @@
 package graph;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.google.common.collect.Iterators;
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.MutableGraph;
+import com.google.common.graph.Traverser;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-
-import com.google.common.graph.GraphBuilder;
-import com.google.common.graph.MutableGraph;
-import com.google.common.graph.Traverser;
-
 import owlprocessing.OntologyOperations;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class SimpleGraph { 
 
 	public SimpleGraph() {}
 
-	public static MutableGraph<String> createGraph (OWLOntology onto) throws OWLOntologyCreationException {
+	public static MutableGraph<String> createGraph (OWLOntology onto) {
 
 		//get classes and their superclasses
 		Map<String, String> superClassMap = OntologyOperations.getClassesAndSuperClassesUsingPellet(onto);
@@ -116,17 +109,31 @@ public class SimpleGraph {
 
 	public static void printParents (String node, MutableGraph<String> graph) {
 
-		Iterator<String> iter = Traverser.forGraph(graph).breadthFirst(node).iterator();	
+		Iterator<String> iter = Traverser.forGraph(graph).breadthFirst(node).iterator();
 
 		while (iter.hasNext()) {
 			System.out.print(" " + iter.next());
 		}
 	}
+	
+	public static Map<String, Integer> getOntologyHierarchy (OWLOntology onto, MutableGraph<String> graph) {
+		
+		Map<String, Integer> hierarchyMap = new LinkedHashMap<String, Integer>();
+		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
+		for (String s : conceptsSet) {
+			if (!s.equals("Thing")) //we don´t need owl:Thing in the map
+			hierarchyMap.put(s, getNodeDepth(s, graph)-2); //tweak with -2 to get the correct num edges to graph root
+		}
+		
+		return hierarchyMap;
+		
+		
+	}
 
 	//test method
-	public static void main(String[] args) throws OWLOntologyCreationException  {
+	public static void main(String[] args) throws OWLOntologyCreationException {
 
-		File ontoFile = new File("./files/ONTOLOGIES/manusquare-industrial.owl");
+		File ontoFile = new File("./files/ONTOLOGIES/updatedOntology.owl");
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
@@ -139,6 +146,20 @@ public class SimpleGraph {
 		String targetNode = "Turning";
 		String lcs = getLCS(sourceNode, targetNode, graph);
 		System.out.println("\nThe lcs of " + sourceNode + " and " + targetNode + " is " + lcs);
+		System.out.println("\nThe depth of " + sourceNode + " is " + getNodeDepth(sourceNode, graph));
+		
+		Map<String, Integer> hierarchyMap = getOntologyHierarchy(onto, graph);
+//		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
+//		for (String s : conceptsSet) {
+//			if (!s.equals("Thing"))
+//			hierarchyMap.put(s, getNodeDepth(s, graph)); 
+//		}
+		
+		System.out.println("\nPrinting hierarchyMap:");
+		for (Entry<String, Integer> e : hierarchyMap.entrySet()) {
+			System.out.println(e.getKey() + " : " + e.getValue());
+		}
+		
 
 	}
 

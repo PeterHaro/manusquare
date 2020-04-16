@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+import embedding.VectorExtractor;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -19,8 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import com.google.common.collect.Iterables;
 
-import supplierdata.Supplier;
-import wordembedding.VectorExtractor;
+import similarity.Cosine;
 
 public class TestWordEmbedding {
 
@@ -62,7 +62,7 @@ public class TestWordEmbedding {
 			
 			System.out.println("Matching " + processNameVectors + " and " + e.getValue());
 			
-			cosineSim = utilities.Cosine.cosineSimilarity(processNameVectors, e.getValue());
+			cosineSim = Cosine.cosineSimilarity(processNameVectors, e.getValue());
 			closestConceptMap.put(e.getKey(), cosineSim);
 		}
 		

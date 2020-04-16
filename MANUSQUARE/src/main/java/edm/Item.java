@@ -1,8 +1,8 @@
 package edm;
 
-import java.util.Set;
-
 import supplierdata.Supplier;
+
+import java.util.Set;
 
 public class Item {
 	
@@ -14,7 +14,6 @@ public class Item {
 	private Set<Supplier> suppliers;
 	
 	public Item(Material value) {
-		// TODO Auto-generated constructor stub
 	}
 
 }

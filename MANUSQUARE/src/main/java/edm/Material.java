@@ -33,7 +33,6 @@ public class Material {
 //		return result;
 //	}
 	
-	//TODO: See if a better approach exist: Use an overridden equals method to ensure that materials with the same name are not contained within the same list.
 	@Override
 	public boolean equals (Object o) {
 		if ( o instanceof Material && ((Material) o).getName().equals(this.name) ) {

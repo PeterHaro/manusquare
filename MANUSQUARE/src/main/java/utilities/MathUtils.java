@@ -1,6 +1,7 @@
 package utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author audunvennesland
@@ -57,6 +58,10 @@ public class MathUtils {
         return (double) tmp / factor;
     }
 
+    public static boolean inRange(int value, int min, int max) {
+        return (value >= min) && (value <= max);
+    }
+
     public static double sigmoidRiMom(double x) {
         return (1 / (1 + Math.pow(Math.E, (-5 * (x - 0.5)))));
     }
@@ -75,7 +80,7 @@ public class MathUtils {
 
     public static double computeListAverage(ArrayList<Double> list) {
         double sum = 0;
-        if(!list.isEmpty()) {
+        if (!list.isEmpty()) {
             for (Double d : list) {
                 sum += d;
             }
@@ -97,11 +102,19 @@ public class MathUtils {
         }
         return computeListAverage(normalisedPropValues);
     }
-    
-    public static int log2 (int x) {
-    
-    	return (int) (Math.log(x) / Math.log(2));
-    	
+
+    public static int log2(int x) {
+
+        return (int) (Math.log(x) / Math.log(2));
+
     }
+    
+	public static double sum(List<Double> list) {
+	    double sum = 0;
+	    for (double i: list) {
+	        sum += i;
+	    }
+	    return sum;
+	}
 
 }

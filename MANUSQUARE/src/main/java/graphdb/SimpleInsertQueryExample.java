@@ -1,13 +1,7 @@
 package graphdb;
 
 import org.eclipse.rdf4j.model.impl.SimpleLiteral;
-import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.QueryEvaluationException;
-import org.eclipse.rdf4j.query.QueryLanguage;
-import org.eclipse.rdf4j.query.TupleQuery;
-import org.eclipse.rdf4j.query.TupleQueryResult;
-import org.eclipse.rdf4j.query.Update;
-import org.eclipse.rdf4j.query.algebra.Create;
+import org.eclipse.rdf4j.query.*;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.http.HTTPRepository;
@@ -22,22 +16,22 @@ import org.slf4j.MarkerFactory;
  *
  */
 public class SimpleInsertQueryExample {
-  private static Logger logger =
+  private static Logger logger = 
     LoggerFactory.getLogger(SimpleInsertQueryExample.class);
   // Why This Failure marker
-  private static final Marker WTF_MARKER =
+  private static final Marker WTF_MARKER = 
     MarkerFactory.getMarker("WTF");
-
-  // GraphDB
-  private static final String GRAPHDB_SERVER =
+  
+  // GraphDB 
+  private static final String GRAPHDB_SERVER = 
     "http://localhost:7200/";
   private static final String REPOSITORY_ID = "PersonData";
 
   private static String strInsert;
   private static String strQuery;
-
+  
   static {
-    strInsert =
+    strInsert = 
         "INSERT DATA {"
          + "<http://dbpedia.org/resource/Grace_Hopper> <http://dbpedia.org/ontology/birthDate> \"1906-12-09\"^^<http://www.w3.org/2001/XMLSchema#date> ."
          + "<http://dbpedia.org/resource/Grace_Hopper> <http://dbpedia.org/ontology/birthPlace> <http://dbpedia.org/resource/New_York_City> ."
@@ -48,14 +42,14 @@ public class SimpleInsertQueryExample {
          + "<http://dbpedia.org/resource/Grace_Hopper> <http://xmlns.com/foaf/0.1/gender> \"female\" ."
          + "<http://dbpedia.org/resource/Grace_Hopper> <http://xmlns.com/foaf/0.1/givenName> \"Grace\" ."
          + "<http://dbpedia.org/resource/Grace_Hopper> <http://xmlns.com/foaf/0.1/name> \"Grace Hopper\" ."
-         + "<http://dbpedia.org/resource/Grace_Hopper> <http://xmlns.com/foaf/0.1/surname> \"Hopper\" ."
+         + "<http://dbpedia.org/resource/Grace_Hopper> <http://xmlns.com/foaf/0.1/surname> \"Hopper\" ."        
          + "}";
-
-    strQuery =
+    
+    strQuery = 
         "SELECT ?name FROM DEFAULT WHERE {" +
         "?s <http://xmlns.com/foaf/0.1/name> ?name .}";
-  }
-
+  }  
+  
   private static RepositoryConnection getRepositoryConnection() {
     Repository repository = new HTTPRepository(
       GRAPHDB_SERVER, REPOSITORY_ID);
@@ -64,15 +58,15 @@ public class SimpleInsertQueryExample {
       repository.getConnection();
     return repositoryConnection;
   }
-
+  
   private static void insert(
     RepositoryConnection repositoryConnection) {
-
+    
     repositoryConnection.begin();
     Update updateOperation = repositoryConnection
       .prepareUpdate(QueryLanguage.SPARQL, strInsert);
     updateOperation.execute();
-
+    
     try {
       repositoryConnection.commit();
     } catch (Exception e) {
@@ -83,7 +77,7 @@ public class SimpleInsertQueryExample {
 
   private static void query(
     RepositoryConnection repositoryConnection) {
-
+    
     TupleQuery tupleQuery = repositoryConnection
       .prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
     TupleQueryResult result = null;
@@ -98,25 +92,25 @@ public class SimpleInsertQueryExample {
       }
     }
     catch (QueryEvaluationException qee) {
-      logger.error(WTF_MARKER,
+      logger.error(WTF_MARKER, 
         qee.getStackTrace().toString(), qee);
     } finally {
       result.close();
-    }
-  }
-
+    }    
+  }  
+  
   public static void main(String[] args) {
     RepositoryConnection repositoryConnection = null;
-    try {
+    try {   
       repositoryConnection = getRepositoryConnection();
-
+      
       insert(repositoryConnection);
-      query(repositoryConnection);
-
+      query(repositoryConnection);      
+      
     } catch (Throwable t) {
       logger.error(WTF_MARKER, t.getMessage(), t);
     } finally {
       repositoryConnection.close();
     }
-  }
+  }  
 }

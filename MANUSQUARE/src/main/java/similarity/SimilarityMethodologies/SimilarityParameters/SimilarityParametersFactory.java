@@ -1,9 +1,7 @@
 package similarity.SimilarityMethodologies.SimilarityParameters;
 
-import org.semanticweb.owlapi.model.OWLOntology;
-
 import com.google.common.graph.MutableGraph;
-
+import org.semanticweb.owlapi.model.OWLOntology;
 import similarity.SimilarityMethods;
 
 //TODO: CONVERT TO BUILDERS (if more params
