@@ -24,271 +24,279 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class TripleStoreConnection {
-	
-	//configuration of the local GraphDB knowledge base (testing)
-	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "MANUSQUARE-INFERENCE-TESTDATA";
 
-	//configuration of the MANUSQUARE Semantic Infrastructure
-	static String WorkshopSpaql = "http://manusquare.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
-	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
-	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
+    //configuration of the local GraphDB knowledge base (testing)
+    static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
+    static final String REPOSITORY_ID = "MANUSQUARE-INFERENCE-TESTDATA";
 
-	//if the MANUSQUARE ontology is fetched from url
-	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
-	
-	/**
-	 * Retrieves (relevant) data / concepts from the Semantic Infrastructure using the content of a consumer query as input.
-	 *
-	 * @param query content of a consumer query
-	 * @return list of suppliers along with the processes (including relevant materials) and certifications registered in the Semantic Infrastructure.
-	 * Nov 9, 2019
-	 * @throws OWLOntologyCreationException
-	 */
-	public static List<Supplier> createSupplierData(ConsumerQuery query, boolean testing, OWLOntology onto) {
-		Repository repository;
+    //configuration of the MANUSQUARE Semantic Infrastructure
+    static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
+    static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
+    static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
+    static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
 
-		//use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
-		List<String> processNames = new ArrayList<String>();
+    //if the MANUSQUARE ontology is fetched from url
+    static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
 
-		if (query.getProcesses() == null || query.getProcesses().isEmpty()) {			
-			System.err.println("There are no processes specified!");			
-		} else {			
-			for (Process process : query.getProcesses()) {
-				processNames.add(process.getName());			
-			}
-		}
+    /**
+     * Retrieves (relevant) data / concepts from the Semantic Infrastructure using the content of a consumer query as input.
+     *
+     * @param query content of a consumer query
+     * @return list of suppliers along with the processes (including relevant materials) and certifications registered in the Semantic Infrastructure.
+     * Nov 9, 2019
+     * @throws OWLOntologyCreationException
+     */
+    public static List<Supplier> createSupplierData(ConsumerQuery query, boolean testing, OWLOntology onto) {
+        String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
+        if (sparql_endpoint_by_env != null) {
+            SPARQL_ENDPOINT = sparql_endpoint_by_env;
+        }
+        if (System.getenv("ONTOLOGY_KEY") != null) {
+            AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
+        }
 
-		long startTime = System.currentTimeMillis();
+        Repository repository;
 
-		if (!testing) {
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("Authorization", AUTHORISATION_TOKEN);
-			headers.put("accept", "application/JSON");
-			repository = new SPARQLRepository(SPARQL_ENDPOINT);
-			repository.initialize();
-			((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
-		} else {
-			//connect to GraphDB
-			repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
-			HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
-			System.out.println(repo.getRepositoryURL());
-			System.out.println(repo.getPreferredRDFFormat());
-			repository.initialize();
-			System.out.println(repository.isInitialized());
-		}
+        //use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
+        List<String> processNames = new ArrayList<String>();
 
-		String strQuery = SparqlQuery.createSparqlQuery(query, onto);
+        if (query.getProcesses() == null || query.getProcesses().isEmpty()) {
+            System.err.println("There are no processes specified!");
+        } else {
+            for (Process process : query.getProcesses()) {
+                processNames.add(process.getName());
+            }
+        }
 
-		//open connection to GraphDB and run SPARQL query
-		Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
-		SparqlRecord record;
-		int counter = 0;
+        long startTime = System.currentTimeMillis();
 
-		try (RepositoryConnection conn = repository.getConnection()) {
-			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
+        if (!testing) {
+            Map<String, String> headers = new HashMap<String, String>();
+            headers.put("Authorization", AUTHORISATION_TOKEN);
+            headers.put("accept", "application/JSON");
+            repository = new SPARQLRepository(SPARQL_ENDPOINT);
+            repository.initialize();
+            ((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
+        } else {
+            //connect to GraphDB
+            repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+            HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+            System.out.println(repo.getRepositoryURL());
+            System.out.println(repo.getPreferredRDFFormat());
+            repository.initialize();
+            System.out.println(repository.isInitialized());
+        }
 
-			//if querying the local KB, we need to set setIncludeInferred to false, otherwise inference will include irrelevant results.
-			//when querying the Semantic Infrastructure the non-inference is set in the http parameters.
-			if (testing) {
-				//do not include inferred statements from the KB
-				tupleQuery.setIncludeInferred(false);
-			}
+        String strQuery = SparqlQuery.createSparqlQuery(query, onto);
 
-			try (TupleQueryResult result = tupleQuery.evaluate()) {
-				while (result.hasNext()) {
-					Map<String, String> attributeMap = new HashMap<String, String>();
-					counter++;
-					BindingSet solution = result.next();
+        //open connection to GraphDB and run SPARQL query
+        Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
+        SparqlRecord record;
+        int counter = 0;
 
-					Set<String> bindings = solution.getBindingNames();
+        try (RepositoryConnection conn = repository.getConnection()) {
+            TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
 
-					//if there are attributes in the query results
-					if (containsAttributes(bindings) == true) {
+            //if querying the local KB, we need to set setIncludeInferred to false, otherwise inference will include irrelevant results.
+            //when querying the Semantic Infrastructure the non-inference is set in the http parameters.
+            if (testing) {
+                //do not include inferred statements from the KB
+                tupleQuery.setIncludeInferred(false);
+            }
 
-						for (String s : bindings) {			
-							if (s.endsWith("Attr")) {	
-								attributeMap.put(s.replace("Attr", ""), solution.getValue(s).stringValue());
-							}
-						}
-					} 
+            try (TupleQueryResult result = tupleQuery.evaluate()) {
+                while (result.hasNext()) {
+                    Map<String, String> attributeMap = new HashMap<String, String>();
+                    counter++;
+                    BindingSet solution = result.next();
 
-					//omit the NamedIndividual types from the query result
-					if (solution.hasBinding("materialType") ) {
-						if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-								&& !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-								&& !solution.getValue("materialType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
+                    Set<String> bindings = solution.getBindingNames();
 
-							record = new SparqlRecord();
-							record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-							record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
-							record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));                           
-							record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+                    //if there are attributes in the query results
+                    if (containsAttributes(bindings) == true) {
 
-							if (containsAttributes(bindings) == true) {
-								record.setAttributeWeightMap(attributeMap);
-							}
-							recordSet.add(record);
-						}
-					} else {
-						if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-								&& !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
+                        for (String s : bindings) {
+                            if (s.endsWith("Attr")) {
+                                attributeMap.put(s.replace("Attr", ""), solution.getValue(s).stringValue());
+                            }
+                        }
+                    }
 
-							record = new SparqlRecord();
-							record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-							record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
-							record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+                    //omit the NamedIndividual types from the query result
+                    if (solution.hasBinding("materialType")) {
+                        if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
+                                && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
+                                && !solution.getValue("materialType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
 
-							if (containsAttributes(bindings) == true) {
-								record.setAttributeWeightMap(attributeMap);
-							}
+                            record = new SparqlRecord();
+                            record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                            record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                            record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
+                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 
-							recordSet.add(record);
-						}
-					}
+                            if (containsAttributes(bindings) == true) {
+                                record.setAttributeWeightMap(attributeMap);
+                            }
+                            recordSet.add(record);
+                        }
+                    } else {
+                        if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
+                                && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
 
-				}
+                            record = new SparqlRecord();
+                            record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                            record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+                            if (containsAttributes(bindings) == true) {
+                                record.setAttributeWeightMap(attributeMap);
+                            }
 
-		if (testing == true) {
-			System.out.println("Number of results returned from Semantic Infrastructure: " + counter + "\n");
-		}
-		//close connection to KB repository
-		repository.shutDown();
+                            recordSet.add(record);
+                        }
+                    }
 
-		long stopTime = System.currentTimeMillis();
-		long elapsedTime = stopTime - startTime;
+                }
 
-		if (testing == true) {
-			System.out.println("The SPARQL querying process took " + elapsedTime / 1000 + " seconds.");
-		}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-		//get unique supplier ids used for constructing the supplier structure below
-		Set<String> supplierIds = new HashSet<String>();
-		for (SparqlRecord sr : recordSet) {
-			supplierIds.add(sr.getSupplierId());
-		}
+        if (testing == true) {
+            System.out.println("Number of results returned from Semantic Infrastructure: " + counter + "\n");
+        }
+        //close connection to KB repository
+        repository.shutDown();
 
-		Certification certification = null;
-		Supplier supplier = null;
-		List<Supplier> suppliersList = new ArrayList<Supplier>();
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
 
-		Map<String, SetMultimap<Object, Object>> supplierToProcessMap = new HashMap<String, SetMultimap<Object, Object>>();
+        if (testing == true) {
+            System.out.println("The SPARQL querying process took " + elapsedTime / 1000 + " seconds.");
+        }
 
-		for (String id : supplierIds) {
-			SetMultimap<Object, Object> map = HashMultimap.create();
-			String supplierID = null;
+        //get unique supplier ids used for constructing the supplier structure below
+        Set<String> supplierIds = new HashSet<String>();
+        for (SparqlRecord sr : recordSet) {
+            supplierIds.add(sr.getSupplierId());
+        }
 
-			for (SparqlRecord sr : recordSet) {
-				if (sr.getSupplierId().equals(id)) {
-					map.put(sr.getProcess(), sr.getMaterial());
-					supplierID = sr.getSupplierId();
-				}
-			}
-			supplierToProcessMap.put(supplierID, map);
-		}
+        Certification certification = null;
+        Supplier supplier = null;
+        List<Supplier> suppliersList = new ArrayList<Supplier>();
 
-		Process process = null;
+        Map<String, SetMultimap<Object, Object>> supplierToProcessMap = new HashMap<String, SetMultimap<Object, Object>>();
 
-		//create supplier objects (supplier id, processes (including materials) and certifications) based on the multimap created in the previous step
-		for (String id : supplierIds) {
-			SetMultimap<Object, Object> processAndMaterialMap = null;
+        for (String id : supplierIds) {
+            SetMultimap<Object, Object> map = HashMultimap.create();
+            String supplierID = null;
 
-			List<Certification> certifications = new ArrayList<Certification>();
-			List<Process> processes = new ArrayList<Process>();
+            for (SparqlRecord sr : recordSet) {
+                if (sr.getSupplierId().equals(id)) {
+                    map.put(sr.getProcess(), sr.getMaterial());
+                    supplierID = sr.getSupplierId();
+                }
+            }
+            supplierToProcessMap.put(supplierID, map);
+        }
 
-			for (SparqlRecord sr : recordSet) {
-				if (sr.getSupplierId().equals(id)) {
-					//add certifications
-					certification = new Certification(sr.getCertification());
-					if (!certifications.contains(certification)) {
-						certifications.add(certification);
-					}
+        Process process = null;
 
-					//add processes and associated materials
-					processAndMaterialMap = supplierToProcessMap.get(sr.getSupplierId());
-					String processName = null;
-					Set<Object> list = new HashSet<Object>();
+        //create supplier objects (supplier id, processes (including materials) and certifications) based on the multimap created in the previous step
+        for (String id : supplierIds) {
+            SetMultimap<Object, Object> processAndMaterialMap = null;
 
-					//iterate processAndMaterialMap and extract process and relevant materials for that process
-					for (Entry<Object, Collection<Object>> e : processAndMaterialMap.asMap().entrySet()) {
-						Set<Material> materialsSet = new HashSet<Material>();
-						//get list/set of materials
-						list = new HashSet<>(e.getValue());
+            List<Certification> certifications = new ArrayList<Certification>();
+            List<Process> processes = new ArrayList<Process>();
 
-						//transform to Set<Material>
-						//FIXME: Is this transformation really necessary? Why not stick to *either* list or set?
-						for (Object o : list) {
-							if (o != null) { //Audun: if there are no suppliers materials retrieved from SPARQL, don´t add null-valued Material objects to the set of materials (should be handled properly with !isEmpty check in SimilarityMeasures.java)
-								materialsSet.add(new Material((String) o));
-							}
-						}
+            for (SparqlRecord sr : recordSet) {
+                if (sr.getSupplierId().equals(id)) {
+                    //add certifications
+                    certification = new Certification(sr.getCertification());
+                    if (!certifications.contains(certification)) {
+                        certifications.add(certification);
+                    }
 
-						processName = (String) e.getKey();
+                    //add processes and associated materials
+                    processAndMaterialMap = supplierToProcessMap.get(sr.getSupplierId());
+                    String processName = null;
+                    Set<Object> list = new HashSet<Object>();
 
-						//add relevant set of materials together with process name
-						process = new Process(processName, materialsSet, sr.getAttributeWeightMap());
+                    //iterate processAndMaterialMap and extract process and relevant materials for that process
+                    for (Entry<Object, Collection<Object>> e : processAndMaterialMap.asMap().entrySet()) {
+                        Set<Material> materialsSet = new HashSet<Material>();
+                        //get list/set of materials
+                        list = new HashSet<>(e.getValue());
 
-						//add processes
-						if (!processes.contains(process)) {
-							processes.add(process);
-						}
+                        //transform to Set<Material>
+                        //FIXME: Is this transformation really necessary? Why not stick to *either* list or set?
+                        for (Object o : list) {
+                            if (o != null) { //Audun: if there are no suppliers materials retrieved from SPARQL, don´t add null-valued Material objects to the set of materials (should be handled properly with !isEmpty check in SimilarityMeasures.java)
+                                materialsSet.add(new Material((String) o));
+                            }
+                        }
 
-					}
-					supplier = new Supplier(id, processes, certifications);
-				}
-			}
-			suppliersList.add(supplier);
-		}
+                        processName = (String) e.getKey();
 
-		return suppliersList;
+                        //add relevant set of materials together with process name
+                        process = new Process(processName, materialsSet, sr.getAttributeWeightMap());
 
-	}
+                        //add processes
+                        if (!processes.contains(process)) {
+                            processes.add(process);
+                        }
 
-	/**
-	 * Checks if the bindings associated with the SPARQL results contains attributes. Requires that the binding variable names end with "Attr". 
-	 * @param bindings
-	 * @return
-       Feb 9, 2020
-	 */
-	private static boolean containsAttributes (Set<String> bindings) {
+                    }
+                    supplier = new Supplier(id, processes, certifications);
+                }
+            }
+            suppliersList.add(supplier);
+        }
 
-		boolean containsAttribute = false;
+        return suppliersList;
 
-		for (String s : bindings) {
-			if (s.endsWith("Attr")) {
-				containsAttribute = true;
-			}
-		}
+    }
 
-		return containsAttribute;
+    /**
+     * Checks if the bindings associated with the SPARQL results contains attributes. Requires that the binding variable names end with "Attr".
+     *
+     * @param bindings
+     * @return Feb 9, 2020
+     */
+    private static boolean containsAttributes(Set<String> bindings) {
 
-	}
+        boolean containsAttribute = false;
+
+        for (String s : bindings) {
+            if (s.endsWith("Attr")) {
+                containsAttribute = true;
+            }
+        }
+
+        return containsAttribute;
+
+    }
 
 
-	/**
-	 * Removes the IRIs in front of processes etc. retrieved from the Semantic Infrastructure
-	 *
-	 * @param inputConcept an input ontology concept (with full IRI)
-	 * @return ontology concept with the IRI removed
-	 * Nov 5, 2019
-	 */
-	private static String stripIRI(String inputConcept) {
-		String returnedConceptName = null;
-		if (inputConcept.contains("http://manusquare.project.eu/industrial-manusquare#")) {
-			returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/industrial-manusquare#", "");
-		} else if (inputConcept.contains("http://manusquare.project.eu/core-manusquare#")) {
-			returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/core-manusquare#", "");
-		} else {
-			returnedConceptName = inputConcept;
-		}
-		return returnedConceptName;
+    /**
+     * Removes the IRIs in front of processes etc. retrieved from the Semantic Infrastructure
+     *
+     * @param inputConcept an input ontology concept (with full IRI)
+     * @return ontology concept with the IRI removed
+     * Nov 5, 2019
+     */
+    private static String stripIRI(String inputConcept) {
+        String returnedConceptName = null;
+        if (inputConcept.contains("http://manusquare.project.eu/industrial-manusquare#")) {
+            returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/industrial-manusquare#", "");
+        } else if (inputConcept.contains("http://manusquare.project.eu/core-manusquare#")) {
+            returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/core-manusquare#", "");
+        } else {
+            returnedConceptName = inputConcept;
+        }
+        return returnedConceptName;
 
-	}
+    }
 
 }
