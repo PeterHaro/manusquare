@@ -72,7 +72,7 @@ public class RequestForQuotation {
 		public String processName;
 		public String attributeKey;
 		public String attributeValue;
-		public String attributeUnitOfMeasurement;
+		public String unitOfMeasure;
 		
 		//if attribute is material
 		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue) {
@@ -84,13 +84,13 @@ public class RequestForQuotation {
 		}
 		
 		//if attribute is other attribute than material
-		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue, String attributeUnitOfMeasurement) {
+		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue, String unitOfMeasure) {
 			super();
 			this.attributeId = attributeId;
 			this.processName = processId;
 			this.attributeKey = attributeKey;
 			this.attributeValue = attributeValue;
-			this.attributeUnitOfMeasurement = attributeUnitOfMeasurement;
+			this.unitOfMeasure = unitOfMeasure;
 		}
 
 		public String getAttributeId() {
@@ -126,11 +126,11 @@ public class RequestForQuotation {
 		}
 
 		public String getAttributeUnitOfMeasurement() {
-			return attributeUnitOfMeasurement;
+			return unitOfMeasure;
 		}
 
-		public void setAttributeUnitOfMeasurement(String attributeUnitOfMeasurement) {
-			this.attributeUnitOfMeasurement = attributeUnitOfMeasurement;
+		public void setAttributeUnitOfMeasurement(String unitOfMeasure) {
+			this.unitOfMeasure = unitOfMeasure;
 		}
 		
 
