@@ -155,14 +155,14 @@ public class ConsumerQuery {
 			//get the materials and other attributes if they´re present
 			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
 				if (projectAttributes.attributeKey != null) {
-					if (!projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) {
+					if (!projectAttributes.attributeKey.equalsIgnoreCase("material") && projectAttributes.processName.equals(process)) {
 						//check if uom is included in JSON
 						if (projectAttributes.attributeUnitOfMeasurement != null) {
 							attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.attributeUnitOfMeasurement), projectAttributes.attributeUnitOfMeasurement));
 						} else {
 							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.attributeUnitOfMeasurement));	
 						}
-					} else if (projectAttributes.attributeKey.equals("material") && projectAttributes.processName.equals(process)) { //get the materials
+					} else if (projectAttributes.attributeKey.equalsIgnoreCase("material") && projectAttributes.processName.equals(process)) { //get the materials
 						materialSet.add(new Material(projectAttributes.attributeValue));
 					}
 				} else {
