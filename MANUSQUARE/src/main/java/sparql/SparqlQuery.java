@@ -125,7 +125,7 @@ public class SparqlQuery {
 		}
 		strQuery += "WHERE { \n";
 
-		//get all subclasses of MfgProcess 
+		//get all subclasses of LCS
 		strQuery += "?processChain core:hasProcess ?process .\n";
 		strQuery += "?process rdf:type ?processType .\n";
 		strQuery += "?processType rdfs:subClassOf* ind:" + lcs + " .\n";
@@ -134,14 +134,12 @@ public class SparqlQuery {
 		//get attributes
 		strQuery += queryAttributes(attributes);
 
-		//materials option 1: we use the object property hasAttribute to retrieve materials relevant for our processes
-		//strQuery += "OPTIONAL { ?process core:hasAttribute ?attribute . }\n";
-		//strQuery += "OPTIONAL { ?attribute core:hasValue ?material . ?material rdf:type ?materialType . }\n";
-
-		//materials option 2: we use the object property hasMaterial to retrieve materials relevant for our processes
-		strQuery += "\nOPTIONAL { ?process core:hasMaterial ?materialAttribute . \n";
+		strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
+		strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
+		strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
 		strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
 		strQuery += "?materialAttributeValue rdf:type ?materialType . }\n";
+		
 
 		//certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
 		//this is taken care of by the matchmaking algo)
@@ -150,15 +148,20 @@ public class SparqlQuery {
 		//filter suppliers
 		if (supplierMaxDistance != 0) {
 
+			//include OPTIONAL
+			//strQuery += "\nOPTIONAL {\n"; 	
 			strQuery += "\n?supplier geo:asWKT ?location .\n"; 	
 			strQuery += "BIND((geof:distance(?location, \"POINT("+lat+" "+lon+ ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n"; 	
 			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n"; 	
+			
+			//INCLUDE OPTIONAL
+			//strQuery += "}\n"; 
 		}
 
 		strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
 		strQuery += "\n}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 	}
@@ -238,9 +241,9 @@ public class SparqlQuery {
 			attributeQuery.append("} \n");
 			
 			attributeQuery.append("BIND ( \n");
-			attributeQuery.append("IF (bound(?uom) && ?uom = \"m/min\", " + attributeValue + " * 1000, \n");
-			attributeQuery.append("IF (bound(?uom) && ?uom = \"dm/min\", " + attributeValue + " * 100,\n");
-			attributeQuery.append("IF (bound(?uom) && ?uom = \"cm/min\", " + attributeValue + " * 10,\n");
+			attributeQuery.append("IF (bound(?uom) && ?uom = \"m\", " + attributeValue + " * 1000, \n");
+			attributeQuery.append("IF (bound(?uom) && ?uom = \"dm\", " + attributeValue + " * 100,\n");
+			attributeQuery.append("IF (bound(?uom) && ?uom = \"cm\", " + attributeValue + " * 10,\n");
 			attributeQuery.append(attributeValue + "))) as " + updatedAttributeValue + ") \n");
 			
 			attributeQuery.append("\n");
@@ -314,7 +317,7 @@ public class SparqlQuery {
 	private static String getOpposite (String inputCondition) {
 		
 		String opposite = null;
-		
+				
 		if (inputCondition.equals("<=")) {
 			opposite = ">";
 		} else if (inputCondition.equals(">=")) {
