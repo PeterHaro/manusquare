@@ -157,10 +157,11 @@ public class ConsumerQuery {
 				if (projectAttributes.attributeKey != null) {
 					if (!projectAttributes.attributeKey.equalsIgnoreCase("material") && projectAttributes.processName.equals(process)) {
 						//check if uom is included in JSON
-						if (projectAttributes.attributeUnitOfMeasurement != null) {
-							attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.attributeUnitOfMeasurement), projectAttributes.attributeUnitOfMeasurement));
+						if (projectAttributes.unitOfMeasure != null) {
+							attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
+														
 						} else {
-							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.attributeUnitOfMeasurement));	
+							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));	
 						}
 					} else if (projectAttributes.attributeKey.equalsIgnoreCase("material") && projectAttributes.processName.equals(process)) { //get the materials
 						materialSet.add(new Material(projectAttributes.attributeValue));
@@ -186,7 +187,6 @@ public class ConsumerQuery {
 					processes.add(new Process(s, QueryValidation.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidation.validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
 				}
 			}
-
 		}
 
 		ConsumerQuery query = null;
@@ -210,6 +210,7 @@ public class ConsumerQuery {
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
 			query = new ConsumerQuery(processes, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
 		}
+		
 
 
 		return query;
