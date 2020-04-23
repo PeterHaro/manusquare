@@ -1,23 +1,42 @@
 package sparql;
 
-import com.google.common.graph.MutableGraph;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import edm.Attribute;
-import edm.Material;
-import exceptions.NoAttributeException;
-import graph.SimpleGraph;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import com.google.common.collect.Iterables;
+import com.google.common.graph.MutableGraph;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
+import edm.Attribute;
+import edm.Material;
+import edm.Process;
+import exceptions.NoAttributeException;
+import graph.SimpleGraph;
 import owlprocessing.OntologyOperations;
 import query.ConsumerQuery;
+import supplierdata.Supplier;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class SparqlQuery {
 
@@ -42,7 +61,7 @@ public class SparqlQuery {
 
         Set<Material> materials = new HashSet<Material>();
         Set<Attribute> attributes = new HashSet<Attribute>();
-        Set<Process> processes = cq.getProcesses();
+        Set<edm.Process> processes = cq.getProcesses();
 
         //27.02.2020: get the Least Common Subsumer (LCS) of the process concepts included by the consumer
         //we need the ontology in order to fetch the superclasses

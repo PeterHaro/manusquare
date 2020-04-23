@@ -114,7 +114,8 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:yaml:1.8.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:parse-json:5.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:babel__code-frame:7.8.3" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:babel__highlight:7.8.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:babel__highlight:7.9.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:babel__helper-validator-identifier:7.9.5" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:chalk:3.0.0-beta.2" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:ansi-styles:4.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:types__color-name:1.1.1" level="project" />
@@ -122,7 +123,6 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:color-name:1.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:supports-color:7.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:has-flag:4.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:esutils:2.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:error-ex:1.3.2" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:is-arrayish:0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:json-parse-better-errors:1.0.2" level="project" />
@@ -156,33 +156,33 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:classnames:2.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:mobx-react:6.0.0-rc.4" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:mobx-react-lite:1.1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:react-dropdown:1.6.4" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:react-hot-loader:4.12.18" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:hoist-non-react-statics:3.3.2" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:shallowequal:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:react-dropdown:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:react-hot-loader:4.12.20" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:loader-utils:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:big.js:5.2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:emojis-list:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:json5:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:minimist:1.2.5" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:react-lifecycles-compat:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:global:4.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:min-document:2.19.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:dom-walk:0.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:dom-walk:0.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:process:0.11.10" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:hoist-non-react-statics:3.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:shallowequal:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:fast-levenshtein:2.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:source-map:0.8.0-beta.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:whatwg-url:7.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:lodash.sortby:4.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:tr46:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:punycode:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:webidl-conversions:4.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:loader-utils:1.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:big.js:5.2.2" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:emojis-list:3.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:json5:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:minimist:1.2.5" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:fast-levenshtein:2.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:lunr:2.3.8" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:openapi-sampler:1.0.0-beta.14" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:stickyfill:1.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:react-tabs:2.3.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:slugify:1.3.6" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:prismjs:1.19.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:react-tabs:2.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:slugify:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:prismjs:1.20.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:perfect-scrollbar:1.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:marked:0.6.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:tslib:1.11.1" level="project" />

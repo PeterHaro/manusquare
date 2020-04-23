@@ -7,10 +7,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_babel__helper_validator_identifier_7_9_5.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_babel__highlight_7_8_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_babel__highlight_7_9_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_dom_walk_0_1_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_dom_walk_0_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_esutils_2_0_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_prismjs_1_19_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_prismjs_1_20_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_dropdown_1_6_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_dropdown_1_7_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_hot_loader_4_12_18.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_hot_loader_4_12_20.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_tabs_2_3_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_react_tabs_2_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_slugify_1_3_6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_webjars_npm_slugify_1_4_0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sparql/TripleStoreConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sparql/TripleStoreConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MANUSQUARE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MANUSQUARE.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/ONTOLOGIES/updatedOntology.owl" beforeDir="false" afterPath="$PROJECT_DIR$/files/ONTOLOGIES/updatedOntology.owl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/EmbeddingSingletonDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/EmbeddingSingletonDataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/query/ConsumerQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/query/ConsumerQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sparql/SparqlQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sparql/SparqlQuery.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +94,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Manusquare">
+  <component name="RunManager" selected="Application.OpenAPIEndpoint">
     <configuration name="BasicMatchmaking_MVP" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.BasicMatchmaking_MVP" />
       <module name="MANUSQUARE" />
@@ -154,8 +165,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JAR Application.Matchmaking.jar" />
         <item itemvalue="Application.OpenAPIEndpoint" />
+        <item itemvalue="JAR Application.Matchmaking.jar" />
         <item itemvalue="Application.BasicMatchmaking_MVP" />
         <item itemvalue="JUnit.All in MANUSQUARE" />
         <item itemvalue="Application.TestDatabaseGeneration" />

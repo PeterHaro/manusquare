@@ -1,30 +1,33 @@
 package query;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import edm.Attribute;
-import edm.Certification;
-import edm.Material;
-import exceptions.NoProcessException;
-import json.RequestForQuotation;
-import json.RequestForQuotation.ProjectAttributeKeys;
-import json.RequestForQuotation.SupplierAttributeKeys;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import owlprocessing.OntologyOperations;
-import validation.JSONValidation;
-import validation.QueryValidation;
-import validation.UnitOfMeasurementConversion;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
+import edm.Attribute;
+import edm.Certification;
+import edm.Material;
+import edm.Process;
+import exceptions.NoProcessException;
+import json.RequestForQuotation;
+import json.RequestForQuotation.ProjectAttributeKeys;
+import json.RequestForQuotation.SupplierAttributeKeys;
+import owlprocessing.OntologyOperations;
+import validation.JSONValidation;
+import validation.QueryValidation;
+import validation.UnitOfMeasurementConversion;
 
 public class ConsumerQuery {
 

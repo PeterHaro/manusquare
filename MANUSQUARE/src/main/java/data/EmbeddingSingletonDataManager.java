@@ -9,7 +9,7 @@ import java.util.zip.GZIPInputStream;
 
 public class EmbeddingSingletonDataManager {
 	private static final int NUM_VECTOR_DIMS = 300;
-	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/embeddings_2L_NSC_Min2_NN_VBG.txt.gz";
+	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/embeddings_2L_NSC_Min2_NN_VBG_WND.txt.gz";
 	private static Map<String, double[]> vectorMap = null;
 
 	private static final EmbeddingSingletonDataManager instance = new EmbeddingSingletonDataManager();
