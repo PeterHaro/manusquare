@@ -117,12 +117,12 @@
     <orderEntry type="library" name="Maven: org.webjars:swagger-ui:3.23.8" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:redoc:2.0.0-rc.2" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:polished:3.0.0-beta.4" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:babel__runtime:7.8.4" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:regenerator-runtime:0.13.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:babel__runtime:7.9.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:regenerator-runtime:0.13.5" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:babel-plugin-preval:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:babel-plugin-macros:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:cosmiconfig:6.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:yaml:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:yaml:1.8.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:parse-json:5.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:babel__code-frame:7.8.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:babel__highlight:7.8.3" level="project" />
@@ -151,7 +151,7 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:loose-envify:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:js-tokens:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:object-assign:4.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:react-is:16.12.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:react-is:16.13.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:json-pointer:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:foreach:2.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:eventemitter3:3.1.2" level="project" />
@@ -162,7 +162,7 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:sprintf-js:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:esprima:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:ono:4.0.11" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:format-util:1.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:format-util:1.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:dompurify:1.0.11" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:classnames:2.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:mobx-react:6.0.0-rc.4" level="project" />
@@ -182,11 +182,11 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:tr46:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:punycode:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:webidl-conversions:4.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:loader-utils:1.2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:loader-utils:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:big.js:5.2.2" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:emojis-list:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:emojis-list:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:json5:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:minimist:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:minimist:1.2.5" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:fast-levenshtein:2.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:lunr:2.3.8" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:openapi-sampler:1.0.0-beta.14" level="project" />
@@ -194,9 +194,9 @@
     <orderEntry type="library" name="Maven: org.webjars.npm:react-tabs:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:slugify:1.3.6" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:prismjs:1.19.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:perfect-scrollbar:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:perfect-scrollbar:1.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:marked:0.6.3" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.npm:tslib:1.10.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.npm:tslib:1.11.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:memoize-one:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:decko:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:mark.js:8.11.1" level="project" />
@@ -375,14 +375,6 @@
     <orderEntry type="library" name="Maven: stax:stax-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Maven: com.github.ansell.pellet:pellet-owlapiv3:2.3.6-ansell" level="project" />
-    <orderEntry type="library" name="Maven: com.github.ansell.owlapi:owlapi-api:3.4.9.2-ansell" level="project" />
-    <orderEntry type="library" name="Maven: com.github.ansell.abstract-service-loader:abstract-service-loader:0.4" level="project" />
-    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-model:2.7.8" level="project" />
-    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-util:2.7.8" level="project" />
-    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-rio-api:2.7.8" level="project" />
-    <orderEntry type="library" name="Maven: com.github.ansell.owlapi:owlapi-impl:3.4.9.2-ansell" level="project" />
-    <orderEntry type="library" name="Maven: com.github.ansell.owlapi:owlapi-parsers:3.4.9.2-ansell" level="project" />
-    <orderEntry type="library" name="Maven: com.github.ansell.owlapi:owlapi-tools:3.4.9.2-ansell" level="project" />
     <orderEntry type="library" name="Maven: com.github.ansell.pellet:pellet-core:2.3.6-ansell" level="project" />
     <orderEntry type="library" name="Maven: com.github.ansell.pellet:pellet-common:2.3.6-ansell" level="project" />
     <orderEntry type="library" name="Maven: com.github.ansell.aterms:aterm-java:1.8.2-p1" level="project" />

@@ -10,6 +10,7 @@ import io.javalin.http.Context;
 import io.javalin.plugin.json.JavalinJson;
 import io.javalin.plugin.openapi.annotations.*;
 import javalin.models.ErrorResponse;
+import json.RequestForQuotation;
 import matchmaking.models.Buyer;
 import matchmaking.models.Offer;
 import matchmaking.models.Supplier;
@@ -17,7 +18,9 @@ import matchmaking.models.TransactionalData;
 import org.json.simple.JSONObject;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import query.ConsumerQuery;
 import ui.SemanticMatching_MVP;
+import validation.JSONValidation;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -127,11 +130,19 @@ public class MatchmakingController {
             throw new BadRequestResponse();
         } else {
             String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
+            if (JSONValidation.isJSONValid(jsonInput)) {
+                RequestForQuotation requestForQuotation = new Gson().fromJson(jsonInput, RequestForQuotation.class);
+                if (requestForQuotation.customer == null) {
+                    throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");
+                }
+            }
             StringWriter sw = new StringWriter();
             BufferedWriter writer = new BufferedWriter(sw);
             SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
             System.out.println(sw.toString());
-            
+
+            String MatchmakingResults = CallMatchmaking();
+
             // AWAIT INFO HERE TO TO NEXT PART
             //ctx.json(sw.toString());
 
@@ -140,7 +151,7 @@ public class MatchmakingController {
         }
     }
 
-    private String CallMatchmaking() throws IOException {
+    private static String CallMatchmaking() throws IOException {
         final URL matchmakingUrl = new URL(MatchmakingEndpoint);
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) matchmakingUrl.openConnection();

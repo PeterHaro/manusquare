@@ -9,13 +9,7 @@
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/files/ONTOLOGIES/updatedOntology.owl" beforeDir="false" afterPath="$PROJECT_DIR$/files/ONTOLOGIES/updatedOntology.owl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/matchingResults.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/matchingResults.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/embedding/evaluation/EmbeddingEvaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/embedding/evaluation/EmbeddingEvaluation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javalin/OpenAPIEndpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javalin/OpenAPIEndpoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javalin/controllers/ExmapleController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javalin/controllers/SemanticMatchingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javalin/controllers/SemanticMatchingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/query/ConsumerQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/query/ConsumerQuery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/BasicMatchmaking_MVP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/BasicMatchmaking_MVP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/owlprocessing/OntologyOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/owlprocessing/OntologyOperations.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,12 +42,6 @@
         <option name="vmOptionsForImporter" value="-Xmx768m" />
       </MavenImportingSettings>
     </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1612" />
-    <option name="height" value="876" />
   </component>
   <component name="ProjectId" id="1XhJK3nEgpDgm9H0B1VMVmj6bBX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -108,7 +96,7 @@
       </method>
     </configuration>
     <configuration name="Manusquare" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="ui.BasicMatchmaking_MVP" />
+      <option name="MAIN_CLASS_NAME" value="javalin.OpenAPIEndpoint" />
       <module name="MANUSQUARE" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -128,19 +116,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestDatabaseGeneration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ui.TestDatabaseGeneration" />
-      <module name="MANUSQUARE" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ui.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="All in MANUSQUARE" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MANUSQUARE" />
       <option name="PACKAGE_NAME" value="" />
@@ -148,6 +123,10 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="matchmaking.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/target/matchmaking.jar" />
+      <method v="2" />
     </configuration>
     <configuration name="javalin.MainKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
       <module name="MANUSQUARE" />
@@ -165,8 +144,8 @@
     <list>
       <item itemvalue="Application.Manusquare" />
       <item itemvalue="Application.BasicMatchmaking_MVP" />
-      <item itemvalue="Application.TestDatabaseGeneration" />
       <item itemvalue="Application.OpenAPIEndpoint" />
+      <item itemvalue="JAR Application.matchmaking.jar" />
       <item itemvalue="JUnit.All in MANUSQUARE" />
       <item itemvalue="Kotlin.javalin.MainKt" />
     </list>
@@ -174,9 +153,9 @@
       <list>
         <item itemvalue="Application.BasicMatchmaking_MVP" />
         <item itemvalue="Application.OpenAPIEndpoint" />
+        <item itemvalue="JAR Application.matchmaking.jar" />
         <item itemvalue="Kotlin.javalin.MainKt" />
         <item itemvalue="JUnit.All in MANUSQUARE" />
-        <item itemvalue="Application.TestDatabaseGeneration" />
       </list>
     </recent_temporary>
   </component>
@@ -214,7 +193,9 @@
       <workItem from="1580290470717" duration="28629000" />
       <workItem from="1581492329666" duration="9829000" />
       <workItem from="1581674747759" duration="6644000" />
-      <workItem from="1583827620724" duration="16217000" />
+      <workItem from="1583827620724" duration="22291000" />
+      <workItem from="1586862102954" duration="5439000" />
+      <workItem from="1587054422426" duration="3794000" />
     </task>
     <servers />
   </component>
@@ -252,23 +233,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java</url>
-          <line>219</line>
+          <line>146</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/javalin/controllers/MatchmakingController.java</url>
-          <line>94</line>
+          <line>97</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/query/ConsumerQuery.java</url>
-          <line>195</line>
+          <line>136</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/javalin/controllers/SemanticMatchingController.java</url>
-          <line>39</line>
+          <line>40</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ui/SemanticMatching_MVP.java</url>
+          <line>105</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
