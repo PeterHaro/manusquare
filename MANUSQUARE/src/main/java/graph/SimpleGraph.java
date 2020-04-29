@@ -14,7 +14,7 @@ import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class SimpleGraph { 
+public class SimpleGraph {
 
 	public SimpleGraph() {}
 
@@ -26,7 +26,7 @@ public class SimpleGraph {
 		//get individual classes from the superClassMap
 		Set<String> classes = superClassMap.keySet();
 
-		//create the graph		
+		//create the graph
 		MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(false).build();
 
 		//create a node for thing
@@ -98,7 +98,7 @@ public class SimpleGraph {
 			for (String target : targetNodeList) {
 				if (source.equals(target)) {
 					lcs = source;
-					break;			
+					break;
 				}
 			}
 		}
@@ -115,19 +115,19 @@ public class SimpleGraph {
 			System.out.print(" " + iter.next());
 		}
 	}
-	
+
 	public static Map<String, Integer> getOntologyHierarchy (OWLOntology onto, MutableGraph<String> graph) {
-		
+
 		Map<String, Integer> hierarchyMap = new LinkedHashMap<String, Integer>();
 		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
 		for (String s : conceptsSet) {
 			if (!s.equals("Thing")) //we don´t need owl:Thing in the map
 			hierarchyMap.put(s, getNodeDepth(s, graph)-2); //tweak with -2 to get the correct num edges to graph root
 		}
-		
+
 		return hierarchyMap;
-		
-		
+
+
 	}
 
 	//test method
@@ -147,19 +147,19 @@ public class SimpleGraph {
 		String lcs = getLCS(sourceNode, targetNode, graph);
 		System.out.println("\nThe lcs of " + sourceNode + " and " + targetNode + " is " + lcs);
 		System.out.println("\nThe depth of " + sourceNode + " is " + getNodeDepth(sourceNode, graph));
-		
+
 		Map<String, Integer> hierarchyMap = getOntologyHierarchy(onto, graph);
 //		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
 //		for (String s : conceptsSet) {
 //			if (!s.equals("Thing"))
-//			hierarchyMap.put(s, getNodeDepth(s, graph)); 
+//			hierarchyMap.put(s, getNodeDepth(s, graph));
 //		}
-		
+
 		System.out.println("\nPrinting hierarchyMap:");
 		for (Entry<String, Integer> e : hierarchyMap.entrySet()) {
 			System.out.println(e.getKey() + " : " + e.getValue());
 		}
-		
+
 
 	}
 
