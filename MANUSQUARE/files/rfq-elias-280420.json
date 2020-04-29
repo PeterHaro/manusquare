@@ -1,0 +1,26 @@
+{
+	"nda": "",
+	"projectName": "3printing lamp concepts",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		"customerInfo": {
+			"location": "",
+			"lat": "",
+			"lon": ""
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "6fe8c602-dcd6-4fb8-9faa-b5e7cf8b3927",
+	"id": "6fe8c602-dcd6-4fb8-9faa-b5e7cf8b3927",
+	"projectType": "Capacity Sharing",
+	"projectAttributes": [{
+		"unitOfMeasure": "mm",
+		"attributeId": "a4f5ef13-68b1-4012-acfa-35914e3ca497",
+		"processName": "3DPrinting",
+		"attributeKey": "Tolerance",
+		"attributeValue": "0.1"
+	}],
+	"supplierAttributes": []
+}
