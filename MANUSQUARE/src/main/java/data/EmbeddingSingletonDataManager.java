@@ -9,7 +9,7 @@ import java.util.zip.GZIPInputStream;
 
 public class EmbeddingSingletonDataManager {
 	private static final int NUM_VECTOR_DIMS = 300;
-	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/embeddings_2L_NSC_Min2_NN_VBG_WND.txt.gz";
+	private static final String EMBEDDING_FILE = "./files/EMBEDDINGS/embeddings_2L_NSC_Min2_NN_VBG.txt.gz";
 	private static Map<String, double[]> vectorMap = null;
 
 	private static final EmbeddingSingletonDataManager instance = new EmbeddingSingletonDataManager();
@@ -26,6 +26,7 @@ public class EmbeddingSingletonDataManager {
 
 	private EmbeddingSingletonDataManager() {
 		try {
+			System.out.println("Working Directory = " + System.getProperty("user.dir"));
 			vectorMap = createVectorMap(EMBEDDING_FILE);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -148,16 +149,17 @@ public class EmbeddingSingletonDataManager {
 	 *
 	 * @return a set of vectors (as a string) associated with the label
 	 */
-	public static double[] getLabelVector(String label, VectorAggregationMethod vectorAggregationMethod) {
+	public double[] getLabelVector(String label, VectorAggregationMethod vectorAggregationMethod) {
 		List<double[]> aggregatedLabelVectors = new ArrayList<>();
 		double[] labelVectorArray = new double[EmbeddingSingletonDataManager.NUM_VECTOR_DIMS];
 		double[] localVectorArray;
+		double[] defaultValue = {0} ;
 
 		//if the class name is not a compound, turn it into lowercase,
 		if (!StringUtilities.isCompoundWord(label)) {
 			String lcLabel = label.toLowerCase();
 			//if the class name is in the vectormap, get its vectors
-			labelVectorArray = vectorMap.getOrDefault(lcLabel, null);
+			labelVectorArray = vectorMap.getOrDefault(lcLabel, defaultValue);
 
 			//if the class name is a compound, split the compounds, and if the vectormap contains ANY of the compounds, extract the vectors from
 			//the compound parts and average them in order to return the vector for the compound class name
