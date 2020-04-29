@@ -195,7 +195,7 @@ public class QueryValidation {
 	private static String findConceptName(String concept, Set<String> allClasses) {
 		String conceptName = null;
 		for (String s : allClasses) {
-			if (concept.equalsIgnoreCase(s)) {
+				if (concept.equalsIgnoreCase(s)) {
 				conceptName = s;
 				break;//break process if a concept name is found
 			} else {
