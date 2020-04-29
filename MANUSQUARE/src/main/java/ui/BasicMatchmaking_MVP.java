@@ -2,7 +2,6 @@ package ui;
 
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import rita.json.JSONException;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -13,7 +12,7 @@ import java.text.ParseException;
 public class BasicMatchmaking_MVP {
 	
 
-	public static void main(String[] args) throws OWLOntologyCreationException, IOException, ParseException, JSONException, OWLOntologyStorageException {
+	public static void main(String[] args) throws OWLOntologyCreationException, IOException, ParseException, /*JSONException,*/ OWLOntologyStorageException {
 		long startTime = System.currentTimeMillis();
 		//logging(false);
 		int numMatchingResults = 10;
@@ -36,7 +35,7 @@ public class BasicMatchmaking_MVP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/rfq-attributes-custInfo.json";
+			String jsonIn = "./files/rfq-elias-280420.json";
  			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
