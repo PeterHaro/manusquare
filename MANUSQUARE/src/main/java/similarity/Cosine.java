@@ -30,8 +30,8 @@ public class Cosine {
 	    } else {
 	    	finalSim = tempSim;
 	    }
-	    
-	    return finalSim;
+
+		return Double.isNaN(finalSim) ? 0.0 : finalSim;
 	}
 	
 	public static double cosineSimilarity(ArrayList<Double> vectorAList, ArrayList<Double> vectorBList) {
