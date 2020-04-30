@@ -63,7 +63,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/similarity" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="C:/Program Files/nodejs/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
@@ -220,6 +220,13 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2178" y="237" key="SettingsEditor" timestamp="1588189651084">
+      <screen x="1680" y="108" width="2560" height="1440" />
+    </state>
+    <state x="2178" y="237" key="SettingsEditor/0.0.1680.1050/1680.108.2560.1440@1680.108.2560.1440" timestamp="1588189651084" />
+    <state x="327" y="115" key="SettingsEditor/0.23.1680.1027/1680.108.2560.1440@1680.108.2560.1440" timestamp="1588189618464" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
