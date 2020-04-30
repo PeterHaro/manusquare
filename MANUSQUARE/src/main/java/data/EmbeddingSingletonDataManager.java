@@ -152,14 +152,14 @@ public class EmbeddingSingletonDataManager {
 	public double[] getLabelVector(String label, VectorAggregationMethod vectorAggregationMethod) {
 		List<double[]> aggregatedLabelVectors = new ArrayList<>();
 		double[] labelVectorArray = new double[EmbeddingSingletonDataManager.NUM_VECTOR_DIMS];
+		Arrays.fill(labelVectorArray, 0.0);
 		double[] localVectorArray;
-		double[] defaultValue = {0} ;
 
 		//if the class name is not a compound, turn it into lowercase,
 		if (!StringUtilities.isCompoundWord(label)) {
 			String lcLabel = label.toLowerCase();
 			//if the class name is in the vectormap, get its vectors
-			labelVectorArray = vectorMap.getOrDefault(lcLabel, defaultValue);
+			labelVectorArray = vectorMap.getOrDefault(lcLabel, labelVectorArray);
 
 			//if the class name is a compound, split the compounds, and if the vectormap contains ANY of the compounds, extract the vectors from
 			//the compound parts and average them in order to return the vector for the compound class name

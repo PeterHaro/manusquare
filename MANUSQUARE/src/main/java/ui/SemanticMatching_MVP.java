@@ -98,7 +98,7 @@ public class SemanticMatching_MVP {
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
 
-			graph = SimpleGraph.createGraph(ontology);
+		graph = SimpleGraph.createGraph(ontology);
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
 		List<Supplier> supplierData = TripleStoreConnection.createSupplierData(query, testing, ontology);

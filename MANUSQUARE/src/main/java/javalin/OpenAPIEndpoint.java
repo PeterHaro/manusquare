@@ -80,8 +80,8 @@ public class OpenAPIEndpoint {
                 .path("/swagger-docs") // Activate the open api endpoint
                 // .defaultDocumentation(doc -> { doc.json("500", MyError.class); }) // Lambda that will be applied to every documentation
                 .activateAnnotationScanningFor("javalin.controllers") // Activate annotation scanning (Required for annotation api with static java methods)
-                .toJsonMapper(JacksonToJsonMapper.INSTANCE) // Custom json mapper
-                .modelConverterFactory(JacksonModelConverterFactory.INSTANCE) // Custom OpenApi model converter
+                //.toJsonMapper(JacksonToJsonMapper.INSTANCE) // Custom json mapper
+//                .modelConverterFactory(JacksonModelConverterFactory.INSTANCE) // Custom OpenApi model converter
                 .swagger(new SwaggerOptions("/swagger").title("Manusquare matchmaking")) // Activate the swagger ui
                 .reDoc(new ReDocOptions("/redoc").title("Manusquare matchmaking ReDoc Documentation"));// Active the ReDoc UI
         return opts;
