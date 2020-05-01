@@ -42,7 +42,7 @@ public class SparqlQuery {
 
     public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-        String filename = "./files/rfq-attributes-custInfo.json";
+        String filename = "./files/rfq-elias-280420.json";
         String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -133,15 +133,18 @@ public class SparqlQuery {
         //get attributes
         strQuery += queryAttributes(attributes);
 
-        //materials option 1: we use the object property hasAttribute to retrieve materials relevant for our processes
-        //strQuery += "OPTIONAL { ?process core:hasAttribute ?attribute . }\n";
-        //strQuery += "OPTIONAL { ?attribute core:hasValue ?material . ?material rdf:type ?materialType . }\n";
+// Option 1: If the type of material attributes is AttributeMaterial        
+//        strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
+//        strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
+//        strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
+//        strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
+//        strQuery += "?materialAttributeValue rdf:type ?materialType . }\n";
 
-        //materials option 2: we use the object property hasMaterial to retrieve materials relevant for our processes
+// Option 2: If the type of material attributes is Material   
         strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
         strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
-        strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
-        strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
+        strQuery += "VALUES ?materialAttributeType {core:Material} . \n";
+        strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
         strQuery += "?materialAttributeValue rdf:type ?materialType . }\n";
 
         //certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
@@ -157,8 +160,6 @@ public class SparqlQuery {
 
         strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
         strQuery += "\n}";
-
-        //System.out.println(strQuery);
 
         return strQuery;
     }
@@ -238,10 +239,10 @@ public class SparqlQuery {
                 attributeQuery.append("} \n");
 
                 attributeQuery.append("BIND ( \n");
-                attributeQuery.append("IF (bound(?uom) && ?uom = \"m\", " + attributeValue + " * 1000, \n");
-                attributeQuery.append("IF (bound(?uom) && ?uom = \"dm\", " + attributeValue + " * 100,\n");
-                attributeQuery.append("IF (bound(?uom) && ?uom = \"cm\", " + attributeValue + " * 10,\n");
-                attributeQuery.append(attributeValue + "))) as " + updatedAttributeValue + ") \n");
+                attributeQuery.append("IF (bound(?uom) && ?uom = \"mm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 1, \n");
+                attributeQuery.append("IF (bound(?uom) && ?uom = \"cm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 10,\n");
+                attributeQuery.append("IF (bound(?uom) && ?uom = \"dm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 100,\n");
+                attributeQuery.append("xsd:decimal(" + attributeValue + ")))) as " + updatedAttributeValue + ") \n");
 
 
                 attributeQuery.append("\n");
