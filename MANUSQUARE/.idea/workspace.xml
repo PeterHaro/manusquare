@@ -8,35 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MANUSQUARE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MANUSQUARE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/aterm-java-1.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/aterm-java-1.8.2-p1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jgrapht-core-0.9.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jgrapht-ext-0.9.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jgrapht-jdk1.5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jwnl.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ontosim.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/owlapi-bin.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/owlapi-dependencypack-5.1.9.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/owlapi-distribution-5.1.10.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-cli.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-core-2.3.2-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-core.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-datatypes.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-dig.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-el.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-examples-2.3.2-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-explanation.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-jena.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-modularity.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-owlapiv3-2.3.2-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-owlapiv3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-pellint.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-query.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pellet-rules.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/rita.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/rita.support.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ws4j-1.0.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/EmbeddingSingletonDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/EmbeddingSingletonDataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/similarity/Cosine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/similarity/Cosine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +56,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/similarity" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="C:/Program Files/nodejs/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -101,7 +76,26 @@
       <recent name="E:\Prosjekter\SINTEF\manusquare\cleaned\manusquare\MANUSQUARE\src\main\java\ui" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.BasicMatchmaking_MVP">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn dependency:tree -Dverbose -Dincludes=com.google.guava" />
+      <command value="mvn dependency:resolve" />
+      <command value="mvn dependency:tree -Dverbose -Dincludes=org.jetbrains.kotlin" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JAR Application.Matchmaking.jar">
     <configuration name="BasicMatchmaking_MVP" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.BasicMatchmaking_MVP" />
       <module name="MANUSQUARE" />
@@ -172,9 +166,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.BasicMatchmaking_MVP" />
-        <item itemvalue="Application.OpenAPIEndpoint" />
         <item itemvalue="JAR Application.Matchmaking.jar" />
+        <item itemvalue="Application.OpenAPIEndpoint" />
+        <item itemvalue="Application.BasicMatchmaking_MVP" />
         <item itemvalue="JUnit.All in MANUSQUARE" />
         <item itemvalue="Application.TestDatabaseGeneration" />
       </list>
