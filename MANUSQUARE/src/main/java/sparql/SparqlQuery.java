@@ -149,8 +149,10 @@ public class SparqlQuery {
 
         //certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
         //this is taken care of by the matchmaking algo)
-        strQuery += "\nOPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType .} \n";
-
+        strQuery += "\nOPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . \n";
+        strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
+        strQuery += "\n}";
+        
         //filter suppliers
         if (supplierMaxDistance != 0) {
             strQuery += "\n?supplier geo:asWKT ?location .\n";
@@ -158,7 +160,7 @@ public class SparqlQuery {
             strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n";
         }
 
-        strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
+        //strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
         strQuery += "\n}";
 
         return strQuery;
