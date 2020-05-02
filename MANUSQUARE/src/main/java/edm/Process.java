@@ -4,6 +4,7 @@ import utilities.StringUtilities;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
@@ -157,27 +158,46 @@ public class Process {
     //a toString() method that prints processes along with relevant materials
     public String toString() {
 
-        //String returnedString = null;
-
-        Set<String> attributeKeys = new HashSet<String>();
-        Set<Attribute> attributes = this.getAttributes();
-
-        //System.out.println("Test: Number of attributes:"  + attributes.size());
-
         StringBuffer returnedString = new StringBuffer();
+        
+        if (this.attributeWeightMap != null) {
+        //get attributeKeys associated with process
+        Map<String, String> attributeWeightMap = this.getAttributeWeightMap();
+        
+        Set<String> attributes = new HashSet<String>();
+        Set<String> attributeValue = new HashSet<String>();
+        
+        for (Entry<String, String> e : attributeWeightMap.entrySet()) {
+        		attributes.add(e.getKey());
+        		attributeValue.add(e.getValue());
+        }
+
+        
+
 
         returnedString.append(this.name);
+        
+        returnedString.append("\n\n- Attributes:");
 
-        //TODO: Check why there are no attributes being printed
-        //need to check if there are no attributes associated with the process
         if (attributes == null || attributes.isEmpty()) {
             returnedString.append(" ( no attributes )");
         } else {
-            for (Attribute attribute : attributes) {
-                attributeKeys.add(attribute.getKey());
+            for (Entry<String, String> e : attributeWeightMap.entrySet()) {
+            	returnedString.append(e.getKey() + ": " + e.getValue());
             }
 
-            returnedString.append(StringUtilities.printSetItems(attributeKeys) + " )");
+        }
+        
+        } else {
+        	
+        	returnedString.append(this.name);
+        	
+        	returnedString.append("\n\n- Attributes:");
+
+            if (attributes == null || attributes.isEmpty()) {
+                returnedString.append(" ( no attributes )");
+            }
+        	
         }
 
         Set<String> materialNames = new HashSet<String>();
@@ -186,7 +206,7 @@ public class Process {
         //need to check if there are no materials associated with the process
         if (materials == null || materials.isEmpty()) {
 
-            returnedString.append(" ( no materials )");
+            returnedString.append("\n- Materials: ( no materials )");
 
 
         } else {
@@ -195,9 +215,11 @@ public class Process {
                 materialNames.add(material.getName());
             }
 
-            returnedString.append("( " + StringUtilities.printSetItems(materialNames) + " )");
+            returnedString.append("\n- Materials: ( " + StringUtilities.printSetItems(materialNames) + " )");
 
         }
+        
+        returnedString.append("\n");
 
         return returnedString.toString();
 
