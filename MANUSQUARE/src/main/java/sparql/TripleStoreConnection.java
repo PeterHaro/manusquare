@@ -27,7 +27,7 @@ public class TripleStoreConnection {
 
     //configuration of the local GraphDB knowledge base (testing)
     static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-    static final String REPOSITORY_ID = "MANUSQUARE-INFERENCE-TESTDATA";
+    static final String REPOSITORY_ID = "MANUSQUARE-300420";
 
     //configuration of the MANUSQUARE Semantic Infrastructure
     static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
@@ -88,7 +88,7 @@ public class TripleStoreConnection {
         }
 
         String strQuery = SparqlQuery.createSparqlQuery(query, onto);
-
+        
         //open connection to GraphDB and run SPARQL query
         Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
         SparqlRecord record;
@@ -111,7 +111,7 @@ public class TripleStoreConnection {
                     BindingSet solution = result.next();
 
                     Set<String> bindings = solution.getBindingNames();
-
+                    
                     //if there are attributes in the query results
                     if (containsAttributes(bindings) == true) {
 
@@ -121,41 +121,43 @@ public class TripleStoreConnection {
                             }
                         }
                     }
+                    if (solution.getValue("materialType") == null && solution.getValue("certificationType") == null) {
+                    	
+                        record = new SparqlRecord();
+                        record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                        record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
 
-                    //omit the NamedIndividual types from the query result
-                    if (solution.hasBinding("materialType")) {
-                        if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-                                && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-                                && !solution.getValue("materialType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
-
-                            record = new SparqlRecord();
-                            record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-                            record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
-                            record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
-                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
-
-                            if (containsAttributes(bindings) == true) {
-                                record.setAttributeWeightMap(attributeMap);
-                            }
-                            recordSet.add(record);
+                        if (containsAttributes(bindings) == true) {
+                            record.setAttributeWeightMap(attributeMap);
                         }
-                    } else {
-                        if (!solution.getValue("processType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")
-                                && !solution.getValue("certificationType").stringValue().equals("http://www.w3.org/2002/07/owl#NamedIndividual")) {
-
-                            record = new SparqlRecord();
-                            record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-                            record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
-                            record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
-
-                            if (containsAttributes(bindings) == true) {
-                                record.setAttributeWeightMap(attributeMap);
-                            }
-
-                            recordSet.add(record);
-                        }
+                        recordSet.add(record);
+                    	
                     }
+                    
+                    if (solution.getValue("materialType") != null && solution.getValue("certificationType") == null) {
+                    	
+                        record = new SparqlRecord();
+                        record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                        record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                        record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
 
+                        if (containsAttributes(bindings) == true) {
+                            record.setAttributeWeightMap(attributeMap);
+                        }
+                        recordSet.add(record);
+                    	
+                    } else if (solution.getValue("certificationType") != null && solution.getValue("materialType") == null) {
+                    	
+                        record = new SparqlRecord();
+                        record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                        record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                        record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+
+                        if (containsAttributes(bindings) == true) {
+                            record.setAttributeWeightMap(attributeMap);
+                        }
+                        recordSet.add(record);
+                    } 
                 }
 
             } catch (Exception e) {
@@ -214,7 +216,7 @@ public class TripleStoreConnection {
                 if (sr.getSupplierId().equals(id)) {
                     //add certifications
                     certification = new Certification(sr.getCertification());
-                    if (!certifications.contains(certification)) {
+                    if (certification.getId() != null && !certifications.contains(certification)) {
                         certifications.add(certification);
                     }
 
