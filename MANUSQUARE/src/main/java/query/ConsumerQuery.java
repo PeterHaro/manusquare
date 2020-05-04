@@ -35,13 +35,15 @@ public class ConsumerQuery {
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
+	private Set<String> language;
 
 
 	//if the consumer specifies both processes (incl. materials) and certifications.
-	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications) {
+	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, Set<String> language) {
 		super();
 		this.processes = processes;
 		this.certifications = certifications;
+		this.language = language;
 	}
 
 	//if processes (incl. materials) and supplierMaxDistance are specified by the consumer
@@ -53,7 +55,6 @@ public class ConsumerQuery {
 		this.customerLocationInfo = customerLocationInfo;
 	}
 
-
 	//if the consumer specifies both processes (incl. materials), certifications, and supplierMaxDistance.
 	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
 		super();
@@ -61,6 +62,16 @@ public class ConsumerQuery {
 		this.certifications = certifications;
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.customerLocationInfo = customerLocationInfo;
+	}
+	
+	//if the consumer specifies both processes (incl. materials), certifications, supplierMaxDistance, and language.
+	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, Set<String> language) {
+		super();
+		this.processes = processes;
+		this.certifications = certifications;
+		this.supplierMaxDistance = supplierMaxDistance;
+		this.customerLocationInfo = customerLocationInfo;
+		this.language = language;
 	}
 
 
@@ -110,7 +121,14 @@ public class ConsumerQuery {
 	public void setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
 		this.customerLocationInfo = customerLocationInfo;
 	}
+	
+	public Set<String> getLanguage() {
+		return language;
+	}
 
+	public void setLanguage(Set<String> language) {
+		this.language = language;
+	}
 
 	/**
 	 * Parses a json file and creates a ConsumerQuery object representing the input provided by a consumer in the RFQ establishment process.
@@ -127,6 +145,7 @@ public class ConsumerQuery {
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> processNames = new HashSet<String>();
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
+		Set<String> languages = new HashSet<String>();
 
 		RequestForQuotation rfq;
 
@@ -153,14 +172,14 @@ public class ConsumerQuery {
 			//get the materials and other attributes if they´re present
 			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
 				if (!projectAttributes.attributeKey.isEmpty()) {
-					if (!projectAttributes.attributeKey.equalsIgnoreCase("material") && projectAttributes.processName.equals(process)) {
+					if ((!projectAttributes.attributeKey.equalsIgnoreCase("material") && !projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) {
 						//check if uom is included in JSON
 						if (projectAttributes.unitOfMeasure != null) {
 							attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
 						} else {
 							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 						}
-					} else if (projectAttributes.attributeKey.equalsIgnoreCase("material") && projectAttributes.processName.equals(process)) { //get the materials
+					} else if ((projectAttributes.attributeKey.equalsIgnoreCase("material") || projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) { //get the materials
 						materialSet.add(new Material(projectAttributes.attributeValue));
 					}
 				} else {
@@ -201,13 +220,24 @@ public class ConsumerQuery {
 
 		} else {
 			for (SupplierAttributeKeys supplierAttributes : rfq.supplierAttributes) {
-				if (supplierAttributes.attributeKey.equals("certification")) {
+				if (supplierAttributes.attributeKey.equalsIgnoreCase("certification")) {
 					certifications.add(new Certification(supplierAttributes.attributeValue));
 				}
+				
+				if (supplierAttributes.attributeKey.equalsIgnoreCase("Language")) {
+					languages.add(supplierAttributes.attributeValue);
+				}
 			}
+			
+			if (languages != null) {
+				
+				query = new ConsumerQuery(processes, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, languages);
+				
+			} else {
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
 			query = new ConsumerQuery(processes, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
-		}
+			}
+			}
 
 
 		return query;
@@ -233,7 +263,7 @@ public class ConsumerQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/rfq-attributes-custInfo.json";
+		String filename = "./files/Test8.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -242,9 +272,12 @@ public class ConsumerQuery {
 
 		for (Process p : query.getProcesses()) {
 			System.out.println("Process: " + p.getName());
+			
+			if (p.getMaterials() != null) {
 			System.out.println("Number of materials: " + p.getMaterials().size());
 			for (Material m : p.getMaterials()) {
 				System.out.println("   Material: " + m.getName());
+			}
 			}
 			for (Attribute a : p.getAttributes()) {
 				System.out.println("   Attribute: " + a.getKey());
@@ -256,6 +289,8 @@ public class ConsumerQuery {
 		}
 
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
+		
+		System.out.println("Languages required: " + query.getLanguage());
 	}
 
 }
