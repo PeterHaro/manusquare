@@ -1,0 +1,35 @@
+{
+	"nda": "",
+	"projectName": "Test 15:14",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		"customerInfo": {
+			"location": "",
+			"lat": "",
+			"lon": ""
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "0cf0b0c2-ffe5-4b10-88a8-53f2cb8de9b9",
+	"id": "0cf0b0c2-ffe5-4b10-88a8-53f2cb8de9b9",
+	"projectType": "Capacity Sharing",
+	"projectAttributes": [{
+		"unitOfMeasure": "mm",
+		"attributeId": "c40c187c-9c8f-484a-9744-d0da1102c499",
+		"processName": "3DPrinting",
+		"attributeKey": "Tolerance",
+		"attributeValue": "1000"
+	}],
+	"supplierAttributes": [{
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
+        "attributeKey": "Language",
+        "attributeValue": "Spanish"
+	},
+	{
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
+        "attributeKey": "Language",
+        "attributeValue": "French"
+	}]
+}
