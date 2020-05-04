@@ -485,7 +485,7 @@ public class StringUtilities {
 
 	/**
 	 * prints each (string) item in a set of items
-	 * @param certifications
+	 * @param set of strings
 	 * @return sequenced string of certifications separated by commas
    	   Oct 12, 2019
 	 */
@@ -505,6 +505,40 @@ public class StringUtilities {
 			return null;
 		}
 
+	}
+	
+	/**
+	 * prints each (string) item with quotes from a set of string items
+	 * @param set of strings
+	 * @return sequenced string of languages surrounded by quotes and separated by commas
+	   May 4, 2020
+	 */
+	public static String printLanguageSetItems(Set<String> set) {
+		StringBuffer sb = new StringBuffer();
+		
+		if (!set.isEmpty()) {
+		
+		for (String s : set) {
+			sb.append("\"" + s + "\"" + ", ");
+		}
+
+		String setItem = sb.deleteCharAt(sb.lastIndexOf(",")).toString();
+
+		return setItem;
+		} else {
+			return null;
+		}
+
+	}
+	
+	public static void main(String[] args) {
+		
+		Set<String> languages = new HashSet<String>();
+		languages.add("French");
+		languages.add("Italian");
+		
+		System.out.println(printLanguageSetItems(languages));
+		
 	}
 
 
