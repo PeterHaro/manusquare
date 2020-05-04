@@ -1,7 +1,6 @@
 package sparql;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,16 +13,15 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableGraph;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -35,14 +33,14 @@ import exceptions.NoAttributeException;
 import graph.SimpleGraph;
 import owlprocessing.OntologyOperations;
 import query.ConsumerQuery;
-import supplierdata.Supplier;
+import utilities.StringUtilities;
 
 
 public class SparqlQuery {
 
     public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-        String filename = "./files/rfq-elias-280420.json";
+        String filename = "./files/Test11-GEO-LANG.json";
         String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -62,9 +60,9 @@ public class SparqlQuery {
         Set<Material> materials = new HashSet<Material>();
         Set<Attribute> attributes = new HashSet<Attribute>();
         Set<edm.Process> processes = cq.getProcesses();
+        Set<String> languages = cq.getLanguage();        
 
-        //27.02.2020: get the Least Common Subsumer (LCS) of the process concepts included by the consumer
-        //we need the ontology in order to fetch the superclasses
+        //get the Least Common Subsumer (LCS) of the process concepts included by the consumer
         String lcs = getLCS(processes, onto);
 
         //14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
@@ -108,10 +106,10 @@ public class SparqlQuery {
         }
 
         //for each attribute key we add a variable
-        //FIXME: Dead code warning from Eclipse?
         StringBuilder attributeQuery = new StringBuilder();
 
-        if (attributes == null) {
+       // if (attributes == null) {
+        	if (isNullOrEmpty(attributes)) {
 
             strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType \n";
         } else {
@@ -122,6 +120,7 @@ public class SparqlQuery {
 
             strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType" + attributeQuery.toString() + " \n";
         }
+        
         strQuery += "WHERE { \n";
 
         //get all subclasses of LCS
@@ -133,14 +132,7 @@ public class SparqlQuery {
         //get attributes
         strQuery += queryAttributes(attributes);
 
-// Option 1: If the type of material attributes is AttributeMaterial        
-//        strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
-//        strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
-//        strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
-//        strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
-//        strQuery += "?materialAttributeValue rdf:type ?materialType . }\n";
-
-// Option 2: If the type of material attributes is Material   
+        //get materials
         strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
         strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
         strQuery += "VALUES ?materialAttributeType {core:Material} . \n";
@@ -150,17 +142,31 @@ public class SparqlQuery {
         //certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
         //this is taken care of by the matchmaking algo)
         strQuery += "\nOPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . \n";
-        strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
-        strQuery += "\n}";
+        strQuery += "FILTER ( ?certificationType not in ( owl:NamedIndividual )) \n";
+        strQuery += "} \n";
         
         //filter suppliers
         if (supplierMaxDistance != 0) {
+        	
+        		//strQuery += "\nOPTIONAL { \n"; TODO: Check if we need OPTIONAL here, this snippet is only included if the consumer adds a supplierMaxDistance other than '0'.
             strQuery += "\n?supplier geo:asWKT ?location .\n";
             strQuery += "BIND((geof:distance(?location, \"POINT(" + lat + " " + lon + ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n";
             strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n";
+            //strQuery += "} \n";
+        }
+        
+        	if (!isNullOrEmpty(languages)) {
+        	
+        strQuery += "\nOPTIONAL { \n";
+        	strQuery += "\n?supplier core:hasAttribute ?languageAttribute . \n";
+        	strQuery += "?languageAttribute rdf:type ?languageAttributeType . \n";       
+        	strQuery += "?languageAttribute core:hasValue ?language . \n";
+        	strQuery += "VALUES ?languageAttributeType {ind:Language} . \n";
+        strQuery += "} \n";
+        	strQuery += "FILTER(?language in (" + StringUtilities.printLanguageSetItems(languages) + ")) \n";
+	
         }
 
-        //strQuery += "\nFILTER ( ?certificationType not in ( owl:NamedIndividual ))";
         strQuery += "\n}";
 
         return strQuery;
@@ -368,6 +374,17 @@ public class SparqlQuery {
 
         return sortedByValues;
     }
+    
+    /**
+     * Checks a collection for null or empty values TODO: this resolves earlier "dead code" warnings and can probably be used elsewhere (+ used as generic utility method and put elsewhere)
+     * @param c
+     * @return
+       May 4, 2020
+     */
+    public static boolean isNullOrEmpty( final Collection< ? > c ) {
+        return c == null || c.isEmpty();
+    }
+    
 
 
 }
