@@ -148,8 +148,9 @@ public class SparqlQuery {
         strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
         
         //uncomment when querying local test-data
-        //strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
-        //strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
+//        strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
+//        strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
+        
         strQuery += "?materialAttributeValue rdf:type ?materialType . \n";
         strQuery += "FILTER ( ?materialType not in ( owl:NamedIndividual )) \n";
         strQuery += "} \n";
