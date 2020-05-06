@@ -27,7 +27,7 @@ public class TripleStoreConnection {
 
     //configuration of the local GraphDB knowledge base (testing)
     static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-    static final String REPOSITORY_ID = "MANUSQUARE-300420";
+    static final String REPOSITORY_ID = "MANUSQUARE_DEV_DUMP";
 
     //configuration of the MANUSQUARE Semantic Infrastructure
     static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
@@ -157,7 +157,21 @@ public class TripleStoreConnection {
                             record.setAttributeWeightMap(attributeMap);
                         }
                         recordSet.add(record);
-                    } 
+                   
+                    } else if (solution.getValue("certificationType") != null && solution.getValue("materialType") != null) {
+                    	
+                    	 	record = new SparqlRecord();
+                         record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+                         record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+                         record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
+                         record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+
+                         if (containsAttributes(bindings) == true) {
+                             record.setAttributeWeightMap(attributeMap);
+                         }
+                         recordSet.add(record);
+
+                    }
                 }
 
             } catch (Exception e) {
@@ -183,7 +197,7 @@ public class TripleStoreConnection {
         for (SparqlRecord sr : recordSet) {
             supplierIds.add(sr.getSupplierId());
         }
-
+        
         Certification certification = null;
         Supplier supplier = null;
         List<Supplier> suppliersList = new ArrayList<Supplier>();
@@ -213,6 +227,7 @@ public class TripleStoreConnection {
             List<Process> processes = new ArrayList<Process>();
 
             for (SparqlRecord sr : recordSet) {
+            	
                 if (sr.getSupplierId().equals(id)) {
                     //add certifications
                     certification = new Certification(sr.getCertification());
@@ -255,7 +270,7 @@ public class TripleStoreConnection {
             }
             suppliersList.add(supplier);
         }
-
+        
         return suppliersList;
 
     }
