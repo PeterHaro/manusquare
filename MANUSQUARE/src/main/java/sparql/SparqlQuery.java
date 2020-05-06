@@ -385,9 +385,7 @@ public class SparqlQuery {
     private static String getOpposite(String inputCondition) {
 
         String opposite = null;
-        System.out.println("Testing inputCondition is " + inputCondition);
-        
-                
+
         if (inputCondition.equals("<=")) {
             opposite = ">";
         } else if (inputCondition.equals(">=")) {
