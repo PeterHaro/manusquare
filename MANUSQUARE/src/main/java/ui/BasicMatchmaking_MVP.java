@@ -1,20 +1,21 @@
 package ui;
 
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.ParseException;
 
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+
 public class BasicMatchmaking_MVP {
 	
 
 	public static void main(String[] args) throws OWLOntologyCreationException, IOException, ParseException, /*JSONException,*/ OWLOntologyStorageException {
+		
 		long startTime = System.currentTimeMillis();
-		//logging(false);
+
 		int numMatchingResults = 10;
 		// String jsonIn = "./files/rfq.json";
 		String jsonOut = "./files/matchingResults.json";
@@ -26,7 +27,7 @@ public class BasicMatchmaking_MVP {
 		boolean weighted = true;
 		
 		//used for situations where a process chain has no certifications|materials|attributes and this is required by the consumer in the RFQ JSON
-		double hard_coded_weight = 0.9;
+		double hard_coded_weight = 0.5;
 
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
@@ -35,7 +36,7 @@ public class BasicMatchmaking_MVP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/rfq-elias-280420.json";
+			String jsonIn = "./files/Test5.json";
  			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
