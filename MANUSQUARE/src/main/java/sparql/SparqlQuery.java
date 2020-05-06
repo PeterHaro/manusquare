@@ -74,7 +74,12 @@ public class SparqlQuery {
         //get the attributes and materials associated with processes included in the consumer query
         for (Process p : processes) {
             if (p.getAttributes() != null) {
-                attributes.addAll(p.getAttributes());
+            	
+            	for (Attribute a : p.getAttributes()) {
+            		if (isSupportedAttribute(a)) {
+                attributes.add(a);
+            		}
+            	}
             }
 
             if (p.getMaterials() != null) {
@@ -86,7 +91,8 @@ public class SparqlQuery {
         strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
         strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
         strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
-
+        strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+        
         //if supplier max distance is no 0, we should consider geo distance
         if (supplierMaxDistance != 0) {
 
@@ -101,7 +107,6 @@ public class SparqlQuery {
             strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
             strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/> \n";
             strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
-            strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
             strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n";
         }
 
@@ -112,7 +117,8 @@ public class SparqlQuery {
         	if (isNullOrEmpty(attributes)) {
 
             strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType \n";
-        } else {
+      
+        	} else {
 
             for (Attribute att : attributes) {
                 attributeQuery.append(" ?" + att.getKey() + "Attr");
@@ -135,14 +141,19 @@ public class SparqlQuery {
         //get materials
         strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
         strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
-        strQuery += "VALUES ?materialAttributeType {core:Material} . \n";
-        strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
-        strQuery += "?materialAttributeValue rdf:type ?materialType . }\n";
+        //strQuery += "VALUES ?materialAttributeType {core:Material} . \n";
+        //strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
+        //uncomment when querying local test-data
+        strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
+        strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
+        strQuery += "?materialAttributeValue rdf:type ?materialType . \n";
+        strQuery += "FILTER ( ?materialType not in ( owl:NamedIndividual )) \n";
+        strQuery += "} \n";
 
         //certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
         //this is taken care of by the matchmaking algo)
         strQuery += "\nOPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . \n";
-        strQuery += "FILTER ( ?certificationType not in ( owl:NamedIndividual )) \n";
+        strQuery += "FILTER ( ?certificationType not in ( owl:NamedIndividual ) && ?certificationType not in ( owl:Class )) \n";
         strQuery += "} \n";
         
         //filter suppliers
@@ -168,6 +179,8 @@ public class SparqlQuery {
         }
 
         strQuery += "\n}";
+        
+        System.out.println(strQuery);
 
         return strQuery;
     }
@@ -235,9 +248,11 @@ public class SparqlQuery {
 
             attributeQuery.append("\nOPTIONAL {?process core:hasAttribute " + attribute + " . \n");
             attributeQuery.append(attribute + " rdf:type " + attributeType + " . \n");
-
+            
             //if unit of measurement is included
-            if (att.getunitOfMeasurement() != null) {
+            if (att.getunitOfMeasurement() != null && attributeConditions.get(attKey) != "!") {
+            	
+            		
                 attributeQuery.append(attribute + " core:hasUnitOfMeasure " + "?uomInd .\n");
                 attributeQuery.append("?uomInd" + " core:hasName " + "?uom .\n");
 
@@ -252,16 +267,15 @@ public class SparqlQuery {
                 attributeQuery.append("IF (bound(?uom) && ?uom = \"dm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 100,\n");
                 attributeQuery.append("xsd:decimal(" + attributeValue + ")))) as " + updatedAttributeValue + ") \n");
 
-
                 attributeQuery.append("\n");
-
                 attributeQuery.append("BIND ( \n");
                 attributeQuery.append("IF (bound(" + updatedAttributeValue + ") && " + updatedAttributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
                 attributeQuery.append("IF (bound(" + updatedAttributeValue + ") && " + updatedAttributeValue + " " + getOpposite(attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
                 attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
 
                 attCounter++;
-
+                
+            	
             } else {
                 attributeQuery.append(" VALUES " + attributeType + " {" + attributeClass + "} . \n");
                 attributeQuery.append(attribute + " core:hasValue " + attributeValue + " . \n");
@@ -300,15 +314,62 @@ public class SparqlQuery {
                 attributeConditions.put(a.getKey(), ">=");
             } else if (a.getKey().equals("Tolerance") || a.getKey().equals("SurfaceFinishing") || a.getKey().equals("MaxWallThickness")
                     || a.getKey().equals("MaxPartSizeX") || a.getKey().equals("MaxPartSizeY") || a.getKey().equals("MaxPartSizeZ")
-                    || a.getKey().equals("MaxKerfWidth") || a.getKey().equals("MaxSheetThickness")) {
+                    || a.getKey().equals("MaxKerfWidth") || a.getKey().equals("MaxSheetThickness")
+                    //|| a.getKey().equals("MaxPower")
+                    ) {
                 attributeConditions.put(a.getKey(), "<=");
             } else if (a.getKey().equals("Axis") || a.getKey().equals("CuttingSpeed")) {
                 attributeConditions.put(a.getKey(), "=");
+            } else {
+            		attributeConditions.put(a.getKey(), "!");
             }
         }
 
         return attributeConditions;
 
+    }
+    
+    public static boolean isSupportedAttribute (Attribute attribute) {
+    	
+    	Set<String> supportedAttributes = new HashSet<String>();
+    	supportedAttributes.add("Length");
+    	supportedAttributes.add("Width");
+    	supportedAttributes.add("Depth");
+    	supportedAttributes.add("MinFeatureSize");
+    	supportedAttributes.add("MinLayerThickness");
+    	supportedAttributes.add("MinKerfWidth");
+    	supportedAttributes.add("WorkingVolumeX");
+    	supportedAttributes.add("MinSheetThickness");
+    	supportedAttributes.add("PartSizeX");
+    	supportedAttributes.add("PartSizeY");
+    	supportedAttributes.add("PartSizeZ");
+    	supportedAttributes.add("MoldSizeX");
+    	supportedAttributes.add("MoldSizeY");
+    	supportedAttributes.add("MoldSizeZ");
+    	supportedAttributes.add("Capacity");
+    	supportedAttributes.add("WorkingAreaX");
+    	supportedAttributes.add("WorkingAreaY");
+    	supportedAttributes.add("WorkingAreaZ");
+    	supportedAttributes.add("AspectRatio");
+    	supportedAttributes.add("Tolerance");
+    	supportedAttributes.add("SurfaceFinishing");
+    	supportedAttributes.add("MaxWallThickness");
+    	supportedAttributes.add("SurfaceFinishing");
+    	supportedAttributes.add("MaxPartSizeX");
+    	supportedAttributes.add("MaxPartSizeY");
+    	supportedAttributes.add("MaxPartSizeZ");
+    	supportedAttributes.add("MaxKerfWidth");
+    	supportedAttributes.add("MaxSheetThickness");
+    	supportedAttributes.add("Axis");
+    	supportedAttributes.add("CuttingSpeed");
+
+    	if (supportedAttributes.contains(attribute.getKey())) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+ 
+    	
     }
 
     /**
@@ -320,7 +381,9 @@ public class SparqlQuery {
     private static String getOpposite(String inputCondition) {
 
         String opposite = null;
-
+        System.out.println("Testing inputCondition is " + inputCondition);
+        
+                
         if (inputCondition.equals("<=")) {
             opposite = ">";
         } else if (inputCondition.equals(">=")) {
