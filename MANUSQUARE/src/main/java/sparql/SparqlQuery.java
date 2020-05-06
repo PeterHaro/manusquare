@@ -141,11 +141,15 @@ public class SparqlQuery {
         //get materials
         strQuery += "\nOPTIONAL { ?process core:hasAttribute ?materialAttribute . \n";
         strQuery += "?materialAttribute rdf:type ?materialAttributeType . \n";
-        //strQuery += "VALUES ?materialAttributeType {core:Material} . \n";
-        //strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
+        
+        //TODO: Fix so that both materials with AttributeType and Material are captured from the JSON file
+        //uncomment when querying data in SI
+        strQuery += "VALUES ?materialAttributeType {core:Material} . \n";
+        strQuery += "?materialAttribute core:hasValue ?materialAttributeValue . \n";
+        
         //uncomment when querying local test-data
-        strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
-        strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
+        //strQuery += "VALUES ?materialAttributeType {ind:AttributeMaterial} . \n";
+        //strQuery += "?materialAttribute ind:hasValue ?materialAttributeValue . \n";
         strQuery += "?materialAttributeValue rdf:type ?materialType . \n";
         strQuery += "FILTER ( ?materialType not in ( owl:NamedIndividual )) \n";
         strQuery += "} \n";
