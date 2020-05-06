@@ -183,7 +183,7 @@ public class Process {
             returnedString.append(" ( no attributes )");
         } else {
             for (Entry<String, String> e : attributeWeightMap.entrySet()) {
-            	returnedString.append(e.getKey() + ": " + e.getValue());
+            	returnedString.append(e.getKey() + ": " + e.getValue() + " ");
             }
 
         }
