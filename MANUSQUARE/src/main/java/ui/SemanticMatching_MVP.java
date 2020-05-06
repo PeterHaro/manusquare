@@ -33,10 +33,6 @@ public class SemanticMatching_MVP {
 
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
-	//configuration of the local GraphDB knowledge base (testing)
-	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "MANUSQUARE-INFERENCE-TESTDATA";
-
 	//configuration of the MANUSQUARE Semantic Infrastructure
 	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
 	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
