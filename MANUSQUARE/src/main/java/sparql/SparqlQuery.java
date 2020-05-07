@@ -92,6 +92,7 @@ public class SparqlQuery {
         strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
         strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
         strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+        strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
         
         //if supplier max distance is no 0, we should consider geo distance
         if (supplierMaxDistance != 0) {
@@ -107,7 +108,7 @@ public class SparqlQuery {
             strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
             strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/> \n";
             strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
-            strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n";
+            strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
         }
 
         //for each attribute key we add a variable
@@ -116,7 +117,7 @@ public class SparqlQuery {
        // if (attributes == null) {
         	if (isNullOrEmpty(attributes)) {
 
-            strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType \n";
+            strQuery += "\nSELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType \n";
       
         	} else {
 
@@ -124,13 +125,13 @@ public class SparqlQuery {
                 attributeQuery.append(" ?" + att.getKey() + "Attr");
             }
 
-            strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType" + attributeQuery.toString() + " \n";
+            strQuery += "\nSELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType" + attributeQuery.toString() + " \n";
         }
         
-        strQuery += "WHERE { \n";
+        strQuery += "\nWHERE { \n";
 
         //get all subclasses of LCS
-        strQuery += "?processChain core:hasProcess ?process .\n";
+        strQuery += "\n?processChain core:hasProcess ?process .\n";
         strQuery += "?process rdf:type ?processType .\n";
         strQuery += "?processType rdfs:subClassOf* ind:" + lcs + " .\n";
         strQuery += "?processChain core:hasSupplier ?supplier .\n";
@@ -183,7 +184,7 @@ public class SparqlQuery {
 	
         }
 
-        strQuery += "\n}";
+        strQuery += "}";
         
         System.out.println(strQuery);
 
@@ -266,7 +267,7 @@ public class SparqlQuery {
 
                 attributeQuery.append("} \n");
 
-                attributeQuery.append("BIND ( \n");
+                attributeQuery.append("\nBIND ( \n");
                 attributeQuery.append("IF (bound(?uom) && ?uom = \"mm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 1, \n");
                 attributeQuery.append("IF (bound(?uom) && ?uom = \"cm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 10,\n");
                 attributeQuery.append("IF (bound(?uom) && ?uom = \"dm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 100,\n");
