@@ -169,15 +169,22 @@ public class QueryValidation {
 				
 				//check if vectormap/embeddings file contains consumerProcess as-is
 				if (vectorOntologyMap.containsKey(preProcessedConsumerProcess.toLowerCase())) {
-					
+										
 					mostSemanticallySimilarConcept = preProcessedConsumerProcess;
 					
-				} else { //if not, retrieve the most similar concept based on vector similarity
-					
-					mostSemanticallySimilarConcept = findMostSimilarVector(consumerInputVectors, vectorOntologyMap);
+				} else { //if not, retrieve the most similar concept based on vector similarity										
+					mostSemanticallySimilarConcept = findMostSimilarVector(consumerInputVectors, vectorOntologyMap);					
 				}
 				
+				//check if not null TODO: The code in this method should be optimised, perhaps also use string matching if sim is > 0.9?				
+				if (mostSemanticallySimilarConcept != null) {
+				
 				return findConceptName(mostSemanticallySimilarConcept, classes);
+				
+				} else {
+					
+					return getMostSimilarConceptSyntactically(preProcessedConsumerProcess, classes);
+				}
 
 			}
 		}
@@ -193,6 +200,8 @@ public class QueryValidation {
 	 * Mar 3, 2020
 	 */
 	private static String findConceptName(String concept, Set<String> allClasses) {
+		
+		System.out.println("Finding concept name for " + concept);
 		String conceptName = null;
 		for (String s : allClasses) {
 				if (concept.equalsIgnoreCase(s)) {
