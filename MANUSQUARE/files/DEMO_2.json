@@ -1,0 +1,77 @@
+{
+	"nda": "",
+	"projectName": "Prova",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		"customerInfo": {
+			"location": "",
+			"lat": "",
+			"lon": ""
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"projectType": "DEMO - Capacity Sharing",
+	"projectAttributes": [{
+		"unitOfMeasure": "",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "Turning",
+		"attributeKey": "Material",
+		"attributeValue": "StainlessSteel"
+	},{
+		"unitOfMeasure": "",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6b",
+		"processName": "Turning",
+		"attributeKey": "Axis",
+		"attributeValue": "3"
+	}, {
+		"unitOfMeasure": "mm",
+		"attributeId": "e46f4796-8ce7-4fec-a4e0-4b20bd28ac2c",
+		"processName": "Turning",
+		"attributeKey": "MaxPartSizeX",
+		"attributeValue": "150"
+	}, {
+		"unitOfMeasure": "mm",
+		"attributeId": "e46f4796-8ce7-4fec-a4e0-4b20bd28ac2d",
+		"processName": "Turning",
+		"attributeKey": "MaxPartSizeY",
+		"attributeValue": "200"
+	}, {
+		"unitOfMeasure": "mm",
+		"attributeId": "e46f4796-8ce7-4fec-a4e0-4b20bd28ac2e",
+		"processName": "Turning",
+		"attributeKey": "MaxPartSizeZ",
+		"attributeValue": "230"
+	}, {
+		"unitOfMeasure": "mm",
+		"attributeId": "e46f4796-8ce7-4fec-a4e0-4b20bd28ac2f",
+		"processName": "Turning",
+		"attributeKey": "Tolerance",
+		"attributeValue": "0.05"
+	}, {
+		"unitOfMeasure": "µm",
+		"attributeId": "e46f4796-8ce7-4fec-a4e0-4b20bd28ac2g",
+		"processName": "Turning",
+		"attributeKey": "SurfaceFinishing",
+		"attributeValue": "15"
+	}
+	],
+	"supplierAttributes": [
+	{
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
+        "attributeKey": "Certification",
+        "attributeValue": "ISO9001"
+	}, {
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf1",
+        "attributeKey": "Certification",
+        "attributeValue": "ISO14001"
+	}, {
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf2",
+        "attributeKey": "Certification",
+        "attributeValue": "OHSAS18001"
+	}
+	]
+}
