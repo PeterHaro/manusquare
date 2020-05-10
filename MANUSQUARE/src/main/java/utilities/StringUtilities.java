@@ -18,6 +18,22 @@ public class StringUtilities {
 	static OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
 	
 	/**
+	 * Checks if a set of strings includes the given string while ignoring the casing
+	 * @param set set of strings
+	 * @param soughtFor the string to check if exists in the set of strings
+	 * @return true if the set of strings contains the given string, false otherwise
+	   Mar 27, 2020
+	 */
+	public static boolean containsIgnoreCase(Set<String> set, String soughtFor) {
+		for (String current : set) {
+			if (current.equalsIgnoreCase(soughtFor)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Capitalises each word
 	 * @param str input string
 	 * @return string where each word is capitalised
