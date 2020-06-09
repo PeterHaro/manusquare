@@ -149,7 +149,16 @@ public class SimilarityMeasures {
 					avgAttributeSim = sum / (double) counter;
 
 					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
-				} 
+					
+					//if there are no consumer attributes, return an avgAttributeSim of 1.0
+				} else {
+					
+					avgAttributeSim = 1.0;
+					
+					debuggingOutput.append("\nThere are not attributes");
+					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
+				}
+				
 				
 				finalProcessSim = (processSim * 0.7) + (materialSim * 0.15) + (avgAttributeSim * 0.15);
 
