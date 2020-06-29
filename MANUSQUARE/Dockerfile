@@ -1,7 +1,7 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:11-jre-slim
 
 EXPOSE 7000
-ENTRYPOINT ["/usr/bin/java", "-jar", "/usr/share/javalin/my-javalin.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/share/javalin/my-javalin.jar"]
 
 ARG JAR_FILE
 ADD target/Matchmaking.jar /usr/share/javalin/my-javalin.jar

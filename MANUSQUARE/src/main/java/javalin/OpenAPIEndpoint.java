@@ -28,9 +28,10 @@ public class OpenAPIEndpoint {
 
 
         Javalin app = Javalin.create(config -> {
-            config.enableWebjars();
+            //config.enableWebjars();
             //config.addStaticFiles("/public");
-            config.registerPlugin(new OpenApiPlugin(getOpenApiOptions()));
+            config.registerPlugin(getConfiguredOpenApiPlugin());
+            config.defaultContentType = "application/json";
         }).routes(() -> {
             path("matchmaking", () -> {
                 path("/getAllBuyers", () -> {
@@ -57,7 +58,7 @@ public class OpenAPIEndpoint {
     }
 
     private static OpenApiPlugin getConfiguredOpenApiPlugin() {
-        Info info = new Info().version("1.0").description("Manusquare Matchmaking Service");
+        Info info = new Info().version("1.0").title("Manusquare Matching service").description("Manusquare Matchmaking Service");
         OpenApiOptions options = new OpenApiOptions(info)
                 .activateAnnotationScanningFor("javalin.controllers")
                 .path("/swagger-docs") // endpoint for OpenAPI json
@@ -72,7 +73,7 @@ public class OpenAPIEndpoint {
 
 
     private static OpenApiOptions getOpenApiOptions() {
-        InitialConfigurationCreator initialConfigurationCreator = () -> new OpenAPI()
+     /*   InitialConfigurationCreator initialConfigurationCreator = () -> new OpenAPI()
                 .info(new Info().version("1.0").description("Manusquare Matchmaking Service"));
         //.addServersItem(new Server().url("http://my-server.com").description("My Server"));
 
@@ -80,11 +81,12 @@ public class OpenAPIEndpoint {
                 .path("/swagger-docs") // Activate the open api endpoint
                 // .defaultDocumentation(doc -> { doc.json("500", MyError.class); }) // Lambda that will be applied to every documentation
                 .activateAnnotationScanningFor("javalin.controllers") // Activate annotation scanning (Required for annotation api with static java methods)
-                //.toJsonMapper(JacksonToJsonMapper.INSTANCE) // Custom json mapper
-//                .modelConverterFactory(JacksonModelConverterFactory.INSTANCE) // Custom OpenApi model converter
+                .toJsonMapper(JacksonToJsonMapper.INSTANCE) // Custom json mapper
+                .modelConverterFactory(JacksonModelConverterFactory.INSTANCE) // Custom OpenApi model converter
                 .swagger(new SwaggerOptions("/swagger").title("Manusquare matchmaking")) // Activate the swagger ui
                 .reDoc(new ReDocOptions("/redoc").title("Manusquare matchmaking ReDoc Documentation"));// Active the ReDoc UI
-        return opts;
+        return opts;*/
+     return null;
     }
 }
 
