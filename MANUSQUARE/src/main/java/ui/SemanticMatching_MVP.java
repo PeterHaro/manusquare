@@ -90,6 +90,8 @@ public class SemanticMatching_MVP {
 
 		}
 		
+		int numConsumerProcesses = processes.size();
+		
 
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
@@ -106,7 +108,9 @@ public class SemanticMatching_MVP {
 		for (Supplier supplier : supplierData) {
 			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
-			supplierScores.put(supplier, getHighestScore(supplierSim));	
+//			supplierScores.put(supplier, getHighestScore(supplierSim));	
+			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numConsumerProcesses));	
+			
 		}
 
 		//extract the n suppliers with the highest similarity scores
@@ -246,6 +250,41 @@ public class SemanticMatching_MVP {
 		inputScores.sort(Collections.reverseOrder());
 		return inputScores.get(0);
 
+	}
+	
+	/**
+	 * Get the average score relative to number of consumer processes (sum supplier scores / num consumer processes in query)
+	 *
+	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
+	 * @return the n highest scores from a list of input scores
+	 * Oct 12, 2019
+	 */
+	private static double getAverageSupplierScore(List<Double> inputScores, int numConsumerProcesses) {
+		double sum = 0;
+
+		for (double d : inputScores) {
+			sum += d;
+		}
+
+		return sum / (double)numConsumerProcesses;
+
+	}
+	
+	/**
+	 * Returns the average score of all scores for each resource offered by a supplier
+	 *
+	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
+	 * @return the average score of all scores for each supplier resource
+	 * Oct 30, 2019
+	 */
+	private static double getAverageScore(List<Double> inputScores) {
+		double sum = 0;
+
+		for (double d : inputScores) {
+			sum += d;
+		}
+
+		return sum / inputScores.size();
 	}
 
 
