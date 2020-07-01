@@ -177,49 +177,11 @@ public class SparqlQuery {
 
 		strQuery += "}";
 
-		System.out.println(strQuery);
+		//System.out.println(strQuery);
 
 		return strQuery;
 	}
 	
-	/*PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-	PREFIX core: <http://manusquare.project.eu/core-manusquare#> 
-	PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> 
-	PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-	PREFIX owl: <http://www.w3.org/2002/07/owl#> 
-
-	SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType ?attributeType (str(?uom) as ?uomStr) ?attributeValue
-
-	WHERE { 
-
-	?processChain core:hasProcess ?process .
-	?process rdf:type ?processType .
-	?processType rdfs:subClassOf* ind:MfgProcess .
-	?processChain core:hasSupplier ?supplier .
-
-	OPTIONAL {?process core:hasAttribute ?attribute . 
-	        ?attribute rdf:type ?attributeType . 
-	        OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .} 
-			OPTIONAL {?uomInd core:hasName ?uom . }
-	        BIND(?attribute AS ?a_attribute)
-	        BIND(?attribute AS ?m_attribute)
-
-	        #GET ATTRIBUTES
-	        OPTIONAL {?a_attribute core:hasValue ?attributeValue . }
-
-	    	#GET MATERIALS
-	        OPTIONAL {?m_attribute ind:hasObjectValue ?attributeMaterialValue .
-	?attributeMaterialValue rdf:type ?materialType . }
-	        
-	        VALUES ?attributeType {ind:MaxPartSizeZ ind:MaxPartSizeY ind:MaxPartSizeX ind:Tolerance ind:Axis ind:AttributeMaterial} 
-	        FILTER ( ?attributeType not in ( owl:NamedIndividual ) && ?materialType not in (owl:NamedIndividual)) 
-	} 
-
-	OPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . 
-	FILTER ( ?certificationType not in ( owl:NamedIndividual ) && ?certificationType not in ( owl:Class )) 
-	} 
-	}*/
 
 	private static String queryAttributes (Set<String> materialsAndAttributes) {
 
@@ -249,27 +211,6 @@ public class SparqlQuery {
 
 	}
 	
-/*	BACKUP
- * 
- * private static String queryAttributes (Set<String> materialsAndAttributes) {
-
-		String restrictedValues = getRestrictedValues(materialsAndAttributes);
-
-		StringBuilder attributeQuery = new StringBuilder();
-
-		attributeQuery.append("OPTIONAL {?process core:hasAttribute ?attribute . \n");
-		attributeQuery.append("?attribute rdf:type ?attributeType . \n");
-		attributeQuery.append("OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .} \n");
-		attributeQuery.append("OPTIONAL {?uomInd core:hasName ?uom . }\n");
-		attributeQuery.append("?attribute core:hasValue ?attributeValue . \n");
-		attributeQuery.append("OPTIONAL {?attributeValue rdf:type ?materialType . }\n");
-		attributeQuery.append("VALUES ?attributeType {" + restrictedValues + "ind:AttributeMaterial} \n"); //these must be retrieved from the consumer query
-		attributeQuery.append("FILTER ( ?attributeType not in ( owl:NamedIndividual )) \n");
-		attributeQuery.append("} \n");
-
-		return attributeQuery.toString();
-
-	}*/
 
 	private static String getRestrictedValues (Set<String> materialsAndAttributes) {
 
