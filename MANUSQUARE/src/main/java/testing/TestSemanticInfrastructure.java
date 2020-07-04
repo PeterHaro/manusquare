@@ -34,7 +34,7 @@ public class TestSemanticInfrastructure {
 
 	public static void main(String[] args) {
 		
-		logging(false);
+		//logging(false);
 		testSI();
 	}
 
@@ -52,7 +52,7 @@ public class TestSemanticInfrastructure {
 		String supplier = "stakeholders:194a7794-9f3c-4f9c-9855-bc243a536594";
 		
 
-		String strQuery = getProcessesOfSupplier(supplier);
+		String strQuery = testQuery();
 
 
 		try (RepositoryConnection conn = repository.getConnection()) {
@@ -68,11 +68,12 @@ public class TestSemanticInfrastructure {
 					System.out.println("ProcessType: " + solution.getValue("processType"));
 					System.out.println("Supplier: " + solution.getValue("supplier"));
 					System.out.println("SupplierName: " + solution.getValue("supplierName").stringValue());
-					//System.out.println("MaterialType: " + solution.getValue("materialType"));
-					//System.out.println("AttributeType: " + solution.getValue("attributeType"));
-					//System.out.println("AttributeValue: " + solution.getValue("attributeValue"));
-					//System.out.println("UOM: " + solution.getValue("uomStr"));
-					//System.out.println("Certification: " + solution.getValue("certificationType"));			
+					System.out.println("MaterialType: " + solution.getValue("materialType"));
+					System.out.println("Property: " + solution.getValue("property"));
+					System.out.println("AttributeType: " + solution.getValue("attributeType"));
+					System.out.println("AttributeValue: " + solution.getValue("attributeValue"));
+					System.out.println("UOM: " + solution.getValue("uomStr"));
+					System.out.println("Certification: " + solution.getValue("certificationType"));			
 					System.out.println("\n");
 					
 				}
@@ -87,32 +88,34 @@ public class TestSemanticInfrastructure {
 
 	}
 	
-	public static String getProcessesOfSupplier (String supplier) {
-		
-		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
-		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
-		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
-		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
-		strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+	/*SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType ?attributeType (str(?uom) as ?uomStr) ?attributeValue 
 
-		strQuery += "SELECT DISTINCT ?processType ?supplier ?supplierName \n";
+			WHERE { 
 
-		strQuery += "WHERE { \n";
-		
+			?processChain core:hasProcess ?process .
+			?process rdf:type ?processType .
+			?processType rdfs:subClassOf* ind:Turning .
+			?processChain core:hasSupplier ?supplier .
+			#GET ATTRIBUTES
+			OPTIONAL {?process core:hasAttribute ?attribute . 
+			?attribute rdf:type ?attributeType . 
+			OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .} 
+			OPTIONAL {?uomInd core:hasName ?uom . }
+			OPTIONAL {?attribute core:hasValue ?attributeValue . }
+			        
+			#GET MATERIALS
+			OPTIONAL {?attribute ind:hasObjectValue ?attributeMaterialValue .
+			?attributeMaterialValue rdf:type ?materialType . 
+			FILTER ( ?materialType not in ( owl:NamedIndividual )) 
+			} 
+			VALUES ?attributeType {ind:CarbonSteel ind:Tolerance ind:AttributeMaterial} 
+			FILTER ( ?attributeType not in ( owl:NamedIndividual )) 
+			} 
 
-				strQuery +="?processChain core:hasProcess ?process .\n";
-				strQuery += "?process rdf:type ?processType . \n";
-				strQuery +="?processChain core:hasSupplier ?supplier . \n";
-				strQuery +="?processChain core:hasSupplier ind:"+supplier+" . \n";
-				strQuery +="?supplier core:hasName ?supplierName \n";
-				//strQuery +="?supplier core:hasName \"" + supplierID + "\" . \n";
-				
-				strQuery += "} \n";
-
-				
-				return strQuery;
-		
-	}
+			OPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . 
+			FILTER ( ?certificationType not in ( owl:NamedIndividual ) && ?certificationType not in ( owl:Class )) 
+			} 
+			}*/
 	
 public static String testQuery () {
 	
@@ -122,23 +125,31 @@ public static String testQuery () {
 	strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
 	strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
 
-	strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType ?attributeType (str(?uom) as ?uomStr) ?attributeValue \n";
+	strQuery += "SELECT DISTINCT ?processChain ?processType ?supplier ?supplierName ?materialType ?certificationType ?attributeType (str(?uom) as ?uomStr) ?attributeValue \n";
 
 	strQuery += "WHERE { \n";
 	
 
 			strQuery +="?processChain core:hasProcess ?process .\n";
 			strQuery += "?process rdf:type ?processType . \n";
-			strQuery +="?processType rdfs:subClassOf* ind:SinglePointCutting . \n";
+			strQuery +="?processType rdfs:subClassOf* ind:MfgProcess . \n";
 			strQuery +="?processChain core:hasSupplier ?supplier . \n";
+			strQuery +="?supplier core:hasName ?supplierName . \n";
 			strQuery += "OPTIONAL {?process core:hasAttribute ?attribute . \n";
 			strQuery += "?attribute rdf:type ?attributeType . \n";
-			strQuery += "OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .} \n";
-			strQuery += "OPTIONAL {?uomInd core:hasName ?uom . }\n";
+			strQuery += "?attribute core:hasUnitOfMeasure ?uomInd . \n";
+			strQuery += "?uomInd core:hasName ?uom . \n";	
 			strQuery += "?attribute core:hasValue ?attributeValue . \n";
-			strQuery += "OPTIONAL {?attributeValue rdf:type ?materialType . } \n";
-			strQuery += "VALUES ?attributeType {ind:MaxPartSizeZ ind:MaxPartSizeY ind:MaxPartSizeX ind:StainlessSteel ind:Tolerance ind:Axis  ind:AttributeMaterial}  \n";
+			strQuery += "VALUES ?attributeType {ind:MaxPartSizeX ind:AttributeMaterial}  \n";
 			strQuery += "FILTER ( ?attributeType not in ( owl:NamedIndividual )) \n";
+			strQuery += "} \n";
+			
+			//get materials
+			strQuery += "OPTIONAL {?process core:hasAttribute ?attribute . \n";
+			strQuery += "?attribute core:hasObjectValue ?attributeMaterialValue .  \n";
+			strQuery += "?attributeMaterialValue rdf:type ?materialType .  \n";		
+			//strQuery += "VALUES ?attributeType {ind:AttributeMaterial}  \n";
+			//strQuery += "FILTER ( ?attributeType not in ( owl:NamedIndividual )) \n";
 			strQuery += "} \n";
 
 			strQuery +="OPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . \n";
@@ -418,20 +429,20 @@ private static String stripIRI(String inputConcept) {
 
 }
 
-private static void logging(boolean logging) {
-	Set<String> loggers = new HashSet<>(Arrays.asList("org.apache.http", "org.eclipse.rdf4j"));
-
-	if (logging == false) {			
-		for(String log:loggers) { 
-			Logger logger = (Logger)LoggerFactory.getLogger(log);
-			logger.setLevel(Level.ERROR);
-			logger.setAdditive(false);
-		}
-	} else {
-
-		System.out.println("Logging:");
-
-	}
-
-}
+//private static void logging(boolean logging) {
+//	Set<String> loggers = new HashSet<>(Arrays.asList("org.apache.http", "org.eclipse.rdf4j"));
+//
+//	if (logging == false) {			
+//		for(String log:loggers) { 
+//			Logger logger = (Logger)LoggerFactory.getLogger(log);
+//			logger.setLevel(Level.ERROR);
+//			logger.setAdditive(false);
+//		}
+//	} else {
+//
+//		System.out.println("Logging:");
+//
+//	}
+//
+//}
 }

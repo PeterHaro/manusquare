@@ -30,7 +30,7 @@ public class TripleStoreConnection {
 
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "MANUSQUARE_DEV_DUMP";
+	static final String REPOSITORY_ID = "MANUSQUARE-01072020";
 
 	//configuration of the MANUSQUARE Semantic Infrastructure
 	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";

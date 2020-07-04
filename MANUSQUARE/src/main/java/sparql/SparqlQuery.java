@@ -40,7 +40,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/DEMO_1.json";
+		String filename = "./files/Test8-supplierLanguages.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -93,7 +93,7 @@ public class SparqlQuery {
 
 				for (Material m : p.getMaterials()) {
 					materials.add(m);
-					//materialsAndAttributes.add(m.getName());
+					materialsAndAttributes.add(m.getName());
 				}
 			}
 		}
@@ -177,7 +177,7 @@ public class SparqlQuery {
 
 		strQuery += "}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 	}
@@ -198,7 +198,7 @@ public class SparqlQuery {
 		attributeQuery.append("OPTIONAL {?attribute core:hasValue ?attributeValue . }\n");
 		
 		attributeQuery.append("#GET MATERIALS\n");
-		attributeQuery.append("OPTIONAL {?attribute ind:hasObjectValue ?attributeMaterialValue .\n");
+		attributeQuery.append("OPTIONAL {?attribute core:hasObjectValue ?attributeMaterialValue .\n");
 		attributeQuery.append("?attributeMaterialValue rdf:type ?materialType . \n");
 		attributeQuery.append("FILTER ( ?materialType not in ( owl:NamedIndividual )) \n");
 		attributeQuery.append("} \n");
