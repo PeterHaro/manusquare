@@ -129,13 +129,13 @@ public class SimilarityMeasures {
 						if (ps.getAttributeWeightMap().containsKey(a_c.getKey())) {
 
 							if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("Y")) {
-								debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey()) + " for attributeKey: " + a_c.getKey());
+								//debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey()) + " for attributeKey: " + a_c.getKey());
 								attributeSim = 1.0;
 							} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("O")) {
-								debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
+								//debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
 								attributeSim = hard_coded_weight;
 							} else if (ps.getAttributeWeightMap().get(a_c.getKey()).equals("N")) {
-								debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
+								//debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
 								attributeSim = hard_coded_weight;
 							}
 							
@@ -143,7 +143,7 @@ public class SimilarityMeasures {
 							counter++;
 							
 						} else {
-							debuggingOutput.append("\nThere are no equivalent attributeKeys for process " + ps.getName());
+							//debuggingOutput.append("\nThere are no equivalent attributeKeys for process " + ps.getName());
 							attributeSim = hard_coded_weight;
 							sum += attributeSim;
 							counter++;
@@ -161,7 +161,7 @@ public class SimilarityMeasures {
 					
 					avgAttributeSim = 1.0;
 					
-					debuggingOutput.append("\nThere are not attributes");
+					debuggingOutput.append("\nThere are no attributes");
 					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
 				}
 				
