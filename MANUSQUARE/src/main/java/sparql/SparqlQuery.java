@@ -40,7 +40,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/Test8-supplierLanguages.json";
+		String filename = "./files/Tests_04072020/Test5.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -74,7 +74,6 @@ public class SparqlQuery {
 		double lat = 0, lon = 0;
 
 		//merge attributes and materials in order to create VALUES restriction in SPARQL query
-		//TODO: Optimise code
 		Set<String> materialsAndAttributes = new HashSet<String>();
 
 		//get the attributes and materials associated with processes included in the consumer query
@@ -122,6 +121,8 @@ public class SparqlQuery {
 			strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
 		}
 
+		//TODO: Optimise code to differentiate SPARQL query on attributes and materials. Currently, the query asks for attributes even if there are no
+		//attributes specified in the consumer query as long as there are materials (included in materialsAndAttributes). Doesn´t seem to cause any issues of any sort though.
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
 			strQuery += "\nSELECT DISTINCT ?processChain ?processType ?supplier ?certificationType \n";
@@ -191,10 +192,10 @@ public class SparqlQuery {
 
 		attributeQuery.append("OPTIONAL {?process core:hasAttribute ?attribute . \n");
 		attributeQuery.append("?attribute rdf:type ?attributeType . \n");
-		attributeQuery.append("OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .} \n");
-		attributeQuery.append("OPTIONAL {?uomInd core:hasName ?uom . }\n");
 		
 		attributeQuery.append("#GET ATTRIBUTES\n");
+		attributeQuery.append("OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .} \n");
+		attributeQuery.append("OPTIONAL {?uomInd core:hasName ?uom . }\n");
 		attributeQuery.append("OPTIONAL {?attribute core:hasValue ?attributeValue . }\n");
 		
 		attributeQuery.append("#GET MATERIALS\n");
