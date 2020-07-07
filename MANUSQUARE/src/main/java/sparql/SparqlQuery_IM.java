@@ -37,7 +37,7 @@ import query.InnovationManagementQuery;
 import utilities.StringUtilities;
 
 
-public class SparqlQueryIM {
+public class SparqlQuery_IM {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
@@ -69,6 +69,8 @@ public class SparqlQueryIM {
 
 
 		strQuery += "\nSELECT DISTINCT ?processChain ?supplier ?certificationType \n";
+		
+		strQuery += "\nWHERE { \n";
 
 		//certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
 		//this is taken care of by the matchmaking algo)
@@ -79,12 +81,12 @@ public class SparqlQueryIM {
 
 		if (!isNullOrEmpty(languages)) {
 
-			strQuery += "\nOPTIONAL { \n";
+			//strQuery += "\nOPTIONAL { \n";
 			strQuery += "\n?supplier core:hasAttribute ?languageAttribute . \n";
 			strQuery += "?languageAttribute rdf:type ?languageAttributeType . \n";       
 			strQuery += "?languageAttribute core:hasValue ?language . \n";
 			strQuery += "VALUES ?languageAttributeType {ind:Language} . \n";
-			strQuery += "} \n";
+			//strQuery += "} \n";
 			strQuery += "FILTER(?language in (" + StringUtilities.printLanguageSetItems(languages) + ")) \n";
 
 		}

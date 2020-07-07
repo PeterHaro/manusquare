@@ -30,20 +30,20 @@ public class InnovationManagementQuery {
 	private static List<String> projectInnovationPhases;
 	private static List<String> projectInnovationTypes;
 	private static List<String> innovationManagerSkills;
-	private List<Certification> certifications;
+	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private Set<String> language;
 
 
-	public InnovationManagementQuery(String projectId, List<Certification> certifications, Set<String> language) {
+	public InnovationManagementQuery(String projectId, Set<Certification> certifications, Set<String> language) {
 		super();
 		this.projectId = projectId;
 		this.certifications = certifications;
 		this.language = language;
 	}
 
-	public InnovationManagementQuery(String projectId, List<String> projectInnovationPhases, List<String> projectInnovationTypes, List<Certification> certifications, Set<String> language) {
+	public InnovationManagementQuery(String projectId, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> language) {
 		super();
 		this.projectId = projectId;
 		this.projectInnovationPhases = projectInnovationPhases;
@@ -52,7 +52,7 @@ public class InnovationManagementQuery {
 		this.language = language;
 	}
 
-	public InnovationManagementQuery(String projectId, List<String> innovationManagerSkills, List<String> projectInnovationPhases, List<String> projectInnovationTypes, List<Certification> certifications, Set<String> language) {
+	public InnovationManagementQuery(String projectId, List<String> innovationManagerSkills, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> language) {
 		super();
 		this.projectId = projectId;
 		this.innovationManagerSkills = innovationManagerSkills;
@@ -75,11 +75,11 @@ public class InnovationManagementQuery {
 		this.projectId = projectId;
 	}
 
-	public List<Certification> getCertifications() {
+	public Set<Certification> getCertifications() {
 		return certifications;
 	}
 
-	public void setCertifications(List<Certification> certifications) {
+	public void setCertifications(Set<Certification> certifications) {
 		this.certifications = certifications;
 	}
 
@@ -146,7 +146,7 @@ public class InnovationManagementQuery {
 	 */
 	public static InnovationManagementQuery createQuery (String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
 
-		List<Certification> certifications = new ArrayList<Certification>();
+		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> languages = new HashSet<String>();
 		List<String> innovationManagementPhases = new ArrayList<String>();
 		List<String> innovationManagementTypes = new ArrayList<String>();
