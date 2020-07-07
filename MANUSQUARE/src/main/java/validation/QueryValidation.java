@@ -106,18 +106,18 @@ public class QueryValidation {
 	 * @throws IOException
 	 */
 	public static Set<Certification> validateCertifications(Set<Certification> initialCertifications, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
-		Set<Certification> validatedMaterials = new HashSet<Certification>();
+		Set<Certification> validatedCertifications = new HashSet<Certification>();
 
 		for (Certification c : initialCertifications) {
 			if (!allOntologyClasses.contains(c.getId())) { //if not, get the concept from the ontology with the highest similarity
 				c.setId(getMostSimilarConcept(c.getId(), QueryConceptType.CERTIFICATION, onto, EmbeddingSingletonDataManager.VAM));
-				validatedMaterials.add(c);
+				validatedCertifications.add(c);
 			} else {
-				validatedMaterials.add(c);
+				validatedCertifications.add(c);
 			}
 		}
 
-		return validatedMaterials;
+		return validatedCertifications;
 
 	}
 	
