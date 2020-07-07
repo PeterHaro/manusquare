@@ -1,0 +1,37 @@
+{
+	"projectName": "projectName",
+	"projectDescription": "some project description",
+	"selectionType": "Manual",
+	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"projectType": "DEMO - Innovation Management",
+	"projectInnovationPhases": ["Idea Development","Industrialization"],
+	"projectInnovationTypes": ["Product, Process", "Technology"],
+	"innovationManagerSkills": [
+		{
+			"id": "23536675",
+			"skill": "3DDrawing"
+		}
+	],
+	"innovationManagerAttributes": [
+		{
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO9001"
+		},
+		{
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO14001"
+		},
+		{
+			"id": "2343252346356",
+			"attributeKey": "language",
+			"attributeValue": "English"
+		},
+		{
+			"id": "2343252346356",
+			"attributeKey": "language",
+			"attributeValue": "Spanish"
+		}
+	]
+}
