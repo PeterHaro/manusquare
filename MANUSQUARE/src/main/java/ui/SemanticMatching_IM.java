@@ -47,7 +47,7 @@ public class SemanticMatching_IM {
 	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
 
 	
-	public static void performSemanticMatchingIM (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performSemanticMatching_IM (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
@@ -74,42 +74,34 @@ public class SemanticMatching_IM {
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 		
 		InnovationManagementQuery imq = InnovationManagementQuery.createQuery(inputJson, ontology);
-		
-		Set<Certification> certifications = imq.getCertifications();
-		Set<String> languages = imq.getLanguage();
 
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
 
 		graph = SimpleGraph.createGraph(ontology);
 
-		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
 		List<InnovationManager> innovationManagerData = TripleStoreConnection_IM.createInnovationManagerData(imq, testing, ontology);
 
-		Map<InnovationManager, Double> supplierScores = new HashMap<InnovationManager, Double>();
+		Map<InnovationManager, Double> innovationManagerScores = new HashMap<InnovationManager, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
-		List<Double> supplierSim = new LinkedList<Double>();
+		List<Double> innovationManagerSim = new LinkedList<Double>();
 
 		for (InnovationManager innovationManager : innovationManagerData) {
-			supplierSim = SimilarityMeasures_IM.computeSemanticSimilarityIM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			innovationManagerSim = SimilarityMeasures_IM.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
-//			supplierScores.put(supplier, getHighestScore(supplierSim));	
-			supplierScores.put(innovationManager, getHighestScore(supplierSim));	
+			innovationManagerScores.put(innovationManager, getHighestScore(innovationManagerSim));	
 			
 		}
 
-		//extract the n suppliers with the highest similarity scores
-		Map<String, Double> bestSuppliers = extractBestInnovationManagers(supplierScores, numResults);
+		//extract the n innovation managers with the highest similarity scores
+		Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
 
-		//prints the n best suppliers in ranked order to JSON
-		writeResultToOutput(bestSuppliers, writer);
-
-		//private static void printResultsToConsoleIM(List<InnovationManager> innovationManagerData, ConsumerQuery query, Map<Supplier, Double> supplierScores, int numResults) {
-		
+		//prints the n best innovation managers in ranked order to JSON
+		writeResultToOutput(bestSuppliers, writer);		
 		
 		//prints additional data to console for testing/validation
 		if (testing == true) {			
-			printResultsToConsoleIM(innovationManagerData, imq, supplierScores, numResults);			
+			printResultsToConsoleIM(innovationManagerData, imq, innovationManagerScores, numResults);			
 		}
 
 	}
@@ -131,7 +123,6 @@ public class SemanticMatching_IM {
 
 		//below code is used for testing purposes
 		System.out.println("Consumer query:");
-		int n = 1;
 		
 		//check if the query includes certifications
 		if (query.getCertifications() != null && !query.getCertifications().isEmpty()) {
@@ -154,7 +145,7 @@ public class SemanticMatching_IM {
 
 		for (Entry<InnovationManager, Double> e : firstEntries) {
 			ranking++;
-			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
+			System.out.println("\n" + ranking + "; Innovation Manager ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
 
 			for (InnovationManager innovationManager : innovationManagerData) {
 				if (e.getKey().getId().equals(innovationManager.getId())) {
@@ -167,6 +158,7 @@ public class SemanticMatching_IM {
 					}
 
 					System.out.println(StringUtilities.printSetItems(certificationNames));
+					
 
 				}
 			}

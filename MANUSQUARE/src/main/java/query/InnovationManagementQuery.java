@@ -33,33 +33,33 @@ public class InnovationManagementQuery {
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
-	private Set<String> language;
+	private Set<String> languages;
 
 
-	public InnovationManagementQuery(String projectId, Set<Certification> certifications, Set<String> language) {
+	public InnovationManagementQuery(String projectId, Set<Certification> certifications, Set<String> languages) {
 		super();
 		this.projectId = projectId;
 		this.certifications = certifications;
-		this.language = language;
+		this.languages = languages;
 	}
 
-	public InnovationManagementQuery(String projectId, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> language) {
+	public InnovationManagementQuery(String projectId, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> languages) {
 		super();
 		this.projectId = projectId;
 		this.projectInnovationPhases = projectInnovationPhases;
 		this.projectInnovationTypes = projectInnovationTypes;
 		this.certifications = certifications;
-		this.language = language;
+		this.languages = languages;
 	}
 
-	public InnovationManagementQuery(String projectId, List<String> innovationManagerSkills, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> language) {
+	public InnovationManagementQuery(String projectId, List<String> innovationManagerSkills, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> languages) {
 		super();
 		this.projectId = projectId;
 		this.innovationManagerSkills = innovationManagerSkills;
 		this.projectInnovationPhases = projectInnovationPhases;
 		this.projectInnovationTypes = projectInnovationTypes;
 		this.certifications = certifications;
-		this.language = language;
+		this.languages = languages;
 	}
 
 	public InnovationManagementQuery() {
@@ -100,12 +100,12 @@ public class InnovationManagementQuery {
 		this.customerLocationInfo = customerLocationInfo;
 	}
 
-	public Set<String> getLanguage() {
-		return language;
+	public Set<String> getLanguages() {
+		return languages;
 	}
 
-	public void setLanguage(Set<String> language) {
-		this.language = language;
+	public void setLanguage(Set<String> languages) {
+		this.languages = languages;
 	}
 
 
@@ -218,7 +218,7 @@ public class InnovationManagementQuery {
 		System.out.println("Innovation Phases: " + query.getProjectInnovationPhases());
 		System.out.println("Innovation Types: " + query.getProjectInnovationTypes());
 		System.out.println("Innovation Manager Skills: " + InnovationManagementQuery.getInnovationManagerSkills());
-		System.out.println("Languages: " + query.getLanguage());
+		System.out.println("Languages: " + query.getLanguages());
 		for (Certification c : query.getCertifications()) {
 		System.out.println("Certifications: " + c.getId());
 		}

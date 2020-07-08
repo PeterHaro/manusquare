@@ -2,37 +2,17 @@ package sparql;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import com.google.common.graph.MutableGraph;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-import edm.Attribute;
-import edm.Material;
-import edm.Process;
-import exceptions.NoAttributeException;
-import graph.SimpleGraph;
-import owlprocessing.OntologyOperations;
-import query.ConsumerQuery;
 import query.InnovationManagementQuery;
 import utilities.StringUtilities;
 
@@ -49,16 +29,16 @@ public class SparqlQuery_IM {
 
 		InnovationManagementQuery query = InnovationManagementQuery.createQuery(filename, onto);
 
-		String test = createSparqlQueryIM(query, onto);
+		String test = createSparqlQuery_IM(query, onto);
 
 		System.out.println(test);
 
 
 	}
 
-	public static String createSparqlQueryIM (InnovationManagementQuery imq, OWLOntology onto) {
+	public static String createSparqlQuery_IM (InnovationManagementQuery imq, OWLOntology onto) {
 
-		Set<String> languages = imq.getLanguage();
+		Set<String> languages = imq.getLanguages();
 
 		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
 		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";

@@ -3,8 +3,6 @@ package supplierdata;
 import java.util.List;
 
 import edm.Certification;
-import edm.Material;
-import edm.Process;
 
 
 public class InnovationManager {
@@ -14,6 +12,7 @@ public class InnovationManager {
 	String supplierNationality;
 	String supplierCity;
 	List<Certification> certifications;
+	List<String> languages;
 
 	
 	public InnovationManager (String id, List<Certification> certifications) {
@@ -69,6 +68,16 @@ public class InnovationManager {
 	public void setCertifications(List<Certification> certifications) {
 		this.certifications = certifications;
 	}
+
+	public List<String> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<String> languages) {
+		this.languages = languages;
+	}
+	
+	
 
 
 }

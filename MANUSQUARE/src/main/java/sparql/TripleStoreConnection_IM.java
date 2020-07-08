@@ -70,7 +70,7 @@ public class TripleStoreConnection_IM {
 			System.out.println(repository.isInitialized());
 		}
 
-		String strQuery = SparqlQuery_IM.createSparqlQueryIM(query, onto);
+		String strQuery = SparqlQuery_IM.createSparqlQuery_IM(query, onto);
 
 		//open connection to GraphDB and run SPARQL query
 		Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
@@ -99,8 +99,6 @@ public class TripleStoreConnection_IM {
 
 					if (solution.getValue("supplier") != null) {
 						
-					
-					System.out.println("supplier id is " + solution.getValue("supplier"));
 					record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
 
 					if (solution.getValue("certificationType") != null) {

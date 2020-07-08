@@ -21,7 +21,7 @@ public class BasicMatchmaking_IM {
 		String jsonOut = "./files/matchingResults.json";
 
 		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = false;
+		boolean testing = true;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
@@ -32,12 +32,12 @@ public class BasicMatchmaking_IM {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
 			System.out.println(args[0]);
-			SemanticMatching_IM.performSemanticMatchingIM(args[0], 10, writer, testing, true, hard_coded_weight);
+			SemanticMatching_IM.performSemanticMatching_IM(args[0], 10, writer, testing, true, hard_coded_weight);
 			return;
 		} else {
 			System.err.println("No arguments provided!");
 			String jsonIn = "./files/InnovationManagementJSON.json";
- 			SemanticMatching_IM.performSemanticMatchingIM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
+ 			SemanticMatching_IM.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
 		long stopTime = System.currentTimeMillis();
