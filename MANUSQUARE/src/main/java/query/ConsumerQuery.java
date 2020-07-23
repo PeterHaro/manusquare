@@ -25,6 +25,7 @@ import json.RequestForQuotation;
 import json.RequestForQuotation.ProjectAttributeKeys;
 import json.RequestForQuotation.SupplierAttributeKeys;
 import owlprocessing.OntologyOperations;
+import utilities.StringUtilities;
 import validation.JSONValidation;
 import validation.QueryValidation;
 import validation.UnitOfMeasurementConversion;
@@ -175,7 +176,11 @@ public class ConsumerQuery {
 					if ((!projectAttributes.attributeKey.equalsIgnoreCase("material") && !projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) {
 						//check if uom is included in JSON
 						if (projectAttributes.unitOfMeasure != null) {
-							attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
+							if(StringUtilities.isValidNumber(projectAttributes.attributeValue)) {
+								attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
+							} else {
+								attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
+							}
 						} else {
 							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 						}
@@ -192,7 +197,7 @@ public class ConsumerQuery {
 			equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
 
 			//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
-			if (equivalentProcesses.isEmpty() || equivalentProcesses == null) {
+			if (equivalentProcesses == null || equivalentProcesses.isEmpty()) {
 
 				processes.add(new Process(process, QueryValidation.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidation.validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
 
