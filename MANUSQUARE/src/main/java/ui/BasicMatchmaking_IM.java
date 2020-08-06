@@ -21,7 +21,7 @@ public class BasicMatchmaking_IM {
 		String jsonOut = "./files/matchingResults.json";
 
 		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = true;
+		boolean testing = false;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
