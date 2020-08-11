@@ -37,9 +37,9 @@ public class InnovationManagerSemanticMatching {
         String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
         if (JSONValidation.isJSONValid(jsonInput)) {
             RequestForQuotation rfq = new Gson().fromJson(jsonInput, RequestForQuotation.class);
-            if (rfq.customer == null) {
-                throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");
-            }
+            //if (rfq.customer == null) {
+             //   throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");
+            //}
         }
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
