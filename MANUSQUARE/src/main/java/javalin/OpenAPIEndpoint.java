@@ -12,6 +12,7 @@ import io.javalin.plugin.openapi.ui.ReDocOptions;
 import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import javalin.controllers.InnovationManagerSemanticMatching;
 import javalin.controllers.MatchmakingController;
 import javalin.controllers.SemanticMatchingController;
 import javalin.models.ErrorResponse;
@@ -53,6 +54,7 @@ public class OpenAPIEndpoint {
 
         app.post("/matching", SemanticMatchingController.PerformSemanticMatching);
         app.post("/matchmaking", SemanticMatchingController.PerformSemanticMatching);
+        app.post("/innovationMatching", InnovationManagerSemanticMatching.performSemanticMatchingOnInnovationManager);
         app.start(7000);
 
     }
