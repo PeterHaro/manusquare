@@ -11,8 +11,8 @@
 			"lon": "-8.3939142"
 		}
 	},
-	"projectInnovationPhases": ["Idea Development","Industrialization"],
-	"projectInnovationTypes": ["Product, Process", "Technology"],
+	"projectInnovationPhases": ["Idea Development Phase","Industrialization Phase"],
+	"projectInnovationTypes": ["ProductInnovation", "ProcessInnovation", "TechnologyInnovation"],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
@@ -22,7 +22,7 @@
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "Automotive"
+			"sector": "AutomationProduct"
 		}
 	],
 	"innovationManagerAttributes": [
@@ -39,7 +39,7 @@
 		{
 			"id": "2343252346356",
 			"attributeKey": "language",
-			"attributeValue": "German"
+			"attributeValue": "English"
 		},
 		{
 			"id": "2343252346356",
