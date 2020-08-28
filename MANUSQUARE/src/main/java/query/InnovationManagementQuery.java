@@ -21,43 +21,48 @@ import com.google.gson.JsonSyntaxException;
 import edm.Certification;
 import json.InnovationManagementRequest;
 import json.InnovationManagementRequest.InnovationManagerAttribute;
+import json.InnovationManagementRequest.InnovationManagerSector;
 import json.InnovationManagementRequest.InnovationManagerSkill;
+import owlprocessing.OntologyOperations;
 import validation.JSONValidation;
+import validation.QueryValidation;
 
 public class InnovationManagementQuery {
 
 	private String projectId;
-	private static List<String> projectInnovationPhases;
-	private static List<String> projectInnovationTypes;
-	private static List<String> innovationManagerSkills;
+	private static List<String> innovationPhases;
+	private static List<String> innovationTypes;
+	private static List<String> skills;
+	private static List<String> sectors;
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private Set<String> languages;
 
 
-	public InnovationManagementQuery(String projectId, Set<Certification> certifications, Set<String> languages) {
-		super();
-		this.projectId = projectId;
-		this.certifications = certifications;
-		this.languages = languages;
-	}
+//	public InnovationManagementQuery(String projectId, Set<Certification> certifications, Set<String> languages) {
+//		super();
+//		this.projectId = projectId;
+//		this.certifications = certifications;
+//		this.languages = languages;
+//	}
+//
+//	public InnovationManagementQuery(String projectId, List<String> innovationPhases, List<String> innovationTypes, Set<Certification> certifications, Set<String> languages) {
+//		super();
+//		this.projectId = projectId;
+//		this.innovationPhases = innovationPhases;
+//		this.innovationTypes = innovationTypes;
+//		this.certifications = certifications;
+//		this.languages = languages;
+//	}
 
-	public InnovationManagementQuery(String projectId, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> languages) {
+	public InnovationManagementQuery(String projectId, List<String> skills, List<String> innovationPhases, List<String> innovationTypes, List<String> sectors, Set<Certification> certifications, Set<String> languages) {
 		super();
 		this.projectId = projectId;
-		this.projectInnovationPhases = projectInnovationPhases;
-		this.projectInnovationTypes = projectInnovationTypes;
-		this.certifications = certifications;
-		this.languages = languages;
-	}
-
-	public InnovationManagementQuery(String projectId, List<String> innovationManagerSkills, List<String> projectInnovationPhases, List<String> projectInnovationTypes, Set<Certification> certifications, Set<String> languages) {
-		super();
-		this.projectId = projectId;
-		this.innovationManagerSkills = innovationManagerSkills;
-		this.projectInnovationPhases = projectInnovationPhases;
-		this.projectInnovationTypes = projectInnovationTypes;
+		InnovationManagementQuery.skills = skills;
+		InnovationManagementQuery.innovationPhases = innovationPhases;
+		InnovationManagementQuery.innovationTypes = innovationTypes;
+		InnovationManagementQuery.sectors = sectors;
 		this.certifications = certifications;
 		this.languages = languages;
 	}
@@ -109,29 +114,39 @@ public class InnovationManagementQuery {
 	}
 
 
-	public List<String> getProjectInnovationPhases() {
-		return projectInnovationPhases;
+	public List<String> getInnovationPhases() {
+		return innovationPhases;
 	}
 
-	public void setProjectInnovationPhases(List<String> projectInnovationPhases) {
-		InnovationManagementQuery.projectInnovationPhases = projectInnovationPhases;
+	public void setInnovationPhases(List<String> projectInnovationPhases) {
+		InnovationManagementQuery.innovationPhases = projectInnovationPhases;
 	}
 
-	public List<String> getProjectInnovationTypes() {
-		return projectInnovationTypes;
+	public List<String> getInnovationTypes() {
+		return innovationTypes;
 	}
 
-	public void setProjectInnovationTypes(List<String> projectInnovationTypes) {
-		InnovationManagementQuery.projectInnovationTypes = projectInnovationTypes;
+	public void setInnovationTypes(List<String> projectInnovationTypes) {
+		InnovationManagementQuery.innovationTypes = projectInnovationTypes;
 	}
 
 
-	public static List<String> getInnovationManagerSkills() {
-		return innovationManagerSkills;
+	public static List<String> getSkills() {
+		return skills;
 	}
 
-	public static void setInnovationManagerSkills(List<String> innovationManagerSkills) {
-		InnovationManagementQuery.innovationManagerSkills = innovationManagerSkills;
+	public static void setSkills(List<String> innovationManagerSkills) {
+		InnovationManagementQuery.skills = innovationManagerSkills;
+	}
+	
+	
+
+	public static List<String> getSectors() {
+		return sectors;
+	}
+
+	public static void setSectors(List<String> sectors) {
+		InnovationManagementQuery.sectors = sectors;
 	}
 
 	/**
@@ -150,7 +165,10 @@ public class InnovationManagementQuery {
 		Set<String> languages = new HashSet<String>();
 		List<String> innovationManagementPhases = new ArrayList<String>();
 		List<String> innovationManagementTypes = new ArrayList<String>();
-		List<String> innovationManagerSkills = new ArrayList<String>();
+		List<String> innovationManagementSkills = new ArrayList<String>();
+		List<String> innovationManagementSectors = new ArrayList<String>();
+		
+		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		InnovationManagementRequest imr;
 
@@ -164,21 +182,37 @@ public class InnovationManagementQuery {
 		query.setProjectId(imr.getProjectId());
 
 		if (imr.projectInnovationPhases != null || !imr.projectInnovationPhases.isEmpty()) {			
-			innovationManagementPhases.addAll(imr.projectInnovationPhases);
-			query.setProjectInnovationPhases(innovationManagementPhases);
+			
+			for (String ip : imr.projectInnovationPhases) {
+				innovationManagementPhases.add(QueryValidation.validateInnovationPhase(ip, onto, allOntologyClasses));
+			}
+			query.setInnovationPhases(innovationManagementPhases);
 		}
 
 		if (imr.projectInnovationTypes != null || !imr.projectInnovationTypes.isEmpty()) {
-			innovationManagementTypes.addAll(imr.projectInnovationTypes);
-			query.setProjectInnovationTypes(innovationManagementTypes);
+
+			for (String it : imr.projectInnovationTypes) {
+				innovationManagementTypes.add(QueryValidation.validateInnovationPhase(it, onto, allOntologyClasses));
+			}
+			
+			query.setInnovationTypes(innovationManagementTypes);
 		}
 
 		if (imr.innovationManagerSkills != null || !imr.innovationManagerSkills.isEmpty()) {
 			for (InnovationManagerSkill skill : imr.innovationManagerSkills) {
-				innovationManagerSkills.add(skill.skill);
+				innovationManagementSkills.add(QueryValidation.validateSkill(skill.skill, onto, allOntologyClasses));
 			}
-			query.setInnovationManagerSkills(innovationManagerSkills);
+			InnovationManagementQuery.setSkills(innovationManagementSkills);
 		}
+		
+		if (imr.innovationManagerSectors != null || !imr.innovationManagerSectors.isEmpty()) {
+			for (InnovationManagerSector sector : imr.innovationManagerSectors) {
+				innovationManagementSectors.add(QueryValidation.validateSector(sector.sector, onto, allOntologyClasses));
+			}
+			InnovationManagementQuery.setSectors(innovationManagementSectors);
+		}
+		
+
 
 		if (imr.innovationManagerAttributes != null || !imr.innovationManagerAttributes.isEmpty()) {
 
@@ -215,9 +249,9 @@ public class InnovationManagementQuery {
 		InnovationManagementQuery query = createQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
 
-		System.out.println("Innovation Phases: " + query.getProjectInnovationPhases());
-		System.out.println("Innovation Types: " + query.getProjectInnovationTypes());
-		System.out.println("Innovation Manager Skills: " + InnovationManagementQuery.getInnovationManagerSkills());
+		System.out.println("Innovation Phases: " + query.getInnovationPhases());
+		System.out.println("Innovation Types: " + query.getInnovationTypes());
+		System.out.println("Innovation Manager Skills: " + InnovationManagementQuery.getSkills());
 		System.out.println("Languages: " + query.getLanguages());
 		for (Certification c : query.getCertifications()) {
 		System.out.println("Certifications: " + c.getId());

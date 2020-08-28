@@ -3,6 +3,7 @@ package json;
 import java.util.List;
 
 public class InnovationManagementRequest {
+	
 
 	String projectName;
 	String projectDescription;
@@ -12,21 +13,23 @@ public class InnovationManagementRequest {
 	public List<String> projectInnovationPhases;
 	public List<String> projectInnovationTypes;
 	public List<InnovationManagerSkill> innovationManagerSkills;
+	public List<InnovationManagerSector> innovationManagerSectors;
 	public List<InnovationManagerAttribute> innovationManagerAttributes;
 
 	public InnovationManagementRequest(String projectName, String projectDescription, String selectionType,
-			String projectId, String projectType, List<String> projectInnovationPhases,
-			List<String> projectInnovationTypes, List<InnovationManagerSkill> innovationManagerSkills,
-			List<InnovationManagerAttribute> innovationManagerAttributes) {
+			String projectId, String projectType, List<String> innovationPhases,
+			List<String> innovationTypes, List<InnovationManagerSkill> skills,
+			List<InnovationManagerSector> sectors, List<InnovationManagerAttribute> innovationManagerAttributes) {
 		super();
 		this.projectName = projectName;
 		this.projectDescription = projectDescription;
 		this.selectionType = selectionType;
 		this.projectId = projectId;
 		this.projectType = projectType;
-		this.projectInnovationPhases = projectInnovationPhases;
-		this.projectInnovationTypes = projectInnovationTypes;
-		this.innovationManagerSkills = innovationManagerSkills;
+		this.projectInnovationPhases = innovationPhases;
+		this.projectInnovationTypes = innovationTypes;
+		this.innovationManagerSkills = skills;
+		this.innovationManagerSectors = sectors;
 		this.innovationManagerAttributes = innovationManagerAttributes;
 	}
 	
@@ -95,6 +98,20 @@ public class InnovationManagementRequest {
 	public void setInnovationManagerSkills(List<InnovationManagerSkill> innovationManagerSkills) {
 		this.innovationManagerSkills = innovationManagerSkills;
 	}
+	
+	
+
+	public List<InnovationManagerSector> getInnovationManagerSectors() {
+		return innovationManagerSectors;
+	}
+
+
+
+	public void setInnovationManagerSectors(List<InnovationManagerSector> sectors) {
+		this.innovationManagerSectors = sectors;
+	}
+
+
 
 	public List<InnovationManagerAttribute> getInnovationManagerAttributes() {
 		return innovationManagerAttributes;
@@ -131,6 +148,35 @@ public class InnovationManagementRequest {
 
 		public void setSkill(String skill) {
 			this.skill = skill;
+		}
+
+	}
+	
+	public class InnovationManagerSector {
+
+		public String id;
+		public String sector;
+
+		public InnovationManagerSector(String id, String sector) {
+			super();
+			this.id = id;
+			this.sector = sector;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public String getSectorl() {
+			return sector;
+		}
+
+		public void setSector(String sector) {
+			this.sector = sector;
 		}
 
 	}

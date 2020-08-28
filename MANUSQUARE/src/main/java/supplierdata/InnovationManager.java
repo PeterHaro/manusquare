@@ -13,17 +13,49 @@ public class InnovationManager {
 	String supplierCity;
 	List<Certification> certifications;
 	List<String> languages;
+	List<String> skills;
+	List<String> innovationPhases;
+	List<String> innovationTypes;
+	List<String> sectors;
 
 	
-	public InnovationManager (String id, List<Certification> certifications) {
+	
+//	public InnovationManager(String id, String supplierName, String supplierNationality, String supplierCity,
+//			List<Certification> certifications, List<String> languages, List<String> skills,
+//			List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {
+//		super();
+//		this.id = id;
+//		this.supplierName = supplierName;
+//		this.supplierNationality = supplierNationality;
+//		this.supplierCity = supplierCity;
+//		this.certifications = certifications;
+//		this.languages = languages;
+//		this.skills = skills;
+//		this.innovationPhases = innovationPhases;
+//		this.innovationTypes = innovationTypes;
+//		this.sectors = sectors;
+//	}
+	
+	public InnovationManager(String id, List<Certification> certifications, List<String> skills,
+			List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {
+		super();
 		this.id = id;
 		this.certifications = certifications;
+		this.skills = skills;
+		this.innovationPhases = innovationPhases;
+		this.innovationTypes = innovationTypes;
+		this.sectors = sectors;
 	}
-	
-	public InnovationManager(String supplierName) {
-		super();
-		this.supplierName = supplierName;
-	}
+
+//	public InnovationManager (String id, List<Certification> certifications) {
+//		this.id = id;
+//		this.certifications = certifications;
+//	}
+//	
+//	public InnovationManager(String supplierName) {
+//		super();
+//		this.supplierName = supplierName;
+//	}
 	
 	public InnovationManager() {}
 	
@@ -59,7 +91,39 @@ public class InnovationManager {
 	public void setSupplierCity(String supplierCity) {
 		this.supplierCity = supplierCity;
 	}
+	
 
+	public List<String> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
+	}
+
+	public List<String> getInnovationPhases() {
+		return innovationPhases;
+	}
+
+	public void setInnovationPhases(List<String> innovationPhases) {
+		this.innovationPhases = innovationPhases;
+	}
+
+	public List<String> getInnovationTypes() {
+		return innovationTypes;
+	}
+
+	public void setInnovationTypes(List<String> innovationTypes) {
+		this.innovationTypes = innovationTypes;
+	}
+
+	public List<String> getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(List<String> sectors) {
+		this.sectors = sectors;
+	}
 
 	public List<Certification> getCertifications() {
 		return certifications;
