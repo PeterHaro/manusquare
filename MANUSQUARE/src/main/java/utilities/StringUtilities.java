@@ -524,6 +524,30 @@ public class StringUtilities {
 	}
 	
 	/**
+	 * prints each (string) item in a list of items
+	 * @param list of strings
+	 * @return sequenced string of certifications separated by commas
+   	   Oct 12, 2019
+	 */
+	public static String printListItems(List<String> list) {
+		StringBuffer sb = new StringBuffer();
+		
+		if (!list.isEmpty()) {
+		
+		for (String s : list) {
+			sb.append(s + ", ");
+		}
+
+		String listItem = sb.deleteCharAt(sb.lastIndexOf(",")).toString();
+
+		return listItem;
+		} else {
+			return null;
+		}
+
+	}
+	
+	/**
 	 * prints each (string) item with quotes from a set of string items
 	 * @param set of strings
 	 * @return sequenced string of languages surrounded by quotes and separated by commas
