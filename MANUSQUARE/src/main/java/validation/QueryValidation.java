@@ -22,6 +22,94 @@ public class QueryValidation {
 	public QueryValidation () {}
 	
 	/**
+	 * Ensures that an innovation phase included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
+	 * @param innovationPhase innovation phase included by the consumer
+	 * @param onto the MANU-SQUARE ontology
+	 * @param allOntologyClasses string representation of all ontology concepts
+	 * @return an innovation phase verified to exist in the MANU-SQUARE ontology
+	 * @throws IOException
+	   Aug 26, 2020
+	 */
+	public static String validateInnovationPhase(String innovationPhase, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+
+		String validatedInnovationPhase = null;
+
+		if (!allOntologyClasses.contains(innovationPhase)) {
+			validatedInnovationPhase = getMostSimilarConcept(innovationPhase, QueryConceptType.INNOVATIONPHASE, onto, EmbeddingSingletonDataManager.VAM);
+		} else {
+			validatedInnovationPhase = innovationPhase;
+		}
+				
+		return validatedInnovationPhase;
+	}
+	
+	/**
+	 * Ensures that an innovation type included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
+	 * @param innovationType innovation type included by the consumer
+	 * @param onto the MANU-SQUARE ontology
+	 * @param allOntologyClasses string representation of all ontology concepts
+	 * @return an innovation type verified to exist in the MANU-SQUARE ontology
+	 * @throws IOException
+	   Aug 26, 2020
+	 */
+	public static String validateInnovationType(String innovationType, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+
+		String validatedInnovationType = null;
+
+		if (!allOntologyClasses.contains(innovationType)) {
+			validatedInnovationType = getMostSimilarConcept(innovationType, QueryConceptType.INNOVATIONTYPE, onto, EmbeddingSingletonDataManager.VAM);
+		} else {
+			validatedInnovationType = innovationType;
+		}
+				
+		return validatedInnovationType;
+	}
+	
+	/**
+	 * Ensures that a skill included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
+	 * @param skill skill included by the consumer
+	 * @param onto the MANU-SQUARE ontology
+	 * @param allOntologyClasses string representation of all ontology concepts
+	 * @return a skill verified to exist in the MANU-SQUARE ontology
+	 * @throws IOException
+	   Aug 26, 2020
+	 */
+	public static String validateSkill(String skill, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+
+		String validatedSkill = null;
+
+		if (!allOntologyClasses.contains(skill)) {
+			validatedSkill = getMostSimilarConcept(skill, QueryConceptType.SKILL, onto, EmbeddingSingletonDataManager.VAM);
+		} else {
+			validatedSkill = skill;
+		}
+				
+		return validatedSkill;
+	}
+	
+	/**
+	 * Ensures that a sector included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
+	 * @param sector sector included by the consumer
+	 * @param onto the MANU-SQUARE ontology
+	 * @param allOntologyClasses string representation of all ontology concepts
+	 * @return a sector verified to exist in the MANU-SQUARE ontology
+	 * @throws IOException
+	   Aug 26, 2020
+	 */
+	public static String validateSector(String sector, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+
+		String validatedSector = null;
+
+		if (!allOntologyClasses.contains(sector)) {
+			validatedSector = getMostSimilarConcept(sector, QueryConceptType.SECTOR, onto, EmbeddingSingletonDataManager.VAM);
+		} else {
+			validatedSector = sector;
+		}
+				
+		return validatedSector;
+	}
+	
+	/**
 	 * Ensures that a process included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param processName process included by the consumer
 	 * @param onto the MANU-SQUARE ontology
@@ -144,6 +232,14 @@ public class QueryValidation {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("Certification", onto));
 		} else if (conceptType == QueryConceptType.ATTRIBUTE) {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("AttributeType", onto));
+		} else if (conceptType == QueryConceptType.INNOVATIONPHASE) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("InnovationPhase", onto));
+		} else if (conceptType == QueryConceptType.INNOVATIONTYPE) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("InnovationType", onto));
+		} else if (conceptType == QueryConceptType.SECTOR) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("Industry", onto));
+		} else if (conceptType == QueryConceptType.SKILL) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("HumanCapabilityType", onto));
 		}
 
 		//if the consumerInput equals an ontology concept we return this without using syntactic/semantic matching
