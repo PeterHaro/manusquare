@@ -20,6 +20,7 @@ import supplierdata.Supplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -37,22 +38,82 @@ public static List<Double> computeSemanticSimilarity_IM (InnovationManagementQue
 		
 
 		List<Certification> certificationList = innovationManager.getCertifications();
+		List<String> supplierInnovationPhases = innovationManager.getInnovationPhases();
+		List<String> supplierInnovationTypes = innovationManager.getInnovationTypes();
+		List<String> supplierSkills = innovationManager.getSkills();
+		List<String> supplierSectors = innovationManager.getSectors();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 
 		SimilarityParameters parameters = null;
 
+		double innovationPhaseSim = 0;
+		double innovationTypeSim = 0;
+		double skillSim = 0;
+		double sectorSim = 0;
 		double certificationSim = 0;
+		double finalSim = 0;
+		
 
 		List<Double> similarityList = new LinkedList<Double>();
 
 				StringBuffer debuggingOutput = new StringBuffer();
+				
+				/* INNOVATION PHASE SIMILARITY */
+				List<String> initialConsumerInnovationPhases = query.getInnovationPhases();
+				
+				if (initialConsumerInnovationPhases == null) {
+					
+					innovationPhaseSim = 0;
+					
+				} else {
+					
+					innovationPhaseSim = computeIndependentWUPSetSim (initialConsumerInnovationPhases, supplierInnovationPhases, similarityMethod, onto, graph, hard_coded_weight);
+				}
+				
+				debuggingOutput.append("\nInnovationPhaseSim is: " + innovationPhaseSim);
+				
+				
+				/* INNOVATION TYPE SIMILARITY */
+				List<String> initialConsumerInnovationTypes = query.getInnovationTypes();
+				
+				if (initialConsumerInnovationTypes == null) {
+					innovationTypeSim = 0;
+				} else {
+					innovationTypeSim = computeIndependentWUPSetSim (initialConsumerInnovationTypes, supplierInnovationTypes, similarityMethod, onto, graph, hard_coded_weight);
+				}
+				
+				debuggingOutput.append("\nInnovationTypeSim is: " + innovationTypeSim);
+				
+				
+				/* SKILL SIMILARITY */
+				List<String> initialConsumerSkills = query.getSkills();
+				
+				if (initialConsumerSkills == null) {
+					skillSim = 0;
+				} else {
+					skillSim = computeIndependentWUPSetSim (initialConsumerSkills, supplierSkills, similarityMethod, onto, graph, hard_coded_weight);
+				}
+				
+				debuggingOutput.append("\nSkillSim is: " + skillSim);
+				
+				
+				/* SECTOR SIMILARITY */
+				List<String> initialConsumerSectors = query.getSectors();
+				
+				if (initialConsumerSectors == null) {
+					sectorSim = 0;
+				} else {
+					sectorSim = computeIndependentWUPSetSim (initialConsumerSectors, supplierSectors, similarityMethod, onto, graph, hard_coded_weight);
+				}
+				
+				debuggingOutput.append("\nSectorSim is: " + sectorSim);
 
 
 				/* CERTIFICATION SIMILARITY */
 
 				Set<Certification> initialConsumerCertifications = query.getCertifications();
-				Set<String> consumerCertifications = new HashSet<String>();
+				List<String> consumerCertifications = new ArrayList<String>();
 
 				if (initialConsumerCertifications != null) {
 					for (Certification c : initialConsumerCertifications) {
@@ -60,31 +121,35 @@ public static List<Double> computeSemanticSimilarity_IM (InnovationManagementQue
 					}
 				}
 
-				Set<String> supplierCertifications = new HashSet<String>();
+				List<String> supplierCertifications = new ArrayList<String>();
 				for (Certification c : certificationList) {
 					supplierCertifications.add(c.getId());
 				}
 
 				certificationSim = computeIndependentWUPSetSim (consumerCertifications, supplierCertifications, similarityMethod, onto, graph, hard_coded_weight);
-				debuggingOutput.append("\nRequired certificates by consumer: " + StringUtilities.printSetItems(consumerCertifications));
-				debuggingOutput.append("\nCertifications possessed by supplier: " + StringUtilities.printSetItems(supplierCertifications));
+				debuggingOutput.append("\nRequired certificates by consumer: " + StringUtilities.printListItems(consumerCertifications));
+				debuggingOutput.append("\nCertifications possessed by supplier: " + StringUtilities.printListItems(supplierCertifications));
 				debuggingOutput.append("\ncertificationSim is: " + certificationSim);
 
-				similarityList.add(certificationSim);
+				finalSim = (((innovationPhaseSim + innovationTypeSim + sectorSim) / 3) * 0.3) + (skillSim * 0.5) + (certificationSim * 0.2);
+				
+				similarityList.add(finalSim);
 				debuggingOutput.append("\nSimilarityList contains: " + similarityList);
+				
+				
 				
 				System.out.println(debuggingOutput.toString());
 				return similarityList;
 			}		
 			
 
-			public static double computeIndependentWUPSetSim (Set<String> consumerSet, Set<String> supplierSet, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
+			public static double computeIndependentWUPSetSim (List<String> consumerSet, List<String> supplierSet, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
 				ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 				SimilarityParameters parameters = null;		
 				List<Double> simList = new LinkedList<Double>();
 				
-				//FIXME: should not be here, only for hacking the issue with SUPSI/HOLONIX typing instances using concepts not within the ontology / graph
-				Set<String> classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
+				//get all ontology classes for the syntactical matching
+				Set<String> classes = OntologyOperations.getClassesAsString(onto);
 
 				if (consumerSet == null || consumerSet.isEmpty()) {
 					return 1.0;
@@ -105,16 +170,16 @@ public static List<Double> computeSemanticSimilarity_IM (InnovationManagementQue
 							for (String s : supplierSet) {
 																
 								//FIXME: must ensure that both nodes are within the ontology graph. This is not always the case since some materials (e.g. StainlessSteel-301) are added incorrectly (e.g. StainlessSteel301) from SUPSI/HOLONIX
-								if (nodeInGraph (s, graph)) {
+								if (nodeInGraph (c.toLowerCase(), graph) && nodeInGraph (s.toLowerCase(), graph)) {
 
 								parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
 								simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 								
 								} else {
+																								
+									System.err.println("Transforming from " + s + " to " + getMostSimilarConceptSyntactically(s, classes));
 									
-									//find ontology concept / graph node with highest string sim (jaro winkler)								
-									//System.err.println("Transforming from " + s + " to " + getMostSimilarConceptSyntactically(s, classes));
-									
+									//find ontology concept / graph node with highest string sim (jaro winkler)
 									s = getMostSimilarConceptSyntactically(s, classes);
 									
 									parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
@@ -162,7 +227,7 @@ public static List<Double> computeSemanticSimilarity_IM (InnovationManagementQue
 
 				for (String s : ontologyClassesAsString) {
 
-					similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
+					similarityMap.put(s, new JaroWinklerSimilarity().apply(input.toLowerCase(), s.toLowerCase()));
 				}
 
 				mostSimilarConcept = getConceptWithHighestSim(similarityMap);

@@ -79,6 +79,9 @@ public class SemanticMatching_IM {
 		MutableGraph<String> graph = null;
 
 		graph = SimpleGraph.createGraph(ontology);
+		
+		//System.out.println("Printing graph nodes");
+		SimpleGraph.printGraphNodes(graph);
 
 		List<InnovationManager> innovationManagerData = TripleStoreConnection_IM.createInnovationManagerData(imq, testing, ontology);
 

@@ -13,6 +13,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+import edm.Certification;
 import query.InnovationManagementQuery;
 import utilities.StringUtilities;
 
@@ -39,6 +40,7 @@ public class SparqlQuery_IM {
 	public static String createSparqlQuery_IM (InnovationManagementQuery imq, OWLOntology onto) {
 
 		Set<String> languages = imq.getLanguages();
+		
 
 		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
 		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
@@ -48,9 +50,22 @@ public class SparqlQuery_IM {
 		strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
 
 
-		strQuery += "\nSELECT DISTINCT ?processChain ?supplier ?certificationType \n";
+		strQuery += "\nSELECT DISTINCT ?improfile ?supplier ?innovationPhaseType ?skillType ?innovationSectorType ?innovationTypeType ?certificationType\n";
 		
 		strQuery += "\nWHERE { \n";
+		
+		strQuery += "\n?improfile core:hasSupplier ?supplier . \n";
+		strQuery += "\n?improfile core:hasInnovationPhase ?innovationPhase . \n";
+		strQuery += "\n?innovationPhase rdf:type ?innovationPhaseType . \n";
+		strQuery += "\n?improfile core:hasInnovationType ?innovationType . \n";
+		strQuery += "\n?innovationType rdf:type ?innovationTypeType . \n";
+		strQuery += "\n?improfile core:hasSkill ?skill . \n";
+		strQuery += "\n?skill rdf:type ?skillType . \n";
+		strQuery += "\n?improfile core:hasSector ?innovationSector . \n";
+		strQuery += "\n?innovationSector rdf:type ?innovationSectorType . \n";
+		
+		strQuery += "\nFILTER ( ?innovationPhaseType not in ( owl:NamedIndividual ) && ?skillType not in ( owl:NamedIndividual ) && ?innovationSectorType not in ( owl:NamedIndividual ) && ?innovationTypeType not in ( owl:NamedIndividual ))\n"; 
+	    	    		
 
 		//certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
 		//this is taken care of by the matchmaking algo)
