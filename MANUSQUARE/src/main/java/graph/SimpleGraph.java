@@ -40,9 +40,9 @@ public class SimpleGraph {
 					superClass = superClassMap.get(entry.getKey());
 					//create an is-a relationship from the class to its superclass. If a class does not have any defined superclasses, create an is-relationship to thing
 					if (superClass != null) {
-						graph.putEdge(s, superClass);
+						graph.putEdge(s.toLowerCase(), superClass.toLowerCase());
 					} else {
-						graph.putEdge(s, thingNode);
+						graph.putEdge(s.toLowerCase(), thingNode.toLowerCase());
 					}
 				}
 			}
@@ -50,18 +50,32 @@ public class SimpleGraph {
 
 		return graph;
 	}
+	
+	public static void printGraphNodes (MutableGraph<String> graph) {
+		
+		Set<String> graphNodes = graph.nodes();
+		
+		for (String s : graphNodes) {
+			System.out.println(s);
+		}
+		
+	}
 
 	public static int getNodeDepth (String nodeName, MutableGraph<String> graph) {
 
-		Iterator<String> iter = Traverser.forGraph(graph).breadthFirst(nodeName).iterator();
+		Iterator<String> iter = Traverser.forGraph(graph).breadthFirst(nodeName.toLowerCase()).iterator();
 
-		Traverser.forGraph(graph).breadthFirst(nodeName);
+		Traverser.forGraph(graph).breadthFirst(nodeName.toLowerCase());
 
 		return Iterators.size(iter);
 
 	}
 
 	public static String getLCS (String sourceNode, String targetNode, MutableGraph<String> graph) {
+		
+		//make all nodes lowercased
+		sourceNode = sourceNode.toLowerCase();
+		targetNode = targetNode.toLowerCase();
 
 		//traverse the graph to get parents of sourceNode
 		Iterator<String> iterSource = Traverser.forGraph(graph).breadthFirst(sourceNode).iterator();
@@ -122,7 +136,7 @@ public class SimpleGraph {
 		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
 		for (String s : conceptsSet) {
 			if (!s.equals("Thing")) //we don´t need owl:Thing in the map
-			hierarchyMap.put(s, getNodeDepth(s, graph)-2); //tweak with -2 to get the correct num edges to graph root
+			hierarchyMap.put(s.toLowerCase(), getNodeDepth(s, graph)-2); //tweak with -2 to get the correct num edges to graph root
 		}
 
 		return hierarchyMap;
