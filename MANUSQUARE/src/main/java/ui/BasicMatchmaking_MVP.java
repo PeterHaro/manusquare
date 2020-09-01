@@ -36,7 +36,7 @@ public class BasicMatchmaking_MVP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/Test5.json";
+			String jsonIn = "./files/Test1.json";
  			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 

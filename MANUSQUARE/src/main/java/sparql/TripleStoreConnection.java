@@ -90,6 +90,9 @@ public class TripleStoreConnection {
 		}
 
 		String strQuery = SparqlQuery.createSparqlQuery(query, onto);
+		
+		System.out.println("Testing SPARQL Query: ");
+		System.out.println(strQuery);
 
 		//open connection to GraphDB and run SPARQL query
 		Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();

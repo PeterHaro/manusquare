@@ -268,12 +268,17 @@ public class ConsumerQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/Test8.json";
+		String filename = "./files/Test1.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 		ConsumerQuery query = createConsumerQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
+		
+		System.out.println("Printing processes: ");
+		for (Process p : query.getProcesses()) {
+			System.out.println(p.getName());
+		}
 
 		for (Process p : query.getProcesses()) {
 			System.out.println("Process: " + p.getName());

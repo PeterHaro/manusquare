@@ -135,8 +135,8 @@ public class SimpleGraph {
 		Map<String, Integer> hierarchyMap = new LinkedHashMap<String, Integer>();
 		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
 		for (String s : conceptsSet) {
-			if (!s.equals("Thing")) //we don´t need owl:Thing in the map
-			hierarchyMap.put(s.toLowerCase(), getNodeDepth(s, graph)-2); //tweak with -2 to get the correct num edges to graph root
+			if (!s.equalsIgnoreCase("Thing")) //we don´t need owl:Thing in the map
+			hierarchyMap.put(s, getNodeDepth(s, graph)-2); //tweak with -2 to get the correct num edges to graph root
 		}
 
 		return hierarchyMap;

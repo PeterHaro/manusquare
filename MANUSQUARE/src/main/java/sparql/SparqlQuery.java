@@ -40,7 +40,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/Tests_04072020/Test5.json";
+		String filename = "./files/Test8-supplierLanguages.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -62,9 +62,11 @@ public class SparqlQuery {
 		Set<Material> materials = new HashSet<Material>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<edm.Process> processes = cq.getProcesses();
+		
 		Set<String> languages = cq.getLanguage();        
 
 		//get the Least Common Subsumer (LCS) of the process concepts included by the consumer
+		
 		String lcs = getLCS(processes, onto);
 
 		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
@@ -242,23 +244,25 @@ public class SparqlQuery {
 		}
 
 		Set<String> commonSupers = getCommonElements(lists);
+		
 
 		//get the depth of the superclasses and let the superclass with highest depth be the LCS
 		MutableGraph<String> ontoGraph = SimpleGraph.createGraph(onto);
 		Map<String, Integer> ontologyHierarchyMap = SimpleGraph.getOntologyHierarchy(onto, ontoGraph);
+		
 
 		Map<String, Integer> supersAndDepthsMap = new LinkedHashMap<String, Integer>();
 		for (String s : commonSupers) {
 			if (ontologyHierarchyMap.containsKey(s)) {
 				supersAndDepthsMap.put(s, ontologyHierarchyMap.get(s));
 			}
-		}
+		}		
 
 		Map<String, Integer> sortedOntologyHierarchy = sortDescending(supersAndDepthsMap);
-
+		
 		Entry<String, Integer> entry = sortedOntologyHierarchy.entrySet().iterator().next();
 		String lcs = entry.getKey();
-
+		
 		return lcs;
 	}
 
