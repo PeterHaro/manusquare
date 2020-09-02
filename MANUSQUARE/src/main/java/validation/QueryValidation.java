@@ -220,7 +220,12 @@ public class QueryValidation {
 	   Mar 27, 2020
 	 */
 	private static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
+		
+		String mostSimilarConcept = null;
+		
 		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
+				
+		double syntacticSimScore = 0;
 
 		Set<String> classes = new HashSet<String>();
 		//we only consider the classes below the stated ontology classes (e.g. MfgProcess for processes)
@@ -245,46 +250,61 @@ public class QueryValidation {
 		//if the consumerInput equals an ontology concept we return this without using syntactic/semantic matching
 		if (containsIgnoreCase(classes, consumerInput)) {
 			
-			return findConceptName(consumerInput, classes);
-			
-		} else {//if not, we do the semantic and syntactic matching process
+			mostSimilarConcept = findConceptName(consumerInput, classes);
 
-			//basic pre-processing of the consumerInput
-			String preProcessedConsumerProcess = preProcess(consumerInput);
+			
+		} else {//else check the sim score of the most syntactically similar concept, if this is above 0.9, use this as the most similar concept
+			
+			String preProcessedConsumerInput = preProcess(consumerInput);
+						
+			syntacticSimScore = highestSyntacticSim(preProcessedConsumerInput, classes);
+						
+			if (syntacticSimScore >= 0.9) {
+				
+				mostSimilarConcept = getMostSimilarConceptSyntactically(preProcessedConsumerInput, classes);
+				
+				
+			} else {//if not, we do the semantic matching process
+
 
 			//create a vector map from the embeddings file for ontology concepts
 			Map<String, double[]> vectorOntologyMap = embeddingManager.createOntologyVectorMap(classes, vectorAggregationMethod);
-			double[] consumerInputVectors = embeddingManager.getLabelVector(preProcessedConsumerProcess, vectorAggregationMethod);
+			double[] consumerInputVectors = embeddingManager.getLabelVector(preProcessedConsumerInput, vectorAggregationMethod);
 			String mostSemanticallySimilarConcept = null;
 			
 			//if there are no relevant embedding vectors for the consumer input, we do to the syntactic matching
 			if (consumerInputVectors == null) {
-				return getMostSimilarConceptSyntactically(preProcessedConsumerProcess, classes);
+				
+				mostSimilarConcept = getMostSimilarConceptSyntactically(preProcessedConsumerInput, classes);
+				
 				
 			} else {
 				
 				//check if vectormap/embeddings file contains consumerProcess as-is
-				if (vectorOntologyMap.containsKey(preProcessedConsumerProcess.toLowerCase())) {
+				if (vectorOntologyMap.containsKey(preProcessedConsumerInput.toLowerCase())) {
 										
-					mostSemanticallySimilarConcept = preProcessedConsumerProcess;
+					mostSemanticallySimilarConcept = preProcessedConsumerInput;
 					
 				} else { //if not, retrieve the most similar concept based on vector similarity										
 					mostSemanticallySimilarConcept = findMostSimilarVector(consumerInputVectors, vectorOntologyMap);					
 				}
 				
-				//check if not null TODO: The code in this method should be optimised, perhaps also use string matching if sim is > 0.9?				
 				if (mostSemanticallySimilarConcept != null) {
 				
-				return findConceptName(mostSemanticallySimilarConcept, classes);
+					mostSimilarConcept = findConceptName(mostSemanticallySimilarConcept, classes);
+					
 				
 				} else {
 					
-					return getMostSimilarConceptSyntactically(preProcessedConsumerProcess, classes);
+					mostSimilarConcept = getMostSimilarConceptSyntactically(preProcessedConsumerInput, classes);
 				}
 
 			}
+		
+			}
 		}
-
+				
+		return mostSimilarConcept;
 	}
 	
 	/**
@@ -333,6 +353,21 @@ public class QueryValidation {
 
 		return mostSimilar;
 	}
+	
+	private static double highestSyntacticSim(String input, Set<String> ontologyClassesAsString) {
+		
+		Map<String, Double> similarityMap = new HashMap<String, Double>();
+
+		for (String s : ontologyClassesAsString) {
+
+			similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
+		}
+		
+		double score = getScoreForConceptWithHighestSim(similarityMap);
+		
+		return score;
+		
+	}
 
 
 	/**
@@ -371,6 +406,20 @@ public class QueryValidation {
 		Map<String, Double> rankedResults = sortDescending(similarityMap);
 		Entry<String, Double> entry = rankedResults.entrySet().iterator().next();
 		String conceptWithHighestSim = entry.getKey();
+		return conceptWithHighestSim;
+	}
+	
+	/**
+	 * Returns the similarity score for the concept (name) with the highest (similarity) score from a map of concepts
+	 *
+	 * @param similarityMap a map of concepts along with their similarity scores
+	 * @return score of concept (name) with highest similarity score
+	 * Sept 2, 2020
+	 */
+	private static double getScoreForConceptWithHighestSim(Map<String, Double> similarityMap) {
+		Map<String, Double> rankedResults = sortDescending(similarityMap);
+		Entry<String, Double> entry = rankedResults.entrySet().iterator().next();
+		double conceptWithHighestSim = entry.getValue();
 		return conceptWithHighestSim;
 	}
 
