@@ -12,21 +12,22 @@
 		}
 	},
 	"projectInnovationPhases": [
-		"Ide Utvikling"
+		"Idea Expansion"
 	],
 	"projectInnovationTypes": [
-		"ProduktInnovasjon"
+		"Product Development"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "DDrawing"
+			"skill": "Drawing"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "BrusAutomat"
+			"sector": "Automation"
 		}
-	]
+	],
+  "innovationManagerAttributes": []
 }

@@ -12,33 +12,22 @@
 		}
 	},
 	"projectInnovationPhases": [
-		"Idea Development"
+		"Idea Development Phase"
 	],
 	"projectInnovationTypes": [
-		"Product Innovatiion"
+		"ProductInnovation"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "DDrawing"
+			"skill": "3DDrawing"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "Automation"
+			"sector": "AutomationProduct"
 		}
 	],
-	"innovationManagerAttributes": [
-		{
-			"id": "234234234",
-			"attributeKey": "certification",
-			"attributeValue": "IS4001"
-		},
-		{
-			"id": "2343252346356",
-			"attributeKey": "language",
-			"attributeValue": "Spnish"
-		}
-	]
+	"innovationManagerAttributes": []
 }

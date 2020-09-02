@@ -12,33 +12,38 @@
 		}
 	},
 	"projectInnovationPhases": [
-		"Idea Development"
+		"Idea Development Phase",
+		"Industrialization"
 	],
 	"projectInnovationTypes": [
-		"Product Innovatiion"
+		"ProductInnovation",
+		"TechnologyInnovation"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "DDrawing"
+			"skill": "3DDrawing"
+		},
+		{
+			"id": "23536676",
+			"skill": "2DDrawing"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "Automation"
+			"sector": "AutomationProduct"
+		},
+		{
+			"id": "659cc6fc-0846-4198-9d16-147662456433",
+			"sector": "ElectricalMachineryAndApparatus"
 		}
 	],
 	"innovationManagerAttributes": [
-		{
+	{
 			"id": "234234234",
 			"attributeKey": "certification",
-			"attributeValue": "IS4001"
-		},
-		{
-			"id": "2343252346356",
-			"attributeKey": "language",
-			"attributeValue": "Spnish"
+			"attributeValue": "ISO9001"
 		}
 	]
 }
