@@ -15,26 +15,14 @@
 	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"projectType": "DEMO - Capacity Sharing",
-	"projectAttributes": [{
-		"unitOfMeasure": "",
-		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "CNCTurning",
-		"attributeKey": "AttributeMaterial",
-		"attributeValue": "CarbonSteel"
-	},
+	"projectAttributes": [
 	{
 		"unitOfMeasure": "",
-		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "CNCTurning",
-		"attributeKey": "MaxPartSizeX",
-		"attributeValue": "1.0"
+		"attributeId": "",
+		"processName": "CNBMilling",
+		"attributeKey": "",
+		"attributeValue": ""
 	}
 	],
-	"supplierAttributes": [
-	{
-	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
-        "attributeKey": "Certification",
-        "attributeValue": "MIL"
-	}	
-	]
+	"supplierAttributes": []
 }

@@ -18,16 +18,16 @@
 	"projectAttributes": [{
 		"unitOfMeasure": "",
 		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "CNCTurning",
-		"attributeKey": "",
-		"attributeValue": ""
+		"processName": "CNCMilling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
 	},
 	{
-		"unitOfMeasure": "",
+		"unitOfMeasure": "mm",
 		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
 		"processName": "CNCMilling",
-		"attributeKey": "",
-		"attributeValue": ""
+		"attributeKey": "MaxPartSizeX",
+		"attributeValue": "1.0"
 	}
 	],
 	"supplierAttributes": []

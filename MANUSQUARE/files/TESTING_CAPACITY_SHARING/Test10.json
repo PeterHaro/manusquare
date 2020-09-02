@@ -17,19 +17,30 @@
 	"projectType": "DEMO - Capacity Sharing",
 	"projectAttributes": [
 	{
-		"unitOfMeasure": "mm",
-		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "CNCMilling",
-		"attributeKey": "MaxPartSizeX",
-		"attributeValue": "150"
+		"unitOfMeasure": "",
+		"attributeId": "",
+		"processName": "oiunjnhgl",
+		"attributeKey": "",
+		"attributeValue": ""
 	},
 	{
 		"unitOfMeasure": "",
-		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "CNCMilling",
-		"attributeKey": "Axis",
-		"attributeValue": "3"
+		"attributeId": "",
+		"processName": "Miling",
+		"attributeKey": "",
+		"attributeValue": ""
 	}
 	],
-	"supplierAttributes": []
+	"supplierAttributes": [
+	{
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO9001"
+		},
+		{
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO14001"
+		}
+	]
 }

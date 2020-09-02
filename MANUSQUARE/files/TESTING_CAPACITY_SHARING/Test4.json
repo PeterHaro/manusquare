@@ -20,8 +20,15 @@
 		"unitOfMeasure": "",
 		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
 		"processName": "CNCMilling",
-		"attributeKey": "MaxPartSizeX",
-		"attributeValue": "1.0"
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
+	},
+	{
+		"unitOfMeasure": "",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "3DPrinting",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "StainlessSteel"
 	}
 	],
 	"supplierAttributes": []
