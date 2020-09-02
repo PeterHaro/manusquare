@@ -81,7 +81,7 @@ public class SemanticMatching_IM {
 		graph = SimpleGraph.createGraph(ontology);
 		
 		//System.out.println("Printing graph nodes");
-		SimpleGraph.printGraphNodes(graph);
+		//SimpleGraph.printGraphNodes(graph);
 
 		List<InnovationManager> innovationManagerData = TripleStoreConnection_IM.createInnovationManagerData(imq, testing, ontology);
 
