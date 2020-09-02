@@ -236,8 +236,11 @@ public class SimilarityMeasures {
 				List<Double> simList = new LinkedList<Double>();
 				
 				//FIXME: should not be here, only for hacking the issue with SUPSI/HOLONIX typing instances using concepts not within the ontology / graph
-				Set<String> classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
+//				Set<String> classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
 
+				//get all ontology classes for the syntactical matching
+				Set<String> classes = OntologyOperations.getClassesAsString(onto);
+				
 				if (consumerSet == null || consumerSet.isEmpty()) {
 					return 1.0;
 				}
@@ -246,10 +249,16 @@ public class SimilarityMeasures {
 					return hard_coded_weight;
 				}
 
+				//FIXME: Temporary hack to ensure that casing is ignored between consumer items and supplier items
 				else {
-					if (supplierSet.containsAll(consumerSet)) {
+					if (StringUtilities.containsAllIgnoreCase(consumerSet, supplierSet)) {
 						return 1.0;
 					}
+					
+//				else {
+//					if (supplierSet.containsAll(consumerSet)) {
+//						return 1.0;
+//					}
 
 					else {
 
@@ -263,6 +272,8 @@ public class SimilarityMeasures {
 								simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 								
 								} else {
+									
+									//System.err.println("Transforming from " + s + " to " + getMostSimilarConceptSyntactically(s, classes));
 									
 									//find ontology concept / graph node with highest string sim (jaro winkler)								
 									//System.err.println("Transforming from " + s + " to " + getMostSimilarConceptSyntactically(s, classes));
@@ -396,7 +407,6 @@ public class SimilarityMeasures {
 			}
 	
 	
-	/* INITIAL VERSION ON GITHUB */
 	public static double computeWUPSetSim (Set<String> consumerSet, Set<String> supplierSet, double initialSim, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 		SimilarityParameters parameters = null;		
@@ -405,15 +415,23 @@ public class SimilarityMeasures {
 		if (consumerSet == null || consumerSet.isEmpty()) {
 			return 1.0;
 		}
+		
+
 
 		else if (supplierSet == null || supplierSet.isEmpty()) {
 			return initialSim * hard_coded_weight;
 		}
-
+		
+		//FIXME: Temporary hack to ensure that case is ignored when comparing sets, should standardised lowercase/uppercase everywhere!
 		else {
-			if (supplierSet.containsAll(consumerSet)) {
+			if (StringUtilities.containsAllIgnoreCase(consumerSet, supplierSet)) {
 				return 1.0;
 			}
+
+//		else {
+//			if (supplierSet.containsAll(consumerSet)) {
+//				return 1.0;
+//			}
 
 			else {
 
