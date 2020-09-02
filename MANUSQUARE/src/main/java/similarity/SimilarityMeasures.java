@@ -229,7 +229,6 @@ public class SimilarityMeasures {
 	
 
 	
-	//returns 'hard_coded_weight' if supplierSet == null || consumerSet.isEmpty()
 			public static double computeIndependentWUPSetSim (Set<String> consumerSet, Set<String> supplierSet, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
 				ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 				SimilarityParameters parameters = null;		
@@ -284,42 +283,6 @@ public class SimilarityMeasures {
 									simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 									
 								}
-
-							}
-						}
-
-						return MathUtils.sum(simList) / (double)simList.size();
-
-					}
-				}
-
-			}
-
-			public static double computeDependentWUPSetSim (Set<String> consumerSet, Set<String> supplierSet, double initialSim, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
-				ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
-				SimilarityParameters parameters = null;		
-				List<Double> simList = new LinkedList<Double>();
-
-				if (consumerSet == null || consumerSet.isEmpty()) {
-					return 1.0;
-				}
-
-				else if (supplierSet == null || supplierSet.isEmpty()) {
-					return initialSim * hard_coded_weight;
-				}
-
-				else {
-					if (supplierSet.containsAll(consumerSet)) {
-						return 1.0;
-					}
-
-					else {
-
-						for (String c : consumerSet) {
-							for (String s : supplierSet) {
-
-								parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
-								simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 
 							}
 						}
