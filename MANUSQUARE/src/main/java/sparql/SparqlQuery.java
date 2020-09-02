@@ -120,7 +120,7 @@ public class SparqlQuery {
 			strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
 			strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/> \n";
 			strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
-			strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
+			//strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
 		}
 
 		//TODO: Optimise code to differentiate SPARQL query on attributes and materials. Currently, the query asks for attributes even if there are no
@@ -180,7 +180,7 @@ public class SparqlQuery {
 
 		strQuery += "}";
 
-		System.out.println(strQuery);
+		//System.out.println(strQuery);
 
 		return strQuery;
 	}
