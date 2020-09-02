@@ -200,17 +200,6 @@ public class TripleStoreConnection_IM {
 			innovationManagerList.add(innovationManager);
 		}
 		
-		System.out.println("Testing results from SPARQL Query");
-		//List<InnovationManager>
-		for (InnovationManager im : innovationManagerList) {
-			System.out.println("\nInnovation Manager ID: " + im.getId());
-			System.out.println("InnovationPhases: " + im.getInnovationPhases());
-			System.out.println("InnovationTypes: " + im.getInnovationTypes());
-			System.out.println("Skills: " + im.getSkills());
-			System.out.println("Sectors: " + im.getSectors());
-			
-			
-		}
 
 		return innovationManagerList;
 
