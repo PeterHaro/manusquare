@@ -63,6 +63,35 @@ public class StringUtilities {
 	}
 	
 	/**
+	 * Checks if a target set of strings includes all strings in a source set of strings while ignoring the casing
+	 * @param sourceSet the source set of strings
+	 * @param targetSet the target set of strings
+	 * @return true if the target set of strings contains all strings in the source set of strings, false otherwise
+	   Sept 2, 2020
+	 */
+	public static boolean containsAllIgnoreCase(List<String> sourceSet, List<String> targetSet) {
+		
+		int itemsInSourceSet = sourceSet.size();
+		int numMatch = 0;
+		
+		for (String source : sourceSet) {
+			for (String target : targetSet) {
+				if (source.equalsIgnoreCase(target)) {
+					numMatch++;
+				}
+			}
+
+		}
+		
+		if (numMatch == itemsInSourceSet) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	/**
 	 * Capitalises each word
 	 * @param str input string
 	 * @return string where each word is capitalised
