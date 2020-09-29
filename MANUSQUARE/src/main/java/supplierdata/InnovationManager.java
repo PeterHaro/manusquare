@@ -36,10 +36,11 @@ public class InnovationManager {
 //		this.sectors = sectors;
 //	}
 	
-	public InnovationManager(String id, List<Certification> certifications, List<String> skills,
+	public InnovationManager(String id, String supplierName, List<Certification> certifications, List<String> skills,
 			List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {
 		super();
 		this.id = id;
+		this.supplierName = supplierName;
 		this.certifications = certifications;
 		this.skills = skills;
 		this.innovationPhases = innovationPhases;

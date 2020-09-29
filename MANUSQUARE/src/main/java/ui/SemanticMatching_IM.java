@@ -90,6 +90,7 @@ public class SemanticMatching_IM {
 		List<Double> innovationManagerSim = new LinkedList<Double>();
 
 		for (InnovationManager innovationManager : innovationManagerData) {
+
 			innovationManagerSim = SimilarityMeasures_IM.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
 			innovationManagerScores.put(innovationManager, getHighestScore(innovationManagerSim));	

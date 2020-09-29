@@ -1,16 +1,20 @@
 package owlprocessing;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -47,6 +51,89 @@ public class OntologyOperations {
 	public OntologyOperations() {
 
 	}
+
+	public static void main(String[] args) throws OWLOntologyCreationException {
+
+		File ontoFile = new File ("./files/ONTOLOGIES/updatedOntology.owl");
+		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
+		
+		Map<String, String> classLabelMap = getClassLabels(onto);
+		
+		System.out.println("The classLabelMap contains " + classLabelMap.size() + " entries.");
+		
+		for (Entry<String, String> e : classLabelMap.entrySet()) {
+			System.out.println("Class: " + e.getKey() + ": " + e.getValue());
+		}
+
+//		OWLClass cl = getClass("Allocation", onto);
+//
+//		System.out.println("The class is " + cl.getIRI());
+//
+//		String label = getLabelFromClass (onto, cl);
+//
+//		System.out.println("The label is " + label);
+//
+//		Set<String> allClasses = new HashSet<String>();
+//
+//		for (OWLClass c : onto.getClassesInSignature()) {
+//
+//			allClasses.add(c.getIRI().getFragment().toLowerCase());
+//		}
+//
+//		System.out.println("There are " + allClasses.size() + " classes");
+//
+//		Set<String> allLabels = new HashSet<String>();
+//
+//		for (OWLClass c : onto.getClassesInSignature()) {
+//
+//			System.out.println("Getting label from OWLClass: " + c);
+//			allLabels.add(getLabelFromClass(onto, c).toLowerCase());
+//
+//		}
+//
+//		System.out.println("Num labels: + " + allLabels.size() + " num classes: " + allClasses.size());
+//
+//		allLabels.removeAll(allClasses);
+//
+//		System.out.println("Labels different from classes");
+//		for (String s : allLabels) {
+//			System.out.println(s);
+//		}
+
+
+
+
+
+	}
+
+	/**
+	 * Constructs a map that holds classes as key and their label as value.
+	 * @param onto 
+	 * @return
+	   Sep 22, 2020
+	 */
+	public static Map<String, String> getClassLabels (OWLOntology onto) {
+
+		Map<String, String> classLabels = new HashMap<String, String>();
+
+		for (OWLClass cls : onto.getClassesInSignature()) {
+				for (OWLAnnotationAssertionAxiom a : onto.getAnnotationAssertionAxioms(cls.getIRI())) {
+					
+					System.out.println("The annotation for " + cls + " is " + a.getProperty());
+					
+					if (a.getProperty() != null && a.getProperty().isLabel()) {
+						//need to use a.getValue() instead of a.getAnnotation() to avoid including 'Annotation rdfs comment' that is included before the real definition.						
+						classLabels.put(cls.getIRI().getFragment(), a.getValue().toString().substring(a.getValue().toString().indexOf("\"")+1, a.getValue().toString().lastIndexOf("\"")));
+						
+					}
+
+			}
+
+		}
+
+		return classLabels;
+	}
+
 
 
 	/** Returns a set of OWL classes being equivalent to cls

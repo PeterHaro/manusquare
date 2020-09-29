@@ -36,7 +36,7 @@ public class BasicMatchmaking_IM {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_8.json";
+			String jsonIn = "./files/SUPSI/Elias_100920.json";
  			SemanticMatching_IM.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 

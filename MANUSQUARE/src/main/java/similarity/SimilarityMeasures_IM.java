@@ -9,6 +9,7 @@ import owlprocessing.OntologyOperations;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLClass;
 import query.ConsumerQuery;
 import query.InnovationManagementQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
@@ -42,6 +43,8 @@ public class SimilarityMeasures_IM {
 		List<String> supplierInnovationTypes = innovationManager.getInnovationTypes();
 		List<String> supplierSkills = innovationManager.getSkills();
 		List<String> supplierSectors = innovationManager.getSectors();
+		String supplierName = innovationManager.getSupplierName();
+		String supplierID = innovationManager.getId();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 
@@ -70,7 +73,10 @@ public class SimilarityMeasures_IM {
 
 			innovationPhaseSim = computeIndependentWUPSetSim (initialConsumerInnovationPhases, supplierInnovationPhases, similarityMethod, onto, graph, hard_coded_weight);
 		}
-
+		debuggingOutput.append("\nThe supplier name is: " + supplierName);
+		debuggingOutput.append("\nThe supplier ID is: " + supplierID);
+		debuggingOutput.append("\nThe consumer´s requested innovation phases are: " + initialConsumerInnovationPhases);
+		debuggingOutput.append("\nThe supplier´s innovation phases are: " + supplierInnovationPhases);
 		debuggingOutput.append("\nInnovationPhaseSim is: " + innovationPhaseSim);
 
 
@@ -83,6 +89,8 @@ public class SimilarityMeasures_IM {
 			innovationTypeSim = computeIndependentWUPSetSim (initialConsumerInnovationTypes, supplierInnovationTypes, similarityMethod, onto, graph, hard_coded_weight);
 		}
 
+		debuggingOutput.append("\nThe consumer´s requested innovation types are: " + initialConsumerInnovationTypes);
+		debuggingOutput.append("\nThe supplier´s innovation types are: " + supplierInnovationTypes);
 		debuggingOutput.append("\nInnovationTypeSim is: " + innovationTypeSim);
 
 
@@ -95,6 +103,8 @@ public class SimilarityMeasures_IM {
 			skillSim = computeIndependentWUPSetSim (initialConsumerSkills, supplierSkills, similarityMethod, onto, graph, hard_coded_weight);
 		}
 
+		debuggingOutput.append("\nThe consumer´s requested innovation skills are: " + initialConsumerSkills);
+		debuggingOutput.append("\nThe supplier´s innovation skills are: " + supplierSkills);
 		debuggingOutput.append("\nSkillSim is: " + skillSim);
 
 
@@ -107,6 +117,8 @@ public class SimilarityMeasures_IM {
 			sectorSim = computeIndependentWUPSetSim (initialConsumerSectors, supplierSectors, similarityMethod, onto, graph, hard_coded_weight);
 		}
 
+		debuggingOutput.append("\nThe consumer´s requested innovation sectors are: " + initialConsumerSectors);
+		debuggingOutput.append("\nThe supplier´s innovation sectors are: " + supplierSectors);
 		debuggingOutput.append("\nSectorSim is: " + sectorSim);
 
 
@@ -147,9 +159,6 @@ public class SimilarityMeasures_IM {
 		SimilarityParameters parameters = null;		
 		List<Double> simList = new LinkedList<Double>();
 
-		//FIXME: should not be here, only for hacking the issue with SUPSI/HOLONIX typing instances using concepts not within the ontology / graph
-		//	Set<String> classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
-
 		//get all ontology classes for the syntactical matching
 		Set<String> classes = OntologyOperations.getClassesAsString(onto);
 
@@ -162,15 +171,14 @@ public class SimilarityMeasures_IM {
 		}
 
 		//FIXME: Temporary hack to ensure that casing is ignored between consumer items and supplier items
+		//FIXME: //include labels of concepts in consumerSet
 		else {
+			
+			//List<String> classesAndLabels = getConceptNamesAndLabels(consumerSet, onto);
+			
 			if (StringUtilities.containsAllIgnoreCase(consumerSet, supplierSet)) {
 				return 1.0;
 			}
-
-			//	else {
-			//		if (supplierSet.containsAll(consumerSet)) {
-			//			return 1.0;
-			//		}
 
 			else {
 
@@ -206,62 +214,25 @@ public class SimilarityMeasures_IM {
 		}
 
 	}
-
-
-	//			public static double computeIndependentWUPSetSim (List<String> consumerSet, List<String> supplierSet, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
-	//				ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
-	//				SimilarityParameters parameters = null;		
-	//				List<Double> simList = new LinkedList<Double>();
-	//				
-	//				//get all ontology classes for the syntactical matching
-	//				Set<String> classes = OntologyOperations.getClassesAsString(onto);
-	//
-	//				if (consumerSet == null || consumerSet.isEmpty()) {
-	//					return 1.0;
-	//				}
-	//
-	//				else if (supplierSet == null || supplierSet.isEmpty()) {
-	//					return hard_coded_weight;
-	//				}
-	//
-	//				else {
-	//					if (supplierSet.containsAll(consumerSet)) {
-	//						return 1.0;
-	//					}
-	//
-	//					else {
-	//
-	//						for (String c : consumerSet) {
-	//							for (String s : supplierSet) {
-	//																
-	//								//FIXME: must ensure that both nodes are within the ontology graph. This is not always the case since some materials (e.g. StainlessSteel-301) are added incorrectly (e.g. StainlessSteel301) from SUPSI/HOLONIX
-	//								if (nodeInGraph (c.toLowerCase(), graph) && nodeInGraph (s.toLowerCase(), graph)) {
-	//
-	//								parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
-	//								simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
-	//								
-	//								} else {
-	//																								
-	//									//System.err.println("Transforming from " + s + " to " + getMostSimilarConceptSyntactically(s, classes));
-	//									
-	//									//find ontology concept / graph node with highest string sim (jaro winkler)
-	//									s = getMostSimilarConceptSyntactically(s, classes);
-	//									
-	//									parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
-	//									simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
-	//									
-	//								}
-	//
-	//							}
-	//						}
-	//
-	//						return MathUtils.sum(simList) / (double)simList.size();
-	//
-	//					}
-	//				}
-	//
-	//			}
-
+	
+//	public static List<String> getConceptNamesAndLabels (List<String> inputSet, OWLOntology onto) {
+//		
+//		List<String> labels = new ArrayList<String>();
+//		
+//		OWLClass cls = null;
+//		
+//		for (String s : inputSet) {
+//			
+//			cls = OntologyOperations.getClass(s, onto);
+//			labels.add(OntologyOperations.getLabelFromClass(onto, cls));
+//			
+//		}
+//		
+//		inputSet.addAll(labels);
+//		
+//		return inputSet;
+//		
+//	}
 
 
 	private static boolean nodeInGraph(String node, MutableGraph graph) {

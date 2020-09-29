@@ -243,6 +243,8 @@ public class QueryValidation {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("InnovationType", onto));
 		} else if (conceptType == QueryConceptType.SECTOR) {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("Industry", onto));
+			classes.addAll(OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("TCSectorClass", onto)));
+			classes.addAll(OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("AGVSectorClass", onto)));
 		} else if (conceptType == QueryConceptType.SKILL) {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("HumanCapabilityType", onto));
 		}

@@ -192,7 +192,7 @@ public class InnovationManagementQuery {
 		if (imr.projectInnovationTypes != null || !imr.projectInnovationTypes.isEmpty()) {
 
 			for (String it : imr.projectInnovationTypes) {
-				innovationManagementTypes.add(QueryValidation.validateInnovationPhase(it, onto, allOntologyClasses));
+				innovationManagementTypes.add(QueryValidation.validateInnovationType(it, onto, allOntologyClasses));
 			}
 			
 			query.setInnovationTypes(innovationManagementTypes);
@@ -242,7 +242,7 @@ public class InnovationManagementQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/InnovationManagementJSON.json";
+		String filename = "./files/SUPSI/Elias_100920.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -252,6 +252,7 @@ public class InnovationManagementQuery {
 		System.out.println("Innovation Phases: " + query.getInnovationPhases());
 		System.out.println("Innovation Types: " + query.getInnovationTypes());
 		System.out.println("Innovation Manager Skills: " + InnovationManagementQuery.getSkills());
+		System.out.println("Sectors: " + InnovationManagementQuery.getSectors());
 		System.out.println("Languages: " + query.getLanguages());
 		for (Certification c : query.getCertifications()) {
 		System.out.println("Certifications: " + c.getId());

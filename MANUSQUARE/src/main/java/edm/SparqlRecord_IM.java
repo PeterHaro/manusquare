@@ -7,6 +7,7 @@ public class SparqlRecord_IM {
 	
 	private String imProfileId;
 	private String supplierId;
+	private String supplierName;
 	private String sector;
 	private String skill;
 	private String innovationType;
@@ -16,11 +17,12 @@ public class SparqlRecord_IM {
 	private double attributeWeight;
 	private Map<String, String> attributeWeightMap; //added 11.02.2020 to associate a condition ('<=', '>=' or '=') to an attributeKey
 	
-	public SparqlRecord_IM (String processChainId, String supplierId, String sector, String skill,
+	public SparqlRecord_IM (String processChainId, String supplierId, String supplierName, String sector, String skill,
 			String innovationType, String innovationPhase, String certification, Set<String> attributes, double attributeWeight) {
 		super();
 		this.imProfileId = processChainId;
 		this.supplierId = supplierId;
+		this.supplierName = supplierName;
 		this.sector = sector;
 		this.skill = skill;
 		this.innovationType = innovationType;
@@ -47,6 +49,15 @@ public class SparqlRecord_IM {
 
 	public void setSupplierId(String supplierId) {
 		this.supplierId = supplierId;
+	}
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
 	}
 
 

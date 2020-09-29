@@ -50,11 +50,12 @@ public class SparqlQuery_IM {
 		strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
 
 
-		strQuery += "\nSELECT DISTINCT ?improfile ?supplier ?innovationPhaseType ?skillType ?innovationSectorType ?innovationTypeType ?certificationType\n";
+		strQuery += "\nSELECT DISTINCT ?improfile ?supplier ?supplierName ?innovationPhaseType ?skillType ?innovationSectorType ?innovationTypeType ?certificationType\n";
 		
 		strQuery += "\nWHERE { \n";
 		
 		strQuery += "\n?improfile core:hasSupplier ?supplier . \n";
+		strQuery += "\n?supplier core:hasName ?supplierName . \n";
 		strQuery += "\n?improfile core:hasInnovationPhase ?innovationPhase . \n";
 		strQuery += "\n?innovationPhase rdf:type ?innovationPhaseType . \n";
 		strQuery += "\n?improfile core:hasInnovationType ?innovationType . \n";

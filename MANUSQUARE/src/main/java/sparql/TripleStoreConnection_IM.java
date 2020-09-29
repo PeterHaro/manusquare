@@ -100,6 +100,7 @@ public class TripleStoreConnection_IM {
 					record = new SparqlRecord_IM();
 
 					record.setSupplierId(stripIRI(solution.getValue("supplier").stringValue().replaceAll("\\s+", "")));
+					record.setSupplierName(stripIRI(solution.getValue("supplierName").stringValue().replaceAll("\\s+", "")));
 					record.setInnovationPhase(stripIRI(solution.getValue("innovationPhaseType").stringValue().replaceAll("\\s+", "")));
 					record.setInnovationType(stripIRI(solution.getValue("innovationTypeType").stringValue().replaceAll("\\s+", "")));
 					record.setSkill(stripIRI(solution.getValue("skillType").stringValue().replaceAll("\\s+", "")));
@@ -165,6 +166,9 @@ public class TripleStoreConnection_IM {
 					//TODO: Not sure all these if clauses are needed, according to SUPSI specs innovationPhase,
 					//innovationType, skill and sector are all mandatory if the innovation capability is included.
 					
+					//set supplier name
+					
+					
 					//add innovationPhases
 					innovationPhase = sr.getInnovationPhase();
 					if (innovationPhase != null && !innovationPhases.contains(innovationPhase)) {
@@ -190,7 +194,7 @@ public class TripleStoreConnection_IM {
 					}
 					
 
-					innovationManager = new InnovationManager(id, certifications, skills, innovationPhases,
+					innovationManager = new InnovationManager(id, sr.getSupplierName(), certifications, skills, innovationPhases,
 							innovationTypes, sectors);
 					
 				}
