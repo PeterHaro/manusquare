@@ -246,7 +246,7 @@ public class QueryValidation {
 			classes.addAll(OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("TCSectorClass", onto)));
 			classes.addAll(OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("AGVSectorClass", onto)));
 		} else if (conceptType == QueryConceptType.SKILL) {
-			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("HumanCapabilityType", onto));
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("CapabilityType", onto));
 		}
 
 		//if the consumerInput equals an ontology concept we return this without using syntactic/semantic matching

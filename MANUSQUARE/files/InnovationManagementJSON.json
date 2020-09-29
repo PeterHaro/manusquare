@@ -11,8 +11,14 @@
 			"lon": "-8.3939142"
 		}
 	},
-	"projectInnovationPhases": ["Idea Development Phase","Industrialization Phase"],
-	"projectInnovationTypes": ["ProductInnovation", "ProcessInnovation", "TechnologyInnovation"],
+	"projectInnovationPhases": [
+		"Idea Development Phase",
+		"Industrialization Phase"
+	],
+	"projectInnovationTypes": [
+		"ProductInnovation",
+		"ProcessInnovation"
+	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
@@ -43,8 +49,18 @@
 		},
 		{
 			"id": "2343252346356",
+			"attributeKey": "Revenue",
+			"attributeValue": "10000000"
+		},
+		{
+			"id": "2343252346355",
 			"attributeKey": "Country",
 			"attributeValue": "Switzerland"
+		},
+		{
+			"id": "2343252346356",
+			"attributeKey": "Country",
+			"attributeValue": "Italy"
 		}
 	]
 }
