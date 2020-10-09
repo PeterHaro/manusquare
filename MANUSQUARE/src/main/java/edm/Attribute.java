@@ -7,13 +7,6 @@ public class Attribute extends Resource {
 	private String type;
 	private String unitOfMeasurement;
 	
-//	public Attribute(String id, String key, String value, String type, String unitOfMeasurement) {
-//		super(id);
-//		this.key = key;
-//		this.value = value;
-//		this.type = type;
-//		this.unitOfMeasurement = unitOfMeasurement;
-//	}
 	
 	//if attribute is material there is no unitOfMeasurement
 	public Attribute(String key, String value) {
@@ -66,9 +59,6 @@ public class Attribute extends Resource {
 
 	public void setunitOfMeasurement(String unitOfMeasurement) {
 		this.unitOfMeasurement = unitOfMeasurement;
-	}
-	
-	
-	
+	}	
 
 }

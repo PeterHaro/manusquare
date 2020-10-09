@@ -1,13 +1,13 @@
 package sparql;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import edm.Attribute;
-import edm.Certification;
-import edm.Material;
-import edm.Process;
-import edm.SparqlRecord;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -19,14 +19,19 @@ import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import query.ConsumerQuery;
-import supplierdata.Supplier;
 
-import java.util.*;
-import java.util.Map.Entry;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 
-//TODO: This class should be seriously checked and very probably improved. 
-public class TripleStoreConnection {
+import edm.Attribute;
+import edm.ByProduct;
+import edm.Certification;
+import edm.SparqlRecord_BP;
+import json.ByProductSharingRequest.ByProductAttributes;
+import query.ByProductQuery;
+import supplierdata.Supplier_BP;
+
+public class TripleStoreConnection_BP {
 
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
@@ -49,7 +54,7 @@ public class TripleStoreConnection {
 	 * Nov 9, 2019
 	 * @throws OWLOntologyCreationException
 	 */
-	public static List<Supplier> createSupplierData(ConsumerQuery query, boolean testing, OWLOntology onto) {
+	public static List<Supplier_BP> createSupplierData(ByProductQuery query, boolean testing, OWLOntology onto) {
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 		if (sparql_endpoint_by_env != null) {
 			SPARQL_ENDPOINT = sparql_endpoint_by_env;
@@ -61,13 +66,13 @@ public class TripleStoreConnection {
 		Repository repository;
 
 		//use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
-		List<String> processNames = new ArrayList<String>();
+		List<String> byProductNames = new ArrayList<String>();
 
-		if (query.getProcesses() == null || query.getProcesses().isEmpty()) {
-			System.err.println("There are no processes specified!");
+		if (query.getByProducts() == null || query.getByProducts().isEmpty()) {
+			System.err.println("There are no by products specified!");
 		} else {
-			for (Process process : query.getProcesses()) {
-				processNames.add(process.getName());
+			for (ByProduct byProduct : query.getByProducts()) {
+				byProductNames.add(byProduct.getName());
 			}
 		}
 
@@ -89,10 +94,10 @@ public class TripleStoreConnection {
 			System.out.println(repository.isInitialized());
 		}
 
-		String strQuery = SparqlQuery.createSparqlQuery(query, onto);
+		String strQuery = SparqlQuery_BP.createMockupQueryBP(query, onto);
 
 		//open connection to GraphDB and run SPARQL query
-		Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
+		Set<SparqlRecord_BP> recordSet = new HashSet<SparqlRecord_BP>();
 
 
 		try (RepositoryConnection conn = repository.getConnection()) {
@@ -110,33 +115,30 @@ public class TripleStoreConnection {
 
 				Attribute supplierAttribute = new Attribute();
 
-				SparqlRecord record = null;
+				SparqlRecord_BP record = null;
 
 				while (result.hasNext()) {
 
 					//Map<String, String> attributeMap = new HashMap<String, String>();
 					BindingSet solution = result.next();
 
-					record = new SparqlRecord();
+					record = new SparqlRecord_BP();
 
+					System.out.println("Supplier: " + solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
 					record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-					record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
+					System.out.println("By-product: " + solution.getValue("byProductType").stringValue().replaceAll("\\s+", ""));
+					record.setByProduct(stripIRI(solution.getValue("byProductType").stringValue().replaceAll("\\s+", "")));
 
-					if (solution.getValue("materialType") != null) {
-
-						record.setMaterial(stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
-
-					}
 
 					if (solution.getValue("certificationType") != null) {
-
+						System.out.println("Certification: " + solution.getValue("certificationType").stringValue().replaceAll("\\s+", ""));
 						record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 
 					}
 
 
 					//deal with attributes ("Y", "N" or "O") according to consumer query - we do not want to include material attributes hence the check on AttributeMaterial
-					if ((solution.getValue("attributeType") != null && !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial"))) {
+					if (solution.getValue("attributeType") != null) {
 
 						//create supplierAttribute that can be compared to consumerAttribute
 						supplierAttribute.setKey(stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
@@ -152,18 +154,18 @@ public class TripleStoreConnection {
 
 						Map<String, String> attributeMap = null;
 
-						for (Attribute ca : consumerAttributes) {
+						for (Attribute bpa : consumerAttributes) {
 
 
-							if (stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")).equals(ca.getKey())) {
+							if (stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")).equals(bpa.getKey())) {
 
-								updatedSupplierAttribute = alignValues(supplierAttribute, ca);
+								updatedSupplierAttribute = alignValues(supplierAttribute, bpa);
 
 								if (condition.equals(">=")) {
 
 									attributeMap = new HashMap<String, String>();
 
-									if (Double.parseDouble(ca.getValue()) >= Double.parseDouble(updatedSupplierAttribute.getValue())) {
+									if (Double.parseDouble(bpa.getValue()) >= Double.parseDouble(updatedSupplierAttribute.getValue())) {
 										attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
 										record.setAttributeWeightMap(attributeMap);	
 
@@ -178,9 +180,9 @@ public class TripleStoreConnection {
 
 									attributeMap = new HashMap<String, String>();
 
-									updatedSupplierAttribute = alignValues(supplierAttribute, ca);
+									updatedSupplierAttribute = alignValues(supplierAttribute, bpa);
 
-									if (Double.parseDouble(updatedSupplierAttribute.getValue()) <= Double.parseDouble(ca.getValue()) ) {
+									if (Double.parseDouble(updatedSupplierAttribute.getValue()) <= Double.parseDouble(bpa.getValue()) ) {
 
 										attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
 										record.setAttributeWeightMap(attributeMap);	
@@ -198,9 +200,9 @@ public class TripleStoreConnection {
 
 									attributeMap = new HashMap<String, String>();
 
-									updatedSupplierAttribute = alignValues(supplierAttribute, ca);
+									updatedSupplierAttribute = alignValues(supplierAttribute, bpa);
 
-									if (Double.parseDouble(ca.getValue()) == Double.parseDouble(updatedSupplierAttribute.getValue())) {
+									if (Double.parseDouble(bpa.getValue()) == Double.parseDouble(updatedSupplierAttribute.getValue())) {
 										attributeMap.put(updatedSupplierAttribute.getKey(), "Y");								
 										record.setAttributeWeightMap(attributeMap);	
 
@@ -230,54 +232,50 @@ public class TripleStoreConnection {
 		//close connection to KB repository
 		repository.shutDown();
 
-
-
 		//get unique supplier ids used for constructing the supplier structure below
 		Set<String> supplierIds = new HashSet<String>();
 
-		for (SparqlRecord sr : recordSet) {
+		for (SparqlRecord_BP sr : recordSet) {
 			supplierIds.add(sr.getSupplierId());
 		}
 
 		Certification certification = null;
-		Supplier supplier = null;
-		List<Supplier> suppliersList = new ArrayList<Supplier>();
+		Supplier_BP supplier = null;
+		List<Supplier_BP> suppliersList = new ArrayList<Supplier_BP>();
 
-		Map<String, SetMultimap<Object, Object>> supplierToProcessMap = new HashMap<String, SetMultimap<Object, Object>>();
+		Map<String, SetMultimap<Object, Object>> supplierToByProductMap = new HashMap<String, SetMultimap<Object, Object>>();
 
-		//perform the same operation for attributes as for materials and then merge the two maps
-		Map<String, SetMultimap<String, Map<String,String>>> supplierToProcessMapAttributes = new HashMap<String, SetMultimap<String, Map<String, String>>>();
+		
+		Map<String, SetMultimap<String, Map<String,String>>> supplierToByProductMapAttributes = new HashMap<String, SetMultimap<String, Map<String, String>>>();
 
 		for (String id : supplierIds) {
-			SetMultimap<Object, Object> process2MaterialMap = HashMultimap.create();
-			SetMultimap<String, Map<String, String>> process2AttributeMap = HashMultimap.create();
+			SetMultimap<String, Map<String, String>> byProduct2AttributeMap = HashMultimap.create();
 			String supplierID = null;
 
-			for (SparqlRecord sr : recordSet) {
+			for (SparqlRecord_BP sr : recordSet) {
 
 				if (sr.getSupplierId().equals(id)) { 
 
-					process2MaterialMap.put(sr.getProcess(), sr.getMaterial());
-					process2AttributeMap.put(sr.getProcess(), sr.getAttributeWeightMap());
+					byProduct2AttributeMap.put(sr.getByProduct(), sr.getAttributeWeightMap());
 					supplierID = sr.getSupplierId();
 				}
 			}
 
-			supplierToProcessMap.put(supplierID, process2MaterialMap);
-			supplierToProcessMapAttributes.put(supplierID, process2AttributeMap);
+			supplierToByProductMapAttributes.put(supplierID, byProduct2AttributeMap);
+			
 		}
+		
 
-		Process process = null;
+		ByProduct byProduct = null;
 
 		//create supplier objects (supplier id, processes (including materials) and certifications) based on the multimap created in the previous step
 		for (String id : supplierIds) {
-			SetMultimap<Object, Object> processAndMaterialMap = null;
-			SetMultimap<String, Map<String, String>> processAndAttributeMap = null;
+			SetMultimap<String, Map<String, String>> byProductAndAttributeMap = null;
 
 			List<Certification> certifications = new ArrayList<Certification>();
-			List<Process> processes = new ArrayList<Process>();
+			List<ByProduct> byProducts = new ArrayList<ByProduct>();
 
-			for (SparqlRecord sr : recordSet) {
+			for (SparqlRecord_BP sr : recordSet) {
 
 				if (sr.getSupplierId().equals(id)) {
 
@@ -287,13 +285,13 @@ public class TripleStoreConnection {
 						certifications.add(certification);
 					}
 
-					//add processes and associated materials
-					processAndMaterialMap = supplierToProcessMap.get(sr.getSupplierId());
-					processAndAttributeMap = supplierToProcessMapAttributes.get(sr.getSupplierId());
-
+					//add byProducts 
+					byProductAndAttributeMap = supplierToByProductMapAttributes.get(sr.getSupplierId());
+					
+					
 					Map<String, String> attributeMap = new HashMap<String, String>();
 
-					Set<Map<String, String>> attributeMapSet = new HashSet<>(processAndAttributeMap.values());
+					Set<Map<String, String>> attributeMapSet = new HashSet<>(byProductAndAttributeMap.values());
 
 					for (Map<String, String> aMap : attributeMapSet) {
 
@@ -303,46 +301,19 @@ public class TripleStoreConnection {
 						}
 
 					}
+										
+					//get by-products for this supplier
+					byProducts.add(new ByProduct(sr.getByProduct()));
 
-					String processName = null;
-					Set<Object> materialList = new HashSet<Object>();
-
-					//iterate processAndMaterialMap and extract process and relevant materials for that process
-					for (Entry<Object, Collection<Object>> e_m : processAndMaterialMap.asMap().entrySet()) {
-
-						Set<Material> materialsSet = new HashSet<Material>();
-						//get list/set of materials
-						materialList = new HashSet<>(e_m.getValue());
-
-						//transform to Set<Material>
-						//FIXME: Is this transformation really necessary? Why not stick to *either* list or set?
-						for (Object o : materialList) {
-							if (o != null) { //Audun: if there are no suppliers materials retrieved from SPARQL, don´t add null-valued Material objects to the set of materials (should be handled properly with !isEmpty check in SimilarityMeasures.java)
-								materialsSet.add(new Material((String) o));
-							}
-						}
-
-						processName = (String) e_m.getKey();
-
-						//add relevant set of materials and attributes together with process name
-
-						process = new Process(processName, materialsSet, attributeMap);
-
-						//add processes
-						if (!processes.contains(process)) {
-							processes.add(process);
-						}
-
-					}
-
-
-					supplier = new Supplier(id, processes, certifications);
+					supplier = new Supplier_BP(id, byProducts, certifications);
 				}
 			}
 
 
 			suppliersList.add(supplier);
 		}
+		
+		System.out.println("Test: SuppliersList contains " + suppliersList.size() + " entries.");
 
 		return suppliersList;
 

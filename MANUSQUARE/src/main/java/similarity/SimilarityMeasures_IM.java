@@ -1,37 +1,30 @@
 package similarity;
 
-import com.google.common.graph.MutableGraph;
-import edm.Attribute;
-import edm.Certification;
-import edm.Material;
-import edm.Process;
-import owlprocessing.OntologyOperations;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLClass;
-import query.ConsumerQuery;
+
+import com.google.common.graph.MutableGraph;
+
+import edm.Certification;
+import owlprocessing.OntologyOperations;
 import query.InnovationManagementQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
 import supplierdata.InnovationManager;
-import supplierdata.Supplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 
 public class SimilarityMeasures_IM {
 
@@ -142,8 +135,14 @@ public class SimilarityMeasures_IM {
 		debuggingOutput.append("\nRequired certificates by consumer: " + StringUtilities.printListItems(consumerCertifications));
 		debuggingOutput.append("\nCertifications possessed by supplier: " + StringUtilities.printListItems(supplierCertifications));
 		debuggingOutput.append("\ncertificationSim is: " + certificationSim);
-
+		
+		
+		//FIXME: Find a better solution to ensure that suppliers having innovationPhaseSim / innovationTypeSim = 1.0 are included in the returned list of suppliers
+		if (innovationPhaseSim == 1.0 || innovationTypeSim == 1.0) {
+			finalSim = (((innovationPhaseSim + innovationTypeSim) / 2) * 0.9) + (((sectorSim + skillSim) / 2) * 0.05) + (certificationSim * 0.05);
+		} else {
 		finalSim = (((innovationPhaseSim + innovationTypeSim + sectorSim) / 3) * 0.3) + (skillSim * 0.5) + (certificationSim * 0.2);
+		}
 
 		similarityList.add(finalSim);
 		debuggingOutput.append("\nSimilarityList contains: " + similarityList);

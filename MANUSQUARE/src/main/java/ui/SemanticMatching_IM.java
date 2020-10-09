@@ -5,7 +5,7 @@ import com.google.common.graph.MutableGraph;
 import com.google.gson.GsonBuilder;
 import edm.Certification;
 import edm.Material;
-import edm.Process;
+import edm.ByProduct;
 import graph.SimpleGraph;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;

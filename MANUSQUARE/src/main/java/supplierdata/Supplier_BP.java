@@ -2,41 +2,33 @@ package supplierdata;
 
 import java.util.List;
 
+import edm.ByProduct;
 import edm.Certification;
-import edm.Material;
-import edm.Process;
 
 
-public class Supplier {
+public class Supplier_BP {
 	
 	String id;
 	String supplierName;
 	String supplierNationality;
 	String supplierCity;
 	List<Certification> certifications;
-	List<Process> processes;
-	//List<Material> materials;
+	List<ByProduct> byProducts;
 	
-	public Supplier (String id, List<Process> processes, List<Certification> certifications) {
+	public Supplier_BP (String id, List<ByProduct> byProducts, List<Certification> certifications) {
 		this.id = id;
-		this.processes = processes;
-		this.certifications = certifications;
-	}
-	
-	public Supplier (String id, List<Process> processes, List<Material> materials, List<Certification> certifications) {
-		this.id = id;
-		this.processes = processes;
-		//this.materials = materials;
+		this.byProducts = byProducts;
 		this.certifications = certifications;
 	}
 	
 	
-	public Supplier(String supplierName) {
+	
+	public Supplier_BP(String supplierName) {
 		super();
 		this.supplierName = supplierName;
 	}
 	
-	public Supplier() {}
+	public Supplier_BP() {}
 	
 
 	public String getId() {
@@ -80,20 +72,12 @@ public class Supplier {
 		this.certifications = certifications;
 	}
 
-	public List<Process> getProcesses() {
-		return processes;
+	public List<ByProduct> getByProducts() {
+		return byProducts;
 	}
 
-	public void setProcesses(List<Process> processes) {
-		this.processes = processes;
+	public void setProcesses(List<ByProduct> byProducts) {
+		this.byProducts = byProducts;
 	}
-
-//	public List<Material> getMaterials() {
-//		return materials;
-//	}
-//
-//	public void setMaterials(List<Material> materials) {
-//		this.materials = materials;
-//	}
 
 }

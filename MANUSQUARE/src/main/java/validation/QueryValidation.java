@@ -21,6 +21,19 @@ public class QueryValidation {
 	
 	public QueryValidation () {}
 	
+	public static String validateByProductName(String byProductName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+
+		String validatedProcessName = null;
+
+		if (!allOntologyClasses.contains(byProductName)) {
+			validatedProcessName = getMostSimilarConcept(byProductName, QueryConceptType.BYPRODUCT, onto, EmbeddingSingletonDataManager.VAM);
+		} else {
+			validatedProcessName = byProductName;
+		}
+				
+		return validatedProcessName;
+	}
+	
 	/**
 	 * Ensures that an innovation phase included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param innovationPhase innovation phase included by the consumer
@@ -247,7 +260,9 @@ public class QueryValidation {
 			classes.addAll(OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("AGVSectorClass", onto)));
 		} else if (conceptType == QueryConceptType.SKILL) {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("CapabilityType", onto));
-		}
+		} else if (conceptType == QueryConceptType.BYPRODUCT) {
+			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
+		} 
 
 		//if the consumerInput equals an ontology concept we return this without using syntactic/semantic matching
 		if (containsIgnoreCase(classes, consumerInput)) {

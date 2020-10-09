@@ -5,16 +5,21 @@ import com.google.common.graph.MutableGraph;
 import com.google.gson.GsonBuilder;
 import edm.Certification;
 import edm.Material;
-import edm.Process;
+import edm.ByProduct;
 import graph.SimpleGraph;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
+
+import query.ByProductQuery;
 import query.ConsumerQuery;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures;
+import similarity.SimilarityMeasures_BP;
 import similarity.SimilarityMethods;
 import sparql.TripleStoreConnection;
+import sparql.TripleStoreConnection_BP;
 import supplierdata.Supplier;
+import supplierdata.Supplier_BP;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
@@ -29,7 +34,7 @@ import java.util.Map.Entry;
  *
  * @author audunvennesland
  */
-public class SemanticMatching_MVP {
+public class SemanticMatching_BP {
 
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
@@ -57,7 +62,7 @@ public class SemanticMatching_MVP {
 	 * @throws OWLOntologyCreationException
 	   Mar 5, 2020
 	 */
-	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performSemanticMatching_BP(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
@@ -83,15 +88,16 @@ public class SemanticMatching_MVP {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
-		ConsumerQuery query = ConsumerQuery.createConsumerQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
-		List<String> processes = new ArrayList<>();
+		ByProductQuery query = ByProductQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
+		
+		List<String> byProducts = new ArrayList<>();
 
-		for (Process p : query.getProcesses()) {
-			processes.add(p.getName());
+		for (ByProduct p : query.getByProducts()) {
+			byProducts.add(p.getName());
 
 		}
 		
-		int numConsumerProcesses = processes.size();
+		int numByProducts = byProducts.size();
 		
 
 		//create graph using Guava´s graph library instead of using Neo4j
@@ -100,17 +106,15 @@ public class SemanticMatching_MVP {
 		graph = SimpleGraph.createGraph(ontology);
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<Supplier> supplierData = TripleStoreConnection.createSupplierData(query, testing, ontology);
+		List<Supplier_BP> supplierData = TripleStoreConnection_BP.createSupplierData(query, testing, ontology);
 
-		Map<Supplier, Double> supplierScores = new HashMap<Supplier, Double>();
+		Map<Supplier_BP, Double> supplierScores = new HashMap<Supplier_BP, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> supplierSim = new LinkedList<Double>();
 
-		for (Supplier supplier : supplierData) {
-			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-			//get the highest score for the process chains offered by supplier n
-//			supplierScores.put(supplier, getHighestScore(supplierSim));	
-			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numConsumerProcesses));	
+		for (Supplier_BP supplier : supplierData) {
+			supplierSim = SimilarityMeasures_BP.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numByProducts));	
 			
 		}
 
@@ -136,26 +140,19 @@ public class SemanticMatching_MVP {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsole(List<Supplier> supplierData, ConsumerQuery query, Map<Supplier, Double> supplierScores, int numResults) {
+	private static void printResultsToConsole(List<Supplier_BP> supplierData, ByProductQuery query, Map<Supplier_BP, Double> supplierScores, int numResults) {
 
-		Map<Supplier, Double> rankedResults = sortDescending(supplierScores);
+		Map<Supplier_BP, Double> rankedResults = sortDescending(supplierScores);
 
-		Iterable<Entry<Supplier, Double>> firstEntries =
+		Iterable<Entry<Supplier_BP, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//below code is used for testing purposes
 		System.out.println("Consumer query:");
 		int n = 1;
-		for (Process p : query.getProcesses()) {
-			System.out.println("Process " + n + ": " + p.getName());
+		for (ByProduct p : query.getByProducts()) {
+			System.out.println("ByProduct " + n + ": " + p.getName());
 
-			//check if the query includes materials
-			if (p.getMaterials() == null || p.getMaterials().isEmpty()) {
-			} else {
-				for (Material m : p.getMaterials()) {
-					System.out.println(" - Material: " + m.getName());
-				}
-			}
 			n++;
 		}
 
@@ -169,7 +166,7 @@ public class SemanticMatching_MVP {
 
 		//get all processes for the suppliers included in the ranked list
 		List<String> rankedSuppliers = new ArrayList<String>();
-		for (Entry<Supplier, Double> e : firstEntries) {
+		for (Entry<Supplier_BP, Double> e : firstEntries) {
 			rankedSuppliers.add(e.getKey().getId());
 		}
 
@@ -178,15 +175,15 @@ public class SemanticMatching_MVP {
 		int ranking = 0;
 
 
-		for (Entry<Supplier, Double> e : firstEntries) {
+		for (Entry<Supplier_BP, Double> e : firstEntries) {
 			ranking++;
 			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
 
-			for (Supplier sup : supplierData) {
+			for (Supplier_BP sup : supplierData) {
 				if (e.getKey().getId().equals(sup.getId())) {
 
 					System.out.println("Processes:");
-					for (Process pro : sup.getProcesses()) {
+					for (ByProduct pro : sup.getByProducts()) {
 						System.out.println(pro.toString());
 					}
 
@@ -205,15 +202,15 @@ public class SemanticMatching_MVP {
 		}
 	}
 
-	private static Map<String, Double> extractBestSuppliers(Map<Supplier, Double> supplierScores, int numResults) {
+	private static Map<String, Double> extractBestSuppliers(Map<Supplier_BP, Double> supplierScores, int numResults) {
 		//sort the results from highest to lowest score and return the [numResults] highest scores
-		Map<Supplier, Double> rankedResults = sortDescending(supplierScores);
-		Iterable<Entry<Supplier, Double>> firstEntries =
+		Map<Supplier_BP, Double> rankedResults = sortDescending(supplierScores);
+		Iterable<Entry<Supplier_BP, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
-		for (Entry<Supplier, Double> e : firstEntries) {
+		for (Entry<Supplier_BP, Double> e : firstEntries) {
 			finalSupplierMap.put(e.getKey().getId(), e.getValue());
 		}
 

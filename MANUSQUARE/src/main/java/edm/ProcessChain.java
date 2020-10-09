@@ -11,10 +11,10 @@ public class ProcessChain {
 	private float throughputTime;
 	private String description;
 	private String version;
-	private Set<Process> processes;
+	private Set<ByProduct> processes;
 	
 	public ProcessChain(float meanTime, String processChainID, float additionaTime, String processChainName,
-			float throughputTime, String description, String version, Set<Process> processes) {
+			float throughputTime, String description, String version, Set<ByProduct> processes) {
 		super();
 		this.meanTime = meanTime;
 		this.processChainID = processChainID;
@@ -84,11 +84,11 @@ public class ProcessChain {
 		this.version = version;
 	}
 
-	public Set<Process> getProcesses() {
+	public Set<ByProduct> getProcesses() {
 		return processes;
 	}
 
-	public void setProcesses(Set<Process> processes) {
+	public void setProcesses(Set<ByProduct> processes) {
 		this.processes = processes;
 	}
 	

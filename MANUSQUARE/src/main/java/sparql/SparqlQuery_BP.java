@@ -27,76 +27,120 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import edm.Attribute;
-import edm.Material;
-import edm.Process;
+import edm.ByProduct;
 import exceptions.NoAttributeException;
 import graph.SimpleGraph;
+import json.ByProductSharingRequest.ByProductAttributes;
 import owlprocessing.OntologyOperations;
-import query.ConsumerQuery;
+import query.ByProductQuery;
 import utilities.StringUtilities;
 
 
-public class SparqlQuery {
+public class SparqlQuery_BP {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/Test8-supplierLanguages.json";
+		String filename = "./files/SUPSI/ByProductSharing_30092020.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 
-		ConsumerQuery query = ConsumerQuery.createConsumerQuery(filename, onto);
+		ByProductQuery query = ByProductQuery.createByProductQuery(filename, onto);
 
-		String test = createSparqlQuery(query, onto);
+		String test = createMockupQueryBP(query, onto);
 
 		System.out.println(test);
 
 
 	}
 	
-	
-
-	public static String createSparqlQuery(ConsumerQuery cq, OWLOntology onto) {
-
-		Set<Material> materials = new HashSet<Material>();
-		Set<Attribute> attributes = new HashSet<Attribute>();
-		Set<edm.Process> processes = cq.getProcesses();
+	public static String createMockupQueryBP(ByProductQuery bpq, OWLOntology onto) {
 		
-		Set<String> languages = cq.getLanguage();        
+		Set<String> languages = bpq.getLanguage();
+		
+
+		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
+		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
+		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
+		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
+		strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+		strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
+
+//		strQuery += "\n?improfile core:hasSupplier ?supplier . \n";
+//		strQuery += "\n?supplier core:hasName ?supplierName . \n";
+//		strQuery += "\n?improfile core:hasInnovationPhase ?innovationPhase . \n";
+
+		strQuery += "\nSELECT DISTINCT ?byProduct ?byProductType ?supplier ?supplierName ?certificationType\n";
+		
+		strQuery += "\nWHERE { \n";
+		
+		strQuery += "\n?byProduct core:hasSupplier ?supplier . \n";
+		strQuery += "\n?supplier core:hasName ?supplierName . \n";
+		
+		strQuery += "\n?byProduct core:hasInnovationPhase ?innovationPhase . \n";
+		strQuery += "\n?innovationPhase rdf:type ?byProductType . \n";
+
+		//certifications (as before we just include all certifications associated with the relevant suppliers, not considering the certifications required by the consumer at this point,
+		//this is taken care of by the matchmaking algo)
+		strQuery += "\nOPTIONAL {?supplier core:hasCertification ?certification . ?certification rdf:type ?certificationType . \n";
+		strQuery += "FILTER ( ?certificationType not in ( owl:NamedIndividual ) && ?certificationType not in ( owl:Class )) \n";
+		strQuery += "} \n";
+
+
+		if (!isNullOrEmpty(languages)) {
+
+			//strQuery += "\nOPTIONAL { \n";
+			strQuery += "\n?supplier core:hasAttribute ?languageAttribute . \n";
+			strQuery += "?languageAttribute rdf:type ?languageAttributeType . \n";       
+			strQuery += "?languageAttribute core:hasValue ?language . \n";
+			strQuery += "VALUES ?languageAttributeType {ind:Language} . \n";
+			//strQuery += "} \n";
+			strQuery += "FILTER(?language in (" + StringUtilities.printLanguageSetItems(languages) + ")) \n";
+
+		}
+
+		strQuery += "}";
+
+		//System.out.println(strQuery);
+
+		return strQuery;
+		
+	}
+
+
+	public static String createSparqlQuery(ByProductQuery bpq, OWLOntology onto) {
+
+		Set<ByProductAttributes> attributes = new HashSet<ByProductAttributes>();
+		Set<edm.ByProduct> byProducts = bpq.getByProducts();
+		
+		Set<String> languages = bpq.getLanguage();        
 
 		//get the Least Common Subsumer (LCS) of the process concepts included by the consumer
 		
-		String lcs = getLCS(processes, onto);
+		String lcs = getLCS(byProducts, onto);
 
 		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
-		double supplierMaxDistance = cq.getSupplierMaxDistance();
+		double supplierMaxDistance = bpq.getSupplierMaxDistance();
 
-		Map<String, String> customerLocationInfo = cq.getCustomerLocationInfo();
+		Map<String, String> customerLocationInfo = bpq.getCustomerLocationInfo();
 		double lat = 0, lon = 0;
 
 		//merge attributes and materials in order to create VALUES restriction in SPARQL query
 		Set<String> materialsAndAttributes = new HashSet<String>();
 
 		//get the attributes and materials associated with processes included in the consumer query
-		for (Process p : processes) {
-			if (p.getAttributes() != null) {
+		for (ByProduct bp : byProducts) {
+			if (bp.getAttributes() != null) {
 
-				for (Attribute a : p.getAttributes()) {
+				for (ByProductAttributes a : bp.getAttributes()) {
 					if (isSupportedAttribute(a)) {
 						attributes.add(a);
-						materialsAndAttributes.add(a.getKey());
+						materialsAndAttributes.add(a.getAttributeKey());
 					}
 				}
 			}
 
-			if (p.getMaterials() != null) {
-
-				for (Material m : p.getMaterials()) {
-					materials.add(m);
-					materialsAndAttributes.add(m.getName());
-				}
-			}
 		}
 
 		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
@@ -127,11 +171,11 @@ public class SparqlQuery {
 		//attributes specified in the consumer query as long as there are materials (included in materialsAndAttributes). Doesn´t seem to cause any issues of any sort though.
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
-			strQuery += "\nSELECT DISTINCT ?processChain ?processType ?supplier ?certificationType \n";
+			strQuery += "\nSELECT DISTINCT ?byProduct ?byProductType ?supplier ?certificationType \n";
 
 		} else {
 
-			strQuery += "\nSELECT DISTINCT ?processChain ?processType ?supplier ?materialType ?certificationType ?attributeType (str(?uom) as ?uomStr) ?attributeValue \n";
+			strQuery += "\nSELECT DISTINCT ?processChain ?processType ?supplier ?certificationType ?attributeType (str(?uom) as ?uomStr) ?attributeValue \n";
 
 		}
 
@@ -200,11 +244,11 @@ public class SparqlQuery {
 		attributeQuery.append("OPTIONAL {?uomInd core:hasName ?uom . }\n");
 		attributeQuery.append("OPTIONAL {?attribute core:hasValue ?attributeValue . }\n");
 		
-		attributeQuery.append("#GET MATERIALS\n");
-		attributeQuery.append("OPTIONAL {?attribute core:hasObjectValue ?attributeMaterialValue .\n");
-		attributeQuery.append("?attributeMaterialValue rdf:type ?materialType . \n");
-		attributeQuery.append("FILTER ( ?materialType not in ( owl:NamedIndividual )) \n");
-		attributeQuery.append("} \n");
+//		attributeQuery.append("#GET MATERIALS\n");
+//		attributeQuery.append("OPTIONAL {?attribute core:hasObjectValue ?attributeMaterialValue .\n");
+//		attributeQuery.append("?attributeMaterialValue rdf:type ?materialType . \n");
+//		attributeQuery.append("FILTER ( ?materialType not in ( owl:NamedIndividual )) \n");
+//		attributeQuery.append("} \n");
 		
 		attributeQuery.append("VALUES ?attributeType {" + restrictedValues + "ind:AttributeMaterial} \n"); //these must be retrieved from the consumer query
 		attributeQuery.append("FILTER ( ?attributeType not in ( owl:NamedIndividual )) \n");
@@ -228,12 +272,12 @@ public class SparqlQuery {
 		return values.toString();
 	}
 
-	private static String getLCS(Set<Process> consumerProcesses, OWLOntology onto) {
+	private static String getLCS(Set<ByProduct> requestedByProducts, OWLOntology onto) {
 
 		//27.02.2020: Find the LCS of an arbitrary set of process concepts
 		List<List<String>> supersList = new LinkedList<List<String>>();
 
-		for (Process p : consumerProcesses) {
+		for (ByProduct p : requestedByProducts) {
 			supersList.add(OntologyOperations.getEntitySuperclassesFragmentsAsList(onto, OntologyOperations.getClass(p.getName(), onto)));
 		}
 
@@ -265,91 +309,6 @@ public class SparqlQuery {
 		
 		return lcs;
 	}
-
-
-	//    private static String queryAttributes(Set<Attribute> attributes) {
-	//
-	//        StringBuilder attributeQuery = new StringBuilder();
-	//
-	//        String attribute, attributeType, attributeClass, attributeValue, attributeVariable, updatedAttributeValue = null;
-	//
-	//        //retrieved from Attribute object
-	//        String attKey, attValue = null;
-	//
-	//        Map<String, String> attributeConditions = mapAttributeConditions(attributes);
-	//        
-	//        
-	//        String restrictedValues = getRestrictedValues(attributes);
-	//        
-	//        Set<String> attributeTypes = new HashSet<String>();
-	//        
-	//        for (Attribute att : attributes) {
-	//        	
-	//        	attributeTypes.add(att.getKey());
-	//        	
-	//        }
-	//        
-	//        int attCounter = 0;
-	//
-	//        for (Attribute att : attributes) {
-	//
-	//            attKey = att.getKey();
-	//            attValue = att.getValue();
-	//            attribute = "?" + att.getKey().toLowerCase() + "Attribute";
-	//            attributeType = "?" + att.getKey().toLowerCase() + "AttributeType";
-	//            attributeClass = "ind:" + att.getKey();
-	//            attributeValue = "?" + att.getKey().toLowerCase() + "Value";
-	//            attributeVariable = "?" + att.getKey() + "Attr";
-	//            updatedAttributeValue = "?updated" + attKey + "Value" + attCounter;
-	//
-	//            attributeQuery.append("\nOPTIONAL {?process core:hasAttribute " + attribute + " . \n");
-	//            attributeQuery.append(attribute + " rdf:type " + attributeType + " . \n");
-	//            
-	//            //if unit of measurement is included
-	//            if (att.getunitOfMeasurement() != null && attributeConditions.get(attKey) != "!") {
-	//            	
-	//            		
-	//                attributeQuery.append(attribute + " core:hasUnitOfMeasure " + "?uomInd .\n");
-	//                attributeQuery.append("?uomInd" + " core:hasName " + "?uom .\n");
-	//
-	//                //attributeQuery.append(" VALUES " + attributeType + " {" + restrictedValues + "} . \n");
-	//                attributeQuery.append(attribute + " core:hasValue " + attributeValue + " . \n");
-	//
-	//                attributeQuery.append("} \n");
-	//
-	//                attributeQuery.append("\nBIND ( \n");
-	//                attributeQuery.append("IF (bound(?uom) && ?uom = \"mm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 1, \n");
-	//                attributeQuery.append("IF (bound(?uom) && ?uom = \"cm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 10,\n");
-	//                attributeQuery.append("IF (bound(?uom) && ?uom = \"dm\"^^rdfs:Literal, xsd:decimal(" + attributeValue + ") * 100,\n");
-	//                attributeQuery.append("xsd:decimal(" + attributeValue + ")))) as " + updatedAttributeValue + ") \n");
-	//
-	//                attributeQuery.append("\n");
-	//                attributeQuery.append("BIND ( \n");
-	//                attributeQuery.append("IF (bound(" + updatedAttributeValue + ") && " + updatedAttributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
-	//                attributeQuery.append("IF (bound(" + updatedAttributeValue + ") && " + updatedAttributeValue + " " + getOpposite(attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
-	//                attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
-	//
-	//                attributeQuery.append(" VALUES " + attributeType + " {" + restrictedValues + "} . \n");
-	//                
-	//                attCounter++;
-	//                
-	//            	
-	//            } else {
-	//                attributeQuery.append(" VALUES " + attributeType + " {" + attributeClass + "} . \n");
-	//                attributeQuery.append(attribute + " core:hasValue " + attributeValue + " . \n");
-	//
-	//                attributeQuery.append("} \n");
-	//
-	//                attributeQuery.append("BIND ( \n");
-	//                attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + attributeConditions.get(attKey) + " " + attValue + ", " + "\"Y\"" + ", \n");
-	//                attributeQuery.append("IF (bound(" + attributeValue + ")" + " && " + attributeValue + " " + getOpposite(attributeConditions.get(attKey)) + " " + attValue + ", " + "\"N\"" + ", \n");
-	//                attributeQuery.append("\"O\"))" + " as " + attributeVariable + ") \n");
-	//            }
-	//        }
-	//
-	//        return attributeQuery.toString();
-	//
-	//    }
 
 
 
@@ -433,7 +392,7 @@ public class SparqlQuery {
 
 	}
 
-	public static boolean isSupportedAttribute (Attribute attribute) {
+	public static boolean isSupportedAttribute (ByProductAttributes attribute) {
 
 		Set<String> supportedAttributes = new HashSet<String>();
 		supportedAttributes.add("Length");
@@ -467,7 +426,7 @@ public class SparqlQuery {
 		supportedAttributes.add("Axis");
 		supportedAttributes.add("CuttingSpeed");
 
-		if (supportedAttributes.contains(attribute.getKey())) {
+		if (supportedAttributes.contains(attribute.getAttributeKey())) {
 			return true;
 		} else {
 			return false;

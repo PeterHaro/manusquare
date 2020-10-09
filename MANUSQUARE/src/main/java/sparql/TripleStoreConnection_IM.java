@@ -6,7 +6,7 @@ import com.google.common.collect.SetMultimap;
 import edm.Attribute;
 import edm.Certification;
 import edm.Material;
-import edm.Process;
+import edm.ByProduct;
 import edm.SparqlRecord;
 import edm.SparqlRecord_IM;
 
