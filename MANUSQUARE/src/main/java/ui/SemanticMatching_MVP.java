@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
-import graph.SimpleGraph;
+import graph.Graph;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import query.ConsumerQuery;
@@ -97,7 +97,7 @@ public class SemanticMatching_MVP {
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
 
-		graph = SimpleGraph.createGraph(ontology);
+		graph = Graph.createGraph(ontology);
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
 		List<Supplier> supplierData = TripleStoreConnection.createSupplierData(query, testing, ontology);

@@ -17,6 +17,27 @@ public class StringUtilities {
 	static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	static OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
 	
+	
+	/**
+	 * Removes the IRIs in front of processes etc. retrieved from the Semantic Infrastructure
+	 *
+	 * @param inputConcept an input ontology concept (with full IRI)
+	 * @return ontology concept with the IRI removed
+	 * Nov 5, 2019
+	 */
+	public static String stripIRI(String inputConcept) {
+		String returnedConceptName = null;
+		if (inputConcept.contains("http://manusquare.project.eu/industrial-manusquare#")) {
+			returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/industrial-manusquare#", "");
+		} else if (inputConcept.contains("http://manusquare.project.eu/core-manusquare#")) {
+			returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/core-manusquare#", "");
+		} else {
+			returnedConceptName = inputConcept;
+		}
+		return returnedConceptName;
+
+	}
+	
 	/**
 	 * Checks if a set of strings includes the given string while ignoring the casing
 	 * @param set set of strings

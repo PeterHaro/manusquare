@@ -4,6 +4,7 @@
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:fn="http://www.w3.org/2005/xpath-functions#"
      xmlns:sp="http://spinrdf.org/sp#"
+     xmlns:app="http://manusquare.project.eu/app-manusquare#"
      xmlns:dct="http://purl.org/dc/terms/"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:ind="http://manusquare.project.eu/industrial-manusquare#"
@@ -176,6 +177,20 @@
         <rdfs:domain rdf:resource="http://manusquare.project.eu/core-manusquare#EnergyMix"/>
         <rdfs:range rdf:resource="http://manusquare.project.eu/core-manusquare#IndicatorCoefficient"/>
     </owl:ObjectProperty>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasInnovationPhase -->
+
+
+    <owl:ObjectProperty rdf:about="http://manusquare.project.eu/core-manusquare#hasInnovationPhase"/>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasInnovationType -->
+
+
+    <owl:ObjectProperty rdf:about="http://manusquare.project.eu/core-manusquare#hasInnovationType"/>
     
 
 
@@ -378,6 +393,20 @@
         <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
         <rdfs:range rdf:resource="http://manusquare.project.eu/core-manusquare#Resource"/>
     </owl:ObjectProperty>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasSector -->
+
+
+    <owl:ObjectProperty rdf:about="http://manusquare.project.eu/core-manusquare#hasSector"/>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasSkill -->
+
+
+    <owl:ObjectProperty rdf:about="http://manusquare.project.eu/core-manusquare#hasSkill"/>
     
 
 
@@ -1112,6 +1141,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#ImProfile -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#ImProfile">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#CoreClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#IndicatorCoefficient -->
 
 
@@ -1127,6 +1166,26 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#InnovationFacilitator">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#Stakeholder"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#InnovationPhase -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#InnovationPhase">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#CoreClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#InnovationType -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#InnovationType">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#CoreClass"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -1473,6 +1532,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#Skill -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#Skill">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#Resource"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#Stakeholder -->
 
 
@@ -1528,6 +1597,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#Waste">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#ItemType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#WsProfile -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/core-manusquare#WsProfile">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#CoreClass"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -2895,6 +2974,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#BusinessModelInnovation -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#BusinessModelInnovation">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#BusinessService -->
 
 
@@ -3034,6 +3123,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#CalculatingMachines">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#OfficeAndAccountingMachinery"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#Capacity -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Capacity">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -3531,6 +3630,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#ConceptDevelopmentPhase -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#ConceptDevelopmentPhase">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationPhase"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#ConceptValidation -->
 
 
@@ -3793,6 +3902,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#CuttingSpeed -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#CuttingSpeed">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#CuttingToolAndMachineToolAccessoryManufacturing -->
 
 
@@ -3969,6 +4088,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Dermal_protection_Textile">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#Silk_Sportwear"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#DesignPhase -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#DesignPhase">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationPhase"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -4791,6 +4920,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#EngineeringPhase -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#EngineeringPhase">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationPhase"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#EngineeringService -->
 
 
@@ -5198,10 +5337,10 @@
     
 
 
-    <!-- http://manusquare.project.eu/industrial-manusquare#FixturingDesing -->
+    <!-- http://manusquare.project.eu/industrial-manusquare#FixturingDesign -->
 
 
-    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#FixturingDesing">
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#FixturingDesign">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#ConceptDefinitionOrDesign"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#EngineeringService"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
@@ -6104,6 +6243,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#IdeaDevelopmentPhase -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#IdeaDevelopmentPhase">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationPhase"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#IgnitionWiringSets -->
 
 
@@ -6230,6 +6379,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#IndustrialValveManufacturing">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#MetalValveManufacturing"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#IndustrializationPhase -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#IndustrializationPhase">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationPhase"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -7135,6 +7294,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialHandlingEquipmentManufacturing">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#OtherGeneralPurposeMachineryManufacturing"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#MaterialInnovation -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialInnovation">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -10017,6 +10186,16 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#ProcessInnovation -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#ProcessInnovation">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#ProcessPlanningService -->
 
 
@@ -10032,6 +10211,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#Procurement">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#BusinessService"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#ProductInnovation -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#ProductInnovation">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -11800,6 +11989,7 @@
 
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#NonShapingProcess"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
@@ -11900,6 +12090,16 @@
 
     <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#TapsAndValves">
         <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/industrial-manusquare#PumpsAndCompressors"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:Class>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#TechnologyInnovation -->
+
+
+    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#TechnologyInnovation">
+        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#InnovationType"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:Class>
     
@@ -13311,16 +13511,6 @@
     
 
 
-    <!-- http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm) -->
-
-
-    <owl:Class rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm)">
-        <rdfs:subClassOf rdf:resource="http://manusquare.project.eu/core-manusquare#AttributeType"/>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    </owl:Class>
-    
-
-
     <!-- http://manusquare.project.eu/industrial-manusquare#Water_and_Mineral_salts_Solution_(temperature,_indice_eutrofizzazione) -->
 
 
@@ -13334,18 +13524,14 @@
     <!-- http://www.w3.org/1999/02/22-rdf-syntax-ns#Property -->
 
 
-    <owl:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    </owl:Class>
+    <owl:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     
 
 
     <!-- http://www.w3.org/2000/01/rdf-schema#Class -->
 
 
-    <owl:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    </owl:Class>
+    <owl:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class"/>
     
 
 
@@ -13775,6 +13961,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#ImProfile -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#ImProfile">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#IndicatorCoefficient -->
 
 
@@ -13788,6 +13983,24 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#InnovationFacilitator">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#InnovationPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#InnovationPhase">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#InnovationType -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#InnovationType">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -14099,6 +14312,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#Skill -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#Skill">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#Stakeholder -->
 
 
@@ -14148,6 +14370,15 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#Waste">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#WsProfile -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#WsProfile">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -14383,6 +14614,24 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#hasIndicatorCoefficent">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasInnovationPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#hasInnovationPhase">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasInnovationType -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#hasInnovationType">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -14676,6 +14925,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/core-manusquare#hasSector -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#hasSector">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/core-manusquare#hasSelectionType -->
 
 
@@ -14711,6 +14969,15 @@
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#hasSize">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DataProperty"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/core-manusquare#hasSkill -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/core-manusquare#hasSkill">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
 
@@ -16075,6 +16342,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#BusinessModelInnovation -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#BusinessModelInnovation">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#BusinessService -->
 
 
@@ -16205,6 +16481,15 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CalculatingMachines">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#Capacity -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#Capacity">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -16660,6 +16945,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#ConceptDevelopmentPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#ConceptDevelopmentPhase">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#ConceptValidation -->
 
 
@@ -16894,6 +17188,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#CuttingSpeed -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#CuttingSpeed">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#CuttingToolAndMachineToolAccessoryManufacturing -->
 
 
@@ -17051,6 +17354,15 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#Dermal_protection_Textile">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#DesignPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#DesignPhase">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -17785,6 +18097,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#EngineeringPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#EngineeringPhase">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#EngineeringService -->
 
 
@@ -18145,10 +18466,10 @@
     
 
 
-    <!-- http://manusquare.project.eu/industrial-manusquare#FixturingDesing -->
+    <!-- http://manusquare.project.eu/industrial-manusquare#FixturingDesign -->
 
 
-    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#FixturingDesing">
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#FixturingDesign">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -18955,6 +19276,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#IdeaDevelopmentPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#IdeaDevelopmentPhase">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#IgnitionWiringSets -->
 
 
@@ -19067,6 +19397,15 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#IndustrialValveManufacturing">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#IndustrializationPhase -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#IndustrializationPhase">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -19877,6 +20216,15 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialHandlingEquipmentManufacturing">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#MaterialInnovation -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialInnovation">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -22495,6 +22843,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#ProcessInnovation -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#ProcessInnovation">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#ProcessPlanningService -->
 
 
@@ -22508,6 +22865,15 @@
 
 
     <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#Procurement">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://manusquare.project.eu/industrial-manusquare#ProductInnovation -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#ProductInnovation">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
     </owl:NamedIndividual>
     
@@ -24169,6 +24535,15 @@
     
 
 
+    <!-- http://manusquare.project.eu/industrial-manusquare#TechnologyInnovation -->
+
+
+    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#TechnologyInnovation">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://manusquare.project.eu/industrial-manusquare#TechnologyProcurement -->
 
 
@@ -25429,15 +25804,6 @@
     
 
 
-    <!-- http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm) -->
-
-
-    <owl:NamedIndividual rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm)">
-        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://manusquare.project.eu/industrial-manusquare#Water_and_Mineral_salts_Solution_(temperature,_indice_eutrofizzazione) -->
 
 
@@ -25744,6 +26110,12 @@
         <rdfs:label>IdeaNetwork</rdfs:label>
         <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#ImProfile">
+        <rdfs:comment>Innovation management profile</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+        <rdfs:label>ImProfile</rdfs:label>
+        <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#IndicatorCoefficient">
         <rdfs:comment>Impact coefficient for indicators that does not follow a mathematical linear behaviour (namely social and economic one), its usage is defined on a case-by-case basis.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
@@ -25755,6 +26127,12 @@
         <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
         <rdfs:label>InnovationFacilitator</rdfs:label>
         <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#InnovationPhase">
+        <rdfs:label xml:lang="en">Innovation Phase</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#InnovationType">
+        <rdfs:label xml:lang="en">Innovation Type</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#Investor">
         <rdfs:comment>Investor specialized the Stakeholder class. The Investor represent the concept of a company or a person which is looking for new business and investment ideas.</rdfs:comment>
@@ -25916,6 +26294,12 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#SemifinishedProduct">
         <rdfs:label xml:lang="en">Semifinished Product</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#Skill">
+        <rdfs:comment>Skills</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+        <rdfs:label>Skill</rdfs:label>
+        <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#Stakeholder">
         <rdfs:comment>It is the class meant to abstract the concept of the platform? user. It is a very general concept and is used in many ways within the various data models. For example, the Stakeholder collect information about his reputation. In other cases, as for the sustainability assessment, stakeholder data can be used to estimate impacts related to the transport of components between different suppliers.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
@@ -25948,6 +26332,12 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#Waste">
         <rdfs:label xml:lang="en">Waste</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#WsProfile">
+        <rdfs:comment>Waste sharing profile</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
+        <rdfs:label>WsProfile</rdfs:label>
+        <rdfs:seeAlso rdf:resource="http://manusquare.project.eu/core-manusquare"/>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/core-manusquare#hasActualValue">
         <rdfs:isDefinedBy rdf:resource="http://manusquare.project.eu/core-manusquare"/>
@@ -26476,7 +26866,7 @@
         <rdfs:label xml:lang="en">Attribute Equipment</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#AttributeMaterial">
-        <rdfs:label xml:lang="en">Attribute Material</rdfs:label>
+        <rdfs:label xml:lang="en">Material</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#AudioAndVideoEquipmentManufacturing">
         <rdfs:label xml:lang="en">Audio And Video Equipment Manufacturing</rdfs:label>
@@ -26622,6 +27012,9 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Burring">
         <rdfs:label xml:lang="en">Burring</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#BusinessModelInnovation">
+        <rdfs:label xml:lang="en">Business Model</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#BusinessService">
         <rdfs:label xml:lang="en">Business Service</rdfs:label>
     </rdf:Description>
@@ -26663,6 +27056,9 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#CalculatingMachines">
         <rdfs:label xml:lang="en">Calculating Machines</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Capacity">
+        <rdfs:label xml:lang="en">Capacity</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#CarbonAndGraphiteProductManufacturing">
         <rdfs:label xml:lang="en">Carbon And Graphite Product Manufacturing</rdfs:label>
@@ -26811,6 +27207,9 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ConceptDefinitionOrDesign">
         <rdfs:label xml:lang="en">Concept Definition Or Design</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ConceptDevelopmentPhase">
+        <rdfs:label xml:lang="en">Concept Development</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ConceptValidation">
         <rdfs:label xml:lang="en">Concept Validation</rdfs:label>
     </rdf:Description>
@@ -26889,6 +27288,9 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Cutting">
         <rdfs:label xml:lang="en">Cutting</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#CuttingSpeed">
+        <rdfs:label xml:lang="en">Cutting Speed</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#CuttingToolAndMachineToolAccessoryManufacturing">
         <rdfs:label xml:lang="en">Cutting Tool And Machine Tool Accessory Manufacturing</rdfs:label>
     </rdf:Description>
@@ -26942,6 +27344,9 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Dermal_protection_Textile">
         <rdfs:label xml:lang="en">Dermal protection Textile</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#DesignPhase">
+        <rdfs:label xml:lang="en">Design</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Detection_portable_system_for_nanoparticles">
         <rdfs:label xml:lang="en">Detection portable system for nanoparticles</rdfs:label>
@@ -27186,6 +27591,9 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#EngineTurbineAndPowerTransmissionEquipmentManufacturing">
         <rdfs:label xml:lang="en">Engine Turbine And Power Transmission Equipment Manufacturing</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#EngineeringPhase">
+        <rdfs:label xml:lang="en">Engineering</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#EngineeringService">
         <rdfs:label xml:lang="en">Engineering Service</rdfs:label>
     </rdf:Description>
@@ -27306,8 +27714,8 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#FinishingService">
         <rdfs:label xml:lang="en">Finishing Service</rdfs:label>
     </rdf:Description>
-    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#FixturingDesing">
-        <rdfs:label xml:lang="en">Fixturing Desing</rdfs:label>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#FixturingDesign">
+        <rdfs:label xml:lang="en">Fixturing Design</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#FlameHardening">
         <rdfs:label xml:lang="en">Flame Hardening</rdfs:label>
@@ -27532,49 +27940,52 @@
         <rdfs:label xml:lang="en">ISO</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO13485">
-        <rdfs:label xml:lang="en">ISO13485</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 13485</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14000">
-        <rdfs:label xml:lang="en">ISO14000</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14000</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14001">
-        <rdfs:label xml:lang="en">ISO14001</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14001</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14002">
-        <rdfs:label xml:lang="en">ISO14002</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14002</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14003">
-        <rdfs:label xml:lang="en">ISO14003</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14003</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14004">
-        <rdfs:label xml:lang="en">ISO14004</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14004</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14005">
-        <rdfs:label xml:lang="en">ISO14005</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14005</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO14006">
-        <rdfs:label xml:lang="en">ISO14006</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 14006</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO45001">
-        <rdfs:label xml:lang="en">ISO45001</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 45001</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO9000">
-        <rdfs:label xml:lang="en">ISO9000</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 9000</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO9001">
-        <rdfs:label xml:lang="en">ISO9001</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 9001</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO9002">
-        <rdfs:label xml:lang="en">ISO9002</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 9002</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO9003">
-        <rdfs:label xml:lang="en">ISO9003</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 9003</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ISO9004">
-        <rdfs:label xml:lang="en">ISO9004</rdfs:label>
+        <rdfs:label xml:lang="en">ISO 9004</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ITAR">
         <rdfs:label xml:lang="en">ITAR</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#IdeaDevelopmentPhase">
+        <rdfs:label xml:lang="en">Idea Development</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#IgnitionWiringSets">
         <rdfs:label xml:lang="en">Ignition Wiring Sets</rdfs:label>
@@ -27614,6 +28025,9 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#IndustrialValveManufacturing">
         <rdfs:label xml:lang="en">Industrial Valve Manufacturing</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#IndustrializationPhase">
+        <rdfs:label xml:lang="en">Industrialization</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Industry">
         <rdfs:label xml:lang="en">Industry</rdfs:label>
@@ -27885,6 +28299,9 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialHandlingEquipmentManufacturing">
         <rdfs:label xml:lang="en">Material Handling Equipment Manufacturing</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialInnovation">
+        <rdfs:label xml:lang="en">Material</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaterialProcurement">
         <rdfs:label xml:lang="en">Material Procurement</rdfs:label>
     </rdf:Description>
@@ -27892,13 +28309,13 @@
         <rdfs:label xml:lang="en">Max Kerf Width</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaxPartSizeX">
-        <rdfs:label xml:lang="en">Max Part SizeX</rdfs:label>
+        <rdfs:label xml:lang="en">Max Part Size X</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaxPartSizeY">
-        <rdfs:label xml:lang="en">Max Part SizeY</rdfs:label>
+        <rdfs:label xml:lang="en">Max Part Size Y</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaxPartSizeZ">
-        <rdfs:label xml:lang="en">Max Part SizeZ</rdfs:label>
+        <rdfs:label xml:lang="en">Max Part Size Z</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MaxPower">
         <rdfs:label xml:lang="en">Max Power</rdfs:label>
@@ -28078,13 +28495,13 @@
         <rdfs:label xml:lang="en">Modeling</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MoldSizeX">
-        <rdfs:label xml:lang="en">Mold SizeX</rdfs:label>
+        <rdfs:label xml:lang="en">Mold Size X</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MoldSizeY">
-        <rdfs:label xml:lang="en">Mold SizeY</rdfs:label>
+        <rdfs:label xml:lang="en">Mold Size Y</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#MoldSizeZ">
-        <rdfs:label xml:lang="en">Mold SizeZ</rdfs:label>
+        <rdfs:label xml:lang="en">Mold Size Z</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Molding">
         <rdfs:label xml:lang="en">Molding</rdfs:label>
@@ -28480,13 +28897,13 @@
         <rdfs:label xml:lang="en">Paper Industry Machinery Manufacturing</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#PartSizeX">
-        <rdfs:label xml:lang="en">Part SizeX</rdfs:label>
+        <rdfs:label xml:lang="en">Part Size X</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#PartSizeY">
-        <rdfs:label xml:lang="en">Part SizeY</rdfs:label>
+        <rdfs:label xml:lang="en">Part Size Y</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#PartSizeZ">
-        <rdfs:label xml:lang="en">Part SizeZ</rdfs:label>
+        <rdfs:label xml:lang="en">Part Size Z</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Parts">
         <rdfs:label xml:lang="en">Parts</rdfs:label>
@@ -28743,11 +29160,17 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ProcessAnealing">
         <rdfs:label xml:lang="en">Process Anealing</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ProcessInnovation">
+        <rdfs:label xml:lang="en">Process</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ProcessPlanningService">
         <rdfs:label xml:lang="en">Process Planning Service</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Procurement">
         <rdfs:label xml:lang="en">Procurement</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ProductInnovation">
+        <rdfs:label xml:lang="en">Product</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ProductionSpeed">
         <rdfs:label xml:lang="en">Production Speed</rdfs:label>
@@ -29301,6 +29724,9 @@
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#TapsAndValves">
         <rdfs:label xml:lang="en">Taps And Valves</rdfs:label>
     </rdf:Description>
+    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#TechnologyInnovation">
+        <rdfs:label xml:lang="en">Technology</rdfs:label>
+    </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#TechnologyProcurement">
         <rdfs:label xml:lang="en">Technology Procurement</rdfs:label>
     </rdf:Description>
@@ -29413,7 +29839,7 @@
         <rdfs:label xml:lang="en">Titanium Grade2</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Tolerance">
-        <rdfs:label xml:lang="en">Tolerance</rdfs:label>
+        <rdfs:label xml:lang="en">Tolerance (+/-)</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#ToolDesign">
         <rdfs:label xml:lang="en">Tool Design</rdfs:label>
@@ -29659,19 +30085,19 @@
         <rdfs:label xml:lang="en">zAxis</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#2D_Drawing">
-        <rdfs:label xml:lang="en">D Drawing</rdfs:label>
+        <rdfs:label xml:lang="en">2D Drawing</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#2D_Modeling">
-        <rdfs:label xml:lang="en">D Modeling</rdfs:label>
+        <rdfs:label xml:lang="en">2D Modeling</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#3DPrinting">
         <rdfs:label xml:lang="en">3D Printing</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#3D_Drawing">
-        <rdfs:label xml:lang="en">D Drawing</rdfs:label>
+        <rdfs:label xml:lang="en">3D Drawing</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#3D_Modeling">
-        <rdfs:label xml:lang="en">D Modeling</rdfs:label>
+        <rdfs:label xml:lang="en">3D Modeling</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#3-AxisMillingMachine">
         <rdfs:label xml:lang="en">3 Axis Milling Machine</rdfs:label>
@@ -29720,9 +30146,6 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#StainlessSteel-316/316L">
         <rdfs:label xml:lang="en">Stainless Steel-316/316L</rdfs:label>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#SurfaceFinishing(μm)">
-        <rdfs:label xml:lang="en">Surface Finishing (μm)</rdfs:label>
     </rdf:Description>
     <rdf:Description rdf:about="http://manusquare.project.eu/industrial-manusquare#Water_and_Mineral_salts_Solution_(temperature,_indice_eutrofizzazione)">
         <rdfs:label xml:lang="en"></rdfs:label>

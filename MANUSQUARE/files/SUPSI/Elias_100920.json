@@ -1,0 +1,26 @@
+{
+	"projectName": "Test MM1",
+	"projectDescription": null,
+	"selectionType": "Manual",
+	"projectId": "d0327e3c-e81a-4b4b-bea5-8e26fa24ed0e",
+	"projectType": "innovationManagement",
+	"projectInnovationPhases": [
+		"EngineeringPhase"
+	],
+	"projectInnovationTypes": [
+		"Technology"
+	],
+	"innovationManagerSkills": [
+		{
+			"id": "b881f8c0-136a-4f8a-8a80-8419cfa1b365",
+			"skill": "SericinResearch"
+		}
+	],
+	"innovationManagerSectors": [
+		{
+			"id": "bfe65f10-a3ca-483c-bc24-d9e02ee9efaa",
+			"sector": "Textile"
+		}
+	],
+	"innovationManagerAttributes": []
+}

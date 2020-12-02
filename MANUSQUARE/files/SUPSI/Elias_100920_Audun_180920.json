@@ -1,0 +1,21 @@
+{
+	"projectName": "Proj1",
+	"projectDescription": "aaa",
+	"selectionType": "Manual",
+	"projectId": "35efd8cb-5b4f-459c-99a8-b2156819ab5f",
+	"projectType": "innovationManagement",
+	"projectInnovationPhases": [
+		"Idea Development Phase"
+	],
+	"projectInnovationTypes": [
+		"businessmodelinnovation"
+	],
+	"innovationManagerSkills": [
+		{
+			"id": "c32d2eb0-4487-45b2-8585-ce0f4a3aa22e",
+			"skill": "3D Modeling"
+		}
+	],
+	"innovationManagerSectors": [],
+	"innovationManagerAttributes": []
+}

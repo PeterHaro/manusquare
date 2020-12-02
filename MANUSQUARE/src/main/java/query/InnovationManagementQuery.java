@@ -40,22 +40,6 @@ public class InnovationManagementQuery {
 	private Set<String> languages;
 
 
-//	public InnovationManagementQuery(String projectId, Set<Certification> certifications, Set<String> languages) {
-//		super();
-//		this.projectId = projectId;
-//		this.certifications = certifications;
-//		this.languages = languages;
-//	}
-//
-//	public InnovationManagementQuery(String projectId, List<String> innovationPhases, List<String> innovationTypes, Set<Certification> certifications, Set<String> languages) {
-//		super();
-//		this.projectId = projectId;
-//		this.innovationPhases = innovationPhases;
-//		this.innovationTypes = innovationTypes;
-//		this.certifications = certifications;
-//		this.languages = languages;
-//	}
-
 	public InnovationManagementQuery(String projectId, List<String> skills, List<String> innovationPhases, List<String> innovationTypes, List<String> sectors, Set<Certification> certifications, Set<String> languages) {
 		super();
 		this.projectId = projectId;

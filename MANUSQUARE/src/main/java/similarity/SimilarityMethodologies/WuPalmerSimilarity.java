@@ -1,6 +1,6 @@
 package similarity.SimilarityMethodologies;
 
-import graph.SimpleGraph;
+import graph.Graph;
 import similarity.SimilarityMethodologies.SimilarityParameters.WuPalmerParameters;
 
 public class WuPalmerSimilarity implements ISimilarity<WuPalmerParameters> {
@@ -9,11 +9,11 @@ public class WuPalmerSimilarity implements ISimilarity<WuPalmerParameters> {
     @Override
     public double ComputeSimilaritySimpleGraph(WuPalmerParameters params) {
                 
-        String LCS = SimpleGraph.getLCS(params.sourceNode, params.targetNode, params.graph);
+        String LCS = Graph.getLCS(params.sourceNode, params.targetNode, params.graph);
 
-        int sourceNodeDepth = SimpleGraph.getNodeDepth(params.sourceNode, params.graph);
-        int targetNodeDepth = SimpleGraph.getNodeDepth(params.targetNode, params.graph);
-        int lcsNodeDepth = SimpleGraph.getNodeDepth(LCS, params.graph);
+        int sourceNodeDepth = Graph.getNodeDepth(params.sourceNode, params.graph);
+        int targetNodeDepth = Graph.getNodeDepth(params.targetNode, params.graph);
+        int lcsNodeDepth = Graph.getNodeDepth(LCS, params.graph);
 
         if (params.sourceNode.equals(params.targetNode)) {
             return 1.0;

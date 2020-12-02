@@ -19,20 +19,6 @@ public class Material {
 		this.name = name;
 	}
 	
-//	@Override
-//	public boolean equals (Object object) {
-//		boolean result = false;
-//		if (object == null || object.getClass() != getClass()) {
-//			result = false;
-//		} else {
-//			Material material = (Material) object;
-//			if (this.name == material.getName()) {
-//				result = true;
-//			}
-//		}
-//		return result;
-//	}
-	
 	@Override
 	public boolean equals (Object o) {
 		if ( o instanceof Material && ((Material) o).getName().equals(this.name) ) {

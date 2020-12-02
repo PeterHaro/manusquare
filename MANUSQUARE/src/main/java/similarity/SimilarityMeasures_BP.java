@@ -1,27 +1,6 @@
 package similarity;
 
-import com.google.common.graph.MutableGraph;
-import edm.Attribute;
-import edm.ByProduct;
-import edm.Certification;
-import edm.Material;
-import edm.Process;
-import owlprocessing.OntologyOperations;
-
-import org.apache.commons.text.similarity.JaroWinklerSimilarity;
-import org.semanticweb.owlapi.model.OWLOntology;
-
-import query.ByProductQuery;
-import query.ConsumerQuery;
-import similarity.SimilarityMethodologies.ISimilarity;
-import similarity.SimilarityMethodologies.SimilarityFactory;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import supplierdata.Supplier;
-import supplierdata.Supplier_BP;
-import utilities.MathUtils;
-import utilities.StringUtilities;
-
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,20 +8,38 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
+
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
+import org.semanticweb.owlapi.model.OWLOntology;
+
+import com.google.common.graph.MutableGraph;
+
+import edm.Attribute;
+import edm.ByProduct;
+import edm.Certification;
+import json.ByProductSharingRequest.ByProductAttributes;
+import owlprocessing.OntologyOperations;
+import query.ByProductQuery;
+import similarity.SimilarityMethodologies.ISimilarity;
+import similarity.SimilarityMethodologies.SimilarityFactory;
+import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
+import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
+import supplierdata.Supplier_BP;
+import utilities.MathUtils;
+import utilities.StringUtilities;
+import validation.QueryValidation;
 
 public class SimilarityMeasures_BP {
 
 	/* ALT 1 */
-	public static List<Double> computeSemanticSimilarity (ByProductQuery query, Supplier_BP supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
+	public static List<Double> computeSemanticSimilarity (ByProductQuery query, Supplier_BP supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
 
 
-		List<ByProduct> byProductList = supplier.getByProducts();
-		
-		System.out.println("The supplier has " + byProductList.size() + " by products");
-		
+		List<ByProduct> supplierByProducts = supplier.getByProducts();
+
 		List<Certification> certificationList = supplier.getCertifications();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
@@ -59,96 +56,147 @@ public class SimilarityMeasures_BP {
 		double finalByProductSim = 0;
 
 		List<Double> similarityList = new LinkedList<Double>();
-		int numConsumerProcesses = query.getByProducts().size();
 
+		StringBuffer debuggingOutput = new StringBuffer();
+		
+		//for validation purposes
+		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
+		
+		
+		//for quantities and uoms
+		double consumerQuantity = 0;
+		String consumerUOM = null;
+		double supplierQuantity = 0;
+		String supplierUOM = null;
+		String consumerSupplyType = null;
+		String supplierSupplyType = null;
+		
 		for (ByProduct bpc : query.getByProducts()) {
+			
+			consumerQuantity = bpc.getQuantity();
+			consumerUOM = bpc.getUom();
+			consumerSupplyType = bpc.getSupplyType();
 
 			List<Double> byProductSimList = new LinkedList<Double>();
 
-			for (ByProduct bps : byProductList) {
-
-				StringBuffer debuggingOutput = new StringBuffer();
+			for (ByProduct bps : supplierByProducts) {
+				
 
 				debuggingOutput.append("\n------------------ Test: Matching Consumer By-product: " + bpc.getName() + " + and Supplier By-product: " + bps.getName() + " ( " + supplier.getId() + " ) ------------------");
 
 				/* BY-PRODUCT SIMILARITY */	
 
-				//represent processes as graph nodes
-//				consumerQueryByProductNode = bpc.getName();
-//				supplierResourceByProductNode = bps.getName();
-//
-//
-//				parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerQueryByProductNode, supplierResourceByProductNode, onto, graph);
-//				byProductSim = similarityMethodology.ComputeSimilaritySimpleGraph(parameters);
+				//represent by-product names as graph nodes
+				consumerQueryByProductNode = bpc.getName();
+				debuggingOutput.append("\nconsumerQueryByProductNode is " + consumerQueryByProductNode);
+				
+				//need to validate the by-product-name of the supplier
+				String validatedSupplierByProductName = QueryValidation.validateByProductName(bps.getName(), onto, allOntologyClasses);
+				
+				supplierResourceByProductNode = validatedSupplierByProductName;
+				debuggingOutput.append("\nsupplierResourceByProductNode is " + supplierResourceByProductNode + " (was originally " + bps.getName() + ")");
 
+				parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerQueryByProductNode, supplierResourceByProductNode, onto, graph);
+				byProductSim = similarityMethodology.ComputeSimilaritySimpleGraph(parameters);
 
-				debuggingOutput.append("\nprocessSim for supplier process " + bps.getName() + " ( " + supplier.getId() + " ) is: " + byProductSim);
+				debuggingOutput.append("\nBy-product similarity for supplier by-product " + validatedSupplierByProductName + " ( " + supplier.getId() + " ) is: " + byProductSim);
 
-
+				//since we´re not considering attributes
+				finalByProductSim = byProductSim;
+				
+				//considering quantities and uoms
+				
+				supplierQuantity = bps.getQuantity();
+				supplierUOM = bps.getUom();
+				supplierSupplyType = bps.getSupplyType();
+				
+				debuggingOutput.append("\nConsumer quantity is: " + consumerQuantity);
+				debuggingOutput.append("\nConsumer UOM is: " + consumerUOM);
+				debuggingOutput.append("\nSupplier quantity is: " + supplierQuantity);
+				debuggingOutput.append("\nSupplier UOM is: " + supplierUOM);
+				debuggingOutput.append("\nConsumer SupplyType is: " + consumerSupplyType);
+				debuggingOutput.append("\nSupplier SupplyType is: " + supplierSupplyType);
+				
+				boolean consumerQuantityLowerThanSupplierQuantity = MathUtils.lowerThan(consumerQuantity, consumerUOM, supplierQuantity, supplierUOM);
+				
+				debuggingOutput.append("\nIs consumer quantity lower than supplier quantity?: " + consumerQuantityLowerThanSupplierQuantity);
+				
+				//checking supply type
+				if (consumerSupplyType.equalsIgnoreCase("limited amount")) {
+					if (!consumerQuantityLowerThanSupplierQuantity) {
+						debuggingOutput.append("\nSetting finalByProductSim to 0 based on supply type and quantity similarity.");
+						finalByProductSim = 0;
+				}
+				}
+				
+				//checking quantities and uoms				
+				if (!consumerQuantityLowerThanSupplierQuantity) {
+					debuggingOutput.append("\nSetting finalByProductSim to 0 based on quantity similarity.");
+					finalByProductSim = 0;
+				}
+				
+				
 				/* ATTRIBUTE SIMILARITY */		
 
-//				Set<Attribute> consumerAttributes = bpc.getNormalisedAttributes(bpc);
-//				//debuggingOutput.append("\n Attribute values with supplier process: " + bps.getAttributeWeightMap().entrySet());
-//				double avgAttributeSim = 0;
-//
-//				//if there are any consumer attributes, we use these to influence the processAndMaterialSim
-//				if (consumerAttributes != null) {
-//					//debuggingOutput.append("\nAttributes with consumer process " + bpc.getName() + ": ");
-//
-//					for (Attribute a : consumerAttributes) {
-//						debuggingOutput.append(a.getKey() + " ");
-//					}
-//
-//					int counter = 0; 
-//					double sum = 0;
-//
-//					//check which value ("Y", "N" or "O") the corresponding supplier process has
-//					for (Attribute a_c : consumerAttributes) {
-//
-//						if (bps.getAttributeWeightMap().containsKey(a_c.getKey())) {
-//
-//							if (bps.getAttributeWeightMap().get(a_c.getKey()).equals("Y")) {
-//								//debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey()) + " for attributeKey: " + a_c.getKey());
-//								attributeSim = 1.0;
-//							} else if (bps.getAttributeWeightMap().get(a_c.getKey()).equals("O")) {
-//								//debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
-//								attributeSim = hard_coded_weight;
-//							} else if (bps.getAttributeWeightMap().get(a_c.getKey()).equals("N")) {
-//								//debuggingOutput.append("\nProcess " + ps.getName() + " has attribute " + ps.getAttributeWeightMap().get(a_c.getKey())+ " for attributeKey: " + a_c.getKey());
-//								attributeSim = hard_coded_weight;
-//							}
-//
-//							sum += attributeSim;
-//							counter++;
-//
-//						} else {
-//							//debuggingOutput.append("\nThere are no equivalent attributeKeys for process " + ps.getName());
-//							attributeSim = hard_coded_weight;
-//							sum += attributeSim;
-//							counter++;
-//
-//						}
-//
-//					}
-//
-//					avgAttributeSim = sum / (double) counter;
-//
-//					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
-//
-//					//if there are no consumer attributes, return an avgAttributeSim of 1.0
-//				} else {
-//
-//					avgAttributeSim = 1.0;
-//
-//					debuggingOutput.append("\nThere are no attributes");
-//					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
-//				}
-//				finalByProductSim = (byProductSim * 0.8) + (avgAttributeSim * 0.2);
+				Set<ByProductAttributes> consumerAttributes = bpc.getAttributes();
+				debuggingOutput.append("\n Number of consumer attributes: " + consumerAttributes);
+				debuggingOutput.append("\n Attribute values with supplier process: " + bps.getAttributeWeightMap().entrySet());
+				double avgAttributeSim = 0;
 
+				//if there are any consumer attributes, we use these to influence the processAndMaterialSim
+				//FIXME: If there are no consumer attributes this should be null!
+				if (consumerAttributes != null) {
+					debuggingOutput.append("\nAttributes with consumer process " + bpc.getName() + ": ");
 
+					for (ByProductAttributes a : consumerAttributes) {
+						debuggingOutput.append(a.getAttributeKey() + " ");
+					}
+					
+					int counter = 0; 
+					double sum = 0;
+
+					//check which value ("Y", "N" or "O") the corresponding supplier process has
+					for (ByProductAttributes a_c : consumerAttributes) {
+
+						if (bps.getAttributeWeightMap().containsKey(a_c.getAttributeKey())) {
+
+							if (bps.getAttributeWeightMap().get(a_c.getAttributeKey()).equals("Y")) {
+								attributeSim = 1.0;
+							} else if (bps.getAttributeWeightMap().get(a_c.getAttributeKey()).equals("O")) {
+								attributeSim = hard_coded_weight;
+							} else if (bps.getAttributeWeightMap().get(a_c.getAttributeKey()).equals("N")) {
+								attributeSim = hard_coded_weight;
+							}
+							
+							sum += attributeSim;
+							counter++;
+							
+						} else {
+							attributeSim = hard_coded_weight;
+							sum += attributeSim;
+							counter++;
+							
+						}
+
+					}
+					
+					avgAttributeSim = sum / (double) counter;
+
+					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
+					
+					//if there are no consumer attributes, return an avgAttributeSim of 1.0
+				} else {
+					
+					avgAttributeSim = 1.0;
+					
+					debuggingOutput.append("\nThere are no consumer attributes");
+					debuggingOutput.append("\nAverage attributeSim is " + avgAttributeSim);
+				}
 				
-				finalByProductSim = byProductSim;
-
+				
+				finalByProductSim = (finalByProductSim * 0.7) + (avgAttributeSim * 0.3);
+				
+				
 				/* CERTIFICATION SIMILARITY */
 
 				Set<Certification> initialConsumerCertifications = query.getCertifications();
@@ -171,25 +219,24 @@ public class SimilarityMeasures_BP {
 				debuggingOutput.append("\ncertificationSim is: " + certificationSim);
 
 				double finalSim = (finalByProductSim * 0.7) + (certificationSim * 0.3);
-
-				debuggingOutput.append("\nfinalSim for process " + bps.getName() + " is: " + finalSim);
-
-				//				similarityList.add(finalSim);
-
+				
+				debuggingOutput.append("\nfinalSim for supplier by-product " + bps.getName() + " is: " + finalSim);
+								
 				byProductSimList.add(finalSim);
-
-
-				//if (testing == true) {
+				
 				System.out.println(debuggingOutput.toString());
-				//}
+
+
 			}		
-
-			System.out.println("Adding " + getHighestScore(byProductSimList) + " to similarityList for consumer process " + bpc.getName());
+			
+			System.out.println("Adding " + getHighestScore(byProductSimList) + " to similarityList for consumer by-product " + bpc.getName());
 			similarityList.add(getHighestScore(byProductSimList));
+			
 
-		}	
+		}
 
-		//return the average score for all supplier processes
+
+		//return the list of scores for all supplier by-products
 		System.out.println("similarityList: " + similarityList.toString());
 		return similarityList;
 
@@ -203,7 +250,7 @@ public class SimilarityMeasures_BP {
 	 * Oct 12, 2019
 	 */
 	private static double getHighestScore(List<Double> inputScores) {
-				
+
 		inputScores.sort(Collections.reverseOrder());
 		return inputScores.get(0);
 
@@ -395,7 +442,5 @@ public class SimilarityMeasures_BP {
 		}
 
 	}
-
-
 
 }

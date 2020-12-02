@@ -1,3 +1,4 @@
+
 package sparql;
 
 import java.io.File;
@@ -5,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -30,7 +30,7 @@ import edm.Attribute;
 import edm.Material;
 import edm.Process;
 import exceptions.NoAttributeException;
-import graph.SimpleGraph;
+import graph.Graph;
 import owlprocessing.OntologyOperations;
 import query.ConsumerQuery;
 import utilities.StringUtilities;
@@ -40,7 +40,7 @@ public class SparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/Test8-supplierLanguages.json";
+		String filename = "./files/TESTING_CAPACITY_SHARING/Test-Full.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -120,7 +120,6 @@ public class SparqlQuery {
 			strQuery += "PREFIX geo: <http://www.opengis.net/ont/geosparql#> \n";
 			strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/> \n";
 			strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
-			//strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
 		}
 
 		//TODO: Optimise code to differentiate SPARQL query on attributes and materials. Currently, the query asks for attributes even if there are no
@@ -180,7 +179,7 @@ public class SparqlQuery {
 
 		strQuery += "}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 	}
@@ -247,8 +246,8 @@ public class SparqlQuery {
 		
 
 		//get the depth of the superclasses and let the superclass with highest depth be the LCS
-		MutableGraph<String> ontoGraph = SimpleGraph.createGraph(onto);
-		Map<String, Integer> ontologyHierarchyMap = SimpleGraph.getOntologyHierarchy(onto, ontoGraph);
+		MutableGraph<String> ontoGraph = Graph.createGraph(onto);
+		Map<String, Integer> ontologyHierarchyMap = Graph.getOntologyHierarchy(onto, ontoGraph);
 		
 
 		Map<String, Integer> supersAndDepthsMap = new LinkedHashMap<String, Integer>();
@@ -353,85 +352,7 @@ public class SparqlQuery {
 
 
 
-
-	/**
-	 * Finds the relevant conditions ('<=', '>=' or '=') for a given sample of attributes.
-	 *
-	 * @param attributes attribute keys and values
-	 * @return a map of attribute (key) and the conditions (value) used for determining whether they satisfy attribute reqs from the consumer.
-	 * Feb 8, 2020
-	 */
-	private static Map<String, String> mapAttributeConditions(Set<Attribute> attributes) {
-
-		Map<String, String> attributeConditions = new HashMap<String, String>();
-		for (Attribute a : attributes) {
-			if (a.getKey().equals("Length") || a.getKey().equals("Width") || a.getKey().equals("Depth") || a.getKey().equals("MinFeatureSize")
-					|| a.getKey().equals("MinLayerThickness") || a.getKey().equals("MinKerfWidth") || a.getKey().equals("WorkingVolumeX")
-					|| a.getKey().equals("MinSheetThickness") || a.getKey().equals("PartSizeX") || a.getKey().equals("PartSizeY") || a.getKey().equals("PartSizeZ")
-					|| a.getKey().equals("MoldSizeX") || a.getKey().equals("MoldSizeY") || a.getKey().equals("MoldSizeZ") || a.getKey().equals("Capacity")
-					|| a.getKey().equals("WorkingAreaX") || a.getKey().equals("WorkingAreaY") || a.getKey().equals("WorkingAreaZ")
-					|| a.getKey().equals("AspectRatio")) {
-				attributeConditions.put(a.getKey(), ">=");
-			} else if (a.getKey().equals("Tolerance") || a.getKey().equals("SurfaceFinishing") || a.getKey().equals("MaxWallThickness")
-					|| a.getKey().equals("MaxPartSizeX") || a.getKey().equals("MaxPartSizeY") || a.getKey().equals("MaxPartSizeZ")
-					|| a.getKey().equals("MaxKerfWidth") || a.getKey().equals("MaxSheetThickness")
-					//|| a.getKey().equals("MaxPower")
-					) {
-				attributeConditions.put(a.getKey(), "<=");
-			} else if (a.getKey().equals("Axis") || a.getKey().equals("CuttingSpeed")) {
-				attributeConditions.put(a.getKey(), "=");
-			} else {
-				attributeConditions.put(a.getKey(), "!");
-			}
-		}
-
-		return attributeConditions;
-
-	}
-
-	/**
-	 * Finds the relevant conditions ('<=', '>=' or '=') for a given sample of attributes.
-	 *
-	 * @param attributes attribute keys and values
-	 * @return a map of attribute (key) and the conditions (value) used for determining whether they satisfy attribute reqs from the consumer.
-	 * Feb 8, 2020
-	 */
-	public static String mapAttributeConditions(String attribute) {
-		
-		String condition = null;
-
-		if (attribute == null) {
-			
-			condition = "!";
-
-			//return "!";
-
-		} else if (attribute.equalsIgnoreCase("Length") || attribute.equalsIgnoreCase("Width") || attribute.equalsIgnoreCase("Depth") || attribute.equalsIgnoreCase("MinFeatureSize")
-				|| attribute.equalsIgnoreCase("MinLayerThickness") || attribute.equalsIgnoreCase("MinKerfWidth") || attribute.equalsIgnoreCase("WorkingVolumeX")
-				|| attribute.equalsIgnoreCase("MinSheetThickness") || attribute.equalsIgnoreCase("PartSizeX") || attribute.equalsIgnoreCase("PartSizeY") || attribute.equalsIgnoreCase("PartSizeZ")
-				|| attribute.equalsIgnoreCase("MoldSizeX") || attribute.equalsIgnoreCase("MoldSizeY") || attribute.equalsIgnoreCase("MoldSizeZ") || attribute.equalsIgnoreCase("Capacity")
-				|| attribute.equalsIgnoreCase("WorkingAreaX") || attribute.equalsIgnoreCase("WorkingAreaY") || attribute.equalsIgnoreCase("WorkingAreaZ")
-				|| attribute.equalsIgnoreCase("AspectRatio")) {
-			
-			condition = ">=";
-			
-			return ">=";
-		} else if (attribute.equalsIgnoreCase("Tolerance") || attribute.equalsIgnoreCase("SurfaceFinishing") || attribute.equalsIgnoreCase("MaxWallThickness")
-				|| attribute.equalsIgnoreCase("MaxPartSizeX") || attribute.equalsIgnoreCase("MaxPartSizeY") || attribute.equalsIgnoreCase("MaxPartSizeZ")
-				|| attribute.equalsIgnoreCase("MaxKerfWidth") || attribute.equalsIgnoreCase("MaxSheetThickness"))
-		{
-			
-			condition = "<=";
-			return "<=";
-		} else if (attribute.equalsIgnoreCase("Axis") || attribute.equalsIgnoreCase("CuttingSpeed")) {
-			
-			condition = "=";
-			return "=";
-		}	
-		
-		return condition;
-
-	}
+	
 
 	public static boolean isSupportedAttribute (Attribute attribute) {
 

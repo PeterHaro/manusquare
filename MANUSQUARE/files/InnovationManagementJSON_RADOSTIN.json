@@ -1,0 +1,40 @@
+{
+  "projectName": "myProject",
+  "projectDescription": "bla bla bla",
+  "selectionType": "Manual",
+  "projectId": "5ec8cd95-f3cf-49e5-b93a-5ec8cd95",
+  "projectType": "Innovation",
+  "customer": {
+        "customerInfo": {
+            "location": "Vale de Cambra, Portugal",
+            "lat": "40.8498115",
+            "lon": "-8.3939142"
+        }
+    },
+  "projectInnovationPhases": ["Idea Development","Industrialization"],
+  "projectInnovationTypes": ["Product","Process","Technology"],
+  "innovationManagerSkills": [
+    {
+      "id": "659cc6fc-0846-4198-9d16-147662423780",
+      "skill": "D Drawing "
+    }
+  ],
+ "innovationManagerSectors": [
+    {
+      "id": "659cc6fc-0846-4198-9d16-147662456432",
+      "sector": "Automotive"
+    }
+  ],
+  "innovationManagerAttributes": [
+    {
+      "id": " 5954da57-d4b9-4d8e-9591-3101fbbfde0c",
+      "attributeKey": "Language",
+      "attributeValue": "German"
+    },
+    {
+      "id": " 93d5af15-ea7b-49cf-98f5-08bfa9436bea",
+      "attributeKey": "Country",
+      "attributeValue": "Switzerland"
+    }
+  ]
+}

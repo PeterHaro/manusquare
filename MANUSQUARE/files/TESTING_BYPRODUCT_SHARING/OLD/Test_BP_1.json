@@ -1,0 +1,47 @@
+{
+    "projectName": "Polias XPTO",
+    "projectDescription": "XPTO",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {
+        "customerInfo": {
+            "location": "Vale de Cambra, Portugal",
+            "lat": "40.8498115",
+            "lon": "-8.3939142"
+        }
+    },
+    "projectId": "82ae7be0-80a7-4065-b4ee-d3980f813e60",
+    "projectType": "By-product",
+    "mode":"buy",
+    "minNumberOfPartecipants":"0",
+    "maxNumberOfPartecipants":"10",
+    "byProductElements": [{
+        "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
+        "byProductName": "Sawdust",
+        "supplyType": "Continuous",
+        "quantity": "200",
+        "unitOfMeasureQuantity": "Kg",
+        "byProductAttributes": [{
+                "attributeKey": "Length",
+                "attributeValue": "4",
+                "unitOfMeasure": "mm"
+            }
+        ]
+
+    }],
+    "supplierAttributes": [
+    {
+        "id": "954fa97c-755d-4200-98b4-6756c9452a65",
+        "attributeKey": "Certification",
+        "attributeValue": "ISO9001"
+    },
+    {
+		"id": "2343252346356",
+		"attributeKey": "language",
+		"attributeValue": "English"
+		}
+	]
+}
+
+
+

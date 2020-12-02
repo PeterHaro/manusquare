@@ -3,12 +3,12 @@
 	"projectName": "Test 15:14",
 	"projectDescription": "",
 	"selectionType": "Manual",
-	"supplierMaxDistance": "0",
+	"supplierMaxDistance": "10",
 	"customer": {
 		"customerInfo": {
-			"location": "",
-			"lat": "",
-			"lon": ""
+			"location": "Denia, Spain",
+			"lat": "38.846228",
+			"lon": "0.096789"
 		}
 	},
 	"servicePolicy": "true",
@@ -21,8 +21,22 @@
 		"processName": "3DPrinting",
 		"attributeKey": "Tolerance",
 		"attributeValue": "1000"
-	}],
-	"supplierAttributes": [{
+	},
+	{
+		"unitOfMeasure": "",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "3DPrinting",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
+	}
+	],
+	"supplierAttributes": [
+	{
+			"id": "supplier-attribute-430396576",
+			"attributeKey": "AS9100-13453554545",
+			"attributeValue": "yes"
+		},
+		{
 	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
         "attributeKey": "Language",
         "attributeValue": "Spanish"

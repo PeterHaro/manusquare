@@ -1,15 +1,36 @@
 package ui;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+
 import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableGraph;
 import com.google.gson.GsonBuilder;
-import edm.Certification;
-import edm.Material;
-import edm.ByProduct;
-import graph.SimpleGraph;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
 
+import edm.ByProduct;
+import edm.Certification;
+import edm.Process;
+import graph.Graph;
 import query.ByProductQuery;
 import query.ConsumerQuery;
 import similarity.MatchingResult;
@@ -17,24 +38,18 @@ import similarity.SimilarityMeasures;
 import similarity.SimilarityMeasures_BP;
 import similarity.SimilarityMethods;
 import sparql.TripleStoreConnection;
-import sparql.TripleStoreConnection_BP;
 import supplierdata.Supplier;
+import supplierdata.SupplierData_BP;
 import supplierdata.Supplier_BP;
 import utilities.MathUtils;
 import utilities.StringUtilities;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
  *
  * @author audunvennesland
  */
-public class SemanticMatching_BP {
+public class SemanticMatching {
 
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
@@ -48,6 +63,7 @@ public class SemanticMatching_BP {
 	//if the MANUSQUARE ontology is fetched from url
 	//NOT IN USE ANYMORE: static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
 	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare/ontology.owl");
+	
 
 	/**
 	 * Matches a consumer query against a set of resources offered by suppliers and returns a ranked list of the [numResult] suppliers having the highest semantic similarity as a JSON file.
@@ -62,8 +78,9 @@ public class SemanticMatching_BP {
 	 * @throws OWLOntologyCreationException
 	   Mar 5, 2020
 	 */
-	public static void performSemanticMatching_BP(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performByProductMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
 		if (sparql_endpoint_by_env != null) {	
@@ -103,10 +120,10 @@ public class SemanticMatching_BP {
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
 
-		graph = SimpleGraph.createGraph(ontology);
+		graph = Graph.createGraph(ontology);
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<Supplier_BP> supplierData = TripleStoreConnection_BP.createSupplierData(query, testing, ontology);
+		List<Supplier_BP> supplierData = SupplierData_BP.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
 		Map<Supplier_BP, Double> supplierScores = new HashMap<Supplier_BP, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
@@ -182,7 +199,7 @@ public class SemanticMatching_BP {
 			for (Supplier_BP sup : supplierData) {
 				if (e.getKey().getId().equals(sup.getId())) {
 
-					System.out.println("Processes:");
+					System.out.println("By-products:");
 					for (ByProduct pro : sup.getByProducts()) {
 						System.out.println(pro.toString());
 					}
@@ -237,18 +254,6 @@ public class SemanticMatching_BP {
 		writer.close();
 	}
 
-	/**
-	 * Sorts the scores for each resource offered by a supplier (from highest to lowest)
-	 *
-	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
-	 * @return the n highest scores from a list of input scores
-	 * Oct 12, 2019
-	 */
-	private static double getHighestScore(List<Double> inputScores) {
-		inputScores.sort(Collections.reverseOrder());
-		return inputScores.get(0);
-
-	}
 	
 	/**
 	 * Get the average score relative to number of consumer processes (sum supplier scores / num consumer processes in query)
@@ -267,23 +272,7 @@ public class SemanticMatching_BP {
 		return sum / (double)numConsumerProcesses;
 
 	}
-	
-	/**
-	 * Returns the average score of all scores for each resource offered by a supplier
-	 *
-	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
-	 * @return the average score of all scores for each supplier resource
-	 * Oct 30, 2019
-	 */
-	private static double getAverageScore(List<Double> inputScores) {
-		double sum = 0;
 
-		for (double d : inputScores) {
-			sum += d;
-		}
-
-		return sum / inputScores.size();
-	}
 
 
 	/**

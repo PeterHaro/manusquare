@@ -5,64 +5,70 @@ import java.util.Set;
 
 public class SparqlRecord_BP {
 	
-	private String processChainId;
+	private String wsProfileId;
 	private String supplierId;
-	private String byProduct;
+	private String byProductName;
+	private String byProductSupplyType;
+	private String byProductDeadline;
+	private String byProductMinParticipants;
+	private String byProductMaxParticipants;
+	private String byProductQuantity;
+	private String byProductUOM;
 	private String certification;
 	private Set<String> attributes;
 	private double attributeWeight;
 	private Map<String, String> attributeWeightMap; //added 11.02.2020 to associate a condition ('<=', '>=' or '=') to an attributeKey
 	
-	public SparqlRecord_BP(String processChainId, String supplierId, String byProduct, 
-			String certification, Set<String> attributes, double attributeWeight) {
+
+	
+	public SparqlRecord_BP(String wsProfileId, String supplierId, String byProductName, String byProductSupplyType,
+			String byProductDeadline, String byProductMinParticipants, String byProductMaxParticipants,
+			String byProductQuantity, String byProductUOM, String certification, Map<String, String> attributeWeightMap) {
 		super();
-		this.processChainId = processChainId;
+		this.wsProfileId = wsProfileId;
 		this.supplierId = supplierId;
-		this.byProduct = byProduct;
+		this.byProductName = byProductName;
+		this.byProductSupplyType = byProductSupplyType;
+		this.byProductDeadline = byProductDeadline;
+		this.byProductMinParticipants = byProductMinParticipants;
+		this.byProductMaxParticipants = byProductMaxParticipants;
+		this.byProductQuantity = byProductQuantity;
+		this.byProductUOM = byProductUOM;
+		this.certification = certification;
+//		this.attributes = attributes;
+//		this.attributeWeight = attributeWeight;
+		this.attributeWeightMap = attributeWeightMap;
+	}
+
+	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification, Set<String> attributes, double attributeWeight) {
+		super();
+		this.wsProfileId = wsProfileId;
+		this.supplierId = supplierId;
 		this.certification = certification;
 		this.attributes = attributes;
 		this.attributeWeight = attributeWeight;
 	}
 	
-	public SparqlRecord_BP(String processChainId, String supplierId, String byProduct, 
+	public SparqlRecord_BP(String supplierId, String wsProfileId, 
 			String certification, Set<String> attributes, Map<String, String> attributeWeightMap) {
 		super();
-		this.processChainId = processChainId;
 		this.supplierId = supplierId;
-		this.byProduct = byProduct;
+		this.wsProfileId = wsProfileId;
 		this.certification = certification;
 		this.attributes = attributes;
 		this.attributeWeightMap = attributeWeightMap;
 	}
 	
-	public SparqlRecord_BP(String processChainId, String supplierId, String byProduct, 
-			String certification) {
+	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification) {
 		super();
-		this.processChainId = processChainId;
+		this.wsProfileId = wsProfileId;
 		this.supplierId = supplierId;
-		this.byProduct = byProduct;
-
 		this.certification = certification;
 	}
 	
-	public SparqlRecord_BP(String supplierId, String byProduct, 
-			String certification) {
-		super();
-		this.supplierId = supplierId;
-		this.byProduct = byProduct;
-
-		this.certification = certification;
-	}
 	
 	public SparqlRecord_BP () {}
 
-	public String getProcessChainId() {
-		return processChainId;
-	}
-
-	public void setProcessChainId(String processChainId) {
-		this.processChainId = processChainId;
-	}
 
 	public String getSupplierId() {
 		return supplierId;
@@ -72,12 +78,12 @@ public class SparqlRecord_BP {
 		this.supplierId = supplierId;
 	}
 
-	public String getByProduct() {
-		return byProduct;
+	public String getWsProfileId() {
+		return wsProfileId;
 	}
 
-	public void setByProduct(String byProduct) {
-		this.byProduct = byProduct;
+	public void setWsProfileId(String byProductId) {
+		this.wsProfileId = byProductId;
 	}
 
 
@@ -93,17 +99,10 @@ public class SparqlRecord_BP {
 		return attributes;
 	}
 
-	public void setAttributes(Set<String> attributes) {
-		this.attributes = attributes;
-	}
-
 	public double getAttributeWeight() {
 		return attributeWeight;
 	}
 
-	public void setAttributeWeight(double attributeWeight) {
-		this.attributeWeight = attributeWeight;
-	}
 
 	public Map<String, String> getAttributeWeightMap() {
 		return attributeWeightMap;
@@ -112,8 +111,67 @@ public class SparqlRecord_BP {
 	public void setAttributeWeightMap(Map<String, String> attributeWeightMap) {
 		this.attributeWeightMap = attributeWeightMap;
 	}
+
+	public String getByProductName() {
+		return byProductName;
+	}
+
+	public void setByProductName(String byProductName) {
+		this.byProductName = byProductName;
+	}
+
+	public String getByProductSupplyType() {
+		return byProductSupplyType;
+	}
+
+	public void setByProductSupplyType(String byProductSupplyType) {
+		this.byProductSupplyType = byProductSupplyType;
+	}
+
+	public String getByProductDeadline() {
+		return byProductDeadline;
+	}
+
+	public void setByProductDeadline(String byProductDeadline) {
+		this.byProductDeadline = byProductDeadline;
+	}
+
+	public String getByProductMinParticipants() {
+		return byProductMinParticipants;
+	}
+
+	public void setByProductMinParticipants(String byProductMinParticipants) {
+		this.byProductMinParticipants = byProductMinParticipants;
+	}
+
+	public String getByProductMaxParticipants() {
+		return byProductMaxParticipants;
+	}
+
+	public void setByProductMaxParticipants(String byProductMaxParticipants) {
+		this.byProductMaxParticipants = byProductMaxParticipants;
+	}
+
+	public String getByProductQuantity() {
+		return byProductQuantity;
+	}
+
+	public void setByProductQuantity(String byProductQuantity) {
+		this.byProductQuantity = byProductQuantity;
+	}
+
+	public String getByProductUOM() {
+		return byProductUOM;
+	}
+
+	public void setByProductUOM(String byProductUOM) {
+		this.byProductUOM = byProductUOM;
+	}
+
 	
-	
+	public String toString() {
+		return "SupplierID: " + this.supplierId + "\n" + "WSProfileID: " + this.wsProfileId + "\nBy-product name: " + this.byProductName;
+	}
 	
 	
 }

@@ -2,6 +2,7 @@ package edm;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,13 +13,13 @@ public class ByProduct {
     private String id;
     private String name;
     private String supplyType;
-    private int quantity;
+    private double quantity;
     private String uom;
     private Set<ByProductAttributes> attributes;
     private Map<String, String> attributeWeightMap; //added 11.02.2020 to associate a weight to an attributeKey
 
-
-    //TODO: Clean up constructors!
+//
+//    //TODO: Clean up constructors!
     public ByProduct(String id, String name, String supplyType, int quantity, String uom, Set<ByProductAttributes> attributes) {
         super();
         this.id = id;
@@ -28,73 +29,47 @@ public class ByProduct {
         this.uom = uom;
         this.attributes = attributes;
     }
-
-    public ByProduct(String name) {
-        this.name = name;
-    }
-//
-//    public ByProduct(String name, Set<ByProductAttribute> attributes) {
-//        super();
-//        this.name = name;
-//        this.attributes = attributes;
-//    }
-//
-//    public ByProduct(String name, Map<String, String> attributeWeightMap) {
-//        super();
-//        this.name = name;
-//        this.attributeWeightMap = attributeWeightMap;
-//    }
-//
-//    public ByProduct(String name, Set<ByProductAttribute> attributes, Map<String, String> attributeWeightMap) {
-//        super();
-//        this.name = name;
-//        this.attributes = attributes;
-//        this.attributeWeightMap = attributeWeightMap;
-//    }
-
-
-
-//    public ByProduct() {
-//    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    
+    //FIXME: Without attributes
+    public ByProduct(String id, String name, String supplyType, double d, String uom) {
+        super();
         this.id = id;
+        this.name = name;
+        this.supplyType = supplyType;
+        this.quantity = d;
+        this.uom = uom;
+    }
+
+    
+	public ByProduct(String id, String name, String supplyType, double quantity, String uom,
+			Map<String, String> attributeWeightMap) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.supplyType = supplyType;
+		this.quantity = quantity;
+		this.uom = uom;
+		this.attributeWeightMap = attributeWeightMap;
+	}
+
+	public String getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSupplyType() {
 		return supplyType;
 	}
 
-	public void setSupplyType(String supplyType) {
-		this.supplyType = supplyType;
-	}
-
-	public int getQuantity() {
+	public double getQuantity() {
 		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	public String getUom() {
 		return uom;
-	}
-
-	public void setUom(String uom) {
-		this.uom = uom;
 	}
 
 	public Set<ByProductAttributes> getAttributes() {
@@ -107,23 +82,15 @@ public class ByProduct {
 		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
 		
 		for (ByProductAttributes bpa : attributes) {
-			normalisedAttributes.add(new Attribute(bpa.attributeKey, bpa.attributeValue, bpa.unitOfMeasure));
+			normalisedAttributes.add(new Attribute(bpa.getAttributeKey(), bpa.getAttributeValue(), bpa.getAttributeUnitOfMeasurement()));
 		}
 		
 		return normalisedAttributes;
 		
 	}
 
-    public void setAttributes(Set<ByProductAttributes> attributes) {
-        this.attributes = attributes;
-    }
-
     public Map<String, String> getAttributeWeightMap() {
         return attributeWeightMap;
-    }
-
-    public void setAttributeWeightMap(Map<String, String> attributeWeightMap) {
-        this.attributeWeightMap = attributeWeightMap;
     }
 
 
@@ -145,41 +112,46 @@ public class ByProduct {
 
 
     //a toString() method that prints processes along with relevant materials
-//    public String toString() {
-//
-//        StringBuffer returnedString = new StringBuffer();
-//        
-//        if (this.attributeWeightMap != null) {
-//        //get attributeKeys associated with process
-//        Map<String, String> attributeWeightMap = this.getAttributeWeightMap();
-//        
-//        Set<String> attributes = new HashSet<String>();
-//        Set<String> attributeValue = new HashSet<String>();
-//        
-//        for (Entry<String, String> e : attributeWeightMap.entrySet()) {
-//        		attributes.add(e.getKey());
-//        		attributeValue.add(e.getValue());
-//        }
-//
-//        returnedString.append(this.name);
-//        
-//        returnedString.append("\n\n- Attributes:");
-//
-//        if (attributes == null || attributes.isEmpty()) {
-//            returnedString.append(" ( no attributes )");
-//        } else {
-//            for (Entry<String, String> e : attributeWeightMap.entrySet()) {
-//            	returnedString.append(e.getKey() + ": " + e.getValue() + " ");
-//            }
-//
-//        }
-//        returnedString.append("\n");
-//        
-//        }
-//
-//        return returnedString.toString();
-//        
-//        }
+    public String toString() {
+
+        StringBuffer returnedString = new StringBuffer();
+        
+        if (this.attributeWeightMap != null) {
+        //get attributeKeys associated with by-product
+        Map<String, String> attributeWeightMap = this.getAttributeWeightMap();
+        
+        Set<String> attributes = new HashSet<String>();
+        Set<String> attributeValue = new HashSet<String>();
+        
+        for (Entry<String, String> e : attributeWeightMap.entrySet()) {
+        		attributes.add(e.getKey());
+        		attributeValue.add(e.getValue());
+        }
+
+        returnedString.append(this.name);
+        
+        returnedString.append("\n\n- Attributes:");
+
+        if (attributes == null || attributes.isEmpty()) {
+            returnedString.append(" ( no attributes )");
+        } else {
+            for (Entry<String, String> e : attributeWeightMap.entrySet()) {
+            	returnedString.append(e.getKey() + ": " + e.getValue() + " ");
+            }
+
+        }
+        returnedString.append("\n");
+        
+        } else {
+        	returnedString.append("By-product Id: " + this.id);
+        	returnedString.append("\nBy-product name: " + this.name);
+        	
+        	
+        }
+
+        return returnedString.toString();
+        
+        }
     
     }
 

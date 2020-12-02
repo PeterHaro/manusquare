@@ -1,0 +1,36 @@
+{
+    "projectName": "Polias XPTO",
+    "projectDescription": "XPTO",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {
+        "customerInfo": {
+            "location": "Vale de Cambra, Portugal",
+            "lat": "40.8498115",
+            "lon": "-8.3939142"
+        }
+    },
+    "projectId": "82ae7be0-80a7-4065-b4ee-d3980f813e60",
+    "projectType": "By-product",
+    "mode":"buy",
+    "minNumberOfPartecipants":"0",
+    "maxNumberOfPartecipants":"10",
+    "byProductElements": [{
+        "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
+        "byProductName": "Steel",
+        "supplyType": "Limited amount",
+        "quantity": "150",
+        "unitOfMeasureQuantity": "Kg",
+        "byProductAttributes": [{
+                "attributeKey": "",
+                "attributeValue": "",
+                "unitOfMeasure": ""
+            }
+        ]
+
+    }],
+    "supplierAttributes": []
+}
+
+
+

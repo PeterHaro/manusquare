@@ -43,49 +43,25 @@ public class Supplier {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getSupplierName() {
 		return supplierName;
 	}
 
-	public void setSupplierName(String supplierName) {
-		this.supplierName = supplierName;
-	}
 
 	public String getSupplierNationality() {
 		return supplierNationality;
-	}
-
-	public void setSupplierNationality(String supplierNationality) {
-		this.supplierNationality = supplierNationality;
 	}
 
 	public String getSupplierCity() {
 		return supplierCity;
 	}
 
-	public void setSupplierCity(String supplierCity) {
-		this.supplierCity = supplierCity;
-	}
-
-
 	public List<Certification> getCertifications() {
 		return certifications;
 	}
 
-	public void setCertifications(List<Certification> certifications) {
-		this.certifications = certifications;
-	}
-
 	public List<Process> getProcesses() {
 		return processes;
-	}
-
-	public void setProcesses(List<Process> processes) {
-		this.processes = processes;
 	}
 
 //	public List<Material> getMaterials() {

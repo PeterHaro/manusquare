@@ -1,13 +1,14 @@
 package sparql;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
-import edm.Attribute;
-import edm.Certification;
-import edm.Material;
-import edm.Process;
-import edm.SparqlRecord;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -19,11 +20,17 @@ import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
+
+import edm.Attribute;
+import edm.Certification;
+import edm.Material;
+import edm.Process;
+import edm.SparqlRecord;
 import query.ConsumerQuery;
 import supplierdata.Supplier;
-
-import java.util.*;
-import java.util.Map.Entry;
 
 //TODO: This class should be seriously checked and very probably improved. 
 public class TripleStoreConnection {
@@ -145,7 +152,7 @@ public class TripleStoreConnection {
 
 						Set<Attribute> consumerAttributes = query.getAttributes();
 
-						String condition = SparqlQuery.mapAttributeConditions(supplierAttribute.getKey());
+						String condition = Attribute.mapAttributeConditions(supplierAttribute.getKey());
 
 						//FIXME: Wrong position of updatedSupplierAttribute contributes to null values of attributeMap being added to record?
 						Attribute updatedSupplierAttribute = new Attribute();
@@ -294,7 +301,7 @@ public class TripleStoreConnection {
 					Map<String, String> attributeMap = new HashMap<String, String>();
 
 					Set<Map<String, String>> attributeMapSet = new HashSet<>(processAndAttributeMap.values());
-
+					
 					for (Map<String, String> aMap : attributeMapSet) {
 
 						//FIXME: Just ignoring null values now, but should check why there are null values earlier in the process.

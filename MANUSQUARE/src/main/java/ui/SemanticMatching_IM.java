@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import edm.Certification;
 import edm.Material;
 import edm.ByProduct;
-import graph.SimpleGraph;
+import graph.Graph;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import query.ConsumerQuery;
@@ -78,7 +78,7 @@ public class SemanticMatching_IM {
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
 
-		graph = SimpleGraph.createGraph(ontology);
+		graph = Graph.createGraph(ontology);
 		
 		//System.out.println("Printing graph nodes");
 		//SimpleGraph.printGraphNodes(graph);

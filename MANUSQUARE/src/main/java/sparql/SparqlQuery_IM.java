@@ -89,7 +89,7 @@ public class SparqlQuery_IM {
 
 		strQuery += "}";
 
-		//System.out.println(strQuery);
+		System.out.println(strQuery);
 
 		return strQuery;
 

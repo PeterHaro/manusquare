@@ -21,7 +21,7 @@ public class BasicMatchmaking_BP {
 		String jsonOut = "./files/matchingResults.json";
 
 		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = false;
+		boolean testing = true;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
@@ -32,12 +32,12 @@ public class BasicMatchmaking_BP {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
 			System.out.println(args[0]);
-			SemanticMatching_MVP.performSemanticMatching(args[0], 10, writer, testing, true, hard_coded_weight);
+			SemanticMatching.performByProductMatching(args[0], 10, writer, testing, true, hard_coded_weight);
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/SUPSI/ByProductSharing_Radostin.json";
- 			SemanticMatching_BP.performSemanticMatching_BP(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
+			String jsonIn = "./files/TESTING_BYPRODUCT_SHARING/TEST_BP_13.json";
+ 			SemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
 		long stopTime = System.currentTimeMillis();

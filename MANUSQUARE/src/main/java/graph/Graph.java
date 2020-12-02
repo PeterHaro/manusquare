@@ -14,9 +14,9 @@ import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class SimpleGraph {
+public class Graph {
 
-	public SimpleGraph() {}
+	public Graph() {}
 
 	public static MutableGraph<String> createGraph (OWLOntology onto) {
 

@@ -1,20 +1,22 @@
 package javalin.controllers;
 
-import com.google.gson.Gson;
-import io.javalin.http.BadRequestResponse;
-import io.javalin.http.Handler;
-import io.javalin.plugin.openapi.annotations.*;
-import javalin.models.ErrorResponse;
-import javalin.models.Rfq;
-import json.RequestForQuotation;
-import ui.SemanticMatching_BP;
-import ui.SemanticMatching_IM;
-import ui.SemanticMatching_MVP;
-import validation.JSONValidation;
-
 import java.io.BufferedWriter;
 import java.io.StringWriter;
 import java.util.Objects;
+
+import com.google.gson.Gson;
+
+import io.javalin.http.Handler;
+import io.javalin.plugin.openapi.annotations.HttpMethod;
+import io.javalin.plugin.openapi.annotations.OpenApi;
+import io.javalin.plugin.openapi.annotations.OpenApiContent;
+import io.javalin.plugin.openapi.annotations.OpenApiFormParam;
+import io.javalin.plugin.openapi.annotations.OpenApiResponse;
+import javalin.models.ErrorResponse;
+import javalin.models.Rfq;
+import json.RequestForQuotation;
+import ui.SemanticMatching;
+import validation.JSONValidation;
 
 
 public class ByProductSemanticMatching {
@@ -45,7 +47,7 @@ public class ByProductSemanticMatching {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        SemanticMatching_BP.performSemanticMatching_BP(jsonInput, 10, writer, false, true, 0.9);
+        SemanticMatching.performByProductMatching(jsonInput, 10, writer, false, true, 0.9);
         System.out.println(sw.toString());
         ctx.json(sw.toString());
     };

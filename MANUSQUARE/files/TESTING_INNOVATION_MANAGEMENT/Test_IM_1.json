@@ -29,5 +29,18 @@
 			"sector": "AutomationProduct"
 		}
 	],
-	"innovationManagerAttributes": []
+	"innovationManagerAttributes": [
+	{
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO9001"
+		},
+	{
+			"id": "2343252346356",
+			"attributeKey": "language",
+			"attributeValue": "English"
+		}
+	]
+
 }
+

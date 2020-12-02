@@ -36,25 +36,14 @@ public class Certification {
 		return qualification;
 	}
 
-	public void setQualification(String qualification) {
-		this.qualification = qualification;
-	}
-
 	public String getAuthority() {
 		return authority;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
 	}
 
 	public String getHasCertification() {
 		return hasCertification;
 	}
 
-	public void setHasCertification(String hasCertification) {
-		this.hasCertification = hasCertification;
-	}
 	
 	@Override
 	public boolean equals (Object o) {

@@ -1,14 +1,11 @@
 package sparql;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
-
-import edm.Attribute;
-import edm.Certification;
-import edm.Material;
-import edm.ByProduct;
-import edm.SparqlRecord;
-import edm.SparqlRecord_IM;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryLanguage;
@@ -20,14 +17,13 @@ import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import query.ConsumerQuery;
+
+import edm.Attribute;
+import edm.Certification;
+import edm.SparqlRecord_IM;
 import query.InnovationManagementQuery;
 import supplierdata.InnovationManager;
-import supplierdata.Supplier;
-
-import java.util.*;
-import java.util.Map.Entry;
+import utilities.StringUtilities;
 
 public class TripleStoreConnection_IM {
 
@@ -99,15 +95,15 @@ public class TripleStoreConnection_IM {
 					
 					record = new SparqlRecord_IM();
 
-					record.setSupplierId(stripIRI(solution.getValue("supplier").stringValue().replaceAll("\\s+", "")));
-					record.setSupplierName(stripIRI(solution.getValue("supplierName").stringValue().replaceAll("\\s+", "")));
-					record.setInnovationPhase(stripIRI(solution.getValue("innovationPhaseType").stringValue().replaceAll("\\s+", "")));
-					record.setInnovationType(stripIRI(solution.getValue("innovationTypeType").stringValue().replaceAll("\\s+", "")));
-					record.setSkill(stripIRI(solution.getValue("skillType").stringValue().replaceAll("\\s+", "")));
-					record.setSector(stripIRI(solution.getValue("innovationSectorType").stringValue().replaceAll("\\s+", "")));
+					record.setSupplierId(StringUtilities.stripIRI(solution.getValue("supplier").stringValue().replaceAll("\\s+", "")));
+					record.setSupplierName(StringUtilities.stripIRI(solution.getValue("supplierName").stringValue().replaceAll("\\s+", "")));
+					record.setInnovationPhase(StringUtilities.stripIRI(solution.getValue("innovationPhaseType").stringValue().replaceAll("\\s+", "")));
+					record.setInnovationType(StringUtilities.stripIRI(solution.getValue("innovationTypeType").stringValue().replaceAll("\\s+", "")));
+					record.setSkill(StringUtilities.stripIRI(solution.getValue("skillType").stringValue().replaceAll("\\s+", "")));
+					record.setSector(StringUtilities.stripIRI(solution.getValue("innovationSectorType").stringValue().replaceAll("\\s+", "")));
 
 					if (solution.getValue("certificationType") != null) {
-						record.setCertification(stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+						record.setCertification(StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 
 					}
 					
@@ -209,114 +205,6 @@ public class TripleStoreConnection_IM {
 
 	}
 
-	
 
-	/**
-	 * Removes the IRIs in front of processes etc. retrieved from the Semantic Infrastructure
-	 *
-	 * @param inputConcept an input ontology concept (with full IRI)
-	 * @return ontology concept with the IRI removed
-	 * Nov 5, 2019
-	 */
-	private static String stripIRI(String inputConcept) {
-		String returnedConceptName = null;
-		if (inputConcept.contains("http://manusquare.project.eu/industrial-manusquare#")) {
-			returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/industrial-manusquare#", "");
-		} else if (inputConcept.contains("http://manusquare.project.eu/core-manusquare#")) {
-			returnedConceptName = inputConcept.replaceAll("http://manusquare.project.eu/core-manusquare#", "");
-		} else {
-			returnedConceptName = inputConcept;
-		}
-		return returnedConceptName;
-
-	}
-
-	private static Attribute alignValues (Attribute supplierAttribute, Attribute consumerAttribute) {
-
-		double newValue = 0;
-
-		if (consumerAttribute.getunitOfMeasurement().equalsIgnoreCase("mm")) {
-
-			if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("mm")) {
-				return supplierAttribute;
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("cm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 10;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("dm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 100;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("m")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 1000;
-				supplierAttribute.setValue(Double.toString(newValue));
-			}
-
-		} else if (consumerAttribute.getunitOfMeasurement().equalsIgnoreCase("cm")) {
-
-			if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("cm")) {
-				return supplierAttribute;
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("mm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) / 10;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("dm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 10;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("m")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 100;
-				supplierAttribute.setValue(Double.toString(newValue));
-			}
-
-		} else if (consumerAttribute.getunitOfMeasurement().equalsIgnoreCase("dm")) {
-
-			if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("dm")) {
-				return supplierAttribute;
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("mm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) / 100;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("cm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) / 10;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("m")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 10;
-				supplierAttribute.setValue(Double.toString(newValue));
-			}
-
-
-		} else if (consumerAttribute.getunitOfMeasurement().equalsIgnoreCase("m")) {
-
-			if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("m")) {
-				return supplierAttribute;
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("dm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) / 10;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("cm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) / 100;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("mm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) / 1000;
-				supplierAttribute.setValue(Double.toString(newValue));
-			}
-
-		} else if (consumerAttribute.getunitOfMeasurement().equalsIgnoreCase("µm")) {
-
-			if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("µm")) {
-				return supplierAttribute;
-			} 	else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("mm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 1000;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("cm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 10000;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("dm")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 100000;
-				supplierAttribute.setValue(Double.toString(newValue));
-			} else if (supplierAttribute.getunitOfMeasurement().equalsIgnoreCase("m")) {
-				newValue = Double.parseDouble(supplierAttribute.getValue()) * 1000000;
-				supplierAttribute.setValue(Double.toString(newValue));
-			}
-		}
-
-		return supplierAttribute;
-
-	}
 
 }

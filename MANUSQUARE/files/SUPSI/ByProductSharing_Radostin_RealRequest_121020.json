@@ -1,0 +1,42 @@
+{
+    "projectName": "my first by product project name",
+    "projectDescription": "",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {
+        "customerInfo": {
+            "location": "Vale de Cambra, Portugal",
+            "lat": "40.8498115",
+            "lon": "-8.3939142"
+        }
+    },
+    "projectId": "a1e3e189-1900-4924-8592-8bacedb679ad",
+    "projectType": "By-product",
+    "byProductElements": [{
+        "byProductId": "f0b502a1-35d2-4134-b516-a449460e6115",
+        "byProductName": "my first by product project description",
+        "supplyType": "Single batch",
+        "quantity": "33",
+        "unitOfMeasureQuantity": "s",
+        "byProductAttributes": [{
+            "id": "1d518d01-3274-44a4-b7ad-d032f1b02ae9",
+            "attributeKey": "aaa",
+            "attributeValue": "vvv",
+            "unitOfMeasure": "mm"
+        }
+        ]
+    }],
+    "supplierAttributes": [{
+        "id": "d0430927-7a9a-4973-9562-3eec245ea5e1",
+        "attributeKey": "language",
+        "attributeValue": "English"
+    }, {
+        "id": "40379027-030b-4172-8d18-a72d9d166a82",
+        "attributeKey": "certification",
+        "attributeValue": "ISO13485"
+    }, {
+        "id": "f57cc1a6-ad4e-4bb7-a3e9-c69aa819aa5b",
+        "attributeKey": "country",
+        "attributeValue": "Switzerland"
+    }]
+}

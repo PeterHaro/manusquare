@@ -78,32 +78,16 @@ public class Process {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    
     public String getVersion() {
         return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 
     public Set<Material> getMaterials() {
@@ -119,25 +103,13 @@ public class Process {
         return attributes;
     }
 
-    public void setAttributes(Set<Attribute> attributes) {
-        this.attributes = attributes;
-    }
-
 
     public Map<String, String> getAttributeWeightMap() {
         return attributeWeightMap;
     }
 
-    public void setAttributeWeightMap(Map<String, String> attributeWeightMap) {
-        this.attributeWeightMap = attributeWeightMap;
-    }
-
     public Set<String> getEquivalentProcesses() {
         return equivalentProcesses;
-    }
-
-    public void setEquivalentProcesses(Set<String> equivalentProcesses) {
-        this.equivalentProcesses = equivalentProcesses;
     }
 
     @Override

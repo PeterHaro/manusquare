@@ -1,0 +1,34 @@
+{
+	"nda": "",
+	"projectName": "Test 15:14",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		"customerInfo": {
+			"location": "Denia, Spain",
+			"lat": "38.846228",
+			"lon": "0.096789"
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "0cf0b0c2-ffe5-4b10-88a8-53f2cb8de9b9",
+	"id": "0cf0b0c2-ffe5-4b10-88a8-53f2cb8de9b9",
+	"projectType": "Capacity Sharing",
+	"projectAttributes": [{
+		"unitOfMeasure": "mm",
+		"attributeId": "c40c187c-9c8f-484a-9744-d0da1102c499",
+		"processName": "3DPrinting",
+		"attributeKey": "MinLayerThickness",
+		"attributeValue": "1000"
+	},
+	{
+		"unitOfMeasure": "",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "3DPrinting",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
+	}
+	],
+	"supplierAttributes": []
+}

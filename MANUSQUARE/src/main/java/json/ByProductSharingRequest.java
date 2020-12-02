@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edm.Resource;
-
 public class ByProductSharingRequest {
 
 	String projectName;
@@ -13,34 +11,86 @@ public class ByProductSharingRequest {
 	String selectionType;
 	String projectId;
 	
-	public Set<ByProductElement> byProductElements;	
-	public List<SupplierAttributeKeys> supplierAttributes;
-	public double supplierMaxDistance;
-	public Customer customer;
-	
+	private Set<ByProductElement> byProductElements;	
+	private List<SupplierAttributeKeys> supplierAttributes;
+	private double supplierMaxDistance;
+	private Customer customer;
+	private String mode;
+	private int minNumberOfPartecipants;
+	private int maxNumberOfPartecipants;
 
 	public ByProductSharingRequest(String projectName, String projectDescription, String selectionType, double supplierMaxDistance,
-                               Customer customer, String projectId, Set<ByProductElement> byProductElements, List<SupplierAttributeKeys> supplierAttributes) {
-		super();
+                               Customer customer, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants, String projectId, Set<ByProductElement> byProductElements, List<SupplierAttributeKeys> supplierAttributes) {
+		//super();
 		this.projectName = projectName;
 		this.projectDescription = projectDescription;
 		this.selectionType = selectionType;
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.customer = customer;
+		this.mode = mode;
+		this.minNumberOfPartecipants = minNumberOfPartecipants;
+		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
 		this.projectId = projectId;
 		this.byProductElements = byProductElements;
 		this.supplierAttributes = supplierAttributes;
 
 	}
 
+	public String getProjectName() {
+		return projectName;
+	}
+
+
+	public String getProjectDescription() {
+		return projectDescription;
+	}
+
+
+	public String getSelectionType() {
+		return selectionType;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public Set<ByProductElement> getByProductElements() {
+		return byProductElements;
+	}
+
+	public List<SupplierAttributeKeys> getSupplierAttributes() {
+		return supplierAttributes;
+	}
+
+	public double getSupplierMaxDistance() {
+		return supplierMaxDistance;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public int getMinNumberOfPartecipants() {
+		return minNumberOfPartecipants;
+	}
+	
+	public int getMaxNumberOfPartecipants() {
+		return maxNumberOfPartecipants;
+	}
+
+
 	public class ByProductElement {
 		
-		public String byProductId;
-		public String byProductName;
-		public String supplyType;
-		public int quantity;
-		public String unitOfMeasureQuantity;
-		public Set<ByProductAttributes> byProductAttributes;
+		private String byProductId;
+		private String byProductName;
+		private String supplyType;
+		private int quantity;
+		private String unitOfMeasureQuantity;
+		private Set<ByProductAttributes> byProductAttributes;
 		
 		public ByProductElement() {}
 		
@@ -58,57 +108,41 @@ public class ByProductSharingRequest {
 			return byProductId;
 		}
 
-		public void setByProductId(String byProductId) {
-			this.byProductId = byProductId;
-		}
 
 		public String getByProductName() {
 			return byProductName;
-		}
-
-		public void setByProductName(String byProductName) {
-			this.byProductName = byProductName;
 		}
 
 		public String getSupplyType() {
 			return supplyType;
 		}
 
-		public void setSupplyType(String supplyType) {
-			this.supplyType = supplyType;
-		}
-
 		public int getQuantity() {
 			return quantity;
-		}
-
-		public void setQuantity(int quantity) {
-			this.quantity = quantity;
 		}
 
 		public String getUom() {
 			return unitOfMeasureQuantity;
 		}
 
-		public void setUom(String unitOfMeasureQuantity) {
-			this.unitOfMeasureQuantity = unitOfMeasureQuantity;
-		}
-
-		public Set<ByProductAttributes> getAttributes() {
+		public Set<ByProductAttributes> getByProductAttributes() {
 			return byProductAttributes;
 		}
 
-		public void setAttributes(Set<ByProductAttributes> attributes) {
-			this.byProductAttributes = attributes;
+		public void setByProductAttributes(Set<ByProductAttributes> byProductAttributes) {
+			this.byProductAttributes = byProductAttributes;
 		}
+		
+		
+
 
 	}
 	
 	public class ByProductAttributes {
 
-		public String attributeKey;
-		public String attributeValue;
-		public String unitOfMeasure;
+		private String attributeKey;
+		private String attributeValue;
+		private String unitOfMeasure;
 		
 		
 		public ByProductAttributes(String attributeKey, String attributeValue, String unitOfMeasure) {
@@ -126,24 +160,13 @@ public class ByProductSharingRequest {
 			return attributeKey;
 		}
 
-		public void setAttributeKey(String attributeKey) {
-			this.attributeKey = attributeKey;
-		}
-
 		public String getAttributeValue() {
 			return attributeValue;
 		}
 
-		public void setAttributeValue(String attributeValue) {
-			this.attributeValue = attributeValue;
-		}
 
 		public String getAttributeUnitOfMeasurement() {
 			return unitOfMeasure;
-		}
-
-		public void setAttributeUnitOfMeasurement(String unitOfMeasure) {
-			this.unitOfMeasure = unitOfMeasure;
 		}
 		
 
@@ -152,9 +175,9 @@ public class ByProductSharingRequest {
 	
 	public class SupplierAttributeKeys {
 		
-		public String id;
-		public String attributeKey;
-		public String attributeValue;
+		private String id;
+		private String attributeKey;
+		private String attributeValue;
 		
 		public SupplierAttributeKeys(String id, String attributeKey, String attributeValue) {
 			super();
@@ -167,31 +190,22 @@ public class ByProductSharingRequest {
 			return id;
 		}
 
-		public void setId(String id) {
-			this.id = id;
-		}
 
 		public String getAttributeKey() {
 			return attributeKey;
 		}
 
-		public void setAttributeKey(String attributeKey) {
-			this.attributeKey = attributeKey;
-		}
 
 		public String getAttributeValue() {
 			return attributeValue;
 		}
 
-		public void setAttributeValue(String attributeValue) {
-			this.attributeValue = attributeValue;
-		}
 	}
 	
 	public class Customer {
 		
-		public String customerName;		
-		public Map<String, String> customerInfo;
+		private String customerName;		
+		private Map<String, String> customerInfo;
 
 		public Customer(String customerName, Map<String, String> customerInfo) {
 			super();
@@ -218,12 +232,7 @@ public class ByProductSharingRequest {
 		public Map<String, String> getCustomerInfo() {
 			return customerInfo;
 		}
-
-		public void setCustomerInfo(Map<String, String> customerInfo) {
-			this.customerInfo = customerInfo;
-		}
-
-		
+	
 		
 	}
 

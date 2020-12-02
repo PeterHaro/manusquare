@@ -153,6 +153,8 @@ public class SimilarityMeasures_IM {
 		return similarityList;
 	}		
 
+	
+	
 	public static double computeIndependentWUPSetSim (List<String> consumerSet, List<String> supplierSet, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 		SimilarityParameters parameters = null;		
