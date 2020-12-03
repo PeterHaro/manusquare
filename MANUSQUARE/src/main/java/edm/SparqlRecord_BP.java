@@ -13,9 +13,10 @@ public class SparqlRecord_BP {
 	private String byProductMinParticipants;
 	private String byProductMaxParticipants;
 	private String byProductQuantity;
+	private String byProductMinQuantity;
 	private String byProductUOM;
 	private String certification;
-	private Set<String> attributes;
+	private String material;
 	private double attributeWeight;
 	private Map<String, String> attributeWeightMap; //added 11.02.2020 to associate a condition ('<=', '>=' or '=') to an attributeKey
 	
@@ -23,7 +24,7 @@ public class SparqlRecord_BP {
 	
 	public SparqlRecord_BP(String wsProfileId, String supplierId, String byProductName, String byProductSupplyType,
 			String byProductDeadline, String byProductMinParticipants, String byProductMaxParticipants,
-			String byProductQuantity, String byProductUOM, String certification, Map<String, String> attributeWeightMap) {
+			String byProductQuantity, String byProductMinQuantity, String byProductUOM, String certification, String material, Map<String, String> attributeWeightMap) {
 		super();
 		this.wsProfileId = wsProfileId;
 		this.supplierId = supplierId;
@@ -35,36 +36,35 @@ public class SparqlRecord_BP {
 		this.byProductQuantity = byProductQuantity;
 		this.byProductUOM = byProductUOM;
 		this.certification = certification;
-//		this.attributes = attributes;
-//		this.attributeWeight = attributeWeight;
+		this.material = material;
 		this.attributeWeightMap = attributeWeightMap;
 	}
 
-	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification, Set<String> attributes, double attributeWeight) {
-		super();
-		this.wsProfileId = wsProfileId;
-		this.supplierId = supplierId;
-		this.certification = certification;
-		this.attributes = attributes;
-		this.attributeWeight = attributeWeight;
-	}
+//	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification, Set<String> attributes, double attributeWeight) {
+//		super();
+//		this.wsProfileId = wsProfileId;
+//		this.supplierId = supplierId;
+//		this.certification = certification;
+//		this.attributes = attributes;
+//		this.attributeWeight = attributeWeight;
+//	}
 	
-	public SparqlRecord_BP(String supplierId, String wsProfileId, 
-			String certification, Set<String> attributes, Map<String, String> attributeWeightMap) {
-		super();
-		this.supplierId = supplierId;
-		this.wsProfileId = wsProfileId;
-		this.certification = certification;
-		this.attributes = attributes;
-		this.attributeWeightMap = attributeWeightMap;
-	}
+//	public SparqlRecord_BP(String supplierId, String wsProfileId, 
+//			String certification, Set<String> attributes, Map<String, String> attributeWeightMap) {
+//		super();
+//		this.supplierId = supplierId;
+//		this.wsProfileId = wsProfileId;
+//		this.certification = certification;
+//		this.attributes = attributes;
+//		this.attributeWeightMap = attributeWeightMap;
+//	}
 	
-	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification) {
-		super();
-		this.wsProfileId = wsProfileId;
-		this.supplierId = supplierId;
-		this.certification = certification;
-	}
+//	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification) {
+//		super();
+//		this.wsProfileId = wsProfileId;
+//		this.supplierId = supplierId;
+//		this.certification = certification;
+//	}
 	
 	
 	public SparqlRecord_BP () {}
@@ -95,8 +95,13 @@ public class SparqlRecord_BP {
 		this.certification = certification;
 	}
 
-	public Set<String> getAttributes() {
-		return attributes;
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(String material) {
+		this.material = material;
 	}
 
 	public double getAttributeWeight() {
@@ -158,6 +163,15 @@ public class SparqlRecord_BP {
 
 	public void setByProductQuantity(String byProductQuantity) {
 		this.byProductQuantity = byProductQuantity;
+	}
+	
+
+	public String getByProductMinQuantity() {
+		return byProductMinQuantity;
+	}
+
+	public void setByProductMinQuantity(String byProductMinQuantity) {
+		this.byProductMinQuantity = byProductMinQuantity;
 	}
 
 	public String getByProductUOM() {

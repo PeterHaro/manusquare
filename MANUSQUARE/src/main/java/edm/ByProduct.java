@@ -14,13 +14,15 @@ public class ByProduct {
     private String name;
     private String supplyType;
     private double quantity;
+    private double minQuantity;
     private String uom;
     private Set<ByProductAttributes> attributes;
-    private Map<String, String> attributeWeightMap; //added 11.02.2020 to associate a weight to an attributeKey
+    private Map<String, String> attributeWeightMap; 
+    private String material; //added 02.12.2020
 
-//
+
 //    //TODO: Clean up constructors!
-    public ByProduct(String id, String name, String supplyType, int quantity, String uom, Set<ByProductAttributes> attributes) {
+    public ByProduct(String id, String name, String supplyType, double quantity, String uom, Set<ByProductAttributes> attributes) {
         super();
         this.id = id;
         this.name = name;
@@ -29,6 +31,8 @@ public class ByProduct {
         this.uom = uom;
         this.attributes = attributes;
     }
+    
+    
     
     //FIXME: Without attributes
     public ByProduct(String id, String name, String supplyType, double d, String uom) {
@@ -41,14 +45,16 @@ public class ByProduct {
     }
 
     
-	public ByProduct(String id, String name, String supplyType, double quantity, String uom,
+	public ByProduct(String id, String name, String supplyType, double quantity, double minQuantity, String uom, String material,
 			Map<String, String> attributeWeightMap) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.supplyType = supplyType;
 		this.quantity = quantity;
+		this.minQuantity = minQuantity;
 		this.uom = uom;
+		this.material = material;
 		this.attributeWeightMap = attributeWeightMap;
 	}
 
@@ -64,6 +70,14 @@ public class ByProduct {
 		return supplyType;
 	}
 
+    
+    
+	public double getMinQuantity() {
+		return minQuantity;
+	}
+
+
+
 	public double getQuantity() {
 		return quantity;
 	}
@@ -71,6 +85,13 @@ public class ByProduct {
 	public String getUom() {
 		return uom;
 	}
+	
+	
+
+	public String getMaterial() {
+		return material;
+	}
+
 
 	public Set<ByProductAttributes> getAttributes() {
         return attributes;

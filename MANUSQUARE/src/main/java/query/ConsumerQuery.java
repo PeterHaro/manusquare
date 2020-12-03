@@ -94,24 +94,13 @@ public class ConsumerQuery {
 
 	}
 
-	public void setProcesses(Set<Process> processes) {
-		this.processes = processes;
-	}
-
 	public Set<Certification> getCertifications() {
 		return certifications;
 	}
 
-	public void setCertifications(Set<Certification> certifications) {
-		this.certifications = certifications;
-	}
 
 	public double getSupplierMaxDistance() {
 		return supplierMaxDistance;
-	}
-
-	public void setSupplierMaxDistance(double supplierMaxDistance) {
-		this.supplierMaxDistance = supplierMaxDistance;
 	}
 
 
@@ -119,17 +108,10 @@ public class ConsumerQuery {
 		return customerLocationInfo;
 	}
 
-	public void setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
-		this.customerLocationInfo = customerLocationInfo;
-	}
-	
 	public Set<String> getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(Set<String> language) {
-		this.language = language;
-	}
 
 	/**
 	 * Parses a json file and creates a ConsumerQuery object representing the input provided by a consumer in the RFQ establishment process.

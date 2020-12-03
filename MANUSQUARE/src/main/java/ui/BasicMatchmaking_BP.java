@@ -36,7 +36,7 @@ public class BasicMatchmaking_BP {
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/TESTING_BYPRODUCT_SHARING/TEST_BP_13.json";
+			String jsonIn = "./files/TESTING_BYPRODUCT_SHARING/TEST_BP_16.json";
  			SemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 

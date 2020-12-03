@@ -110,12 +110,12 @@ public class SparqlQuery_BP {
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
 			strQuery += "\nSELECT DISTINCT ?wsProfileId ?supplierId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?certificationType "
-					+ "?byProductMaxParticipants ?byProductQuantity ?byProductUOM \n";
+					+ "?byProductMaxParticipants ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?materialType \n";
 
 		} else {
 
 			strQuery += "\nSELECT DISTINCT ?wsProfileId ?supplierId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?certificationType "
-					+ "?byProductMaxParticipants ?byProductQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue\n";
+					+ "?byProductMaxParticipants ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?materialType \n";
 
 		}
 
@@ -144,6 +144,8 @@ public class SparqlQuery_BP {
 		
 		//the quantity and unit of measurement of quantity must be compared with reqs in consumer query (in java)
 		strQuery +="?wsProfileId core:hasQuantity ?byProductQuantity . \n";
+		
+		strQuery +="?wsProfileId ind:hasMinQuantity ?byProductMinQuantity . \n";
 		
 		strQuery +="?wsProfileId ind:hasUnitOfMeasureQuantity ?byProductUOM . \n";
 		

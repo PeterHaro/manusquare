@@ -72,6 +72,7 @@ public class TestSemanticInfrastructure {
 
 					System.out.println("By-product Price: " + stripIRI(solution.getValue("byProductPrice").stringValue()));
 					System.out.println("By-product Quantity: " + stripIRI(solution.getValue("byProductQuantity").stringValue()));
+					System.out.println("By-product Min Quantity: " + stripIRI(solution.getValue("byProductMinQuantity").stringValue()));
 					System.out.println("By-product UOM: " + stripIRI(solution.getValue("byProductUOM").stringValue()));
 
 					System.out.println("By-product Attribute Type: " + stripIRI(solution.getValue("attributeType").stringValue()));
@@ -115,7 +116,7 @@ public class TestSemanticInfrastructure {
 //		strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>  \n";
 
 		strQuery += "SELECT DISTINCT ?wsProfile ?supplier ?supplierName ?byProductName ?byProductMode ?byProductStatus ?byProductSupplyType ?byProductDeadline ?byProductMinParticipants "
-				+ "?byProductMaxParticipants ?byProductPrice ?byProductQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?certificationType \n";
+				+ "?byProductMaxParticipants ?byProductPrice ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?certificationType \n";
 
 		strQuery += "WHERE { \n";
 
@@ -149,6 +150,9 @@ public class TestSemanticInfrastructure {
 
 		//the quantity and unit of measurement of quantity must be compared with reqs in consumer query (in java)
 		strQuery +="?wsProfile core:hasQuantity ?byProductQuantity . \n";
+		
+		//min quantity
+		strQuery +="?wsProfile ind:hasMinQuantity ?byProductMinQuantity . \n";
 		
 		strQuery +="?wsProfile ind:hasUnitOfMeasureQuantity ?byProductUOM . \n";
 

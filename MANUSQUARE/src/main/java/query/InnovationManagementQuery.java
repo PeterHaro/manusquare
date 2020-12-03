@@ -68,35 +68,24 @@ public class InnovationManagementQuery {
 		return certifications;
 	}
 
-	public void setCertifications(Set<Certification> certifications) {
-		this.certifications = certifications;
-	}
 
 	public double getSupplierMaxDistance() {
 		return supplierMaxDistance;
 	}
 
-	public void setSupplierMaxDistance(double supplierMaxDistance) {
-		this.supplierMaxDistance = supplierMaxDistance;
-	}
-
-
 	public Map<String, String> getCustomerLocationInfo() {
 		return customerLocationInfo;
-	}
-
-	public void setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
-		this.customerLocationInfo = customerLocationInfo;
 	}
 
 	public Set<String> getLanguages() {
 		return languages;
 	}
 
-	public void setLanguage(Set<String> languages) {
+	
+
+	public void setLanguages(Set<String> languages) {
 		this.languages = languages;
 	}
-
 
 	public List<String> getInnovationPhases() {
 		return innovationPhases;
@@ -123,10 +112,13 @@ public class InnovationManagementQuery {
 		InnovationManagementQuery.skills = innovationManagerSkills;
 	}
 	
-	
 
 	public static List<String> getSectors() {
 		return sectors;
+	}
+
+	public void setCertifications(Set<Certification> certifications) {
+		this.certifications = certifications;
 	}
 
 	public static void setSectors(List<String> sectors) {
@@ -215,7 +207,7 @@ public class InnovationManagementQuery {
 			}
 			
 			if (languages != null || !languages.isEmpty()) {
-				query.setLanguage(languages);
+				query.setLanguages(languages);
 			}
 
 		}

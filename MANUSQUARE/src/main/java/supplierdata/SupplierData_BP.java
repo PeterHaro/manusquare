@@ -32,7 +32,7 @@ public class SupplierData_BP {
 	
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "BYPRODUCTSHARING_LOCAL";
+	static final String REPOSITORY_ID = "BP_2";
 
 
 	/**
@@ -91,6 +91,8 @@ public class SupplierData_BP {
 			 Attribute supplierAttribute = new Attribute();
 
 			SparqlRecord_BP record = null;
+			
+			Map<String, String> attributeWeightMap = null;
 						
 			while (result.hasNext()) {
 				
@@ -111,6 +113,7 @@ public class SupplierData_BP {
 				record.setByProductMinParticipants(solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""));
 				record.setByProductMaxParticipants(solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""));
 				record.setByProductQuantity(solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""));
+				record.setByProductMinQuantity(solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""));
 				record.setByProductUOM(solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", ""));
 
 				if (solution.getValue("certificationType") != null) {
@@ -118,19 +121,22 @@ public class SupplierData_BP {
 							.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 
 				}
-				
 
 			  // deal with attributes ("Y", "N" or "O") according to attributes required in
 				// the consumer query
-				
-				
 				if (solution.getValue("attributeType") != null && !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") /*&& solution.getValue("uomStr") != null*/) {
 					
-					Map<String, String> attributeWeightMap = Attribute.createAttributeWeightMap(solution,
+					attributeWeightMap = Attribute.createAttributeWeightMap(solution,
 							supplierAttribute, query);
+										
 					record.setAttributeWeightMap(attributeWeightMap);
 					
 
+				}
+				
+				if (solution.getValue("materialType") != null) {
+					record.setMaterial(StringUtilities
+							.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
 				}
 				
 
@@ -224,24 +230,27 @@ public class SupplierData_BP {
 					// add byProducts
 					byProductAndAttributeMap = supplierToByProductMapAttributes.get(sr.getSupplierId());
 					
-					Map<String, String> attributeMap = new HashMap<String, String>();
-					
-					//FIXME: hack to avoid npe
+
 					if (byProductAndAttributeMap != null) {
-
-					Set<Map<String, String>> attributeMapSet = new HashSet<>(byProductAndAttributeMap.values());
 					
-					for (Map<String, String> aMap : attributeMapSet) {
+					for (String key : byProductAndAttributeMap.keySet()) {
+						if (sr.getWsProfileId().equals(key)) {
+							
+							for (Map<String, String> aMap : byProductAndAttributeMap.get(key)) {
 
-						if (aMap != null) {
-							attributeMap.putAll(aMap);
+								if (aMap != null) {
+									byProduct = new ByProduct(sr.getWsProfileId(), sr.getByProductName(), sr.getByProductSupplyType(), Double.parseDouble(sr.getByProductQuantity()), Double.parseDouble(sr.getByProductMinQuantity()), sr.getByProductUOM(), 
+											sr.getMaterial(), aMap);
+
+								}
+
+							}
+
 						}
-
 					}
 					
-					}//end avoiding npe
-										
-					byProduct = new ByProduct(sr.getWsProfileId(), sr.getByProductName(), sr.getByProductSupplyType(), Double.parseDouble(sr.getByProductQuantity()), sr.getByProductUOM(), attributeMap);
+					}
+					
 
 					//add byproducts
 					if (!byProducts.contains(byProduct)) {
@@ -256,6 +265,7 @@ public class SupplierData_BP {
 
 			suppliersList.add(supplier);
 		}
+		
 		
 		return suppliersList;
 	}

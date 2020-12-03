@@ -241,10 +241,8 @@ public class ByProductQuery {
 			//TODO: Check that this check on empty attributes work!
 			for (ByProductAttributes bp : attributeSet) {
 				if (bp.getAttributeKey() == null || bp.getAttributeKey().equals("")) {
-					System.out.println("Validating by-product: " + element.getByProductName());
 					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), element.getSupplyType(), element.getQuantity(), element.getUom()));
 				} else {
-					System.out.println("Validating by-product: " + element.getByProductName());
 					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), element.getSupplyType(), element.getQuantity(), element.getUom(), element.getByProductAttributes()));
 				}
 			}

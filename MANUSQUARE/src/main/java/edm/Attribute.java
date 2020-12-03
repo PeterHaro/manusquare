@@ -74,12 +74,6 @@ public class Attribute {
 		supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
 		supplierAttribute.setunitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
 		supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
-		
-		System.out.println("Testing createAttributeWeightMap:");
-
-		System.out.println("AttributeKey: " + solution.getValue("attributeType").stringValue().replaceAll("\\s+", ""));
-		System.out.println("UOM: " + solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
-		System.out.println("Attribute Value: " + solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
 
 		Set<Attribute> consumerAttributes = query.getAttributes();
 

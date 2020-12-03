@@ -119,17 +119,14 @@ public class MathUtils {
 	    return sum;
 	}
 	
-	public static boolean lowerThan (double consumerQuantity, String consumerUOM, double supplierQuantity, String supplierUOM) {
-		
-		System.out.println("From lowerThan: ");
-		System.out.println("consumerQuantity: " + consumerQuantity);
-		System.out.println("consumerUOM: " + consumerUOM);
-		System.out.println("supplierQuantity: " + supplierQuantity);
-		System.out.println("supplierUOM: " + supplierUOM);
+	public static boolean lowerThan (double consumerQuantity, String consumerUOM, double supplierQuantity, double supplierMinQuantity, String supplierUOM) {
 
 		boolean lowerThan = true;
 
-		if (consumerUOM.equalsIgnoreCase(supplierUOM)) {
+		//if consumerQuantity is lower than supplierMinQuantity the supplier is not interested
+		if (consumerQuantity < supplierMinQuantity) {
+			lowerThan = false;
+		} else if (consumerUOM.equalsIgnoreCase(supplierUOM)) {
 			if (consumerQuantity <= supplierQuantity) {
 				lowerThan = true;
 			} else {
@@ -142,13 +139,10 @@ public class MathUtils {
 				lowerThan = false;
 			}
 
-
 		} else {
 			lowerThan = false;
 		}
 		
-		System.out.println("consumerQuantity is lower than supplier quantity: " + lowerThan);
-
 		return lowerThan;
 
 	}

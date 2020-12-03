@@ -143,6 +143,30 @@ public class QueryValidation {
 				
 		return validatedProcessName;
 	}
+	
+	/**
+	 * Ensures that a material included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
+	 * @param materialName included by the consumer
+	 * @param onto the MANU-SQUARE ontology
+	 * @param allOntologyClasses string representation of all ontology concepts
+	 * @return a material name verified to exist in the MANU-SQUARE ontology
+	 * @throws IOException
+	   Dec 3, 2020
+	 */
+	public static String validateMaterialName(String materialName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+		
+		String validatedMaterialName = null;
+
+		if (!allOntologyClasses.contains(materialName)) {
+			System.err.println("QueryValidation: materialName is " + materialName);
+			validatedMaterialName = getMostSimilarConcept(materialName, QueryConceptType.MATERIAL, onto, EmbeddingSingletonDataManager.VAM);
+		} else {
+			validatedMaterialName = materialName;
+		}
+				
+		return validatedMaterialName;
+		
+	}
 
 
 	/**
@@ -271,6 +295,8 @@ public class QueryValidation {
 
 			
 		} else {//else check the sim score of the most syntactically similar concept, if this is above 0.9, use this as the most similar concept
+			
+			System.err.println("QueryValidation 2: consumerInput: " + consumerInput);
 			
 			String preProcessedConsumerInput = preProcess(consumerInput);
 						
@@ -470,7 +496,8 @@ public class QueryValidation {
 	 */
 	private static String preProcess(String input) {
 		
-
+		System.err.println("QueryValidation 3: input is: " + input);
+		
 		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+", ""));
 		
 
