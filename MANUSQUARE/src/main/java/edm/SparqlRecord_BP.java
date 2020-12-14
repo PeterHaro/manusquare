@@ -1,7 +1,6 @@
 package edm;
 
 import java.util.Map;
-import java.util.Set;
 
 public class SparqlRecord_BP {
 	
@@ -12,31 +11,53 @@ public class SparqlRecord_BP {
 	private String byProductDeadline;
 	private String byProductMinParticipants;
 	private String byProductMaxParticipants;
+	private String purchasingGroupAbilitation;
 	private String byProductQuantity;
 	private String byProductMinQuantity;
 	private String byProductUOM;
 	private String certification;
 	private String material;
+	private String appearance;
 	private double attributeWeight;
 	private Map<String, String> attributeWeightMap; //added 11.02.2020 to associate a condition ('<=', '>=' or '=') to an attributeKey
 	
 
+	//dont think we need deadline, but keeping it for now
+//	public SparqlRecord_BP(String supplierId, String wsProfileId, String byProductName, String byProductSupplyType,
+//			String byProductDeadline, String byProductMinParticipants, String byProductMaxParticipants,
+//			String byProductQuantity, String byProductMinQuantity, String byProductUOM, String certification, String material, Map<String, String> attributeWeightMap) {
+//		super();
+//		this.wsProfileId = wsProfileId;
+//		this.supplierId = supplierId;
+//		this.byProductName = byProductName;
+//		this.byProductSupplyType = byProductSupplyType;
+//		this.byProductDeadline = byProductDeadline;
+//		this.byProductMinParticipants = byProductMinParticipants;
+//		this.byProductMaxParticipants = byProductMaxParticipants;
+//		this.byProductQuantity = byProductQuantity;
+//		this.byProductUOM = byProductUOM;
+//		this.certification = certification;
+//		this.material = material;
+//		this.attributeWeightMap = attributeWeightMap;
+//	}
 	
-	public SparqlRecord_BP(String wsProfileId, String supplierId, String byProductName, String byProductSupplyType,
-			String byProductDeadline, String byProductMinParticipants, String byProductMaxParticipants,
-			String byProductQuantity, String byProductMinQuantity, String byProductUOM, String certification, String material, Map<String, String> attributeWeightMap) {
+	public SparqlRecord_BP(String supplierId, String wsProfileId, String byProductName, String byProductSupplyType, String byProductMinParticipants, String byProductMaxParticipants,
+			String purchasingGroupAbilitation, String byProductQuantity, String byProductMinQuantity, String byProductUOM, String certification, String material, String appearance, 
+			Map<String, String> attributeWeightMap) {
 		super();
-		this.wsProfileId = wsProfileId;
 		this.supplierId = supplierId;
+		this.wsProfileId = wsProfileId;
 		this.byProductName = byProductName;
 		this.byProductSupplyType = byProductSupplyType;
-		this.byProductDeadline = byProductDeadline;
 		this.byProductMinParticipants = byProductMinParticipants;
 		this.byProductMaxParticipants = byProductMaxParticipants;
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 		this.byProductQuantity = byProductQuantity;
+		this.byProductMinQuantity = byProductMinQuantity;
 		this.byProductUOM = byProductUOM;
 		this.certification = certification;
 		this.material = material;
+		this.appearance = appearance;
 		this.attributeWeightMap = attributeWeightMap;
 	}
 
@@ -59,12 +80,15 @@ public class SparqlRecord_BP {
 //		this.attributeWeightMap = attributeWeightMap;
 //	}
 	
-//	public SparqlRecord_BP(String wsProfileId, String supplierId, String certification) {
-//		super();
-//		this.wsProfileId = wsProfileId;
-//		this.supplierId = supplierId;
-//		this.certification = certification;
-//	}
+	public SparqlRecord_BP(String supplierId, String wsProfileId, String certification, String material, String appearance, Map<String, String> attributeWeightMap) {
+		super();
+		this.supplierId = supplierId;
+		this.wsProfileId = wsProfileId;
+		this.certification = certification;
+		this.material = material;
+		this.appearance = appearance;
+		this.attributeWeightMap = attributeWeightMap;
+	}
 	
 	
 	public SparqlRecord_BP () {}
@@ -102,6 +126,16 @@ public class SparqlRecord_BP {
 
 	public void setMaterial(String material) {
 		this.material = material;
+	}
+	
+	
+
+	public String getAppearance() {
+		return appearance;
+	}
+
+	public void setAppearance(String appearance) {
+		this.appearance = appearance;
 	}
 
 	public double getAttributeWeight() {
@@ -155,6 +189,14 @@ public class SparqlRecord_BP {
 
 	public void setByProductMaxParticipants(String byProductMaxParticipants) {
 		this.byProductMaxParticipants = byProductMaxParticipants;
+	}	
+
+	public String getPurchasingGroupAbilitation() {
+		return purchasingGroupAbilitation;
+	}
+
+	public void setPurchasingGroupAbilitation(String purchasingGroupAbilitation) {
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 	}
 
 	public String getByProductQuantity() {

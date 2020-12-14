@@ -29,16 +29,12 @@ import com.google.gson.GsonBuilder;
 
 import edm.ByProduct;
 import edm.Certification;
-import edm.Process;
 import graph.Graph;
 import query.ByProductQuery;
-import query.ConsumerQuery;
+import similarity.ExtendedMatchingResult;
 import similarity.MatchingResult;
-import similarity.SimilarityMeasures;
 import similarity.SimilarityMeasures_BP;
 import similarity.SimilarityMethods;
-import sparql.TripleStoreConnection;
-import supplierdata.Supplier;
 import supplierdata.SupplierData_BP;
 import supplierdata.Supplier_BP;
 import utilities.MathUtils;
@@ -109,8 +105,9 @@ public class SemanticMatching {
 		
 		List<String> byProducts = new ArrayList<>();
 
+		//just to get the number of relevant by-products
 		for (ByProduct p : query.getByProducts()) {
-			byProducts.add(p.getName());
+			byProducts.add(p.getId());
 
 		}
 		
@@ -128,18 +125,26 @@ public class SemanticMatching {
 		Map<Supplier_BP, Double> supplierScores = new HashMap<Supplier_BP, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> supplierSim = new LinkedList<Double>();
+		
+		TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
 
 		for (Supplier_BP supplier : supplierData) {
-			supplierSim = SimilarityMeasures_BP.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			supplierByProductScoresMapping.putAll(SimilarityMeasures_BP.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
 			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numByProducts));	
 			
 		}
-
+		
+		System.err.println("supplierByProductScoresMapping: " + supplierByProductScoresMapping);
+				
+		List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
+		
 		//extract the n suppliers with the highest similarity scores
-		Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
+		//Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
 
 		//prints the n best suppliers in ranked order to JSON
-		writeResultToOutput(bestSuppliers, writer);
+//		writeResultToOutput(bestSuppliers, writer);
+		
+		writeExtendedResultToOutput(results, writer);
 
 		//prints additional data to console for testing/validation
 		if (testing == true) {			
@@ -234,6 +239,8 @@ public class SemanticMatching {
 		return finalSupplierMap;
 
 	}
+	
+
 
 	/**
 	 * Prints a ranked list of suppliers along with similarity scores to a JSON file
@@ -249,6 +256,20 @@ public class SemanticMatching {
 		}
 
 		String output = new GsonBuilder().create().toJson(scores);
+		writer.write(output);
+		writer.flush();
+		writer.close();
+	}
+	
+	/**
+	 * Prints a ranked list of suppliers along with similarity scores to a JSON file
+	 *
+	 * @param writer Output writer
+	 * @throws IOException Nov 4, 2019
+	 */
+	private static void writeExtendedResultToOutput(List<ExtendedMatchingResult> results, BufferedWriter writer) throws IOException {
+		int rank = 0;
+		String output = new GsonBuilder().create().toJson(results);
 		writer.write(output);
 		writer.flush();
 		writer.close();

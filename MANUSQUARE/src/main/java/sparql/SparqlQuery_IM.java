@@ -13,7 +13,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-import edm.Certification;
 import query.InnovationManagementQuery;
 import utilities.StringUtilities;
 

@@ -27,7 +27,7 @@ public class SparqlQuery_BP {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_1.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/TEST_BP_16.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -35,8 +35,8 @@ public class SparqlQuery_BP {
 
 		ByProductQuery query = ByProductQuery.createByProductQuery(filename, onto);
 		
-		System.out.println("min number of participants: "+ query.getMinNumberOfPartecipants());
-		System.out.println("min number of participants: "+ query.getMaxNumberOfPartecipants());
+		System.out.println("min number of participants: "+ query.getMinNumberOfParticipants());
+		System.out.println("min number of participants: "+ query.getMaxNumberOfParticipants());
 
 		String test = createSparqlQuery(query, onto);
 
@@ -51,8 +51,9 @@ public class SparqlQuery_BP {
 		Set<edm.ByProduct> byProducts = bpq.getByProducts();
 		
 		Set<String> languages = bpq.getLanguage();        
-		int minParticipants = bpq.getMinNumberOfPartecipants();
-		int maxParticipants = bpq.getMaxNumberOfPartecipants();
+//		int minParticipants = bpq.getMinNumberOfParticipants();
+//		int maxParticipants = bpq.getMaxNumberOfParticipants();
+//		String purchasingGroupAbilitation = bpq.getPurchasingGroupAbilitation();
 		Set<ByProduct> byProductSet = bpq.getByProducts();
 		
 		for (ByProduct bp : byProductSet ) {
@@ -81,7 +82,7 @@ public class SparqlQuery_BP {
 			}
 
 		}
-
+		
 		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
 		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
 		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#> \n";
@@ -109,13 +110,13 @@ public class SparqlQuery_BP {
 		//attributes specified in the consumer query as long as there are materials (included in materialsAndAttributes). Doesn´t seem to cause any issues of any sort though.
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
-			strQuery += "\nSELECT DISTINCT ?wsProfileId ?supplierId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?certificationType "
-					+ "?byProductMaxParticipants ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?materialType \n";
+			strQuery += "\nSELECT DISTINCT ?supplierId ?wsProfileId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?byProductMaxParticipants ?purchasingGroupAbilitation ?certificationType "
+					+ "?byProductQuantity ?byProductMinQuantity ?byProductUOM ?materialType \n";
 
 		} else {
 
-			strQuery += "\nSELECT DISTINCT ?wsProfileId ?supplierId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?certificationType "
-					+ "?byProductMaxParticipants ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?materialType \n";
+			strQuery += "\nSELECT DISTINCT ?supplierId ?wsProfileId ?byProductName ?byProductSupplyType ?byProductMinParticipants "
+					+ "?byProductMaxParticipants ?purchasingGroupAbilitation ?certificationType ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?materialType \n";
 
 		}
 
@@ -125,13 +126,19 @@ public class SparqlQuery_BP {
 		strQuery +="?wsProfileId core:hasName ?byProductName . \n";
 		strQuery +="?wsProfileId ind:hasMode ?byProductMode . \n";
 		
-		strQuery +="?wsProfileId ind:hasMinPartecipants ?byProductMinParticipants . \n";
-		//instead of 0 the minParticipants should come from the consumer query
-		strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) >= " + minParticipants + " ) \n";
+		strQuery +="OPTIONAL { ?wsProfileId ind:hasDeadline ?deadline . \n";
+		strQuery +="FILTER ( ?deadline >= NOW() ) \n";
+		strQuery += "} \n";
 		
-		strQuery +="?wsProfileId ind:hasMaxPartecipants ?byProductMaxParticipants . \n";
-		//instead of 10 the maxParticipants should come from the consumer query
-		strQuery +="FILTER ( xsd:integer(?byProductMaxParticipants) <= " + maxParticipants + " ) \n";
+		strQuery +="?wsProfileId ind:hasMinParticipants ?byProductMinParticipants . \n";
+		//TODO: Not sure how the minParticipants is registered with the supplier wsprofile (not in GUI)
+		//strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) >= " + minParticipants + " ) \n";
+		
+		strQuery +="?wsProfileId ind:hasMaxParticipants ?byProductMaxParticipants . \n";
+		//TODO: Not sure how the maxParticipants is registered with the supplier wsprofile (not in GUI)
+		//strQuery +="FILTER ( xsd:integer(?byProductMaxParticipants) <= " + maxParticipants + " ) \n";
+		
+		strQuery +="?wsProfileId ind:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
 		
 		//fixed filter not from consumer query
 		strQuery +="FILTER ( regex(?byProductMode, \"sell\", \"i\") ) \n";
@@ -196,7 +203,7 @@ public class SparqlQuery_BP {
 	
 	private static String queryAttributes (Set<String> materialsAndAttributes) {
 
-		//String restrictedValues = getRestrictedValues(materialsAndAttributes);
+		String restrictedValues = getRestrictedValues(materialsAndAttributes);
 
 		StringBuilder attributeQuery = new StringBuilder();
 
@@ -204,9 +211,9 @@ public class SparqlQuery_BP {
 		attributeQuery.append("?attribute rdf:type ?attributeType . \n");
 		
 		attributeQuery.append("#GET ATTRIBUTES\n");
-		attributeQuery.append("OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd . } \n");
-		attributeQuery.append("OPTIONAL {?uomInd core:hasName ?uom . }\n");
-		attributeQuery.append("OPTIONAL {?attribute core:hasValue ?attributeValue . }\n");
+		attributeQuery.append("OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd .  \n");
+		attributeQuery.append("?uomInd core:hasName ?uom . \n");
+		attributeQuery.append("?attribute core:hasValue ?attributeValue . }\n");
 		
 		attributeQuery.append("#GET MATERIALS\n");
 		attributeQuery.append("OPTIONAL {?attribute core:hasObjectValue ?attributeMaterialValue .\n");
@@ -214,7 +221,7 @@ public class SparqlQuery_BP {
 		attributeQuery.append("FILTER ( ?materialType not in ( owl:NamedIndividual )) \n");
 		attributeQuery.append("} \n");
 		
-//		attributeQuery.append("VALUES ?attributeType {" + restrictedValues + "ind:AttributeMaterial} \n"); //these must be retrieved from the consumer query
+		attributeQuery.append("VALUES ?attributeType {" + restrictedValues + "ind:Appearance} \n"); //these must be retrieved from the consumer query
 		attributeQuery.append("FILTER ( ?attributeType not in ( owl:NamedIndividual )) \n");
 		attributeQuery.append("} \n");
 

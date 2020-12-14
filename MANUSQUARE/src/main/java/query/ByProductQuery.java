@@ -34,110 +34,79 @@ public class ByProductQuery {
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private String mode;
-	private int minNumberOfPartecipants;
-	private int maxNumberOfPartecipants;
+	private int minNumberOfPartcipants;
+	private int maxNumberOfParticipants;
+	private String purchasingGroupAbilitation;
 	private Set<String> language;
 	private Set<String> country;
 	
 	
-	public ByProductQuery(Set<ByProduct> byProducts, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants) {
+	//used by ByProductQuery
+	public ByProductQuery(Set<ByProduct> byProducts, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation) {
 		super();
 		this.byProducts = byProducts;
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.customerLocationInfo = customerLocationInfo;
 		this.mode = mode;
-		this.minNumberOfPartecipants = minNumberOfPartecipants;
-		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
+		this.minNumberOfPartcipants = minNumberOfParticipants;
+		this.maxNumberOfParticipants = maxNumberOfParticipants;
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 	}
 	
-	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants) {
-		super();
-		this.byProducts = byProducts;
-		this.certifications = certifications;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customerLocationInfo = customerLocationInfo;
-		this.mode = mode;
-		this.minNumberOfPartecipants = minNumberOfPartecipants;
-		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
-	}
-	
-	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants, Set<String> language) {
+	//used by ByProductQuery
+	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation) {
 		super();
 		this.byProducts = byProducts;
 		this.certifications = certifications;
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.customerLocationInfo = customerLocationInfo;
 		this.mode = mode;
-		this.minNumberOfPartecipants = minNumberOfPartecipants;
-		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
-		this.language = language;
+		this.minNumberOfPartcipants = minNumberOfParticipants;
+		this.maxNumberOfParticipants = maxNumberOfParticipants;
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 	}
 	
-//	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants, Set<String> country) {
+//	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, Set<String> language) {
 //		super();
 //		this.byProducts = byProducts;
 //		this.certifications = certifications;
 //		this.supplierMaxDistance = supplierMaxDistance;
 //		this.customerLocationInfo = customerLocationInfo;
 //		this.mode = mode;
-//		this.minNumberOfPartecipants = minNumberOfPartecipants;
-//		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
-//		this.country = country;
+//		this.minNumberOfPartcipants = minNumberOfParticipants;
+//		this.maxNumberOfParticipants = maxNumberOfParticipants;
+//		this.language = language;
 //	}
 	
-	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants, Set<String> language, Set<String> country) {
+	//used by ByProductQuery
+	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation, Set<String> country) {
 		super();
 		this.byProducts = byProducts;
 		this.certifications = certifications;
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.customerLocationInfo = customerLocationInfo;
 		this.mode = mode;
-		this.minNumberOfPartecipants = minNumberOfPartecipants;
-		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
+		this.minNumberOfPartcipants = minNumberOfParticipants;
+		this.minNumberOfPartcipants = maxNumberOfParticipants;
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
+		this.country = country;
+	}
+	
+	//used by ByProductQuery
+	public ByProductQuery(Set<ByProduct> byProducts, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation, Set<String> language, Set<String> country) {
+		super();
+		this.byProducts = byProducts;
+		this.certifications = certifications;
+		this.supplierMaxDistance = supplierMaxDistance;
+		this.customerLocationInfo = customerLocationInfo;
+		this.mode = mode;
+		this.minNumberOfPartcipants = minNumberOfParticipants;
+		this.maxNumberOfParticipants = maxNumberOfParticipants;
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 		this.language = language;
 		this.country = country;
 	}
 	
-//	public static class ByProductQueryBuilder {
-//		
-//		private Set<ByProduct> byProducts;
-//		private Set<Certification> certifications;
-//		private double supplierMaxDistance;
-//		private Map<String, String> customerLocationInfo;
-//		private String mode;
-//		private int minNumberOfPartecipants;
-//		private int maxNumberOfPartecipants;
-//		private Set<String> language;
-//		
-//		public ByProductQueryBuilder(Set<ByProduct> byProducts, double supplierMaxDistance, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants) {
-//			this.byProducts = byProducts;
-//			this.supplierMaxDistance = supplierMaxDistance;
-//			this.mode = mode;
-//			this.minNumberOfPartecipants = minNumberOfPartecipants;
-//			this.maxNumberOfPartecipants = maxNumberOfPartecipants;
-//		}
-//		
-//		public ByProductQueryBuilder certifications (Set<Certification> certifications) {
-//			this.certifications = certifications;
-//			return this;
-//		}
-//		
-//		public ByProductQueryBuilder customerLocationInfo (Map<String, String> customerLocationInfo) {
-//			this.customerLocationInfo = customerLocationInfo;
-//			return this;
-//		}
-//		
-//		public ByProductQueryBuilder languages (Set<String> language) {
-//			this.language = language;
-//			return this;
-//		}
-//		
-//		public ByProductQuery build() {
-//			ByProductQuery query = new ByProductQuery(this);
-//			return query;
-//		}
-//	}
-
 
 	public ByProductQuery() {
 	}
@@ -199,14 +168,19 @@ public class ByProductQuery {
 		return mode;
 	}
 
-	public int getMinNumberOfPartecipants() {
-		return minNumberOfPartecipants;
+	public int getMinNumberOfParticipants() {
+		return minNumberOfPartcipants;
 	}
 
-	public int getMaxNumberOfPartecipants() {
-		return maxNumberOfPartecipants;
+	public int getMaxNumberOfParticipants() {
+		return maxNumberOfParticipants;
 	}
+	
 
+
+	public String getPurchasingGroupAbilitation() {
+		return purchasingGroupAbilitation;
+	}
 
 	/**
 	 * Parses a json file and creates a ByProductQuery object representing the input provided by a consumer in the RFQ establishment process.
@@ -223,6 +197,8 @@ public class ByProductQuery {
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> languages = new HashSet<String>();
 		Set<String> countries = new HashSet<String>();
+		Set<String> materials = new HashSet<String>();
+		Set<String> appearances = new HashSet<String>();
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		ByProductSharingRequest bpsr;
@@ -232,18 +208,34 @@ public class ByProductQuery {
 		} else {
 			bpsr = new Gson().fromJson(new FileReader(filename), ByProductSharingRequest.class);
 		}
+		
+		String purchasingGroupAbilitation = bpsr.getPurchasingGroupAbilitation();
+		int minNumberOfParticipants = bpsr.getMinNumberOfParticipants();
+		int maxNumberOfParticipants = bpsr.getMaxNumberOfParticipants();
+		
 
 		//get all byproduct (names) from the JSON
 		for (ByProductElement element : bpsr.getByProductElements()) {
 			
 			Set<ByProductAttributes> attributeSet = element.getByProductAttributes();
 			
-			//TODO: Check that this check on empty attributes work!
 			for (ByProductAttributes bp : attributeSet) {
 				if (bp.getAttributeKey() == null || bp.getAttributeKey().equals("")) {
-					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), element.getSupplyType(), element.getQuantity(), element.getUom()));
+					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
+							element.getSupplyType(), element.getQuantity(), element.getUom(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation));
 				} else {
-					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), element.getSupplyType(), element.getQuantity(), element.getUom(), element.getByProductAttributes()));
+					
+					if (bp.getAttributeKey().equals("AttributeMaterial")) {
+						materials.add(bp.getAttributeValue());
+					}
+					
+					if (bp.getAttributeKey().equals("Appearance")) {
+						appearances.add(bp.getAttributeValue());
+					}
+					
+					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
+							element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom(),  
+							materials, appearances, element.getByProductAttributes()));
 				}
 			}
 			
@@ -256,14 +248,12 @@ public class ByProductQuery {
 		Map<String, String> customerInformation = bpsr.getCustomer().getCustomerInfo();
 		
 		String mode = bpsr.getMode();
-		int minNumberOfPartecipants = bpsr.getMinNumberOfPartecipants();
-		int maxNumberOfPartecipants = bpsr.getMaxNumberOfPartecipants();
 
 		//get certifications if they are specified by the consumer
 		if (bpsr.getSupplierAttributes() == null || bpsr.getSupplierAttributes().isEmpty()) {
 			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
 			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
-			query = new ByProductQuery(byProducts, supplierMaxDistance, customerInformation, mode, minNumberOfPartecipants, maxNumberOfPartecipants);
+			query = new ByProductQuery(byProducts, supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation);
 
 		} else {
 
@@ -285,31 +275,31 @@ public class ByProductQuery {
 			//if both languages and countries
 			if (!languages.isEmpty() && !countries.isEmpty()) {
 
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfPartecipants, maxNumberOfPartecipants, languages, countries);
+				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, languages, countries);
 
 			} else if (!languages.isEmpty() && countries.isEmpty()) {
 				
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfPartecipants, maxNumberOfPartecipants, languages);
+				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, languages);
 				
 			} else if (!countries.isEmpty() && languages.isEmpty())  {
 				
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfPartecipants, maxNumberOfPartecipants, countries);
+				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, countries);
 			}
 			else {
 			
 				//if there are certifications specified we add those along with processes to the ConsumerQuery object
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfPartecipants, maxNumberOfPartecipants);
+				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation);
 			}
 		
 
-
 		return query;
 	}
+	
 
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_11.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin/Radostin_4.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -321,7 +311,10 @@ public class ByProductQuery {
 			System.out.println("Supply type: " + bp.getSupplyType());
 			System.out.println("Quantity: " + bp.getQuantity());
 			System.out.println("UOM: " + bp.getUom() + "\n");
+			System.out.println("Materials: " + bp.getMaterials());
+			System.out.println("Appearances: " + bp.getAppearances());
 
+			System.out.println("\nOther attributes: ");
 			if (bp.getAttributes() != null) {
 			for (Attribute a : bp.getNormalisedAttributes(bp)) {
 				System.out.println("   Attribute: " + a.getKey());
@@ -338,9 +331,9 @@ public class ByProductQuery {
 
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
 		System.out.println("Mode: " + query.getMode());
-		System.out.println("Min number of participants: " + query.getMinNumberOfPartecipants());
-		System.out.println("Max number of participants: " + query.getMaxNumberOfPartecipants());
-
+		System.out.println("Min number of participants: " + query.getMinNumberOfParticipants());
+		System.out.println("Max number of participants: " + query.getMaxNumberOfParticipants());
+		System.out.println("purchaseGroupAbilitation: " + query.getPurchasingGroupAbilitation() + "\n");
 		System.out.println("Languages required: " + query.getLanguage());
 	}
 

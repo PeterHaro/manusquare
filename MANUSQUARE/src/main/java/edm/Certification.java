@@ -9,13 +9,13 @@ public class Certification {
 	private String authority;
 	private String hasCertification;
 	
-	public Certification(String id, String qualification, String authority, String hasCertification) {
-		super();
-		this.id = id;
-		this.qualification = qualification;
-		this.authority = authority;
-		this.hasCertification = hasCertification;
-	}
+//	public Certification(String id, String qualification, String authority, String hasCertification) {
+//		super();
+//		this.id = id;
+//		this.qualification = qualification;
+//		this.authority = authority;
+//		this.hasCertification = hasCertification;
+//	}
 	
 	public Certification(String id) {
 		super();
@@ -59,5 +59,8 @@ public class Certification {
 	        return Objects.hash(id);
 	    }
 		
+	  public String toString() {
+		  return this.getId();
+	  }
 
 }

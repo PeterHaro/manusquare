@@ -149,7 +149,7 @@ public class Attribute {
 	}
 
 
-	private static Attribute alignAttributeValues (Attribute supplierAttribute, Attribute consumerAttribute) {
+	public static Attribute alignAttributeValues (Attribute supplierAttribute, Attribute consumerAttribute) {
 
 		double newValue = 0;
 
@@ -423,7 +423,7 @@ public class Attribute {
 		supportedAttributes.add("Stackability");
 		supportedAttributes.add("PresenceOfHandles");
 		supportedAttributes.add("PresenceOfCover");
-		supportedAttributes.add("Material");
+		supportedAttributes.add("AttributeMaterial");
 
 		if (supportedAttributes.contains(attributeKey)) {
 			return true;

@@ -1,11 +1,13 @@
 package supplierdata;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -16,12 +18,16 @@ import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
 import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
+import edm.Material;
+import edm.Process;
+import edm.SparqlRecord;
 import edm.SparqlRecord_BP;
 import query.ByProductQuery;
 import sparql.SparqlQuery_BP;
@@ -32,7 +38,7 @@ public class SupplierData_BP {
 	
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "BP_2";
+	static final String REPOSITORY_ID = "BPS";
 
 
 	/**
@@ -87,61 +93,60 @@ public class SupplierData_BP {
 
 		try (TupleQueryResult result = tupleQuery.evaluate()) {
 
-
-			 Attribute supplierAttribute = new Attribute();
-
-			SparqlRecord_BP record = null;
-			
+			Attribute supplierAttribute = new Attribute();
+			SparqlRecord_BP record = null;			
 			Map<String, String> attributeWeightMap = null;
 						
 			while (result.hasNext()) {
 				
 				BindingSet solution = result.next();
-
+				
 				record = new SparqlRecord_BP();
-				record.setWsProfileId(StringUtilities
-						.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));
 				record.setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
+				record.setWsProfileId(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));			
 				record.setByProductName(solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""));
-				record.setByProductSupplyType(solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""));
-				
-				if (solution.getValue("byProductDeadline") != null) {
-				
-				record.setByProductDeadline(solution.getValue("byProductDeadline").stringValue().replaceAll("\\s+", ""));
-				
-				}
+				record.setByProductSupplyType(solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""));						
 				record.setByProductMinParticipants(solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""));
 				record.setByProductMaxParticipants(solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""));
+				record.setPurchasingGroupAbilitation(solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""));
+				
+
+				
 				record.setByProductQuantity(solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""));
 				record.setByProductMinQuantity(solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""));
 				record.setByProductUOM(solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", ""));
 
 				if (solution.getValue("certificationType") != null) {
-					record.setCertification(StringUtilities
-							.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
-
+				record.setCertification(StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
 				}
 
-			  // deal with attributes ("Y", "N" or "O") according to attributes required in
-				// the consumer query
-				if (solution.getValue("attributeType") != null && !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") /*&& solution.getValue("uomStr") != null*/) {
-					
-					attributeWeightMap = Attribute.createAttributeWeightMap(solution,
-							supplierAttribute, query);
-										
-					record.setAttributeWeightMap(attributeWeightMap);
-					
-
-				}
 				
 				if (solution.getValue("materialType") != null) {
-					record.setMaterial(StringUtilities
-							.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
+					record.setMaterial(StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
+				} else {
+					record.setMaterial(null);
 				}
 				
+				if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
+					
+					record.setAppearance(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
+					
+				}
+				
+				// deal with attributes ("Y", "N" or "O") according to attributes required in the consumer query
+				if (solution.getValue("attributeType") != null 
+						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
+						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
+					
+					
+					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);
+										
+					record.setAttributeWeightMap(attributeWeightMap);
 
+				} 
+				
+				
 				recordSet.add(record);
-
 			}
 			
 
@@ -151,125 +156,175 @@ public class SupplierData_BP {
 
 		// close connection to KB repository
 		repository.shutDown();
-		
-		
+
 		// create list of suppliers according to the results from SPARQL
-		List<Supplier_BP> suppliersList = createSupplierList(recordSet);
-		
-		
+		List<Supplier_BP> suppliersList = consolidateSuppliers(recordSet);		
+
 		return suppliersList;
+
+	}
+	
+	/**
+	 * Consolidates the retrieved SPARQL data per supplier
+	 * @param recordSet set of sparql records retrieved from SI
+	 * @return list of supplier objects containing SPARQL results
+	   Dec 9, 2020
+	 */
+	public static List<Supplier_BP> consolidateSuppliers (Set<SparqlRecord_BP> recordSet) {
+
+		List<Supplier_BP> supplierList = new ArrayList<Supplier_BP>();
+
+		//get all supplier ids for filtering
+		Set<String> supplierids = new HashSet<String>();
+		for (SparqlRecord_BP sr : recordSet) {
+			supplierids.add(sr.getSupplierId());
+		}
+		
+		//consolidate by-products
+		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (recordSet);
+		
+		Supplier_BP supplier = null;
+
+		for (String sup : supplierids) {
+
+			List<Certification> certifications = new ArrayList<Certification>();
+
+			for (SparqlRecord_BP sr : recordSet) {
+
+				Certification cert = null;	
+
+				if (sr.getSupplierId().equals(sup)) {
+
+					cert = new Certification(sr.getCertification());
+					
+					if (!certifications.contains(cert) && cert.getId() != null) {
+						certifications.add(cert);
+					}
+
+					supplier = new Supplier_BP(sr.getSupplierId(), consolidatedByProducts.get(sr.getSupplierId()), certifications);	
+
+				}
+
+				//add supplier to supplierList
+				if (!supplierList.contains(supplier) && supplier != null) {
+					supplierList.add(supplier);
+				}
+			}
+		}		
+
+
+		return supplierList;
 
 	}
 
 	/**
-	 * Aggregates the retrieved SPARQL data per supplier
-	 * @param recordSet
-	 * @return list of supplier objects containing SPARQL results
-	   Nov 25, 2020
+	 * Consolidates all parameters associated with by-products and maps these by-products to the correct supplier
+	 * @param recordSet set of sparql records retrieved from SI
+	 * @return a map where the supplier id is used as key and the value consist of a list of consolidated by-products
+	   Dec 9, 2020
 	 */
-	private static List<Supplier_BP> createSupplierList(Set<SparqlRecord_BP> recordSet) {
-		
+	private static Map<String, List<ByProduct>> consolidateByProducts (Set<SparqlRecord_BP> recordSet) {
+		Map<String, ByProduct> byProductMap = new HashMap<String, ByProduct>();
 
-		// get unique supplier ids used for constructing the supplier structure below
-		Set<String> supplierIds = new HashSet<String>();
+		Set<String> uniqueByProducts = new HashSet<String>();
+		for (SparqlRecord_BP sr : recordSet) {		
+			uniqueByProducts.add(sr.getWsProfileId());
+		}
 
+		Set<String> uniqueSuppliers = new HashSet<String>();
 		for (SparqlRecord_BP sr : recordSet) {
-			supplierIds.add(sr.getSupplierId());
-		}
-		
-		Set<String> wsProfileIds = new HashSet<String>();
-		
-		// get unique wsProfile ids for constructing the byproduct structure
-		for (SparqlRecord_BP sr : recordSet) {
-			wsProfileIds.add(sr.getWsProfileId());
+			uniqueSuppliers.add(sr.getSupplierId());
 		}
 
-	
-		Certification certification = null;
-		Supplier_BP supplier = null;
-		List<Supplier_BP> suppliersList = new ArrayList<Supplier_BP>();
-
-		Map<String, SetMultimap<String, Map<String, String>>> supplierToByProductMapAttributes = new HashMap<String, SetMultimap<String, Map<String, String>>>();
-
-		for (String id : supplierIds) {
-			SetMultimap<String, Map<String, String>> byProduct2AttributeMap = HashMultimap.create();
-			String supplierID = null;
-
-			for (SparqlRecord_BP sr : recordSet) {
-
-				if (sr.getSupplierId().equals(id) && sr.getAttributeWeightMap() != null) {
-
-					byProduct2AttributeMap.put(sr.getWsProfileId(), sr.getAttributeWeightMap());		
-					supplierID = sr.getSupplierId();
-				}
-			}
-			
-			supplierToByProductMapAttributes.put(supplierID, byProduct2AttributeMap);
-			
-		}
-		
 		ByProduct byProduct = null;
+		Map<String, String> attributeWeightMap = new HashMap<String, String>();
 
-		// create supplier objects 
-		for (String id : supplierIds) {
-			SetMultimap<String, Map<String, String>> byProductAndAttributeMap = null;
+		for (String s : uniqueByProducts) {
 
-			List<Certification> certifications = new ArrayList<Certification>();
-			List<ByProduct> byProducts = new ArrayList<ByProduct>();
+			Set<String> materials = new HashSet<String>();
+			Set<String> appearances = new HashSet<String>();
+			
+			for (SparqlRecord_BP sr : recordSet) {
+
+				if (sr.getWsProfileId().equals(s)) {
+					
+					String byProductName = sr.getByProductName();
+					String byProductSupplyType = sr.getByProductSupplyType();
+					int byProductMinParticipants = Integer.parseInt(sr.getByProductMinParticipants());
+					int byProductMaxParticipants = Integer.parseInt(sr.getByProductMaxParticipants());
+					String purchasingGroupAbilitation = sr.getPurchasingGroupAbilitation();
+														
+					String quantity = sr.getByProductQuantity();
+	
+					double minQuantity = 0;
+					
+					//TODO: Check if minQuantity is mandatory
+					if (sr.getByProductMinQuantity() != null && !sr.getByProductMinQuantity().isEmpty()) {
+					
+						minQuantity = Double.parseDouble(sr.getByProductMinQuantity());
+					
+					} else {
+						
+						minQuantity = 0;
+						
+					}
+					
+					String uom = sr.getByProductUOM();
+
+					String material = sr.getMaterial();
+
+					if (!materials.contains(material) && material != null) {
+						materials.add(material);
+					}
+					
+					String appearance = sr.getAppearance();
+					
+					if (!appearances.contains(appearance) && appearance != null) {
+						appearances.add(appearance);
+					}
+
+					attributeWeightMap = sr.getAttributeWeightMap();
+					
+					byProduct = new ByProduct(sr.getWsProfileId(), byProductName, byProductSupplyType, byProductMinParticipants, byProductMaxParticipants, purchasingGroupAbilitation, quantity, minQuantity, uom, materials, appearances, attributeWeightMap);
+
+					byProductMap.put(sr.getWsProfileId(), byProduct);
+
+				}
+
+			}
+		}
+
+
+		ArrayListMultimap<String, String> supplierToByProductMapping = ArrayListMultimap.create();
+
+		for (String supplier : uniqueSuppliers) {
 
 			for (SparqlRecord_BP sr : recordSet) {
 
-				if (sr.getSupplierId().equals(id)) {					
-
-					// add certifications
-					certification = new Certification(sr.getCertification());
-					if (certification.getId() != null && !certifications.contains(certification)) {
-						certifications.add(certification);
-					}
-
-					// add byProducts
-					byProductAndAttributeMap = supplierToByProductMapAttributes.get(sr.getSupplierId());
-					
-
-					if (byProductAndAttributeMap != null) {
-					
-					for (String key : byProductAndAttributeMap.keySet()) {
-						if (sr.getWsProfileId().equals(key)) {
-							
-							for (Map<String, String> aMap : byProductAndAttributeMap.get(key)) {
-
-								if (aMap != null) {
-									byProduct = new ByProduct(sr.getWsProfileId(), sr.getByProductName(), sr.getByProductSupplyType(), Double.parseDouble(sr.getByProductQuantity()), Double.parseDouble(sr.getByProductMinQuantity()), sr.getByProductUOM(), 
-											sr.getMaterial(), aMap);
-
-								}
-
-							}
-
-						}
-					}
-					
-					}
-					
-
-					//add byproducts
-					if (!byProducts.contains(byProduct)) {
-						byProducts.add(byProduct);
-					}
-
-
-					supplier = new Supplier_BP(id, byProducts, certifications);
-										
+				if (sr.getSupplierId().equals(supplier)) {
+					supplierToByProductMapping.put(sr.getSupplierId(), sr.getWsProfileId());
 				}
+
+			}
+		}
+
+
+		Map<String, List<ByProduct>> finalSupplierToByProductMap = new HashMap<String, List<ByProduct>>();
+
+		for (String sup : uniqueSuppliers) {
+			Set<ByProduct> byProductList = new HashSet<ByProduct>();
+
+			List<String> byProducts = supplierToByProductMapping.get(sup);
+
+			for (String s : byProducts) {
+				byProductList.add(byProductMap.get(s));
 			}
 
-			suppliersList.add(supplier);
+			finalSupplierToByProductMap.put(sup, new ArrayList<>(byProductList));
 		}
-		
-		
-		return suppliersList;
-	}
-	
 
+		return finalSupplierToByProductMap;
+
+	}
 	
 }

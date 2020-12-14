@@ -119,7 +119,6 @@ public class StringUtilities {
 	   Mar 4, 2020
 	 */
 	public static String capitaliseWord(String str){  
-		System.err.println("StringUtilities: str is " + str);
 	    String words[]=str.split("\\s");  
 	    String capitaliseWord="";  
 	    for(String w:words){  

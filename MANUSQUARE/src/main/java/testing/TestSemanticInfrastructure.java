@@ -1,5 +1,9 @@
 package testing;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -11,8 +15,14 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import query.ByProductQuery;
 import similarity.SimilarityMethods;
+import sparql.SparqlQuery_BP;
 
 public class TestSemanticInfrastructure {
 
@@ -24,18 +34,19 @@ public class TestSemanticInfrastructure {
 	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
 	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, OWLOntologyCreationException {
 
 		//logging(false);
 		//testSI();
 		//testIM();
 		//testSupplier();
 		//testProperties();
-		testByProductSharing();
+		//testByProductSharing();
+		printResults();
 
 	}
 
-	public static void testByProductSharing() {
+	public static void testByProductSharing() throws IOException {
 
 		Repository repository;
 
@@ -58,19 +69,15 @@ public class TestSemanticInfrastructure {
 
 					Set<String> bindings = solution.getBindingNames();
 					System.out.println("Bindings are " + bindings);
-					System.out.println("Supplier: " + stripIRI(solution.getValue("supplier").stringValue()));
+					System.out.println("Supplier: " + stripIRI(solution.getValue("supplierId").stringValue()));
 					System.out.println("Supplier Name: " + stripIRI(solution.getValue("supplierName").stringValue()));
-					System.out.println("WsProfile: " + stripIRI(solution.getValue("wsProfile").stringValue()));
+					System.out.println("WsProfile: " + stripIRI(solution.getValue("wsProfileId").stringValue()));
 					System.out.println("By-product name: " + stripIRI(solution.getValue("byProductName").stringValue()));
-					System.out.println("By-product mode: " + stripIRI(solution.getValue("byProductMode").stringValue()));
-					System.out.println("By-product status: " + stripIRI(solution.getValue("byProductStatus").stringValue()));
 					System.out.println("By-product supply type: " + stripIRI(solution.getValue("byProductSupplyType").stringValue()));
-					System.out.println("By-product deadline: " + stripIRI(solution.getValue("byProductDeadline").stringValue()));
 
 					System.out.println("By-product Min Participants: " + stripIRI(solution.getValue("byProductMinParticipants").stringValue()));
 					System.out.println("By-product Max Participants: " + stripIRI(solution.getValue("byProductMaxParticipants").stringValue()));
 
-					System.out.println("By-product Price: " + stripIRI(solution.getValue("byProductPrice").stringValue()));
 					System.out.println("By-product Quantity: " + stripIRI(solution.getValue("byProductQuantity").stringValue()));
 					System.out.println("By-product Min Quantity: " + stripIRI(solution.getValue("byProductMinQuantity").stringValue()));
 					System.out.println("By-product UOM: " + stripIRI(solution.getValue("byProductUOM").stringValue()));
@@ -88,6 +95,10 @@ public class TestSemanticInfrastructure {
 					if (solution.hasBinding("certificationType")) {
 					System.out.println("Certification: " + stripIRI(solution.getValue("certificationType").stringValue()));
 					}
+					
+					if (solution.hasBinding("materialType")) {
+						System.out.println("Material: " + stripIRI(solution.getValue("materialType").stringValue()));
+						}
 					System.out.println("\n");
 
 				}
@@ -99,8 +110,108 @@ public class TestSemanticInfrastructure {
 
 		System.out.println("The SPARQL query is: ");
 		System.out.println(strQuery);
+		
+		//print to file
+		String fileName = "./files/TestSemanticInfrastructure.txt";
+		  BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+		    writer.write(strQuery);
+		    
+		    writer.close();
 
 	}
+	
+	public static void printResults() throws IOException, OWLOntologyCreationException {
+
+		Repository repository;
+
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Authorization", AUTHORISATION_TOKEN);
+		headers.put("accept", "application/JSON");
+		repository = new SPARQLRepository(SPARQL_ENDPOINT);
+		repository.initialize();
+		((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
+		
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin/Radostin_1.json";
+		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
+
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
+
+		ByProductQuery query = ByProductQuery.createByProductQuery(filename, onto);
+		
+		//String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
+
+		String strQuery = bpQuery();
+		
+		StringBuffer buffer = new StringBuffer();
+
+
+		try (RepositoryConnection conn = repository.getConnection()) {
+			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
+
+			try (TupleQueryResult result = tupleQuery.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();  
+
+					Set<String> bindings = solution.getBindingNames();
+					buffer.append("Bindings are " + bindings);
+					buffer.append("\nSupplier: " + stripIRI(solution.getValue("supplierId").stringValue()));
+					buffer.append("\nSupplier Name: " + stripIRI(solution.getValue("supplierName").stringValue()));
+					buffer.append("\nWsProfile: " + stripIRI(solution.getValue("wsProfileId").stringValue()));
+					buffer.append("\nBy-product name: " + stripIRI(solution.getValue("byProductName").stringValue()));
+					buffer.append("\nBy-product mode: " + stripIRI(solution.getValue("byProductMode").stringValue()));
+					buffer.append("\nBy-product status: " + stripIRI(solution.getValue("byProductStatus").stringValue()));
+					buffer.append("\nBy-product supply type: " + stripIRI(solution.getValue("byProductSupplyType").stringValue()));
+					buffer.append("\nBy-product deadline: " + stripIRI(solution.getValue("byProductDeadline").stringValue()));
+
+					buffer.append("\nBy-product Min Participants: " + stripIRI(solution.getValue("byProductMinParticipants").stringValue()));
+					buffer.append("\nBy-product Max Participants: " + stripIRI(solution.getValue("byProductMaxParticipants").stringValue()));
+
+					buffer.append("\nBy-product Quantity: " + stripIRI(solution.getValue("byProductQuantity").stringValue()));
+					buffer.append("\nBy-product Min Quantity: " + stripIRI(solution.getValue("byProductMinQuantity").stringValue()));
+					buffer.append("\nBy-product UOM: " + stripIRI(solution.getValue("byProductUOM").stringValue()));
+
+					if (solution.hasBinding("attributeType")) {
+					buffer.append("\nBy-product Attribute Type: " + stripIRI(solution.getValue("attributeType").stringValue()));
+					}
+					
+					if (solution.hasBinding("uomStr")) {
+						buffer.append("\nBy-product Attribute UOM: " + stripIRI(solution.getValue("uomStr").stringValue()));
+					}
+					
+					if (solution.hasBinding("attributeValue")) {
+						buffer.append("\nBy-product Attribute Value: " + stripIRI(solution.getValue("attributeValue").stringValue()));
+					}
+
+					if (solution.hasBinding("certificationType")) {
+					buffer.append("\nCertification: " + stripIRI(solution.getValue("certificationType").stringValue()));
+					}
+					
+					if (solution.hasBinding("materialType")) {
+						buffer.append("\nMaterial: " + stripIRI(solution.getValue("materialType").stringValue()));
+						}
+					buffer.append("\n");
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		String results = buffer.toString();
+
+		
+		//print to file
+		String fileName = "./files/TestSemanticInfrastructure.txt";
+		  BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+		    writer.write(results);
+		    
+		    writer.close();
+
+	}
+	
+
 
 	public static String bpQuery () {
 
@@ -115,50 +226,49 @@ public class TestSemanticInfrastructure {
 //		strQuery += "PREFIX geof: <http://www.opengis.net/def/function/geosparql/>  \n";
 //		strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>  \n";
 
-		strQuery += "SELECT DISTINCT ?wsProfile ?supplier ?supplierName ?byProductName ?byProductMode ?byProductStatus ?byProductSupplyType ?byProductDeadline ?byProductMinParticipants "
-				+ "?byProductMaxParticipants ?byProductPrice ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?certificationType \n";
+		strQuery += "SELECT DISTINCT ?wsProfileId ?supplierId ?supplierName ?byProductName ?byProductSupplyType ?byProductMinParticipants ?byProductMode ?byProductStatus ?byProductDeadline"
+				+ "?byProductMaxParticipants ?certificationType ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?materialType \n";
 
 		strQuery += "WHERE { \n";
 
-		strQuery += "?wsProfile core:hasSupplier ?supplier . \n";
+		strQuery += "?wsProfileId core:hasSupplier ?supplierId . \n";
 		strQuery +="?supplier core:hasName ?supplierName . \n";
-		strQuery +="?wsProfile core:hasName ?byProductName . \n";
-		strQuery +="?wsProfile ind:hasMode ?byProductMode . \n";
+		strQuery +="?wsProfileId core:hasName ?byProductName . \n";
+		strQuery +="?wsProfileId ind:hasMode ?byProductMode . \n";
 		
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductMode, \"sell\") ) . \n";
+		//strQuery +="FILTER ( regex(?byProductMode, \"sell\") ) . \n";
 
-		strQuery +="?wsProfile ind:hasStatus ?byProductStatus . \n";
+		strQuery +="?wsProfileId ind:hasStatus ?byProductStatus . \n";
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductStatus, \"Available\") ) . \n";
+		//strQuery +="FILTER ( regex(?byProductStatus, \"Available\") ) . \n";
 		
-		strQuery +="?wsProfile ind:hasSupplyType ?byProductSupplyType . \n";
+		strQuery +="?wsProfileId ind:hasSupplyType ?byProductSupplyType . \n";
 		//instead of CONTINUOUS the byProductSupplyType should come from the consumer query (either CONTINUOUS or SINGLE_BATCH)
-		strQuery +="FILTER ( regex(?byProductSupplyType, \"SINGLE_BATCH\") ) . \n";
+		//strQuery +="FILTER ( regex(?byProductSupplyType, \"SINGLE_BATCH\") ) . \n";
 		
 		//may have to parse this as ^^xsd:dateTime
-		strQuery +="?wsProfile ind:hasDeadline ?byProductDeadline . \n";
+		strQuery +="?wsProfileId ind:hasDeadline ?byProductDeadline . \n";
 
 
-		strQuery +="?wsProfile ind:hasMinPartecipants ?byProductMinParticipants . \n";
+		strQuery +="?wsProfileId ind:hasMinParticipants ?byProductMinParticipants . \n";
 		//instead of 0 the minParticipants should come from the consumer query
-		strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) >= 0 ) . \n";
+		//strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) >= 0 ) . \n";
 		
-		strQuery +="?wsProfile ind:hasMaxPartecipants ?byProductMaxParticipants . \n";
+		strQuery +="?wsProfileId ind:hasMaxParticipants ?byProductMaxParticipants . \n";
 		//instead of 10 the maxParticipants should come from the consumer query
-		strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) < 10 ) . \n";
+		//strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) < 10 ) . \n";
 
 		//the quantity and unit of measurement of quantity must be compared with reqs in consumer query (in java)
-		strQuery +="?wsProfile core:hasQuantity ?byProductQuantity . \n";
+		strQuery +="?wsProfileId core:hasQuantity ?byProductQuantity . \n";
 		
 		//min quantity
-		strQuery +="?wsProfile ind:hasMinQuantity ?byProductMinQuantity . \n";
+		strQuery +="?wsProfileId ind:hasMinQuantity ?byProductMinQuantity . \n";
 		
-		strQuery +="?wsProfile ind:hasUnitOfMeasureQuantity ?byProductUOM . \n";
+		strQuery +="?wsProfileId ind:hasUnitOfMeasureQuantity ?byProductUOM . \n";
 
-		strQuery +="?wsProfile ind:hasPrice ?byProductPrice . \n";
 
-		strQuery +="OPTIONAL {?wsProfile core:hasAttribute ?attribute .  \n";
+		strQuery +="OPTIONAL {?wsProfileId core:hasAttribute ?attribute .  \n";
 		strQuery +="?attribute rdf:type ?attributeType . \n";
 		strQuery +="#GET ATTRIBUTES \n";
 		strQuery +="OPTIONAL {?attribute core:hasUnitOfMeasure ?uomInd . }  \n";

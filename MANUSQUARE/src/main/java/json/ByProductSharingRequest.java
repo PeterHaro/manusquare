@@ -1,8 +1,9 @@
 package json;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
+import edm.Customer;
 
 public class ByProductSharingRequest {
 
@@ -16,11 +17,12 @@ public class ByProductSharingRequest {
 	private double supplierMaxDistance;
 	private Customer customer;
 	private String mode;
-	private int minNumberOfPartecipants;
-	private int maxNumberOfPartecipants;
+	private int minNumberOfParticipants;
+	private int maxNumberOfParticipants;
+	private String purchasingGroupAbilitation;
 
 	public ByProductSharingRequest(String projectName, String projectDescription, String selectionType, double supplierMaxDistance,
-                               Customer customer, String mode, int minNumberOfPartecipants, int maxNumberOfPartecipants, String projectId, Set<ByProductElement> byProductElements, List<SupplierAttributeKeys> supplierAttributes) {
+                               Customer customer, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation, String projectId, Set<ByProductElement> byProductElements, List<SupplierAttributeKeys> supplierAttributes) {
 		//super();
 		this.projectName = projectName;
 		this.projectDescription = projectDescription;
@@ -28,8 +30,9 @@ public class ByProductSharingRequest {
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.customer = customer;
 		this.mode = mode;
-		this.minNumberOfPartecipants = minNumberOfPartecipants;
-		this.maxNumberOfPartecipants = maxNumberOfPartecipants;
+		this.minNumberOfParticipants = minNumberOfParticipants;
+		this.maxNumberOfParticipants = maxNumberOfParticipants;
+		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 		this.projectId = projectId;
 		this.byProductElements = byProductElements;
 		this.supplierAttributes = supplierAttributes;
@@ -74,13 +77,19 @@ public class ByProductSharingRequest {
 		return mode;
 	}
 
-	public int getMinNumberOfPartecipants() {
-		return minNumberOfPartecipants;
+	public int getMinNumberOfParticipants() {
+		return minNumberOfParticipants;
 	}
 	
-	public int getMaxNumberOfPartecipants() {
-		return maxNumberOfPartecipants;
+	public int getMaxNumberOfParticipants() {
+		return maxNumberOfParticipants;
 	}
+
+
+	public String getPurchasingGroupAbilitation() {
+		return purchasingGroupAbilitation;
+	}
+
 
 
 	public class ByProductElement {
@@ -88,13 +97,13 @@ public class ByProductSharingRequest {
 		private String byProductId;
 		private String byProductName;
 		private String supplyType;
-		private int quantity;
+		private String quantity;
 		private String unitOfMeasureQuantity;
 		private Set<ByProductAttributes> byProductAttributes;
 		
 		public ByProductElement() {}
 		
-		public ByProductElement(String byProductId, String byProductName, String supplyType, int quantity, String unitOfMeasureQuantity, Set<ByProductAttributes> byProductAttributes) {
+		public ByProductElement(String byProductId, String byProductName, String supplyType, String quantity, String unitOfMeasureQuantity, Set<ByProductAttributes> byProductAttributes) {
 			this.byProductId = byProductId;
 			this.byProductName = byProductName;
 			this.supplyType = supplyType;
@@ -117,7 +126,7 @@ public class ByProductSharingRequest {
 			return supplyType;
 		}
 
-		public int getQuantity() {
+		public String getQuantity() {
 			return quantity;
 		}
 
@@ -201,40 +210,7 @@ public class ByProductSharingRequest {
 		}
 
 	}
-	
-	public class Customer {
-		
-		private String customerName;		
-		private Map<String, String> customerInfo;
 
-		public Customer(String customerName, Map<String, String> customerInfo) {
-			super();
-			this.customerName = customerName;
-			this.customerInfo = customerInfo;
-		}
-
-		public Customer(Map<String, String> customerInfo) {
-			super();
-			this.customerInfo = customerInfo;
-
-		}
-		
-		public Customer() {}
-
-		public String getCustomerName() {
-			return customerName;
-		}
-
-		public void setCustomerName(String customerName) {
-			this.customerName = customerName;
-		}
-
-		public Map<String, String> getCustomerInfo() {
-			return customerInfo;
-		}
-	
-		
-	}
 
 
 }

@@ -12,7 +12,7 @@ public class Process {
 
     private String id;
     private String name;
-    private String description;
+    //private String description;
     private String version;
     private Set<Material> materials;
     private Set<Attribute> attributes;
@@ -21,15 +21,15 @@ public class Process {
 
 
     //TODO: Clean up constructors!
-    public Process(String id, String name, String description, String version, Set<Material> materials, Set<Attribute> attributes) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.version = version;
-        this.materials = materials;
-        this.attributes = attributes;
-    }
+//    public Process(String id, String name, String description, String version, Set<Material> materials, Set<Attribute> attributes) {
+//        super();
+//        this.id = id;
+//        this.name = name;
+//        this.description = description;
+//        this.version = version;
+//        this.materials = materials;
+//        this.attributes = attributes;
+//    }
 
     public Process(String name) {
         this.name = name;
@@ -82,9 +82,9 @@ public class Process {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
     
     public String getVersion() {
         return version;

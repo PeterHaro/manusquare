@@ -26,7 +26,7 @@ public class QueryValidation {
 		String validatedProcessName = null;
 
 		if (!allOntologyClasses.contains(byProductName)) {
-			validatedProcessName = getMostSimilarConcept(byProductName, QueryConceptType.BYPRODUCT, onto, EmbeddingSingletonDataManager.VAM);
+			validatedProcessName = getMostSimilarConcept(byProductName.trim(), QueryConceptType.BYPRODUCT, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedProcessName = byProductName;
 		}
@@ -48,7 +48,7 @@ public class QueryValidation {
 		String validatedInnovationPhase = null;
 
 		if (!allOntologyClasses.contains(innovationPhase)) {
-			validatedInnovationPhase = getMostSimilarConcept(innovationPhase, QueryConceptType.INNOVATIONPHASE, onto, EmbeddingSingletonDataManager.VAM);
+			validatedInnovationPhase = getMostSimilarConcept(innovationPhase.trim(), QueryConceptType.INNOVATIONPHASE, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedInnovationPhase = innovationPhase;
 		}
@@ -70,7 +70,7 @@ public class QueryValidation {
 		String validatedInnovationType = null;
 
 		if (!allOntologyClasses.contains(innovationType)) {
-			validatedInnovationType = getMostSimilarConcept(innovationType, QueryConceptType.INNOVATIONTYPE, onto, EmbeddingSingletonDataManager.VAM);
+			validatedInnovationType = getMostSimilarConcept(innovationType.trim(), QueryConceptType.INNOVATIONTYPE, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedInnovationType = innovationType;
 		}
@@ -92,7 +92,7 @@ public class QueryValidation {
 		String validatedSkill = null;
 
 		if (!allOntologyClasses.contains(skill)) {
-			validatedSkill = getMostSimilarConcept(skill, QueryConceptType.SKILL, onto, EmbeddingSingletonDataManager.VAM);
+			validatedSkill = getMostSimilarConcept(skill.trim(), QueryConceptType.SKILL, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedSkill = skill;
 		}
@@ -114,7 +114,7 @@ public class QueryValidation {
 		String validatedSector = null;
 
 		if (!allOntologyClasses.contains(sector)) {
-			validatedSector = getMostSimilarConcept(sector, QueryConceptType.SECTOR, onto, EmbeddingSingletonDataManager.VAM);
+			validatedSector = getMostSimilarConcept(sector.trim(), QueryConceptType.SECTOR, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedSector = sector;
 		}
@@ -136,7 +136,7 @@ public class QueryValidation {
 		String validatedProcessName = null;
 
 		if (!allOntologyClasses.contains(processName)) {
-			validatedProcessName = getMostSimilarConcept(processName, QueryConceptType.PROCESS, onto, EmbeddingSingletonDataManager.VAM);
+			validatedProcessName = getMostSimilarConcept(processName.trim(), QueryConceptType.PROCESS, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedProcessName = processName;
 		}
@@ -158,8 +158,7 @@ public class QueryValidation {
 		String validatedMaterialName = null;
 
 		if (!allOntologyClasses.contains(materialName)) {
-			System.err.println("QueryValidation: materialName is " + materialName);
-			validatedMaterialName = getMostSimilarConcept(materialName, QueryConceptType.MATERIAL, onto, EmbeddingSingletonDataManager.VAM);
+			validatedMaterialName = getMostSimilarConcept(materialName.trim(), QueryConceptType.MATERIAL, onto, EmbeddingSingletonDataManager.VAM);
 		} else {
 			validatedMaterialName = materialName;
 		}
@@ -295,9 +294,7 @@ public class QueryValidation {
 
 			
 		} else {//else check the sim score of the most syntactically similar concept, if this is above 0.9, use this as the most similar concept
-			
-			System.err.println("QueryValidation 2: consumerInput: " + consumerInput);
-			
+						
 			String preProcessedConsumerInput = preProcess(consumerInput);
 						
 			syntacticSimScore = highestSyntacticSim(preProcessedConsumerInput, classes);
@@ -360,7 +357,6 @@ public class QueryValidation {
 	 */
 	private static String findConceptName(String concept, Set<String> allClasses) {
 		
-		System.out.println("Finding concept name for " + concept);
 		String conceptName = null;
 		for (String s : allClasses) {
 				if (concept.equalsIgnoreCase(s)) {
@@ -495,9 +491,7 @@ public class QueryValidation {
 	   Mar 27, 2020
 	 */
 	private static String preProcess(String input) {
-		
-		System.err.println("QueryValidation 3: input is: " + input);
-		
+				
 		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+", ""));
 		
 

@@ -18,7 +18,7 @@
     "byProductElements": [{
         "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
         "byProductName": "Carbon Steel",
-        "supplyType": "Continuous",
+        "supplyType": "Single Batch",
         "quantity": "100",
         "unitOfMeasureQuantity": "Kg",
         "byProductAttributes": [{
