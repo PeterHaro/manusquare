@@ -27,7 +27,7 @@ public class SparqlQuery_BP {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/TEST_BP_16.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_17122020/Radostin_17122020_1.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -49,11 +49,10 @@ public class SparqlQuery_BP {
 
 		Set<ByProductAttributes> attributes = new HashSet<ByProductAttributes>();
 		Set<edm.ByProduct> byProducts = bpq.getByProducts();
-		
+		String mode = bpq.getMode();
+				
 		Set<String> languages = bpq.getLanguage();        
-//		int minParticipants = bpq.getMinNumberOfParticipants();
-//		int maxParticipants = bpq.getMaxNumberOfParticipants();
-//		String purchasingGroupAbilitation = bpq.getPurchasingGroupAbilitation();
+
 		Set<ByProduct> byProductSet = bpq.getByProducts();
 		
 		for (ByProduct bp : byProductSet ) {
@@ -141,7 +140,7 @@ public class SparqlQuery_BP {
 		strQuery +="?wsProfileId ind:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
 		
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductMode, \"sell\", \"i\") ) \n";
+		strQuery +="FILTER ( regex(?byProductMode, \""+mode+"\", \"i\") ) \n";
 		
 		strQuery +="?wsProfileId ind:hasStatus ?byProductStatus . \n";
 		//fixed filter not from consumer query
