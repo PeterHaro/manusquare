@@ -101,6 +101,39 @@ public class SupplierData_BP {
 				
 				BindingSet solution = result.next();
 				
+				System.err.println("\nSupplierData_BP: Results from SI: ");
+				System.err.println("Supplier ID: " + solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
+				System.err.println("By-product ID: " + StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));
+				System.err.println("By-product Name: " + solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""));
+				System.err.println("Supply type: " + solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""));
+				System.err.println("Min participants: " + solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""));
+				System.err.println("Max participants: " + solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""));
+				System.err.println("Purchasing group abilitation: " + solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""));
+				System.err.println("Quantity: " + solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""));
+				System.err.println("Min quantity: " + solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""));
+				System.err.println("UOM: " + solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", ""));
+				
+				if (solution.getValue("certificationType") != null) {
+				System.err.println("Certification type: " + StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+				}
+				
+				if (solution.getValue("materialType") != null) {
+				System.err.println("Material type: " + StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
+				}
+				
+				if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
+				System.err.println("Apperance type: " + solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
+				}
+				
+				if (solution.getValue("attributeType") != null 
+						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
+						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
+					
+					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);
+					
+				System.err.println("Attribute weight map: " + attributeWeightMap);
+				}
+				
 				record = new SparqlRecord_BP();
 				record.setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
 				record.setWsProfileId(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));			
@@ -238,6 +271,8 @@ public class SupplierData_BP {
 
 		ByProduct byProduct = null;
 		Map<String, String> attributeWeightMap = new HashMap<String, String>();
+		
+		System.err.println("SupplierData_BP: There are " + recordSet.size() + " sparql records");
 
 		for (String s : uniqueByProducts) {
 
@@ -250,8 +285,29 @@ public class SupplierData_BP {
 					
 					String byProductName = sr.getByProductName();
 					String byProductSupplyType = sr.getByProductSupplyType();
-					int byProductMinParticipants = Integer.parseInt(sr.getByProductMinParticipants());
-					int byProductMaxParticipants = Integer.parseInt(sr.getByProductMaxParticipants());
+					
+					//FIXME: sometimes minParticipants is "", so converting this to 0 to avoid errors later (according to the spec from SUPSI it could then be ignored in the match).
+					
+					int byProductMinParticipants = 0;
+					if (sr.getByProductMinParticipants().equals("") || sr.getByProductMinParticipants().equals(" ")) {
+						byProductMinParticipants = 0;
+					
+					} else {
+					
+					byProductMinParticipants = Integer.parseInt(sr.getByProductMinParticipants());
+					
+					}
+					int byProductMaxParticipants = 0;
+					
+					if (sr.getByProductMaxParticipants().equals("") || sr.getByProductMaxParticipants().equals(" ")) {
+						byProductMaxParticipants = 0;
+					
+					} else {
+					
+					byProductMaxParticipants = Integer.parseInt(sr.getByProductMaxParticipants());
+					
+					}
+					
 					String purchasingGroupAbilitation = sr.getPurchasingGroupAbilitation();
 														
 					String quantity = sr.getByProductQuantity();
