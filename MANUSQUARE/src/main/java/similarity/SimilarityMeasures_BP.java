@@ -16,12 +16,12 @@ import NEW.PurchaseGroupAbilitation;
 import edm.ByProduct;
 import edm.Certification;
 import json.ByProductSharingRequest.ByProductAttributes;
-import owlprocessing.OntologyOperations;
+import ontology.OntologyOperations;
 import query.ByProductQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
-import supplierdata.Supplier_BP;
+import supplier.Supplier_BP;
 
 public class SimilarityMeasures_BP {
 

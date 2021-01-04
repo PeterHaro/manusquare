@@ -1,4 +1,4 @@
-package utilities;
+package sparqlconnection;
 
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;

@@ -4,11 +4,13 @@ import com.google.common.collect.Iterators;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 import com.google.common.graph.Traverser;
+
+import ontology.OntologyOperations;
+
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import owlprocessing.OntologyOperations;
 
 import java.io.File;
 import java.util.*;

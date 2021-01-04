@@ -15,10 +15,10 @@ import similarity.MatchingResult;
 import similarity.SimilarityMeasures;
 import similarity.SimilarityMeasures_IM;
 import similarity.SimilarityMethods;
-import sparql.TripleStoreConnection;
-import sparql.TripleStoreConnection_IM;
-import supplierdata.InnovationManager;
-import supplierdata.Supplier;
+import sparqlquery.TripleStoreConnection;
+import sparqlquery.TripleStoreConnection_IM;
+import supplier.InnovationManager;
+import supplier.Supplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 

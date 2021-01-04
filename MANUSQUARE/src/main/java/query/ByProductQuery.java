@@ -23,9 +23,9 @@ import json.ByProductSharingRequest;
 import json.ByProductSharingRequest.ByProductAttributes;
 import json.ByProductSharingRequest.ByProductElement;
 import json.ByProductSharingRequest.SupplierAttributeKeys;
-import owlprocessing.OntologyOperations;
-import validation.JSONValidation;
-import validation.QueryValidation;
+import ontology.OntologyOperations;
+import validation.JSONValidator;
+import validation.QueryValidator;
 
 public class ByProductQuery {
 
@@ -203,7 +203,7 @@ public class ByProductQuery {
 
 		ByProductSharingRequest bpsr;
 
-		if (JSONValidation.isJSONValid(filename)) {
+		if (JSONValidator.isJSONValid(filename)) {
 			bpsr = new Gson().fromJson(filename, ByProductSharingRequest.class);
 		} else {
 			bpsr = new Gson().fromJson(new FileReader(filename), ByProductSharingRequest.class);
@@ -221,7 +221,7 @@ public class ByProductQuery {
 			
 			for (ByProductAttributes bp : attributeSet) {
 				if (bp.getAttributeKey() == null || bp.getAttributeKey().equals("")) {
-					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
+					byProducts.add(new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
 							element.getSupplyType(), element.getQuantity(), element.getUom(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation));
 				} else {
 					
@@ -233,7 +233,7 @@ public class ByProductQuery {
 						appearances.add(bp.getAttributeValue());
 					}
 					
-					byProducts.add(new ByProduct(element.getByProductId(), QueryValidation.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
+					byProducts.add(new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
 							element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom(),  
 							materials, appearances, element.getByProductAttributes()));
 				}
@@ -275,20 +275,20 @@ public class ByProductQuery {
 			//if both languages and countries
 			if (!languages.isEmpty() && !countries.isEmpty()) {
 
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, languages, countries);
+				query = new ByProductQuery(byProducts, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, languages, countries);
 
 			} else if (!languages.isEmpty() && countries.isEmpty()) {
 				
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, languages);
+				query = new ByProductQuery(byProducts, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, languages);
 				
 			} else if (!countries.isEmpty() && languages.isEmpty())  {
 				
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, countries);
+				query = new ByProductQuery(byProducts, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, countries);
 			}
 			else {
 			
 				//if there are certifications specified we add those along with processes to the ConsumerQuery object
-				query = new ByProductQuery(byProducts, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation);
+				query = new ByProductQuery(byProducts, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation);
 			}
 		
 

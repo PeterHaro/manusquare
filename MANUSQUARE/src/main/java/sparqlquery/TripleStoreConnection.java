@@ -1,4 +1,4 @@
-package sparql;
+package sparqlquery;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,9 +28,9 @@ import edm.Attribute;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
-import edm.SparqlRecord;
 import query.ConsumerQuery;
-import supplierdata.Supplier;
+import sparqlresult.SparqlRecord;
+import supplier.Supplier;
 
 //TODO: This class should be seriously checked and very probably improved. 
 public class TripleStoreConnection {

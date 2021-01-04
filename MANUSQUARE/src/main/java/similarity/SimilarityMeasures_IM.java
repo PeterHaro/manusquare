@@ -16,13 +16,13 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import com.google.common.graph.MutableGraph;
 
 import edm.Certification;
-import owlprocessing.OntologyOperations;
+import ontology.OntologyOperations;
 import query.InnovationManagementQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import supplierdata.InnovationManager;
+import supplier.InnovationManager;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 

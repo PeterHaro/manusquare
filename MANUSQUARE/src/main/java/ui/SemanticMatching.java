@@ -35,8 +35,8 @@ import similarity.ExtendedMatchingResult;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures_BP;
 import similarity.SimilarityMethods;
+import supplier.Supplier_BP;
 import supplierdata.SupplierData_BP;
-import supplierdata.Supplier_BP;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 

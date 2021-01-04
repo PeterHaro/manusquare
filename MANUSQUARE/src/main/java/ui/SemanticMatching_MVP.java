@@ -13,8 +13,8 @@ import query.ConsumerQuery;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures;
 import similarity.SimilarityMethods;
-import sparql.TripleStoreConnection;
-import supplierdata.Supplier;
+import sparqlquery.TripleStoreConnection;
+import supplier.Supplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 

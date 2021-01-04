@@ -1,4 +1,4 @@
-package sparql;
+package sparqlquery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +20,9 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import edm.Attribute;
 import edm.Certification;
-import edm.SparqlRecord_IM;
 import query.InnovationManagementQuery;
-import supplierdata.InnovationManager;
+import sparqlresult.SparqlRecord_IM;
+import supplier.InnovationManager;
 import utilities.StringUtilities;
 
 public class TripleStoreConnection_IM {

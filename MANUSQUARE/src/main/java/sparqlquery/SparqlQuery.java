@@ -1,5 +1,5 @@
 
-package sparql;
+package sparqlquery;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import edm.Material;
 import edm.Process;
 import exceptions.NoAttributeException;
 import graph.Graph;
-import owlprocessing.OntologyOperations;
+import ontology.OntologyOperations;
 import query.ConsumerQuery;
 import utilities.StringUtilities;
 

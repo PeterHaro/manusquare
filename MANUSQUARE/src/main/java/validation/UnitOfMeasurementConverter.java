@@ -1,6 +1,6 @@
 package validation;
 
-public class UnitOfMeasurementConversion {
+public class UnitOfMeasurementConverter {
 	
 	
 	//TODO: Use javax.measure for unit conversion + additional metrics

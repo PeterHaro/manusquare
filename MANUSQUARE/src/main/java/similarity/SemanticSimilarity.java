@@ -14,7 +14,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import com.google.common.graph.MutableGraph;
 
-import owlprocessing.OntologyOperations;
+import ontology.OntologyOperations;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;

@@ -5,7 +5,7 @@ import edm.Attribute;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
-import owlprocessing.OntologyOperations;
+import ontology.OntologyOperations;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -14,7 +14,7 @@ import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import supplierdata.Supplier;
+import supplier.Supplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 

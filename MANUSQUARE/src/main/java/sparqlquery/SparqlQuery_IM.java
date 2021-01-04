@@ -1,4 +1,4 @@
-package sparql;
+package sparqlquery;
 
 import java.io.File;
 import java.io.IOException;

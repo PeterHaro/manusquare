@@ -19,7 +19,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import query.ConsumerQuery;
 import ui.SemanticMatching_MVP;
-import validation.JSONValidation;
+import validation.JSONValidator;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -129,7 +129,7 @@ public class MatchmakingController {
             throw new BadRequestResponse();
         } else {
             String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
-            if (JSONValidation.isJSONValid(jsonInput)) {
+            if (JSONValidator.isJSONValid(jsonInput)) {
                 RequestForQuotation requestForQuotation = new Gson().fromJson(jsonInput, RequestForQuotation.class);
                 if (requestForQuotation.customer == null) {
                     throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");

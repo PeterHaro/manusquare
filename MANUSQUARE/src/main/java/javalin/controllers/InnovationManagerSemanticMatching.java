@@ -9,7 +9,7 @@ import javalin.models.Rfq;
 import json.RequestForQuotation;
 import ui.SemanticMatching_IM;
 import ui.SemanticMatching_MVP;
-import validation.JSONValidation;
+import validation.JSONValidator;
 
 import java.io.BufferedWriter;
 import java.io.StringWriter;
@@ -35,7 +35,7 @@ public class InnovationManagerSemanticMatching {
     )
     public static Handler performSemanticMatchingOnInnovationManager = ctx -> {
         String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
-        if (JSONValidation.isJSONValid(jsonInput)) {
+        if (JSONValidator.isJSONValid(jsonInput)) {
             RequestForQuotation rfq = new Gson().fromJson(jsonInput, RequestForQuotation.class);
             //if (rfq.customer == null) {
              //   throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");

@@ -2,7 +2,7 @@ package validation;
 
 import com.google.gson.Gson;
 
-public class JSONValidation {
+public class JSONValidator {
 	
 	// I am so sorry for this. TODO: Hack warning
 	public static boolean isJSONValid(String jsonInString) {

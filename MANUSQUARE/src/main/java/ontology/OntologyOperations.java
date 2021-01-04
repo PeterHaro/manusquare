@@ -1,4 +1,4 @@
-package owlprocessing;
+package ontology;
 
 import java.io.File;
 import java.util.ArrayList;

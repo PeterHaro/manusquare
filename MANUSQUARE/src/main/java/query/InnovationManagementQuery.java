@@ -23,9 +23,9 @@ import json.InnovationManagementRequest;
 import json.InnovationManagementRequest.InnovationManagerAttribute;
 import json.InnovationManagementRequest.InnovationManagerSector;
 import json.InnovationManagementRequest.InnovationManagerSkill;
-import owlprocessing.OntologyOperations;
-import validation.JSONValidation;
-import validation.QueryValidation;
+import ontology.OntologyOperations;
+import validation.JSONValidator;
+import validation.QueryValidator;
 
 public class InnovationManagementQuery {
 
@@ -148,7 +148,7 @@ public class InnovationManagementQuery {
 
 		InnovationManagementRequest imr;
 
-		if (JSONValidation.isJSONValid(filename)) {
+		if (JSONValidator.isJSONValid(filename)) {
 			imr = new Gson().fromJson(filename, InnovationManagementRequest.class);
 		} else {
 			imr = new Gson().fromJson(new FileReader(filename), InnovationManagementRequest.class);
@@ -160,7 +160,7 @@ public class InnovationManagementQuery {
 		if (imr.projectInnovationPhases != null || !imr.projectInnovationPhases.isEmpty()) {			
 			
 			for (String ip : imr.projectInnovationPhases) {
-				innovationManagementPhases.add(QueryValidation.validateInnovationPhase(ip, onto, allOntologyClasses));
+				innovationManagementPhases.add(QueryValidator.validateInnovationPhase(ip, onto, allOntologyClasses));
 			}
 			query.setInnovationPhases(innovationManagementPhases);
 		}
@@ -168,7 +168,7 @@ public class InnovationManagementQuery {
 		if (imr.projectInnovationTypes != null || !imr.projectInnovationTypes.isEmpty()) {
 
 			for (String it : imr.projectInnovationTypes) {
-				innovationManagementTypes.add(QueryValidation.validateInnovationType(it, onto, allOntologyClasses));
+				innovationManagementTypes.add(QueryValidator.validateInnovationType(it, onto, allOntologyClasses));
 			}
 			
 			query.setInnovationTypes(innovationManagementTypes);
@@ -176,14 +176,14 @@ public class InnovationManagementQuery {
 
 		if (imr.innovationManagerSkills != null || !imr.innovationManagerSkills.isEmpty()) {
 			for (InnovationManagerSkill skill : imr.innovationManagerSkills) {
-				innovationManagementSkills.add(QueryValidation.validateSkill(skill.skill, onto, allOntologyClasses));
+				innovationManagementSkills.add(QueryValidator.validateSkill(skill.skill, onto, allOntologyClasses));
 			}
 			InnovationManagementQuery.setSkills(innovationManagementSkills);
 		}
 		
 		if (imr.innovationManagerSectors != null || !imr.innovationManagerSectors.isEmpty()) {
 			for (InnovationManagerSector sector : imr.innovationManagerSectors) {
-				innovationManagementSectors.add(QueryValidation.validateSector(sector.sector, onto, allOntologyClasses));
+				innovationManagementSectors.add(QueryValidator.validateSector(sector.sector, onto, allOntologyClasses));
 			}
 			InnovationManagementQuery.setSectors(innovationManagementSectors);
 		}

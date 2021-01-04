@@ -6,9 +6,11 @@ import edm.Attribute;
 import edm.Certification;
 import edm.Material;
 import embedding.vectoraggregation.VectorAggregationMethod;
+import ontology.OntologyOperations;
+
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
-import owlprocessing.OntologyOperations;
+
 import query.QueryConceptType;
 import similarity.Cosine;
 import utilities.StringUtilities;
@@ -17,9 +19,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class QueryValidation {
+public class QueryValidator {
 	
-	public QueryValidation () {}
+	public QueryValidator () {}
 	
 	public static String validateByProductName(String byProductName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 

@@ -13,7 +13,7 @@ import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
 import utilities.MathUtils;
-import validation.QueryValidation;
+import validation.QueryValidator;
 
 public class MaterialSimilarity {
 
@@ -31,8 +31,8 @@ public class MaterialSimilarity {
 			for (String consumerByProductMaterial : consumerByProductMaterials) {
 				
 				for (String supplierMaterial : supplierMaterials) {
-					validatedConsumerMaterial = QueryValidation.validateMaterialName(consumerByProductMaterial, onto, allOntologyClasses);
-					validatedSupplierMaterial = QueryValidation.validateMaterialName(supplierMaterial, onto, allOntologyClasses);
+					validatedConsumerMaterial = QueryValidator.validateMaterialName(consumerByProductMaterial, onto, allOntologyClasses);
+					validatedSupplierMaterial = QueryValidator.validateMaterialName(supplierMaterial, onto, allOntologyClasses);
 					parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, validatedConsumerMaterial, validatedSupplierMaterial, onto, graph);
 					materialSimilarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 				}

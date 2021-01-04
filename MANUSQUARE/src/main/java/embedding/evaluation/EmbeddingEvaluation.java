@@ -3,15 +3,17 @@ package embedding.evaluation;
 import com.google.common.collect.Iterables;
 import data.EmbeddingSingletonDataManager;
 import embedding.vectoraggregation.VectorAggregationMethod;
+import ontology.OntologyOperations;
+
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import owlprocessing.OntologyOperations;
+
 import query.QueryConceptType;
 import similarity.Cosine;
 import utilities.MathUtils;
-import validation.QueryValidation;
+import validation.QueryValidator;
 
 import java.io.*;
 import java.util.*;
@@ -61,7 +63,7 @@ public class EmbeddingEvaluation {
 		
 		for (String s : processList) {
 			
-			mostSimilarMap = QueryValidation.getMostSimilarConceptWithScore(s.toLowerCase(), type, onto, VectorAggregationMethod.AVG);
+			mostSimilarMap = QueryValidator.getMostSimilarConceptWithScore(s.toLowerCase(), type, onto, VectorAggregationMethod.AVG);
 			
 			queryReformulationMap.put(s, mostSimilarMap);
 			

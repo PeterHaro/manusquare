@@ -1,4 +1,4 @@
-package edm;
+package sparqlresult;
 
 import java.util.Map;
 import java.util.Set;

@@ -27,11 +27,12 @@ import edm.ByProduct;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
-import edm.SparqlRecord;
-import edm.SparqlRecord_BP;
 import query.ByProductQuery;
-import sparql.SparqlQuery_BP;
-import utilities.SparqlConnection;
+import sparqlconnection.SparqlConnection;
+import sparqlquery.SparqlQuery_BP;
+import sparqlresult.SparqlRecord;
+import sparqlresult.SparqlRecord_BP;
+import supplier.Supplier_BP;
 import utilities.StringUtilities;
 
 public class SupplierData_BP {

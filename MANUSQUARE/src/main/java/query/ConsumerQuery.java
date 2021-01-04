@@ -24,11 +24,11 @@ import exceptions.NoProcessException;
 import json.RequestForQuotation;
 import json.RequestForQuotation.ProjectAttributeKeys;
 import json.RequestForQuotation.SupplierAttributeKeys;
-import owlprocessing.OntologyOperations;
+import ontology.OntologyOperations;
 import utilities.StringUtilities;
-import validation.JSONValidation;
-import validation.QueryValidation;
-import validation.UnitOfMeasurementConversion;
+import validation.JSONValidator;
+import validation.QueryValidator;
+import validation.UnitOfMeasurementConverter;
 
 public class ConsumerQuery {
 
@@ -132,7 +132,7 @@ public class ConsumerQuery {
 
 		RequestForQuotation rfq;
 
-		if (JSONValidation.isJSONValid(filename)) {
+		if (JSONValidator.isJSONValid(filename)) {
 			rfq = new Gson().fromJson(filename, RequestForQuotation.class);
 		} else {
 			rfq = new Gson().fromJson(new FileReader(filename), RequestForQuotation.class);
@@ -159,7 +159,7 @@ public class ConsumerQuery {
 						//check if uom is included in JSON
 						if (projectAttributes.unitOfMeasure != null) {
 							if(StringUtilities.isValidNumber(projectAttributes.attributeValue)) {
-								attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConversion.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
+								attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConverter.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
 							} else {
 								attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 							}
@@ -175,19 +175,19 @@ public class ConsumerQuery {
 			}
 
 			//10.02.2020: get equivalent process concepts to process (after we have ensured the process is included in the ontology)
-			process = QueryValidation.validateProcessName(process, onto, allOntologyClasses);
+			process = QueryValidator.validateProcessName(process, onto, allOntologyClasses);
 			equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
 
 			//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
 			if (equivalentProcesses == null || equivalentProcesses.isEmpty()) {
 
-				processes.add(new Process(process, QueryValidation.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidation.validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
+				processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
 
 			} else {//if there are equivalent processes in the ontology we add those to the set of processes together with the process included by the consumer
 				for (String s : equivalentProcesses) {
 
-					processes.add(new Process(process, QueryValidation.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidation.validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
-					processes.add(new Process(s, QueryValidation.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidation.validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
+					processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
+					processes.add(new Process(s, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
 				}
 			}
 
@@ -218,11 +218,11 @@ public class ConsumerQuery {
 			
 			if (languages != null) {
 				
-				query = new ConsumerQuery(processes, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, languages);
+				query = new ConsumerQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, languages);
 				
 			} else {
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
-			query = new ConsumerQuery(processes, QueryValidation.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
+			query = new ConsumerQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
 			}
 			}
 

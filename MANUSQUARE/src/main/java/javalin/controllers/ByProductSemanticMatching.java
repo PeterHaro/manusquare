@@ -16,7 +16,7 @@ import javalin.models.ErrorResponse;
 import javalin.models.Rfq;
 import json.RequestForQuotation;
 import ui.SemanticMatching;
-import validation.JSONValidation;
+import validation.JSONValidator;
 
 
 public class ByProductSemanticMatching {
@@ -38,7 +38,7 @@ public class ByProductSemanticMatching {
     )
     public static Handler performSemanticMatchingOnByProducts = ctx -> {
         String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
-        if (JSONValidation.isJSONValid(jsonInput)) {
+        if (JSONValidator.isJSONValid(jsonInput)) {
             RequestForQuotation rfq = new Gson().fromJson(jsonInput, RequestForQuotation.class);
             //if (rfq.customer == null) {
              //   throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");
