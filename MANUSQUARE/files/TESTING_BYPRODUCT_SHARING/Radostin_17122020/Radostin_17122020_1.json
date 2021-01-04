@@ -1,0 +1,37 @@
+{
+    "projectName": "stainless steel match t1",
+    "projectDescription": "",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {},
+    "projectId": "7a82fc73-0c2c-4a89-a0f5-86d850b077c7",
+    "projectType": "By-product",
+    "mode": "buy",
+    "minNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 0,
+    "purchasingGroupAbilitation": "",
+    "byProductElements": [{
+        "byProductId": "8beab8d8-88d3-4ba2-8a6d-27b26ebee753",
+        "byProductName": "stainless steel",
+        "supplyType": "Single batch",
+        "quantity": "5",
+        "unitOfMeasureQuantity": "kg",
+        "byProductAttributes": [{
+            "id": "22a8ba4a-3930-4020-86cd-d80473d63771",
+            "attributeKey": "Appearance",
+            "attributeValue": "scraps",
+            "unitOfMeasure": "N/D"
+        }, {
+            "id": "6fa845d9-dd23-4d62-8da9-31a6569db4ea",
+            "attributeKey": "AttributeMaterial",
+            "attributeValue": "Stainless Steel",
+            "unitOfMeasure": "N/D"
+        }, {
+            "id": "7b5b45f9-35fe-4a8d-b73c-bbea0e18c733",
+            "attributeKey": "YoungmodulusE",
+            "attributeValue": "20000",
+            "unitOfMeasure": "MPa"
+        }]
+    }],
+    "supplierAttributes": []
+}

@@ -3,7 +3,7 @@
 	"projectName": "Test 15:14",
 	"projectDescription": "",
 	"selectionType": "Manual",
-	"supplierMaxDistance": "0",
+	"supplierMaxDistance": "10",
 	"customer": {
 		"customerInfo": {
 			"location": "Denia, Spain",
