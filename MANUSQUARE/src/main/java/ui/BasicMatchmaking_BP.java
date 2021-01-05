@@ -9,6 +9,8 @@ import java.text.ParseException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
+import semanticmatching.BPSemanticMatching;
+
 public class BasicMatchmaking_BP {
 	
 
@@ -32,12 +34,12 @@ public class BasicMatchmaking_BP {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
 			System.out.println(args[0]);
-			SemanticMatching.performByProductMatching(args[0], 10, writer, testing, true, hard_coded_weight);
+			BPSemanticMatching.performByProductMatching(args[0], 10, writer, testing, true, hard_coded_weight);
 			return;
 		} else {
 			System.err.println("No arguments provided!");
 			String jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Radostin_17122020/Radostin_17122020_1.json";
- 			SemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
+ 			BPSemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
 		long stopTime = System.currentTimeMillis();

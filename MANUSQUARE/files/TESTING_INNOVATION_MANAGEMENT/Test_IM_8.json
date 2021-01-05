@@ -30,15 +30,11 @@
 		}
 	],
 	"innovationManagerAttributes": [
-		{
-			"id": "234234234",
-			"attributeKey": "certification",
-			"attributeValue": "IS4001"
-		},
+		
 		{
 			"id": "2343252346356",
 			"attributeKey": "language",
-			"attributeValue": "Spnish"
+			"attributeValue": "Spanish"
 		}
 	]
 }

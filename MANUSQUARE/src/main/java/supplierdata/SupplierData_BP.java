@@ -1,13 +1,11 @@
 package supplierdata;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -19,18 +17,13 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
 
 import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
-import edm.Material;
-import edm.Process;
-import query.ByProductQuery;
+import query.BPQuery;
 import sparqlconnection.SparqlConnection;
 import sparqlquery.SparqlQuery_BP;
-import sparqlresult.SparqlRecord;
 import sparqlresult.SparqlRecord_BP;
 import supplier.Supplier_BP;
 import utilities.StringUtilities;
@@ -49,7 +42,7 @@ public class SupplierData_BP {
 	 * @return list of suppliers along with the innovation phases, types, skills and sectors registered in the Semantic Infrastructure.        
 	 * @throws OWLOntologyCreationException
 	 */
-	public static List<Supplier_BP> createSupplierData(ByProductQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
+	public static List<Supplier_BP> createSupplierData(BPQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 
 		String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
 		Set<SparqlRecord_BP> recordSet = new HashSet<SparqlRecord_BP>();

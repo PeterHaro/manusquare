@@ -20,7 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import query.ByProductQuery;
+import query.BPQuery;
 import similarity.SimilarityMethods;
 import sparqlquery.SparqlQuery_BP;
 
@@ -29,7 +29,7 @@ public class TestSemanticInfrastructure {
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
 	//configuration of the MANUSQUARE Semantic Infrastructure
-	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
+	static String WorkshopSpaql = "http://manusquare.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
 	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
 	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
 	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
@@ -137,7 +137,7 @@ public class TestSemanticInfrastructure {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 
-		ByProductQuery query = ByProductQuery.createByProductQuery(filename, onto);
+		BPQuery query = BPQuery.createByProductQuery(filename, onto);
 		
 		//String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
 

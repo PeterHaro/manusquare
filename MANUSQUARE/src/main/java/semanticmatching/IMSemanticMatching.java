@@ -1,50 +1,53 @@
-package ui;
-
-import com.google.common.collect.Iterables;
-import com.google.common.graph.MutableGraph;
-import com.google.gson.GsonBuilder;
-import edm.Certification;
-import edm.Material;
-import edm.ByProduct;
-import graph.Graph;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
-import query.ConsumerQuery;
-import query.InnovationManagementQuery;
-import similarity.MatchingResult;
-import similarity.SimilarityMeasures;
-import similarity.SimilarityMeasures_IM;
-import similarity.SimilarityMethods;
-import sparqlquery.TripleStoreConnection;
-import sparqlquery.TripleStoreConnection_IM;
-import supplier.InnovationManager;
-import supplier.Supplier;
-import utilities.MathUtils;
-import utilities.StringUtilities;
+package semanticmatching;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+
+import com.google.common.collect.Iterables;
+import com.google.common.graph.MutableGraph;
+import com.google.gson.GsonBuilder;
+
+import edm.Certification;
+import graph.Graph;
+import query.IMQuery;
+import similarity.MatchingResult;
+import similarity.SimilarityMeasures_IM;
+import similarity.SimilarityMethods;
+import sparqlquery.TripleStoreConnection_IM;
+import supplier.InnovationManager;
+import utilities.MathUtils;
+import utilities.StringUtilities;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
  *
  * @author audunvennesland
  */
-public class SemanticMatching_IM {
+public class IMSemanticMatching extends SemanticMatching {
 
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
-	//configuration of the MANUSQUARE Semantic Infrastructure
-	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
-	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
-	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
-
-	//if the MANUSQUARE ontology is fetched from url
-	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare/ontology.owl");
 
 	
 	public static void performSemanticMatching_IM (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
@@ -73,7 +76,7 @@ public class SemanticMatching_IM {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 		
-		InnovationManagementQuery imq = InnovationManagementQuery.createQuery(inputJson, ontology);
+		IMQuery imq = IMQuery.createQuery(inputJson, ontology);
 
 		//create graph using Guava´s graph library instead of using Neo4j
 		MutableGraph<String> graph = null;
@@ -118,7 +121,7 @@ public class SemanticMatching_IM {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsoleIM(List<InnovationManager> innovationManagerData, InnovationManagementQuery query, Map<InnovationManager, Double> supplierScores, int numResults) {
+	private static void printResultsToConsoleIM(List<InnovationManager> innovationManagerData, IMQuery query, Map<InnovationManager, Double> supplierScores, int numResults) {
 
 		Map<InnovationManager, Double> rankedResults = sortDescending(supplierScores);
 

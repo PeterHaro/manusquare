@@ -20,7 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import edm.Attribute;
 import edm.Certification;
-import query.InnovationManagementQuery;
+import query.IMQuery;
 import sparqlresult.SparqlRecord_IM;
 import supplier.InnovationManager;
 import utilities.StringUtilities;
@@ -40,7 +40,7 @@ public class TripleStoreConnection_IM {
 	//if the MANUSQUARE ontology is fetched from url
 	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
 	
-	public static List<InnovationManager> createInnovationManagerData(InnovationManagementQuery query, boolean testing, OWLOntology onto) {
+	public static List<InnovationManager> createInnovationManagerData(IMQuery query, boolean testing, OWLOntology onto) {
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 		if (sparql_endpoint_by_env != null) {
 			SPARQL_ENDPOINT = sparql_endpoint_by_env;

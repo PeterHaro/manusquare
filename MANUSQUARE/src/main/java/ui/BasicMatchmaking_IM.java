@@ -9,6 +9,8 @@ import java.text.ParseException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
+import semanticmatching.IMSemanticMatching;
+
 public class BasicMatchmaking_IM {
 	
 
@@ -21,7 +23,7 @@ public class BasicMatchmaking_IM {
 		String jsonOut = "./files/matchingResults.json";
 
 		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = false;
+		boolean testing = true;
 
 		//if weighted == true, I'm trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;
@@ -32,12 +34,12 @@ public class BasicMatchmaking_IM {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
 			System.out.println(args[0]);
-			SemanticMatching_IM.performSemanticMatching_IM(args[0], 10, writer, testing, true, hard_coded_weight);
+			IMSemanticMatching.performSemanticMatching_IM(args[0], 10, writer, testing, true, hard_coded_weight);
 			return;
 		} else {
 			System.err.println("No arguments provided!");
-			String jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/TEST_IM_8.json";
- 			SemanticMatching_IM.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
+			String jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/TEST_IM_1.json";
+ 			IMSemanticMatching.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
 		long stopTime = System.currentTimeMillis();

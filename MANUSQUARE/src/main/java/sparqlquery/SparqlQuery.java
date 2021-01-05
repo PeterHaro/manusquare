@@ -32,7 +32,7 @@ import edm.Process;
 import exceptions.NoAttributeException;
 import graph.Graph;
 import ontology.OntologyOperations;
-import query.ConsumerQuery;
+import query.CSQuery;
 import utilities.StringUtilities;
 
 
@@ -46,7 +46,7 @@ public class SparqlQuery {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 
-		ConsumerQuery query = ConsumerQuery.createConsumerQuery(filename, onto);
+		CSQuery query = CSQuery.createConsumerQuery(filename, onto);
 
 		String test = createSparqlQuery(query, onto);
 
@@ -57,7 +57,7 @@ public class SparqlQuery {
 	
 	
 
-	public static String createSparqlQuery(ConsumerQuery cq, OWLOntology onto) {
+	public static String createSparqlQuery(CSQuery cq, OWLOntology onto) {
 
 		Set<Material> materials = new HashSet<Material>();
 		Set<Attribute> attributes = new HashSet<Attribute>();

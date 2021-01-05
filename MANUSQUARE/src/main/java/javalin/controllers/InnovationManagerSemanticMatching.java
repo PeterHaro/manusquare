@@ -7,8 +7,8 @@ import io.javalin.plugin.openapi.annotations.*;
 import javalin.models.ErrorResponse;
 import javalin.models.Rfq;
 import json.RequestForQuotation;
-import ui.SemanticMatching_IM;
-import ui.SemanticMatching_MVP;
+import semanticmatching.CSSemanticMatching;
+import semanticmatching.IMSemanticMatching;
 import validation.JSONValidator;
 
 import java.io.BufferedWriter;
@@ -44,7 +44,7 @@ public class InnovationManagerSemanticMatching {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        SemanticMatching_IM.performSemanticMatching_IM(jsonInput, 10, writer, false, true, 0.9);
+        IMSemanticMatching.performSemanticMatching_IM(jsonInput, 10, writer, false, true, 0.9);
         System.out.println(sw.toString());
         ctx.json(sw.toString());
     };

@@ -12,7 +12,7 @@ import io.javalin.plugin.openapi.annotations.*;
 import javalin.models.ErrorResponse;
 import javalin.models.Rfq;
 import json.RequestForQuotation;
-import ui.SemanticMatching_MVP;
+import semanticmatching.CSSemanticMatching;
 import validation.JSONValidator;
 
 public class SemanticMatchingController {
@@ -48,7 +48,7 @@ public class SemanticMatchingController {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
+        CSSemanticMatching.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
         System.out.println(sw.toString());
         ctx.json(sw.toString());
     };

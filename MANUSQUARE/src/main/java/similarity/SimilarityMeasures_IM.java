@@ -17,7 +17,7 @@ import com.google.common.graph.MutableGraph;
 
 import edm.Certification;
 import ontology.OntologyOperations;
-import query.InnovationManagementQuery;
+import query.IMQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
@@ -28,7 +28,7 @@ import utilities.StringUtilities;
 
 public class SimilarityMeasures_IM {
 
-	public static List<Double> computeSemanticSimilarity_IM (InnovationManagementQuery query, InnovationManager innovationManager, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
+	public static List<Double> computeSemanticSimilarity_IM (IMQuery query, InnovationManager innovationManager, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
 
 
 		List<Certification> certificationList = innovationManager.getCertifications();

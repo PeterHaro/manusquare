@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.eclipse.rdf4j.query.BindingSet;
 
-import query.ByProductQuery;
+import query.BPQuery;
 import utilities.StringUtilities;
 
 public class Attribute {
@@ -68,7 +68,7 @@ public class Attribute {
 	}	
 	
 
-	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, ByProductQuery query) {
+	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, BPQuery query) {
 		
 		//create supplierAttribute that can be compared to consumerAttribute
 		supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));

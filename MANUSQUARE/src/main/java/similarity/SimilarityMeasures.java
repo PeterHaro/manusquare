@@ -9,7 +9,7 @@ import ontology.OntologyOperations;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
-import query.ConsumerQuery;
+import query.CSQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 public class SimilarityMeasures {
 	
 	/* ALT 1 */
-	public static List<Double> computeSemanticSimilarity (ConsumerQuery query, Supplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
+	public static List<Double> computeSemanticSimilarity (CSQuery query, Supplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
 		
 		
 		List<Process> processList = supplier.getProcesses();

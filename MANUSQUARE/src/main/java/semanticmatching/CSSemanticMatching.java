@@ -1,48 +1,51 @@
-package ui;
-
-import com.google.common.collect.Iterables;
-import com.google.common.graph.MutableGraph;
-import com.google.gson.GsonBuilder;
-import edm.Certification;
-import edm.Material;
-import edm.Process;
-import graph.Graph;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
-import query.ConsumerQuery;
-import similarity.MatchingResult;
-import similarity.SimilarityMeasures;
-import similarity.SimilarityMethods;
-import sparqlquery.TripleStoreConnection;
-import supplier.Supplier;
-import utilities.MathUtils;
-import utilities.StringUtilities;
+package semanticmatching;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+
+import com.google.common.collect.Iterables;
+import com.google.common.graph.MutableGraph;
+import com.google.gson.GsonBuilder;
+
+import edm.Certification;
+import edm.Material;
+import edm.Process;
+import graph.Graph;
+import query.CSQuery;
+import similarity.MatchingResult;
+import similarity.SimilarityMeasures;
+import sparqlquery.TripleStoreConnection;
+import supplier.Supplier;
+import utilities.MathUtils;
+import utilities.StringUtilities;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
  *
  * @author audunvennesland
  */
-public class SemanticMatching_MVP {
-
-	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
-
-	//configuration of the MANUSQUARE Semantic Infrastructure
-	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-	//NOT IN USE ANYMORE static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
-	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
-	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
-
-	//if the MANUSQUARE ontology is fetched from url
-	//NOT IN USE ANYMORE: static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
-	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare/ontology.owl");
+public class CSSemanticMatching extends SemanticMatching {
 
 	/**
 	 * Matches a consumer query against a set of resources offered by suppliers and returns a ranked list of the [numResult] suppliers having the highest semantic similarity as a JSON file.
@@ -83,7 +86,7 @@ public class SemanticMatching_MVP {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
-		ConsumerQuery query = ConsumerQuery.createConsumerQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
+		CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 		List<String> processes = new ArrayList<>();
 
 		for (Process p : query.getProcesses()) {
@@ -136,7 +139,7 @@ public class SemanticMatching_MVP {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsole(List<Supplier> supplierData, ConsumerQuery query, Map<Supplier, Double> supplierScores, int numResults) {
+	private static void printResultsToConsole(List<Supplier> supplierData, CSQuery query, Map<Supplier, Double> supplierScores, int numResults) {
 
 		Map<Supplier, Double> rankedResults = sortDescending(supplierScores);
 

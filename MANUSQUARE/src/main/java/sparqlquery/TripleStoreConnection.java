@@ -28,7 +28,7 @@ import edm.Attribute;
 import edm.Certification;
 import edm.Material;
 import edm.Process;
-import query.ConsumerQuery;
+import query.CSQuery;
 import sparqlresult.SparqlRecord;
 import supplier.Supplier;
 
@@ -56,7 +56,7 @@ public class TripleStoreConnection {
 	 * Nov 9, 2019
 	 * @throws OWLOntologyCreationException
 	 */
-	public static List<Supplier> createSupplierData(ConsumerQuery query, boolean testing, OWLOntology onto) {
+	public static List<Supplier> createSupplierData(CSQuery query, boolean testing, OWLOntology onto) {
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 		if (sparql_endpoint_by_env != null) {
 			SPARQL_ENDPOINT = sparql_endpoint_by_env;

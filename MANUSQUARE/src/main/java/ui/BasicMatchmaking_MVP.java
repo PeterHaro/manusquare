@@ -9,6 +9,8 @@ import java.text.ParseException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
+import semanticmatching.CSSemanticMatching;
+
 public class BasicMatchmaking_MVP {
 	
 
@@ -32,12 +34,12 @@ public class BasicMatchmaking_MVP {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 		if (args.length == 1) {
 			System.out.println(args[0]);
-			SemanticMatching_MVP.performSemanticMatching(args[0], 10, writer, testing, true, hard_coded_weight);
+			CSSemanticMatching.performSemanticMatching(args[0], 10, writer, testing, true, hard_coded_weight);
 			return;
 		} else {
 			System.err.println("No arguments provided!");
 			String jsonIn = "./files/TESTING_CAPACITY_SHARING/Test-Full.json";
- 			SemanticMatching_MVP.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
+ 			CSSemanticMatching.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 		}
 
 		long stopTime = System.currentTimeMillis();

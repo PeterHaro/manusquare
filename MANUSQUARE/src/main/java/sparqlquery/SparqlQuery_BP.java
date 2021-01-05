@@ -19,7 +19,7 @@ import edm.Attribute;
 import edm.ByProduct;
 import exceptions.NoAttributeException;
 import json.ByProductSharingRequest.ByProductAttributes;
-import query.ByProductQuery;
+import query.BPQuery;
 import utilities.StringUtilities;
 
 
@@ -33,7 +33,7 @@ public class SparqlQuery_BP {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 
-		ByProductQuery query = ByProductQuery.createByProductQuery(filename, onto);
+		BPQuery query = BPQuery.createByProductQuery(filename, onto);
 		
 		System.out.println("min number of participants: "+ query.getMinNumberOfParticipants());
 		System.out.println("min number of participants: "+ query.getMaxNumberOfParticipants());
@@ -45,7 +45,7 @@ public class SparqlQuery_BP {
 
 	}
 	
-	public static String createSparqlQuery(ByProductQuery bpq, OWLOntology onto) {
+	public static String createSparqlQuery(BPQuery bpq, OWLOntology onto) {
 
 		Set<ByProductAttributes> attributes = new HashSet<ByProductAttributes>();
 		Set<edm.ByProduct> byProducts = bpq.getByProducts();

@@ -30,54 +30,67 @@ import validation.JSONValidator;
 import validation.QueryValidator;
 import validation.UnitOfMeasurementConverter;
 
-public class ConsumerQuery {
+public class CSQuery {
 
+	//mandatory attributes
 	private Set<Process> processes;
+	
+	//optional attributes
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
-	private Set<String> language;
+	private Set<String> languages;
+	
+	private CSQuery(CSQueryBuilder builder) {
+		this.processes = builder.processes;
+		this.certifications = builder.certifications;
+		this.supplierMaxDistance = builder.supplierMaxDistance;
+		this.customerLocationInfo = builder.customerLocationInfo;
+		this.languages = builder.languages;
 
-
-	//if the consumer specifies both processes (incl. materials) and certifications.
-	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, Set<String> language) {
-		super();
-		this.processes = processes;
-		this.certifications = certifications;
-		this.language = language;
-	}
-
-	//if processes (incl. materials) and supplierMaxDistance are specified by the consumer
-	public ConsumerQuery(Set<Process> processes, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
-		super();
-
-		this.processes = processes;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customerLocationInfo = customerLocationInfo;
-	}
-
-	//if the consumer specifies both processes (incl. materials), certifications, and supplierMaxDistance.
-	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo) {
-		super();
-		this.processes = processes;
-		this.certifications = certifications;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customerLocationInfo = customerLocationInfo;
 	}
 	
-	//if the consumer specifies both processes (incl. materials), certifications, supplierMaxDistance, and language.
-	public ConsumerQuery(Set<Process> processes, Set<Certification> certifications, double supplierMaxDistance, Map<String, String> customerLocationInfo, Set<String> language) {
-		super();
-		this.processes = processes;
-		this.certifications = certifications;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customerLocationInfo = customerLocationInfo;
-		this.language = language;
+	public static class CSQueryBuilder {
+		
+		private Set<Process> processes;
+		
+		private Set<Certification> certifications;
+		private double supplierMaxDistance;
+		private Map<String, String> customerLocationInfo;
+		private Set<String> languages;
+		
+		public CSQueryBuilder(Set<Process> processes) {
+			this.processes = processes;
+
+		}
+		
+		public CSQueryBuilder setCertifications(Set<Certification> certifications) {
+			this.certifications = certifications;
+			return this;
+		}
+		
+		public CSQueryBuilder setSupplierMaxDistance(double supplierMaxDistance) {
+			this.supplierMaxDistance = supplierMaxDistance;
+			return this;
+		}
+		
+		public CSQueryBuilder setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
+			this.customerLocationInfo = customerLocationInfo;
+			return this;
+		}
+		
+		public CSQueryBuilder setLanguage(Set<String> language) {
+			this.languages = language;
+			return this;
+		}
+
+		
+		public CSQuery build() {
+			return new CSQuery(this);
+		}
+		
 	}
 
-
-	public ConsumerQuery() {
-	}
 
 	public Set<Process> getProcesses() {
 		return processes;
@@ -109,7 +122,7 @@ public class ConsumerQuery {
 	}
 
 	public Set<String> getLanguage() {
-		return language;
+		return languages;
 	}
 
 
@@ -123,7 +136,7 @@ public class ConsumerQuery {
 	 * @throws JsonIOException
 	 * @throws IOException
 	 */
-	public static ConsumerQuery createConsumerQuery(String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
+	public static CSQuery createConsumerQuery(String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
 		Set<Process> processes = new HashSet<>();
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> processNames = new HashSet<String>();
@@ -193,7 +206,7 @@ public class ConsumerQuery {
 
 		}
 
-		ConsumerQuery query = null;
+		CSQuery query = null;
 
 		//add geographical information to consumer query
 		double supplierMaxDistance = rfq.supplierMaxDistance;
@@ -203,7 +216,13 @@ public class ConsumerQuery {
 		if (rfq.supplierAttributes == null || rfq.supplierAttributes.isEmpty()) {
 			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
 			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
-			query = new ConsumerQuery(processes, supplierMaxDistance, customerInformation);
+			
+			
+			//query = new CSQuery(processes, supplierMaxDistance, customerInformation);			
+			query = new CSQuery.CSQueryBuilder(processes).
+					setSupplierMaxDistance(supplierMaxDistance).
+					setCustomerLocationInfo(customerInformation).
+					build();
 
 		} else {
 			for (SupplierAttributeKeys supplierAttributes : rfq.supplierAttributes) {
@@ -218,11 +237,23 @@ public class ConsumerQuery {
 			
 			if (languages != null) {
 				
-				query = new ConsumerQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, languages);
+				//query = new CSQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, languages);
+				query = new CSQuery.CSQueryBuilder(processes).
+						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+						setSupplierMaxDistance(supplierMaxDistance).
+						setCustomerLocationInfo(customerInformation).
+						setLanguage(languages).
+						build();
 				
 			} else {
 			//if there are certifications specified we add those along with processes to the ConsumerQuery object
-			query = new ConsumerQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
+			//query = new CSQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
+			query = new CSQuery.CSQueryBuilder(processes).
+					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+					setSupplierMaxDistance(supplierMaxDistance).
+					setCustomerLocationInfo(customerInformation).
+					build();
+			
 			}
 			}
 
@@ -254,7 +285,7 @@ public class ConsumerQuery {
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
-		ConsumerQuery query = createConsumerQuery(filename, onto);
+		CSQuery query = createConsumerQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
 		
 		System.out.println("Printing processes: ");

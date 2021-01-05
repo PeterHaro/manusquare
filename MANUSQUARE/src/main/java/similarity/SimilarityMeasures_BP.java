@@ -17,7 +17,7 @@ import edm.ByProduct;
 import edm.Certification;
 import json.ByProductSharingRequest.ByProductAttributes;
 import ontology.OntologyOperations;
-import query.ByProductQuery;
+import query.BPQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
@@ -26,7 +26,7 @@ import supplier.Supplier_BP;
 public class SimilarityMeasures_BP {
 
 
-	public static Map<String, Map<String, Double>> computeSemanticSimilarity (ByProductQuery query, Supplier_BP supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
+	public static Map<String, Map<String, Double>> computeSemanticSimilarity (BPQuery query, Supplier_BP supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
 
 		List<ByProduct> supplierByProducts = supplier.getByProducts();
 

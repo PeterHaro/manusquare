@@ -17,8 +17,8 @@ import matchmaking.models.Supplier;
 import matchmaking.models.TransactionalData;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import query.ConsumerQuery;
-import ui.SemanticMatching_MVP;
+import query.CSQuery;
+import semanticmatching.CSSemanticMatching;
 import validation.JSONValidator;
 
 import java.io.*;
@@ -137,7 +137,7 @@ public class MatchmakingController {
             }
             StringWriter sw = new StringWriter();
             BufferedWriter writer = new BufferedWriter(sw);
-            SemanticMatching_MVP.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
+            CSSemanticMatching.performSemanticMatching(jsonInput, 10, writer, false, true, 0.9);
             System.out.println(sw.toString());
 
             String MatchmakingResults = CallMatchmaking();

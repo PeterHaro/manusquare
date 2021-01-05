@@ -8,7 +8,7 @@
     "projectType": "By-product",
     "mode": "buy",
     "minNumberOfParticipants": 0,
-    "maxNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 10,
     "purchasingGroupAbilitation": "",
     "byProductElements": [{
         "byProductId": "8beab8d8-88d3-4ba2-8a6d-27b26ebee753",

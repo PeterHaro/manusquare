@@ -13,7 +13,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-import query.InnovationManagementQuery;
+import query.IMQuery;
 import utilities.StringUtilities;
 
 
@@ -27,7 +27,7 @@ public class SparqlQuery_IM {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 
-		InnovationManagementQuery query = InnovationManagementQuery.createQuery(filename, onto);
+		IMQuery query = IMQuery.createQuery(filename, onto);
 
 		String test = createSparqlQuery_IM(query, onto);
 
@@ -36,7 +36,7 @@ public class SparqlQuery_IM {
 
 	}
 
-	public static String createSparqlQuery_IM (InnovationManagementQuery imq, OWLOntology onto) {
+	public static String createSparqlQuery_IM (IMQuery imq, OWLOntology onto) {
 
 		Set<String> languages = imq.getLanguages();
 		

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -27,103 +26,85 @@ import ontology.OntologyOperations;
 import validation.JSONValidator;
 import validation.QueryValidator;
 
-public class InnovationManagementQuery {
+public class IMQuery {
 
-	private String projectId;
-	private static List<String> innovationPhases;
-	private static List<String> innovationTypes;
-	private static List<String> skills;
-	private static List<String> sectors;
+	//mandatory attributes
+	private List<String> innovationPhases;
+	private List<String> innovationTypes;
+	private List<String> skills;
+	private List<String> sectors;
+
+	//optional attributes
 	private Set<Certification> certifications;
-	private double supplierMaxDistance;
-	private Map<String, String> customerLocationInfo;
 	private Set<String> languages;
-
-
-	public InnovationManagementQuery(String projectId, List<String> skills, List<String> innovationPhases, List<String> innovationTypes, List<String> sectors, Set<Certification> certifications, Set<String> languages) {
-		super();
-		this.projectId = projectId;
-		InnovationManagementQuery.skills = skills;
-		InnovationManagementQuery.innovationPhases = innovationPhases;
-		InnovationManagementQuery.innovationTypes = innovationTypes;
-		InnovationManagementQuery.sectors = sectors;
-		this.certifications = certifications;
-		this.languages = languages;
-	}
-
-	public InnovationManagementQuery() {
-	}
-	
-	
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
 
 	public Set<Certification> getCertifications() {
 		return certifications;
-	}
-
-
-	public double getSupplierMaxDistance() {
-		return supplierMaxDistance;
-	}
-
-	public Map<String, String> getCustomerLocationInfo() {
-		return customerLocationInfo;
 	}
 
 	public Set<String> getLanguages() {
 		return languages;
 	}
 
-	
-
-	public void setLanguages(Set<String> languages) {
-		this.languages = languages;
-	}
-
 	public List<String> getInnovationPhases() {
 		return innovationPhases;
-	}
-
-	public void setInnovationPhases(List<String> projectInnovationPhases) {
-		InnovationManagementQuery.innovationPhases = projectInnovationPhases;
 	}
 
 	public List<String> getInnovationTypes() {
 		return innovationTypes;
 	}
 
-	public void setInnovationTypes(List<String> projectInnovationTypes) {
-		InnovationManagementQuery.innovationTypes = projectInnovationTypes;
-	}
-
-
-	public static List<String> getSkills() {
+	public List<String> getSkills() {
 		return skills;
 	}
 
-	public static void setSkills(List<String> innovationManagerSkills) {
-		InnovationManagementQuery.skills = innovationManagerSkills;
-	}
-	
-
-	public static List<String> getSectors() {
+	public List<String> getSectors() {
 		return sectors;
 	}
 
-	public void setCertifications(Set<Certification> certifications) {
-		this.certifications = certifications;
+
+	private IMQuery(IMQueryBuilder builder) {
+		this.skills = builder.skills;
+		this.innovationPhases = builder.innovationPhases;
+		this.innovationTypes = builder.innovationTypes;
+		this.sectors = builder.sectors;
+		this.certifications = builder.certifications;
+		this.languages = builder.languages;
+
 	}
 
-	public static void setSectors(List<String> sectors) {
-		InnovationManagementQuery.sectors = sectors;
+	public static class IMQueryBuilder {
+
+		private Set<String> languages;
+		private Set<Certification> certifications;
+		private List<String> innovationPhases;
+		private List<String> innovationTypes;
+		private List<String> skills;
+		private List<String> sectors;
+		
+		public IMQueryBuilder(List<String> skills, List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {		
+			this.skills = skills;
+			this.innovationPhases = innovationPhases;
+			this.innovationTypes = innovationTypes;
+			this.sectors = sectors;
+
+		}
+
+		public IMQueryBuilder setCertifications(Set<Certification> certifications) {
+			this.certifications = certifications;
+			return this;
+		}
+
+		public IMQueryBuilder setLanguage(Set<String> language) {
+			this.languages = language;
+			return this;
+		}	
+
+		public IMQuery build() {
+			return new IMQuery(this);
+		}
 	}
+
 
 	/**
 	 * Parses a json file and creates a InnovationManagerQuery object representing the input provided by a consumer in the RFI (Request for Innovation) establishment process.
@@ -135,7 +116,7 @@ public class InnovationManagementQuery {
 	 * @throws JsonIOException
 	 * @throws IOException
 	 */
-	public static InnovationManagementQuery createQuery (String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
+	public static IMQuery createQuery (String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
 
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> languages = new HashSet<String>();
@@ -143,7 +124,7 @@ public class InnovationManagementQuery {
 		List<String> innovationManagementTypes = new ArrayList<String>();
 		List<String> innovationManagementSkills = new ArrayList<String>();
 		List<String> innovationManagementSectors = new ArrayList<String>();
-		
+
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		InnovationManagementRequest imr;
@@ -154,15 +135,11 @@ public class InnovationManagementQuery {
 			imr = new Gson().fromJson(new FileReader(filename), InnovationManagementRequest.class);
 		}
 
-		InnovationManagementQuery query = new InnovationManagementQuery();
-		query.setProjectId(imr.getProjectId());
-
 		if (imr.projectInnovationPhases != null || !imr.projectInnovationPhases.isEmpty()) {			
-			
+
 			for (String ip : imr.projectInnovationPhases) {
 				innovationManagementPhases.add(QueryValidator.validateInnovationPhase(ip, onto, allOntologyClasses));
 			}
-			query.setInnovationPhases(innovationManagementPhases);
 		}
 
 		if (imr.projectInnovationTypes != null || !imr.projectInnovationTypes.isEmpty()) {
@@ -170,25 +147,21 @@ public class InnovationManagementQuery {
 			for (String it : imr.projectInnovationTypes) {
 				innovationManagementTypes.add(QueryValidator.validateInnovationType(it, onto, allOntologyClasses));
 			}
-			
-			query.setInnovationTypes(innovationManagementTypes);
 		}
 
 		if (imr.innovationManagerSkills != null || !imr.innovationManagerSkills.isEmpty()) {
 			for (InnovationManagerSkill skill : imr.innovationManagerSkills) {
 				innovationManagementSkills.add(QueryValidator.validateSkill(skill.skill, onto, allOntologyClasses));
 			}
-			InnovationManagementQuery.setSkills(innovationManagementSkills);
 		}
-		
+
 		if (imr.innovationManagerSectors != null || !imr.innovationManagerSectors.isEmpty()) {
 			for (InnovationManagerSector sector : imr.innovationManagerSectors) {
 				innovationManagementSectors.add(QueryValidator.validateSector(sector.sector, onto, allOntologyClasses));
 			}
-			InnovationManagementQuery.setSectors(innovationManagementSectors);
 		}
-		
 
+		IMQuery query = null;
 
 		if (imr.innovationManagerAttributes != null || !imr.innovationManagerAttributes.isEmpty()) {
 
@@ -201,16 +174,22 @@ public class InnovationManagementQuery {
 				}
 
 			}
-			
-			if (certifications != null || !certifications.isEmpty()) {
-				query.setCertifications(certifications);
-			}
-			
-			if (languages != null || !languages.isEmpty()) {
-				query.setLanguages(languages);
-			}
-
 		}
+
+			if ((certifications != null || !certifications.isEmpty())
+					&& (languages != null || !languages.isEmpty())) {
+
+				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors).
+						setCertifications(certifications).
+						setLanguage(languages).
+						build();
+
+			} else if (languages == null || languages.isEmpty()) {
+				
+				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors).
+						setCertifications(certifications).
+						build();
+			}
 
 		return query;
 	}
@@ -218,20 +197,20 @@ public class InnovationManagementQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/SUPSI/Elias_100920.json";
+		String filename = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_8.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
-		InnovationManagementQuery query = createQuery(filename, onto);
+		IMQuery query = createQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
 
 		System.out.println("Innovation Phases: " + query.getInnovationPhases());
 		System.out.println("Innovation Types: " + query.getInnovationTypes());
-		System.out.println("Innovation Manager Skills: " + InnovationManagementQuery.getSkills());
-		System.out.println("Sectors: " + InnovationManagementQuery.getSectors());
+		System.out.println("Innovation Manager Skills: " + query.getSkills());
+		System.out.println("Sectors: " + query.getSectors());
 		System.out.println("Languages: " + query.getLanguages());
 		for (Certification c : query.getCertifications()) {
-		System.out.println("Certifications: " + c.getId());
+			System.out.println("Certifications: " + c.getId());
 		}
 
 	}

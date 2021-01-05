@@ -1,4 +1,4 @@
-package ui;
+package semanticmatching;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,11 +30,10 @@ import com.google.gson.GsonBuilder;
 import edm.ByProduct;
 import edm.Certification;
 import graph.Graph;
-import query.ByProductQuery;
+import query.BPQuery;
 import similarity.ExtendedMatchingResult;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures_BP;
-import similarity.SimilarityMethods;
 import supplier.Supplier_BP;
 import supplierdata.SupplierData_BP;
 import utilities.MathUtils;
@@ -45,21 +44,7 @@ import utilities.StringUtilities;
  *
  * @author audunvennesland
  */
-public class SemanticMatching {
-
-	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
-
-	//configuration of the MANUSQUARE Semantic Infrastructure
-	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-	//NOT IN USE ANYMORE static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
-	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
-	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
-	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
-
-	//if the MANUSQUARE ontology is fetched from url
-	//NOT IN USE ANYMORE: static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://116.203.187.118/semantic-registry/repository/manusquare/ontology.owl");
-	static final IRI MANUSQUARE_ONTOLOGY_IRI = IRI.create("http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare/ontology.owl");
-	
+public class BPSemanticMatching extends SemanticMatching {
 
 	/**
 	 * Matches a consumer query against a set of resources offered by suppliers and returns a ranked list of the [numResult] suppliers having the highest semantic similarity as a JSON file.
@@ -101,7 +86,7 @@ public class SemanticMatching {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
-		ByProductQuery query = ByProductQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
+		BPQuery query = BPQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 		
 		List<String> byProducts = new ArrayList<>();
 
@@ -162,7 +147,7 @@ public class SemanticMatching {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsole(List<Supplier_BP> supplierData, ByProductQuery query, Map<Supplier_BP, Double> supplierScores, int numResults) {
+	private static void printResultsToConsole(List<Supplier_BP> supplierData, BPQuery query, Map<Supplier_BP, Double> supplierScores, int numResults) {
 
 		Map<Supplier_BP, Double> rankedResults = sortDescending(supplierScores);
 
