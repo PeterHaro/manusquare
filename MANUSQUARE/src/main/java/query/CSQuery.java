@@ -217,9 +217,7 @@ public class CSQuery {
 			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
 			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
 			
-			
-			//query = new CSQuery(processes, supplierMaxDistance, customerInformation);			
-			query = new CSQuery.CSQueryBuilder(processes).
+					query = new CSQuery.CSQueryBuilder(processes).
 					setSupplierMaxDistance(supplierMaxDistance).
 					setCustomerLocationInfo(customerInformation).
 					build();
@@ -237,7 +235,6 @@ public class CSQuery {
 			
 			if (languages != null) {
 				
-				//query = new CSQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation, languages);
 				query = new CSQuery.CSQueryBuilder(processes).
 						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 						setSupplierMaxDistance(supplierMaxDistance).
@@ -245,18 +242,15 @@ public class CSQuery {
 						setLanguage(languages).
 						build();
 				
-			} else {
-			//if there are certifications specified we add those along with processes to the ConsumerQuery object
-			//query = new CSQuery(processes, QueryValidator.validateCertifications(certifications, onto, allOntologyClasses), supplierMaxDistance, customerInformation);
+			} 
+			//if not we omit languages, and add only certifications from the supplier attributes
 			query = new CSQuery.CSQueryBuilder(processes).
 					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 					setSupplierMaxDistance(supplierMaxDistance).
 					setCustomerLocationInfo(customerInformation).
 					build();
-			
-			}
-			}
 
+		}
 
 		return query;
 	}

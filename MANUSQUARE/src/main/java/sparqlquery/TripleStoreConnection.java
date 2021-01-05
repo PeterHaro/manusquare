@@ -29,7 +29,7 @@ import edm.Certification;
 import edm.Material;
 import edm.Process;
 import query.CSQuery;
-import sparqlresult.SparqlRecord;
+import sparqlresult.CSSparqlResult;
 import supplier.Supplier;
 
 //TODO: This class should be seriously checked and very probably improved. 
@@ -99,7 +99,7 @@ public class TripleStoreConnection {
 		String strQuery = SparqlQuery.createSparqlQuery(query, onto);
 
 		//open connection to GraphDB and run SPARQL query
-		Set<SparqlRecord> recordSet = new HashSet<SparqlRecord>();
+		Set<CSSparqlResult> recordSet = new HashSet<CSSparqlResult>();
 
 
 		try (RepositoryConnection conn = repository.getConnection()) {
@@ -117,14 +117,14 @@ public class TripleStoreConnection {
 
 				Attribute supplierAttribute = new Attribute();
 
-				SparqlRecord record = null;
+				CSSparqlResult record = null;
 
 				while (result.hasNext()) {
 
 					//Map<String, String> attributeMap = new HashMap<String, String>();
 					BindingSet solution = result.next();
 
-					record = new SparqlRecord();
+					record = new CSSparqlResult();
 
 					record.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
 					record.setProcess(stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")));
@@ -242,7 +242,7 @@ public class TripleStoreConnection {
 		//get unique supplier ids used for constructing the supplier structure below
 		Set<String> supplierIds = new HashSet<String>();
 
-		for (SparqlRecord sr : recordSet) {
+		for (CSSparqlResult sr : recordSet) {
 			supplierIds.add(sr.getSupplierId());
 		}
 
@@ -260,7 +260,7 @@ public class TripleStoreConnection {
 			SetMultimap<String, Map<String, String>> process2AttributeMap = HashMultimap.create();
 			String supplierID = null;
 
-			for (SparqlRecord sr : recordSet) {
+			for (CSSparqlResult sr : recordSet) {
 
 				if (sr.getSupplierId().equals(id)) { 
 
@@ -284,7 +284,7 @@ public class TripleStoreConnection {
 			List<Certification> certifications = new ArrayList<Certification>();
 			List<Process> processes = new ArrayList<Process>();
 
-			for (SparqlRecord sr : recordSet) {
+			for (CSSparqlResult sr : recordSet) {
 
 				if (sr.getSupplierId().equals(id)) {
 

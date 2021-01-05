@@ -24,7 +24,7 @@ import edm.Certification;
 import query.BPQuery;
 import sparqlconnection.SparqlConnection;
 import sparqlquery.SparqlQuery_BP;
-import sparqlresult.SparqlRecord_BP;
+import sparqlresult.BPSparqlResult;
 import supplier.Supplier_BP;
 import utilities.StringUtilities;
 
@@ -32,7 +32,7 @@ public class SupplierData_BP {
 	
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
-	static final String REPOSITORY_ID = "BPS";
+	static final String REPOSITORY_ID = "BPS_050121_2";
 
 
 	/**
@@ -45,7 +45,7 @@ public class SupplierData_BP {
 	public static List<Supplier_BP> createSupplierData(BPQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 
 		String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
-		Set<SparqlRecord_BP> recordSet = new HashSet<SparqlRecord_BP>();
+		Set<BPSparqlResult> recordSet = new HashSet<BPSparqlResult>();
 
 		// use name of processes in query to retrieve subset of relevant supplier data
 		// from semantic infrastructure
@@ -88,7 +88,7 @@ public class SupplierData_BP {
 		try (TupleQueryResult result = tupleQuery.evaluate()) {
 
 			Attribute supplierAttribute = new Attribute();
-			SparqlRecord_BP record = null;			
+			BPSparqlResult record = null;			
 			Map<String, String> attributeWeightMap = null;
 						
 			while (result.hasNext()) {
@@ -128,7 +128,7 @@ public class SupplierData_BP {
 //				System.err.println("Attribute weight map: " + attributeWeightMap);
 //				}
 				
-				record = new SparqlRecord_BP();
+				record = new BPSparqlResult();
 				record.setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
 				record.setWsProfileId(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));			
 				record.setByProductName(solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""));
@@ -197,13 +197,13 @@ public class SupplierData_BP {
 	 * @return list of supplier objects containing SPARQL results
 	   Dec 9, 2020
 	 */
-	public static List<Supplier_BP> consolidateSuppliers (Set<SparqlRecord_BP> recordSet) {
+	public static List<Supplier_BP> consolidateSuppliers (Set<BPSparqlResult> recordSet) {
 
 		List<Supplier_BP> supplierList = new ArrayList<Supplier_BP>();
 
 		//get all supplier ids for filtering
 		Set<String> supplierids = new HashSet<String>();
-		for (SparqlRecord_BP sr : recordSet) {
+		for (BPSparqlResult sr : recordSet) {
 			supplierids.add(sr.getSupplierId());
 		}
 		
@@ -216,7 +216,7 @@ public class SupplierData_BP {
 
 			List<Certification> certifications = new ArrayList<Certification>();
 
-			for (SparqlRecord_BP sr : recordSet) {
+			for (BPSparqlResult sr : recordSet) {
 
 				Certification cert = null;	
 
@@ -250,16 +250,16 @@ public class SupplierData_BP {
 	 * @return a map where the supplier id is used as key and the value consist of a list of consolidated by-products
 	   Dec 9, 2020
 	 */
-	private static Map<String, List<ByProduct>> consolidateByProducts (Set<SparqlRecord_BP> recordSet) {
+	private static Map<String, List<ByProduct>> consolidateByProducts (Set<BPSparqlResult> recordSet) {
 		Map<String, ByProduct> byProductMap = new HashMap<String, ByProduct>();
 
 		Set<String> uniqueByProducts = new HashSet<String>();
-		for (SparqlRecord_BP sr : recordSet) {		
+		for (BPSparqlResult sr : recordSet) {		
 			uniqueByProducts.add(sr.getWsProfileId());
 		}
 
 		Set<String> uniqueSuppliers = new HashSet<String>();
-		for (SparqlRecord_BP sr : recordSet) {
+		for (BPSparqlResult sr : recordSet) {
 			uniqueSuppliers.add(sr.getSupplierId());
 		}
 
@@ -271,7 +271,7 @@ public class SupplierData_BP {
 			Set<String> materials = new HashSet<String>();
 			Set<String> appearances = new HashSet<String>();
 			
-			for (SparqlRecord_BP sr : recordSet) {
+			for (BPSparqlResult sr : recordSet) {
 
 				if (sr.getWsProfileId().equals(s)) {
 					
@@ -347,7 +347,7 @@ public class SupplierData_BP {
 
 		for (String supplier : uniqueSuppliers) {
 
-			for (SparqlRecord_BP sr : recordSet) {
+			for (BPSparqlResult sr : recordSet) {
 
 				if (sr.getSupplierId().equals(supplier)) {
 					supplierToByProductMapping.put(sr.getSupplierId(), sr.getWsProfileId());

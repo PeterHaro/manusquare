@@ -27,7 +27,7 @@ public class SparqlQuery_BP {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_17122020/Radostin_17122020_1.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_17122020/Radostin_17122020_2.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();

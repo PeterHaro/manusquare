@@ -21,7 +21,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import edm.Attribute;
 import edm.Certification;
 import query.IMQuery;
-import sparqlresult.SparqlRecord_IM;
+import sparqlresult.IMSparqlResult;
 import supplier.InnovationManager;
 import utilities.StringUtilities;
 
@@ -71,7 +71,7 @@ public class TripleStoreConnection_IM {
 		String strQuery = SparqlQuery_IM.createSparqlQuery_IM(query, onto);
 
 		//open connection to GraphDB and run SPARQL query
-		Set<SparqlRecord_IM> recordSet = new HashSet<SparqlRecord_IM>();
+		Set<IMSparqlResult> recordSet = new HashSet<IMSparqlResult>();
 
 
 		try (RepositoryConnection conn = repository.getConnection()) {
@@ -87,13 +87,13 @@ public class TripleStoreConnection_IM {
 
 			try (TupleQueryResult result = tupleQuery.evaluate()) {
 
-				SparqlRecord_IM record = null;
+				IMSparqlResult record = null;
 
 				while (result.hasNext()) {
 
 					BindingSet solution = result.next();
 					
-					record = new SparqlRecord_IM();
+					record = new IMSparqlResult();
 
 					record.setSupplierId(StringUtilities.stripIRI(solution.getValue("supplier").stringValue().replaceAll("\\s+", "")));
 					record.setSupplierName(StringUtilities.stripIRI(solution.getValue("supplierName").stringValue().replaceAll("\\s+", "")));
@@ -125,7 +125,7 @@ public class TripleStoreConnection_IM {
 		//get unique supplier ids used for constructing the supplier structure below
 		Set<String> supplierIds = new HashSet<String>();
 
-		for (SparqlRecord_IM sr : recordSet) {
+		for (IMSparqlResult sr : recordSet) {
 			supplierIds.add(sr.getSupplierId());
 		}
 
@@ -147,7 +147,7 @@ public class TripleStoreConnection_IM {
 			List<String> skills = new ArrayList<String>();
 			List<String> sectors = new ArrayList<String>();
 
-			for (SparqlRecord_IM sr : recordSet) {
+			for (IMSparqlResult sr : recordSet) {
 
 				if (sr.getSupplierId().equals(id)) {
 										
