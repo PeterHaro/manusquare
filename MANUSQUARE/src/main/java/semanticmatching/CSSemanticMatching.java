@@ -34,7 +34,7 @@ import edm.Process;
 import graph.Graph;
 import query.CSQuery;
 import similarity.MatchingResult;
-import similarity.SimilarityMeasures;
+import similarity.CSSimilarityMeasures;
 import supplier.CSSupplier;
 import supplierdata.CSSupplierData;
 import utilities.MathUtilities;
@@ -110,7 +110,7 @@ public class CSSemanticMatching extends SemanticMatching {
 		List<Double> supplierSim = new LinkedList<Double>();
 
 		for (CSSupplier supplier : supplierData) {
-			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
 //			supplierScores.put(supplier, getHighestScore(supplierSim));	
 			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numConsumerProcesses));	
@@ -155,8 +155,8 @@ public class CSSemanticMatching extends SemanticMatching {
 			//check if the query includes materials
 			if (p.getMaterials() == null || p.getMaterials().isEmpty()) {
 			} else {
-				for (Material m : p.getMaterials()) {
-					System.out.println(" - Material: " + m.getName());
+				for (String m : p.getMaterials()) {
+					System.out.println(" - Material: " + m);
 				}
 			}
 			n++;

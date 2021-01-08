@@ -32,7 +32,7 @@ import edm.Certification;
 import graph.Graph;
 import query.IMQuery;
 import similarity.MatchingResult;
-import similarity.SimilarityMeasures_IM;
+import similarity.IMSimilarityMeasures;
 import similarity.SimilarityMethods;
 import supplier.IMSupplier;
 import supplierdata.IMSupplierData;
@@ -94,7 +94,7 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		for (IMSupplier innovationManager : innovationManagerData) {
 
-			innovationManagerSim = SimilarityMeasures_IM.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
 			innovationManagerScores.put(innovationManager, getHighestScore(innovationManagerSim));	
 			

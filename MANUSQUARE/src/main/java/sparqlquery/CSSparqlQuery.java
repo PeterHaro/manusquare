@@ -36,7 +36,7 @@ import query.CSQuery;
 import utilities.StringUtilities;
 
 
-public class SparqlQuery {
+public class CSSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
@@ -59,7 +59,7 @@ public class SparqlQuery {
 
 	public static String createSparqlQuery(CSQuery cq, OWLOntology onto) {
 
-		Set<Material> materials = new HashSet<Material>();
+		Set<String> materials = new HashSet<String>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<edm.Process> processes = cq.getProcesses();
 		
@@ -92,9 +92,9 @@ public class SparqlQuery {
 
 			if (p.getMaterials() != null) {
 
-				for (Material m : p.getMaterials()) {
+				for (String m : p.getMaterials()) {
 					materials.add(m);
-					materialsAndAttributes.add(m.getName());
+					materialsAndAttributes.add(m);
 				}
 			}
 		}

@@ -33,7 +33,7 @@ import graph.Graph;
 import query.BPQuery;
 import similarity.ExtendedMatchingResult;
 import similarity.MatchingResult;
-import similarity.SimilarityMeasures_BP;
+import similarity.BPSimilarityMeasures;
 import supplier.BPSupplier;
 import supplierdata.BPSupplierData;
 import utilities.MathUtilities;
@@ -114,7 +114,7 @@ public class BPSemanticMatching extends SemanticMatching {
 		TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
 
 		for (BPSupplier supplier : supplierData) {
-			supplierByProductScoresMapping.putAll(SimilarityMeasures_BP.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+			supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
 			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numByProducts));	
 			
 		}

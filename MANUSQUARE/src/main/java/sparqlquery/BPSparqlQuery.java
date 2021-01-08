@@ -22,7 +22,7 @@ import query.BPQuery;
 import utilities.StringUtilities;
 
 
-public class SparqlQuery_BP {
+public class BPSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 

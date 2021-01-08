@@ -17,7 +17,7 @@ import query.IMQuery;
 import utilities.StringUtilities;
 
 
-public class SparqlQuery_IM {
+public class IMSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 

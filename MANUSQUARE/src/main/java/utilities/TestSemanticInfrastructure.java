@@ -22,7 +22,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import query.BPQuery;
 import similarity.SimilarityMethods;
-import sparqlquery.SparqlQuery_BP;
+import sparqlquery.BPSparqlQuery;
 
 public class TestSemanticInfrastructure {
 

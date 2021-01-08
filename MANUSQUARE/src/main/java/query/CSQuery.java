@@ -161,7 +161,7 @@ public class CSQuery {
 		//get attribute and materials and map them to process
 		for (String process : processNames) {
 			Set<Attribute> attributeSet = new HashSet<Attribute>();
-			Set<Material> materialSet = new HashSet<Material>();
+			Set<String> materialSet = new HashSet<String>();
 			Set<String> equivalentProcesses = new HashSet<String>();
 
 			//get the materials and other attributes if they´re present
@@ -179,7 +179,7 @@ public class CSQuery {
 							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 						}
 					} else if ((projectAttributes.attributeKey.equalsIgnoreCase("material") || projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) { //get the materials
-						materialSet.add(new Material(projectAttributes.attributeValue));
+						materialSet.add(projectAttributes.attributeValue);
 					}
 				} else {
 					System.out.println("There are no attributes in the JSON file!");
@@ -193,13 +193,37 @@ public class CSQuery {
 			//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
 			if (equivalentProcesses == null || equivalentProcesses.isEmpty()) {
 
-				processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
+				//processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
+				
+				processes.add(new Process.Builder()
+						.setName(process)
+						.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
+						.setAttributes(attributeSet)
+						.build()
+						);
 
 			} else {//if there are equivalent processes in the ontology we add those to the set of processes together with the process included by the consumer
 				for (String s : equivalentProcesses) {
 
-					processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
-					processes.add(new Process(s, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
+					//processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
+					//processes.add(new Process(s, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
+					
+					processes.add(new Process.Builder()
+							.setName(process)
+							.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
+							.setAttributes(attributeSet)
+							.setEquivalentProcesses(equivalentProcesses)
+							.build()
+							);
+					
+					processes.add(new Process.Builder()
+							.setName(s)
+							.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
+							.setAttributes(attributeSet)
+							.setEquivalentProcesses(updateEquivalenceSet(equivalentProcesses, s, process))
+							.build()
+							);
+					
 				}
 			}
 
@@ -274,7 +298,7 @@ public class CSQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/Test1.json";
+		String filename = "./files/TESTING_CAPACITY_SHARING/Test-Full.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -291,8 +315,8 @@ public class CSQuery {
 			
 			if (p.getMaterials() != null) {
 			System.out.println("Number of materials: " + p.getMaterials().size());
-			for (Material m : p.getMaterials()) {
-				System.out.println("   Material: " + m.getName());
+			for (String m : p.getMaterials()) {
+				System.out.println("   Material: " + m);
 			}
 			}
 			for (Attribute a : p.getAttributes()) {

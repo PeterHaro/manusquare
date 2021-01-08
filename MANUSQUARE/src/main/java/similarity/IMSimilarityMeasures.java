@@ -26,7 +26,7 @@ import supplier.IMSupplier;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
 
-public class SimilarityMeasures_IM {
+public class IMSimilarityMeasures {
 
 	public static List<Double> computeSemanticSimilarity_IM (IMQuery query, IMSupplier innovationManager, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
 

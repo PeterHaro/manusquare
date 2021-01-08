@@ -23,7 +23,7 @@ import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import supplier.BPSupplier;
 
-public class SimilarityMeasures_BP {
+public class BPSimilarityMeasures {
 
 
 	public static Map<String, Map<String, Double>> computeSemanticSimilarity (BPQuery query, BPSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {

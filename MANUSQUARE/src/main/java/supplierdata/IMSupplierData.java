@@ -18,7 +18,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import edm.Certification;
 import query.IMQuery;
 import sparqlconnection.SparqlConnection;
-import sparqlquery.SparqlQuery_IM;
+import sparqlquery.IMSparqlQuery;
 import sparqlresult.IMSparqlResult;
 import supplier.IMSupplier;
 import utilities.StringUtilities;
@@ -32,7 +32,7 @@ public class IMSupplierData {
 	
 	public static List<IMSupplier> createInnovationManagerData(IMQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 		
-		String strQuery = SparqlQuery_IM.createSparqlQuery_IM(query, onto);
+		String strQuery = IMSparqlQuery.createSparqlQuery_IM(query, onto);
 		Set<IMSparqlResult> sparqlResults = new HashSet<IMSparqlResult>();
 
 		Repository repository;

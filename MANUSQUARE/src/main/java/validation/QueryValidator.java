@@ -169,7 +169,7 @@ public class QueryValidator {
 		
 	}
 
-
+	
 	/**
 	 * Checks if all materials specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
 	 *
@@ -178,14 +178,14 @@ public class QueryValidator {
 	 * Nov 13, 2019
 	 * @throws IOException
 	 */
-	public static Set<Material> validateMaterials(Set<Material> initialMaterials, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
-		Set<Material> validatedMaterials = new HashSet<Material>();
+	public static Set<String> validateMaterials(Set<String> initialMaterials, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+		Set<String> validatedMaterials = new HashSet<String>();
 		if (initialMaterials.isEmpty() || initialMaterials == null) {
 			return null;
 		} else {
-			for (Material m : initialMaterials) {
-				if (!allOntologyClasses.contains(m.getName())) { //if not, get the concept from the ontology with the highest similarity
-					m.setName(getMostSimilarConcept(m.getName(), QueryConceptType.MATERIAL, onto, EmbeddingSingletonDataManager.VAM));
+			for (String m : initialMaterials) {
+				if (!allOntologyClasses.contains(m)) { //if not, get the concept from the ontology with the highest similarity
+					m = getMostSimilarConcept(m, QueryConceptType.MATERIAL, onto, EmbeddingSingletonDataManager.VAM);
 					validatedMaterials.add(m);
 				} else {
 					validatedMaterials.add(m);
@@ -194,6 +194,31 @@ public class QueryValidator {
 			return validatedMaterials;
 		}
 	}
+
+//	/**
+//	 * Checks if all materials specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
+//	 *
+//	 * @param initialMaterials set of materials specified by the consumer in the RFQ process
+//	 * @return set of materials we´re sure exist as concepts in the ontology
+//	 * Nov 13, 2019
+//	 * @throws IOException
+//	 */
+//	public static Set<Material> validateMaterials(Set<Material> initialMaterials, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+//		Set<Material> validatedMaterials = new HashSet<Material>();
+//		if (initialMaterials.isEmpty() || initialMaterials == null) {
+//			return null;
+//		} else {
+//			for (Material m : initialMaterials) {
+//				if (!allOntologyClasses.contains(m.getName())) { //if not, get the concept from the ontology with the highest similarity
+//					m.setName(getMostSimilarConcept(m.getName(), QueryConceptType.MATERIAL, onto, EmbeddingSingletonDataManager.VAM));
+//					validatedMaterials.add(m);
+//				} else {
+//					validatedMaterials.add(m);
+//				}
+//			}
+//			return validatedMaterials;
+//		}
+//	}
 
 	/**
 	 * Checks if all attribute keys specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.

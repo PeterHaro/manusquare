@@ -27,7 +27,7 @@ import edm.Material;
 import edm.Process;
 import query.CSQuery;
 import sparqlconnection.SparqlConnection;
-import sparqlquery.SparqlQuery;
+import sparqlquery.CSSparqlQuery;
 import sparqlresult.CSSparqlResult;
 import supplier.CSSupplier;
 import utilities.StringUtilities;
@@ -50,7 +50,7 @@ public class CSSupplierData {
 	 */
 	public static List<CSSupplier> createSupplierData(CSQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 
-		String strQuery = SparqlQuery.createSparqlQuery(query, onto);
+		String strQuery = CSSparqlQuery.createSparqlQuery(query, onto);
 		Set<CSSparqlResult> sparqlResults = new HashSet<CSSparqlResult>();		
 
 		//use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
@@ -231,7 +231,7 @@ public class CSSupplierData {
 						//iterate processAndMaterialMap and extract process and relevant materials for that process
 						for (Entry<Object, Collection<Object>> e_m : processAndMaterialMap.asMap().entrySet()) {
 
-							Set<Material> materialsSet = new HashSet<Material>();
+							Set<String> materialsSet = new HashSet<String>();
 							//get list/set of materials
 							materialList = new HashSet<>(e_m.getValue());
 
@@ -239,7 +239,7 @@ public class CSSupplierData {
 							//FIXME: Is this transformation really necessary? Why not stick to *either* list or set?
 							for (Object o : materialList) {
 								if (o != null) { //Audun: if there are no suppliers materials retrieved from SPARQL, don´t add null-valued Material objects to the set of materials (should be handled properly with !isEmpty check in SimilarityMeasures.java)
-									materialsSet.add(new Material((String) o));
+									materialsSet.add((String) o);
 								}
 							}
 
@@ -247,7 +247,13 @@ public class CSSupplierData {
 
 							//add relevant set of materials and attributes together with process name
 
-							process = new Process(processName, materialsSet, attributeMap);
+				//			process = new Process(processName, materialsSet, attributeMap);
+							
+							process = new Process.Builder()
+									.setName(processName)
+									.setMaterials(materialsSet)
+									.setAttributeWeightMap(attributeMap)
+									.build();
 
 							//add processes
 							if (!processes.contains(process)) {

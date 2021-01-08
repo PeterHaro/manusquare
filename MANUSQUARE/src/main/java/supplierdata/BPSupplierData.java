@@ -23,7 +23,7 @@ import edm.ByProduct;
 import edm.Certification;
 import query.BPQuery;
 import sparqlconnection.SparqlConnection;
-import sparqlquery.SparqlQuery_BP;
+import sparqlquery.BPSparqlQuery;
 import sparqlresult.BPSparqlResult;
 import supplier.BPSupplier;
 import utilities.StringUtilities;
@@ -44,7 +44,7 @@ public class BPSupplierData {
 	 */
 	public static List<BPSupplier> createSupplierData(BPQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 
-		String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
+		String strQuery = BPSparqlQuery.createSparqlQuery(query, onto);
 		Set<BPSparqlResult> recordSet = new HashSet<BPSparqlResult>();
 
 		// use name of processes in query to retrieve subset of relevant supplier data
