@@ -36,7 +36,7 @@ import similarity.MatchingResult;
 import similarity.SimilarityMeasures_BP;
 import supplier.BPSupplier;
 import supplierdata.BPSupplierData;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 /**
@@ -184,7 +184,7 @@ public class BPSemanticMatching extends SemanticMatching {
 
 		for (Entry<BPSupplier, Double> e : firstEntries) {
 			ranking++;
-			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
+			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
 
 			for (BPSupplier sup : supplierData) {
 				if (e.getKey().getId().equals(sup.getId())) {

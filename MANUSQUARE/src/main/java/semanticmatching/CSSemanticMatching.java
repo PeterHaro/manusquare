@@ -37,7 +37,7 @@ import similarity.MatchingResult;
 import similarity.SimilarityMeasures;
 import supplier.CSSupplier;
 import supplierdata.CSSupplierData;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 /**
@@ -183,7 +183,7 @@ public class CSSemanticMatching extends SemanticMatching {
 
 		for (Entry<CSSupplier, Double> e : firstEntries) {
 			ranking++;
-			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
+			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
 
 			for (CSSupplier sup : supplierData) {
 				if (e.getKey().getId().equals(sup.getId())) {

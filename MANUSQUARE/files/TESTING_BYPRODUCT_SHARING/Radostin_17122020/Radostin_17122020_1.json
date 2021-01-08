@@ -28,7 +28,7 @@
             "unitOfMeasure": "N/D"
         }, {
             "id": "7b5b45f9-35fe-4a8d-b73c-bbea0e18c733",
-            "attributeKey": "YoungmodulusE",
+            "attributeKey": "MaxYoungModulusE",
             "attributeValue": "20000",
             "unitOfMeasure": "MPa"
         }]

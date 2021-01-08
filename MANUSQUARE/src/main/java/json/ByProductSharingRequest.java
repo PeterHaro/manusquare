@@ -3,6 +3,7 @@ package json;
 import java.util.List;
 import java.util.Set;
 
+import edm.Attribute;
 import edm.Customer;
 
 public class ByProductSharingRequest {
@@ -99,11 +100,11 @@ public class ByProductSharingRequest {
 		private String supplyType;
 		private String quantity;
 		private String unitOfMeasureQuantity;
-		private Set<ByProductAttributes> byProductAttributes;
+		private Set<ByProductAttribute> byProductAttributes;
 		
 		public ByProductElement() {}
 		
-		public ByProductElement(String byProductId, String byProductName, String supplyType, String quantity, String unitOfMeasureQuantity, Set<ByProductAttributes> byProductAttributes) {
+		public ByProductElement(String byProductId, String byProductName, String supplyType, String quantity, String unitOfMeasureQuantity, Set<ByProductAttribute> byProductAttributes) {
 			this.byProductId = byProductId;
 			this.byProductName = byProductName;
 			this.supplyType = supplyType;
@@ -134,11 +135,11 @@ public class ByProductSharingRequest {
 			return unitOfMeasureQuantity;
 		}
 
-		public Set<ByProductAttributes> getByProductAttributes() {
+		public Set<ByProductAttribute> getByProductAttributes() {
 			return byProductAttributes;
 		}
 
-		public void setByProductAttributes(Set<ByProductAttributes> byProductAttributes) {
+		public void setByProductAttributes(Set<ByProductAttribute> byProductAttributes) {
 			this.byProductAttributes = byProductAttributes;
 		}
 		
@@ -147,14 +148,14 @@ public class ByProductSharingRequest {
 
 	}
 	
-	public class ByProductAttributes {
+	public class ByProductAttribute {
 
 		private String attributeKey;
 		private String attributeValue;
 		private String unitOfMeasure;
 		
 		
-		public ByProductAttributes(String attributeKey, String attributeValue, String unitOfMeasure) {
+		public ByProductAttribute(String attributeKey, String attributeValue, String unitOfMeasure) {
 			super();
 
 			this.attributeKey = attributeKey;
@@ -162,19 +163,19 @@ public class ByProductSharingRequest {
 			this.unitOfMeasure = unitOfMeasure;
 		}
 		
-		public ByProductAttributes() {}
+		public ByProductAttribute() {}
 
 
-		public String getAttributeKey() {
+		public String getKey() {
 			return attributeKey;
 		}
 
-		public String getAttributeValue() {
+		public String getValue() {
 			return attributeValue;
 		}
 
 
-		public String getAttributeUnitOfMeasurement() {
+		public String getUnitOfMeasurement() {
 			return unitOfMeasure;
 		}
 		

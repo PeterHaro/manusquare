@@ -3,11 +3,12 @@ package similarity;
 import java.util.Map;
 import java.util.Set;
 
-import json.ByProductSharingRequest.ByProductAttributes;
+import edm.Attribute;
+
 
 public class AttributeSimilarity {
 	
-	public static double computeAttributeSimilarity(Set<ByProductAttributes> consumerAttributes, Map<String, String> attributeWeightMap, double hard_coded_weight) {
+	public static double computeAttributeSimilarity(Set<Attribute> consumerAttributes, Map<String, String> attributeWeightMap, double hard_coded_weight) {
 		
 		double attributeSim = 0;
 		double avgAttributeSim = 0;
@@ -21,15 +22,15 @@ public class AttributeSimilarity {
 				double sum = 0;
 
 				//check which value ("Y", "N" or "O") the corresponding supplier process has
-				for (ByProductAttributes a_c : consumerAttributes) {
+				for (Attribute a_c : consumerAttributes) {
 
-					if (attributeWeightMap.containsKey(a_c.getAttributeKey())) {
+					if (attributeWeightMap.containsKey(a_c.getKey())) {
 
-						if (attributeWeightMap.get(a_c.getAttributeKey()).equals("Y")) {
+						if (attributeWeightMap.get(a_c.getKey()).equals("Y")) {
 							attributeSim = 1.0;
-						} else if (attributeWeightMap.get(a_c.getAttributeKey()).equals("O")) {
+						} else if (attributeWeightMap.get(a_c.getKey()).equals("O")) {
 							attributeSim = hard_coded_weight;
-						} else if (attributeWeightMap.get(a_c.getAttributeKey()).equals("N")) {
+						} else if (attributeWeightMap.get(a_c.getKey()).equals("N")) {
 							attributeSim = hard_coded_weight;
 						}
 

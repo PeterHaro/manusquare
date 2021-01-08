@@ -158,22 +158,22 @@ public class BPSupplierData {
 	
 	/**
 	 * Consolidates the retrieved SPARQL data per supplier
-	 * @param recordSet set of sparql records retrieved from SI
+	 * @param sparqlResults set of sparql records retrieved from SI
 	 * @return list of supplier objects containing SPARQL results
 	   Dec 9, 2020
 	 */
-	public static List<BPSupplier> consolidateSuppliers (Set<BPSparqlResult> recordSet) {
+	public static List<BPSupplier> consolidateSuppliers (Set<BPSparqlResult> sparqlResults) {
 
 		List<BPSupplier> supplierList = new ArrayList<BPSupplier>();
 
 		//get all supplier ids for filtering
 		Set<String> supplierids = new HashSet<String>();
-		for (BPSparqlResult sr : recordSet) {
+		for (BPSparqlResult sr : sparqlResults) {
 			supplierids.add(sr.getSupplierId());
 		}
 		
 		//consolidate by-products
-		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (recordSet);
+		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (sparqlResults);
 		
 		BPSupplier supplier = null;
 
@@ -181,7 +181,7 @@ public class BPSupplierData {
 
 			List<Certification> certifications = new ArrayList<Certification>();
 
-			for (BPSparqlResult sr : recordSet) {
+			for (BPSparqlResult sr : sparqlResults) {
 
 				Certification cert = null;	
 
@@ -298,7 +298,15 @@ public class BPSupplierData {
 
 					attributeWeightMap = sr.getAttributeWeightMap();
 					
-					byProduct = new ByProduct(sr.getWsProfileId(), byProductName, byProductSupplyType, byProductMinParticipants, byProductMaxParticipants, purchasingGroupAbilitation, quantity, minQuantity, uom, materials, appearances, attributeWeightMap);
+					byProduct = new ByProduct.Builder(byProductSupplyType, byProductMinParticipants, byProductMaxParticipants, purchasingGroupAbilitation, quantity, uom)
+							.setId(sr.getWsProfileId())
+							.setName(byProductName)
+							.setMaterials(materials)
+							.setAppearance(appearances)
+							.setAttributeWeightMap(attributeWeightMap)
+							.build();
+					
+//					byProduct = new ByProduct(sr.getWsProfileId(), byProductName, byProductSupplyType, byProductMinParticipants, byProductMaxParticipants, purchasingGroupAbilitation, quantity, minQuantity, uom, materials, appearances, attributeWeightMap);
 
 					byProductMap.put(sr.getWsProfileId(), byProduct);
 

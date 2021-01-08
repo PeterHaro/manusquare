@@ -1,8 +1,9 @@
 package json;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
+import edm.Customer;
 
 public class RequestForQuotation {
 
@@ -24,7 +25,6 @@ public class RequestForQuotation {
 	public RequestForQuotation(String nda, String projectName, String projectDescription, String selectionType, double supplierMaxDistance,
                                Customer customer, String servicePolicy, Set<String> processnames, String projectId, String id, String projectType,
                                List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
-		super();
 		this.nda = nda;
 		this.projectName = projectName;
 		this.projectDescription = projectDescription;
@@ -42,27 +42,23 @@ public class RequestForQuotation {
 	}
 	
 	public RequestForQuotation(double supplierMaxDistance, List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
-		super();
 		this.supplierMaxDistance = supplierMaxDistance;
 		this.projectAttributes = projectAttributes;
 		this.supplierAttributes = supplierAttributes;
 	}
 	
 	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
-		super();
 		this.projectAttributes = projectAttributes;
 		this.supplierAttributes = supplierAttributes;
 	}
 	
 	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes, Customer customer) {
-		super();
 		this.projectAttributes = projectAttributes;
 		this.supplierAttributes = supplierAttributes;
 		this.customer = customer;
 	}
 	
 	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes) {
-		super();
 		this.projectAttributes = projectAttributes;
 	}
 	
@@ -76,7 +72,6 @@ public class RequestForQuotation {
 		
 		//if attribute is material
 		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue) {
-			super();
 			this.attributeId = attributeId;
 			this.processName = processId;
 			this.attributeKey = attributeKey;
@@ -85,7 +80,6 @@ public class RequestForQuotation {
 		
 		//if attribute is other attribute than material
 		public ProjectAttributeKeys(String attributeId, String processId, String attributeKey, String attributeValue, String unitOfMeasure) {
-			super();
 			this.attributeId = attributeId;
 			this.processName = processId;
 			this.attributeKey = attributeKey;
@@ -173,45 +167,7 @@ public class RequestForQuotation {
 			this.attributeValue = attributeValue;
 		}
 	}
-	
-	public class Customer {
-		
-		public String customerName;		
-		public Map<String, String> customerInfo;
 
-		public Customer(String customerName, Map<String, String> customerInfo) {
-			super();
-			this.customerName = customerName;
-			this.customerInfo = customerInfo;
-		}
-
-		public Customer(Map<String, String> customerInfo) {
-			super();
-			this.customerInfo = customerInfo;
-
-		}
-		
-		public Customer() {}
-
-		public String getCustomerName() {
-			return customerName;
-		}
-
-		public void setCustomerName(String customerName) {
-			this.customerName = customerName;
-		}
-
-		public Map<String, String> getCustomerInfo() {
-			return customerInfo;
-		}
-
-		public void setCustomerInfo(Map<String, String> customerInfo) {
-			this.customerInfo = customerInfo;
-		}
-
-		
-		
-	}
 
 
 }

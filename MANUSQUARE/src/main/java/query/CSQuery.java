@@ -40,40 +40,7 @@ public class CSQuery {
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private Set<String> languages;
-	
-	public Set<Process> getProcesses() {
-		return processes;
-	}
 
-
-	public Set<Certification> getCertifications() {
-		return certifications;
-	}
-
-
-	public double getSupplierMaxDistance() {
-		return supplierMaxDistance;
-	}
-
-
-	public Map<String, String> getCustomerLocationInfo() {
-		return customerLocationInfo;
-	}
-
-	public Set<String> getLanguage() {
-		return languages;
-	}
-	
-	public Set<Attribute> getAttributes() {
-		Set<Attribute> attributes = new HashSet<Attribute>();
-		Set<Process> processes = getProcesses();
-		for (Process p : processes) {
-			attributes.addAll(p.getAttributes());
-		}
-
-		return attributes;
-	}
-	
 	private CSQuery(CSQueryBuilder builder) {
 		this.processes = builder.processes;
 		this.certifications = builder.certifications;
@@ -122,6 +89,39 @@ public class CSQuery {
 			return new CSQuery(this);
 		}
 		
+	}
+	
+	public Set<Process> getProcesses() {
+		return processes;
+	}
+
+
+	public Set<Certification> getCertifications() {
+		return certifications;
+	}
+
+
+	public double getSupplierMaxDistance() {
+		return supplierMaxDistance;
+	}
+
+
+	public Map<String, String> getCustomerLocationInfo() {
+		return customerLocationInfo;
+	}
+
+	public Set<String> getLanguage() {
+		return languages;
+	}
+	
+	public Set<Attribute> getAttributes() {
+		Set<Attribute> attributes = new HashSet<Attribute>();
+		Set<Process> processes = getProcesses();
+		for (Process p : processes) {
+			attributes.addAll(p.getAttributes());
+		}
+
+		return attributes;
 	}
 
 

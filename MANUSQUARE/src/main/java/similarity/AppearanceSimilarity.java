@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 
-import utilities.MathUtils;
+import utilities.MathUtilities;
 
 public class AppearanceSimilarity {
 	
@@ -26,7 +26,7 @@ public class AppearanceSimilarity {
 
 			}
 
-			appearanceSimilarity = MathUtils.getMaxFromList(appearanceSimilarityList);
+			appearanceSimilarity = MathUtilities.getMaxFromList(appearanceSimilarityList);
 
 		} else  {
 			

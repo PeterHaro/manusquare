@@ -20,14 +20,14 @@ import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
 import json.ByProductSharingRequest;
-import json.ByProductSharingRequest.ByProductAttributes;
+import json.ByProductSharingRequest.ByProductAttribute;
 import json.ByProductSharingRequest.ByProductElement;
 import json.ByProductSharingRequest.SupplierAttributeKeys;
 import ontology.OntologyOperations;
 import validation.JSONValidator;
 import validation.QueryValidator;
 
-public class BPQuery {
+public class BPQuery extends Query {
 
 	
 	//mandatory attributes	
@@ -44,71 +44,6 @@ public class BPQuery {
 	private Set<String> language;
 	private Set<String> country;
 	
-	public Set<ByProduct> getByProducts() {
-		return byProducts;
-	}
-	
-	public String getMode() {
-		return mode;
-	}
-	
-	public int getMinNumberOfParticipants() {
-		return minNumberOfParticipants;
-	}
-
-	public int getMaxNumberOfParticipants() {
-		return maxNumberOfParticipants;
-	}
-	
-	public String getPurchasingGroupAbilitation() {
-		return purchasingGroupAbilitation;
-	}
-	
-	public Set<Certification> getCertifications() {
-		return certifications;
-	}
-
-	public double getSupplierMaxDistance() {
-		return supplierMaxDistance;
-	}
-
-	public Map<String, String> getCustomerLocationInfo() {
-		return customerLocationInfo;
-	}
-
-	public Set<String> getLanguage() {
-		return language;
-	}
-	
-	public Set<String> getCountry() {
-		return country;
-	}
-	
-	public Set<Attribute> getAttributes() {
-		Set<ByProduct> byProducts = getByProducts();
-		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
-		for (ByProduct p : byProducts) {
-			normalisedAttributes.addAll(getNormalisedAttributes(p));
-		}
-
-		return normalisedAttributes;
-
-	}
-
-	public Set<Attribute> getNormalisedAttributes(ByProduct bp) {
-
-		Set<ByProductAttributes> attributes = bp.getAttributes();
-		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
-
-		for (ByProductAttributes bpa : attributes) {
-			normalisedAttributes.add(new Attribute(bpa.getAttributeKey(), bpa.getAttributeValue(), bpa.getAttributeUnitOfMeasurement()));
-		}
-
-		return normalisedAttributes;
-
-	}
-	
-
 	private BPQuery(BPQueryBuilder builder) {
 		this.byProducts = builder.byProducts;
 		this.mode = builder.mode;
@@ -182,7 +117,69 @@ public class BPQuery {
 	public BPQuery() {
 	}
 
+	public Set<ByProduct> getByProducts() {
+		return byProducts;
+	}
+	
+	public String getMode() {
+		return mode;
+	}
+	
+	public int getMinNumberOfParticipants() {
+		return minNumberOfParticipants;
+	}
 
+	public int getMaxNumberOfParticipants() {
+		return maxNumberOfParticipants;
+	}
+	
+	public String getPurchasingGroupAbilitation() {
+		return purchasingGroupAbilitation;
+	}
+	
+	public Set<Certification> getCertifications() {
+		return certifications;
+	}
+
+	public double getSupplierMaxDistance() {
+		return supplierMaxDistance;
+	}
+
+	public Map<String, String> getCustomerLocationInfo() {
+		return customerLocationInfo;
+	}
+
+	public Set<String> getLanguage() {
+		return language;
+	}
+	
+	public Set<String> getCountry() {
+		return country;
+	}
+	
+	public Set<Attribute> getAttributes() {
+		Set<ByProduct> byProducts = getByProducts();
+		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
+		for (ByProduct p : byProducts) {
+			normalisedAttributes.addAll(getNormalisedAttributes(p));
+		}
+
+		return normalisedAttributes;
+
+	}
+
+	public Set<Attribute> getNormalisedAttributes(ByProduct bp) {
+
+		Set<Attribute> attributes = bp.getAttributes();
+		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
+
+		for (Attribute bpa : attributes) {
+			normalisedAttributes.add(new Attribute(bpa.getKey(), bpa.getValue(), bpa.getUnitOfMeasurement()));
+		}
+
+		return normalisedAttributes;
+
+	}
 
 	/**
 	 * Parses a json file and creates a ByProductQuery object representing the input provided by a consumer in the RFQ establishment process.
@@ -204,6 +201,7 @@ public class BPQuery {
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		ByProductSharingRequest bpsr;
+		
 
 		if (JSONValidator.isJSONValid(filename)) {
 			bpsr = new Gson().fromJson(filename, ByProductSharingRequest.class);
@@ -218,26 +216,46 @@ public class BPQuery {
 
 		//get all byproduct (names) from the JSON
 		for (ByProductElement element : bpsr.getByProductElements()) {
+						
+			Set<Attribute> attributeSet = normaliseAttributes(element.getByProductAttributes());
 			
-			Set<ByProductAttributes> attributeSet = element.getByProductAttributes();
-			
-			for (ByProductAttributes bp : attributeSet) {
-				if (bp.getAttributeKey() == null || bp.getAttributeKey().equals("")) {
-					byProducts.add(new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
-							element.getSupplyType(), element.getQuantity(), element.getUom(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation));
+			for (Attribute bp : attributeSet) {
+				
+				if (bp.getKey() == null || bp.getKey().equals("")) {
+					byProducts.add(
+							
+							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
+							.setId(element.getByProductId())
+							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
+							.build());
+							
+//							new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
+//							element.getSupplyType(), element.getQuantity(), element.getUom(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation));
 				} else {
 					
-					if (bp.getAttributeKey().equals("AttributeMaterial")) {
-						materials.add(bp.getAttributeValue());
+					if (bp.getKey().equals("AttributeMaterial")) {
+						materials.add(bp.getValue());
 					}
 					
-					if (bp.getAttributeKey().equals("Appearance")) {
-						appearances.add(bp.getAttributeValue());
+					if (bp.getKey().equals("Appearance")) {
+						appearances.add(bp.getValue());
 					}
 					
-					byProducts.add(new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
-							element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom(),  
-							materials, appearances, element.getByProductAttributes()));
+					byProducts.add(
+							
+							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
+							.setId(element.getByProductId())
+							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
+							.setMaterials(materials)
+							.setAppearance(appearances)
+							.setAttributes(attributeSet)
+							.build());
+							
+							System.out.println("TESTING ATTRIBUTES: ");
+							System.out.println("Adding " + element.getByProductAttributes() + " to " + QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses));
+//							new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
+//							element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom(),  
+//							materials, appearances, element.getByProductAttributes()));
 				}
 			}
 			
@@ -323,6 +341,19 @@ public class BPQuery {
 		return query;
 	}
 	
+	private static Set<Attribute> normaliseAttributes (Set<ByProductAttribute> bps) {
+		Set<Attribute> attrs = new HashSet<Attribute>();
+		Attribute attr = new Attribute();
+		for (ByProductAttribute bp :bps) {
+			
+			attr.setKey(bp.getKey());
+			attr.setValue(bp.getValue());
+			attr.setUnitOfMeasurement(bp.getUnitOfMeasurement());
+			attrs.add(attr);
+		}
+
+		return attrs;
+	}
 
 
 	//test method
@@ -343,8 +374,9 @@ public class BPQuery {
 			System.out.println("Appearances: " + bp.getAppearances());
 
 			System.out.println("\nOther attributes: ");
+			System.err.println(bp.getAttributes());
 			if (bp.getAttributes() != null) {
-			for (Attribute a : bp.getNormalisedAttributes(bp)) {
+			for (Attribute a : bp.getAttributes()) {
 				System.out.println("   Attribute: " + a.getKey());
 			}
 		} else {

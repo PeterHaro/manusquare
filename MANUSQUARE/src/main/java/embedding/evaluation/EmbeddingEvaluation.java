@@ -12,7 +12,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import query.QueryConceptType;
 import similarity.Cosine;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import validation.QueryValidator;
 
 import java.io.*;
@@ -137,7 +137,7 @@ public class EmbeddingEvaluation {
 		
 		double accuracy = (double)correctOnes / (double)synonymMap.size() * 100;
 		
-		System.out.println("Synonym accuracy (correct ones: " + correctOnes + "), (synonym map size: " + synonymMap.size() + ") : " +  MathUtils.round(accuracy, 0) + " percent");
+		System.out.println("Synonym accuracy (correct ones: " + correctOnes + "), (synonym map size: " + synonymMap.size() + ") : " +  MathUtilities.round(accuracy, 0) + " percent");
 
 		return accuracy;
 

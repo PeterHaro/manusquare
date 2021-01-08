@@ -18,7 +18,6 @@ import com.google.gson.JsonSyntaxException;
 import edm.Attribute;
 import edm.ByProduct;
 import exceptions.NoAttributeException;
-import json.ByProductSharingRequest.ByProductAttributes;
 import query.BPQuery;
 import utilities.StringUtilities;
 
@@ -47,7 +46,7 @@ public class SparqlQuery_BP {
 	
 	public static String createSparqlQuery(BPQuery bpq, OWLOntology onto) {
 
-		Set<ByProductAttributes> attributes = new HashSet<ByProductAttributes>();
+		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<edm.ByProduct> byProducts = bpq.getByProducts();
 		String mode = bpq.getMode();
 				
@@ -72,10 +71,10 @@ public class SparqlQuery_BP {
 		for (ByProduct bp : byProducts) {
 			if (bp.getAttributes() != null) {
 
-				for (ByProductAttributes a : bp.getAttributes()) {
-					if (Attribute.isSupportedAttribute(a.getAttributeKey())) {
+				for (Attribute a : bp.getAttributes()) {
+					if (Attribute.isSupportedAttribute(a.getKey())) {
 						attributes.add(a);
-						materialsAndAttributes.add(a.getAttributeKey());
+						materialsAndAttributes.add(a.getKey());
 					}
 				}
 			}

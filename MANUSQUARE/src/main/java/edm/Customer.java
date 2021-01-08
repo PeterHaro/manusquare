@@ -5,7 +5,7 @@ import java.util.Map;
 public class Customer {
 	
 	private String customerName;		
-	private Map<String, String> customerInfo;
+	public Map<String, String> customerInfo;
 
 	public Customer(String customerName, Map<String, String> customerInfo) {
 		super();

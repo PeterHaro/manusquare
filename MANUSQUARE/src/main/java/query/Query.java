@@ -1,9 +1,13 @@
 package query;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import edm.Attribute;
+import edm.ByProduct;
 import edm.Certification;
+import json.ByProductSharingRequest.ByProductAttribute;
 
 public class Query {
 	
@@ -19,28 +23,30 @@ public class Query {
 	}
 	
 	public Query() {}
-	
-	//generic and mandatory attributes
-		//	certifications
-		//	country
-		//	customerlocationInfo
-		//	language
-		//	supplierMaxDistance
 
-	//cs attributes
-		//  processes
-	
-	//im attributes
-		//	innovationTypes
-		//	innovationPhases
-		//	sectors
-		//	skills
-	
-	//bp attributes
-		//	byProducts
-		//	maxNumberOfParticipants
-		//	minNumberOfParticipants
-		//	mode
-		//	purchasingGroupAbilitation
+		public Set<Attribute> getAttributes() {
+		Set<ByProduct> byProducts = getByProducts();
+		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
+		for (ByProduct p : byProducts) {
+			normalisedAttributes.addAll(getNormalisedAttributes(p));
+		}
+
+		return normalisedAttributes;
+
+	}
+		
+		public Set<Attribute> getNormalisedAttributes(ByProduct bp) {
+
+			Set<ByProductAttribute> attributes = bp.getAttributes();
+			Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
+
+			for (ByProductAttribute bpa : attributes) {
+				normalisedAttributes.add(new Attribute(bpa.getKey(), bpa.getValue(), bpa.getUnitOfMeasurement()));
+			}
+
+			return normalisedAttributes;
+
+		}
+
 	
 }

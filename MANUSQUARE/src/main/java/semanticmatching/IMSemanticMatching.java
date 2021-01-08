@@ -36,7 +36,7 @@ import similarity.SimilarityMeasures_IM;
 import similarity.SimilarityMethods;
 import supplier.IMSupplier;
 import supplierdata.IMSupplierData;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 /**
@@ -152,7 +152,7 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		for (Entry<IMSupplier, Double> e : firstEntries) {
 			ranking++;
-			System.out.println("\n" + ranking + "; Innovation Manager ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
+			System.out.println("\n" + ranking + "; Innovation Manager ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
 
 			for (IMSupplier innovationManager : innovationManagerData) {
 				if (e.getKey().getId().equals(innovationManager.getId())) {

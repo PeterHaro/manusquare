@@ -10,7 +10,7 @@ import java.util.Set;
  * @author audunvennesland
  * 26. okt. 2017
  */
-public class MathUtils {
+public class MathUtilities {
 
     public static void main(String[] args) {
         double high = 0.30;

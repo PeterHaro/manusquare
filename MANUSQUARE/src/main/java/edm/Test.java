@@ -9,10 +9,11 @@ import org.eclipse.rdf4j.query.BindingSet;
 
 import query.BPQuery;
 import query.CSQuery;
+import query.Query;
 import utilities.StringUtilities;
 
-public class Attribute {
-
+public class Test {
+	
 	private String key;
 	private String value;
 	private String type;
@@ -20,25 +21,25 @@ public class Attribute {
 
 
 	//if attribute is material there is no unitOfMeasurement
-	public Attribute(String key, String value) {
+	public Test(String key, String value) {
 		this.key = key;
 		this.value = value;
 
 	}
 
-	public Attribute(String key, String value, String unitOfMeasurement) {
+	public Test(String key, String value, String unitOfMeasurement) {
 		this.key = key;
 		this.value = value;
 		this.unitOfMeasurement = unitOfMeasurement;
 
 	}
 
-	public Attribute(String key) {
+	public Test(String key) {
 		this.key = key;
 	}
 
 
-	public Attribute() {}
+	public Test() {}
 
 	public String getKey() {
 		return key;
@@ -60,15 +61,15 @@ public class Attribute {
 		return type;
 	}
 
-	public String getUnitOfMeasurement() {
+	public String getunitOfMeasurement() {
 		return unitOfMeasurement;
 	}
 
-	public void setUnitOfMeasurement(String unitOfMeasurement) {
+	public void setunitOfMeasurement(String unitOfMeasurement) {
 		this.unitOfMeasurement = unitOfMeasurement;
 	}	
 	
-	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, CSQuery query) {
+	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, Query query) {
 		
 		//create supplierAttribute that can be compared to consumerAttribute
 		supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
@@ -515,5 +516,5 @@ public class Attribute {
 
 	}
 	
-
+	
 }

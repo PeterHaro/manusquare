@@ -13,9 +13,9 @@ import com.google.common.graph.MutableGraph;
 
 import NEW.ByProductQuantityComparison;
 import NEW.PurchaseGroupAbilitation;
+import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
-import json.ByProductSharingRequest.ByProductAttributes;
 import ontology.OntologyOperations;
 import query.BPQuery;
 import similarity.SimilarityMethodologies.ISimilarity;
@@ -164,7 +164,7 @@ public class SimilarityMeasures_BP {
 					
 					/* ATTRIBUTE SIMILARITY */		
 
-					Set<ByProductAttributes> consumerAttributes = bpc.getAttributes();
+					Set<Attribute> consumerAttributes = bpc.getAttributes();
 					debuggingOutput.append("\n Number of consumer attributes: " + consumerAttributes.size());
 
 					Map<String, String> attributeWeightMap = bps.getAttributeWeightMap();

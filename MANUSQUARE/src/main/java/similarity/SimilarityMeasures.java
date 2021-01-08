@@ -15,7 +15,7 @@ import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
 import supplier.CSSupplier;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 import java.util.Collections;
@@ -287,7 +287,7 @@ public class SimilarityMeasures {
 							}
 						}
 
-						return MathUtils.sum(simList) / (double)simList.size();
+						return MathUtilities.sum(simList) / (double)simList.size();
 
 					}
 				}
@@ -407,7 +407,7 @@ public class SimilarityMeasures {
 					}
 				}
 
-				return MathUtils.sum(simList) / (double)simList.size();
+				return MathUtilities.sum(simList) / (double)simList.size();
 
 			}
 		}

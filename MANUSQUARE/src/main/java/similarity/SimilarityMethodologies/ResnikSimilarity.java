@@ -2,7 +2,7 @@ package similarity.SimilarityMethodologies;
 
 
 import similarity.SimilarityMethodologies.SimilarityParameters.ResnikSimilarityParameters;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 
 public class ResnikSimilarity implements ISimilarity<ResnikSimilarityParameters> {
     @Override

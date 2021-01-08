@@ -1,6 +1,6 @@
 package matchmaking.models;
 
-import utilities.MathUtils;
+import utilities.MathUtilities;
 
 import java.security.InvalidParameterException;
 
@@ -14,7 +14,7 @@ public class SearchInterfaceDataBuilder {
     private int priceRange; // TODO: CONSIDER CLASSIFY YO
 
     public SearchInterfaceDataBuilder setQualityOfProjectResultsImportance(int qualityOfProjectResultsImportance) {
-        if(MathUtils.inRange(qualityOfProjectResultsImportance, 0, 5)) {
+        if(MathUtilities.inRange(qualityOfProjectResultsImportance, 0, 5)) {
             this.qualityOfProjectResultsImportance = qualityOfProjectResultsImportance;
             return this;
         }
@@ -22,7 +22,7 @@ public class SearchInterfaceDataBuilder {
     }
 
     public SearchInterfaceDataBuilder setOnTimeDeliveryImportance(int onTimeDeliveryImportance) {
-        if(MathUtils.inRange(onTimeDeliveryImportance, 0, 5)) {
+        if(MathUtilities.inRange(onTimeDeliveryImportance, 0, 5)) {
             this.onTimeDeliveryImportance = onTimeDeliveryImportance;
             return this;
         }
@@ -30,7 +30,7 @@ public class SearchInterfaceDataBuilder {
     }
 
     public SearchInterfaceDataBuilder setCommunicationAndCollaberationEffectivenessImportance(int communicationAndCollaberationEffectivenessImportance) {
-        if(MathUtils.inRange(communicationAndCollaberationEffectivenessImportance, 0, 5)) {
+        if(MathUtilities.inRange(communicationAndCollaberationEffectivenessImportance, 0, 5)) {
             this.communicationAndCollaberationEffectivenessImportance = communicationAndCollaberationEffectivenessImportance;
             return this;
         }
@@ -43,7 +43,7 @@ public class SearchInterfaceDataBuilder {
     }
 
     public SearchInterfaceDataBuilder setProfileRankingImportance(int profileRankingImportance) {
-        if(MathUtils.inRange(profileRankingImportance, 0, 100)) {
+        if(MathUtilities.inRange(profileRankingImportance, 0, 100)) {
             this.profileRankingImportance = profileRankingImportance;
             return this;
         }
@@ -51,7 +51,7 @@ public class SearchInterfaceDataBuilder {
     }
 
     public SearchInterfaceDataBuilder setSustainabilityRanking(int sustainabilityRanking) {
-        if(MathUtils.inRange(sustainabilityRanking, 0, 100)) {
+        if(MathUtilities.inRange(sustainabilityRanking, 0, 100)) {
             this.sustainabilityRanking = sustainabilityRanking;
             return this;
         }

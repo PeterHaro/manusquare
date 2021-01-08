@@ -19,7 +19,7 @@ import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 
@@ -72,7 +72,7 @@ public class SemanticSimilarity {
 					}
 				}
 
-				return MathUtils.sum(simList) / (double)simList.size();
+				return MathUtilities.sum(simList) / (double)simList.size();
 
 			}
 		}

@@ -12,7 +12,7 @@ import com.google.common.graph.MutableGraph;
 import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import validation.QueryValidator;
 
 public class MaterialSimilarity {
@@ -39,7 +39,7 @@ public class MaterialSimilarity {
 
 			}
 
-			materialSimilarity = MathUtils.getMaxFromList(materialSimilarityList);
+			materialSimilarity = MathUtilities.getMaxFromList(materialSimilarityList);
 
 		} else  {
 			//assuming that consumerByProductMaterials (combining by-product name and material attributes) will never be empty or null

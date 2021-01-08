@@ -23,7 +23,7 @@ import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
 import supplier.IMSupplier;
-import utilities.MathUtils;
+import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 public class SimilarityMeasures_IM {
@@ -209,7 +209,7 @@ public class SimilarityMeasures_IM {
 					}
 				}
 
-				return MathUtils.sum(simList) / (double)simList.size();
+				return MathUtilities.sum(simList) / (double)simList.size();
 
 			}
 		}
