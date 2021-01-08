@@ -5,7 +5,7 @@ import java.util.List;
 import edm.Certification;
 
 
-public class InnovationManager {
+public class IMSupplier {
 	
 	String id;
 	String supplierName;
@@ -19,7 +19,7 @@ public class InnovationManager {
 	List<String> sectors;
 
 	
-	public InnovationManager(String id, String supplierName, List<Certification> certifications, List<String> skills,
+	public IMSupplier(String id, String supplierName, List<Certification> certifications, List<String> skills,
 			List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {
 		super();
 		this.id = id;
@@ -32,7 +32,7 @@ public class InnovationManager {
 	}
 
 	
-	public InnovationManager() {}
+	public IMSupplier() {}
 	
 
 	public String getId() {

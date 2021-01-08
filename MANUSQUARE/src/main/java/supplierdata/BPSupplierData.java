@@ -25,10 +25,10 @@ import query.BPQuery;
 import sparqlconnection.SparqlConnection;
 import sparqlquery.SparqlQuery_BP;
 import sparqlresult.BPSparqlResult;
-import supplier.Supplier_BP;
+import supplier.BPSupplier;
 import utilities.StringUtilities;
 
-public class SupplierData_BP {
+public class BPSupplierData {
 	
 	//configuration of the local GraphDB knowledge base (testing)
 	static final String GRAPHDB_SERVER = "http://localhost:7200/"; // Should be configurable., Now we manually fix ths in the docker img
@@ -42,7 +42,7 @@ public class SupplierData_BP {
 	 * @return list of suppliers along with the innovation phases, types, skills and sectors registered in the Semantic Infrastructure.        
 	 * @throws OWLOntologyCreationException
 	 */
-	public static List<Supplier_BP> createSupplierData(BPQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
+	public static List<BPSupplier> createSupplierData(BPQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 
 		String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
 		Set<BPSparqlResult> recordSet = new HashSet<BPSparqlResult>();
@@ -88,92 +88,57 @@ public class SupplierData_BP {
 		try (TupleQueryResult result = tupleQuery.evaluate()) {
 
 			Attribute supplierAttribute = new Attribute();
-			BPSparqlResult record = null;			
+			BPSparqlResult sparqlResult = null;			
 			Map<String, String> attributeWeightMap = null;
-						
+			
+			
 			while (result.hasNext()) {
 				
 				BindingSet solution = result.next();
 				
-//				System.err.println("\nSupplierData_BP: Results from SI: ");
-//				System.err.println("Supplier ID: " + solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("By-product ID: " + StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));
-//				System.err.println("By-product Name: " + solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("Supply type: " + solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("Min participants: " + solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("Max participants: " + solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("Purchasing group abilitation: " + solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("Quantity: " + solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("Min quantity: " + solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""));
-//				System.err.println("UOM: " + solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", ""));
-//				
-//				if (solution.getValue("certificationType") != null) {
-//				System.err.println("Certification type: " + StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
-//				}
-//				
-//				if (solution.getValue("materialType") != null) {
-//				System.err.println("Material type: " + StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
-//				}
-//				
-//				if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
-//				System.err.println("Apperance type: " + solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
-//				}
-//				
-//				if (solution.getValue("attributeType") != null 
-//						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
-//						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
-//					
-//					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);
-//					
-//				System.err.println("Attribute weight map: " + attributeWeightMap);
-//				}
 				
-				record = new BPSparqlResult();
-				record.setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", ""));
-				record.setWsProfileId(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")));			
-				record.setByProductName(solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""));
-				record.setByProductSupplyType(solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""));						
-				record.setByProductMinParticipants(solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""));
-				record.setByProductMaxParticipants(solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""));
-				record.setPurchasingGroupAbilitation(solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""));
-				
-
-				
-				record.setByProductQuantity(solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""));
-				record.setByProductMinQuantity(solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""));
-				record.setByProductUOM(solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", ""));
-
+				String certification = null;
 				if (solution.getValue("certificationType") != null) {
-				record.setCertification(StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", "")));
+				certification = StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", ""));
 				}
-
-				
+		
+				String material = null;
 				if (solution.getValue("materialType") != null) {
-					record.setMaterial(StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", "")));
-				} else {
-					record.setMaterial(null);
+					material = StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", ""));
 				}
 				
+				String appearance = null;
 				if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
-					
-					record.setAppearance(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
-					
+					appearance = solution.getValue("attributeValue").stringValue().replaceAll("\\s+", "");
 				}
 				
 				// deal with attributes ("Y", "N" or "O") according to attributes required in the consumer query
 				if (solution.getValue("attributeType") != null 
 						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
 						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
-					
-					
-					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);
-										
-					record.setAttributeWeightMap(attributeWeightMap);
+									
+					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);								
 
 				} 
+
 				
-				
-				recordSet.add(record);
+				sparqlResult = new BPSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")), 
+						solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""), 
+						solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", "")).
+						setCertification(certification).
+						setMaterial(material).
+						setAppearance(appearance).
+						setAttributeWeightMap(attributeWeightMap).
+						setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", "")).
+						build();
+
+				recordSet.add(sparqlResult);
 			}
 			
 
@@ -185,7 +150,7 @@ public class SupplierData_BP {
 		repository.shutDown();
 
 		// create list of suppliers according to the results from SPARQL
-		List<Supplier_BP> suppliersList = consolidateSuppliers(recordSet);		
+		List<BPSupplier> suppliersList = consolidateSuppliers(recordSet);		
 
 		return suppliersList;
 
@@ -197,9 +162,9 @@ public class SupplierData_BP {
 	 * @return list of supplier objects containing SPARQL results
 	   Dec 9, 2020
 	 */
-	public static List<Supplier_BP> consolidateSuppliers (Set<BPSparqlResult> recordSet) {
+	public static List<BPSupplier> consolidateSuppliers (Set<BPSparqlResult> recordSet) {
 
-		List<Supplier_BP> supplierList = new ArrayList<Supplier_BP>();
+		List<BPSupplier> supplierList = new ArrayList<BPSupplier>();
 
 		//get all supplier ids for filtering
 		Set<String> supplierids = new HashSet<String>();
@@ -210,7 +175,7 @@ public class SupplierData_BP {
 		//consolidate by-products
 		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (recordSet);
 		
-		Supplier_BP supplier = null;
+		BPSupplier supplier = null;
 
 		for (String sup : supplierids) {
 
@@ -228,7 +193,7 @@ public class SupplierData_BP {
 						certifications.add(cert);
 					}
 
-					supplier = new Supplier_BP(sr.getSupplierId(), consolidatedByProducts.get(sr.getSupplierId()), certifications);	
+					supplier = new BPSupplier(sr.getSupplierId(), consolidatedByProducts.get(sr.getSupplierId()), certifications);	
 
 				}
 

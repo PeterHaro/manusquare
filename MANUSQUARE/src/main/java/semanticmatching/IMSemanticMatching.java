@@ -34,8 +34,8 @@ import query.IMQuery;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures_IM;
 import similarity.SimilarityMethods;
-import sparqlquery.TripleStoreConnection_IM;
-import supplier.InnovationManager;
+import supplier.IMSupplier;
+import supplierdata.IMSupplierData;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
@@ -86,13 +86,13 @@ public class IMSemanticMatching extends SemanticMatching {
 		//System.out.println("Printing graph nodes");
 		//SimpleGraph.printGraphNodes(graph);
 
-		List<InnovationManager> innovationManagerData = TripleStoreConnection_IM.createInnovationManagerData(imq, testing, ontology);
+		List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
-		Map<InnovationManager, Double> innovationManagerScores = new HashMap<InnovationManager, Double>();
+		Map<IMSupplier, Double> innovationManagerScores = new HashMap<IMSupplier, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> innovationManagerSim = new LinkedList<Double>();
 
-		for (InnovationManager innovationManager : innovationManagerData) {
+		for (IMSupplier innovationManager : innovationManagerData) {
 
 			innovationManagerSim = SimilarityMeasures_IM.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
@@ -121,11 +121,11 @@ public class IMSemanticMatching extends SemanticMatching {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsoleIM(List<InnovationManager> innovationManagerData, IMQuery query, Map<InnovationManager, Double> supplierScores, int numResults) {
+	private static void printResultsToConsoleIM(List<IMSupplier> innovationManagerData, IMQuery query, Map<IMSupplier, Double> supplierScores, int numResults) {
 
-		Map<InnovationManager, Double> rankedResults = sortDescending(supplierScores);
+		Map<IMSupplier, Double> rankedResults = sortDescending(supplierScores);
 
-		Iterable<Entry<InnovationManager, Double>> firstEntries =
+		Iterable<Entry<IMSupplier, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//below code is used for testing purposes
@@ -141,7 +141,7 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		//get all processes for the suppliers included in the ranked list
 		List<String> rankedSuppliers = new ArrayList<String>();
-		for (Entry<InnovationManager, Double> e : firstEntries) {
+		for (Entry<IMSupplier, Double> e : firstEntries) {
 			rankedSuppliers.add(e.getKey().getId());
 		}
 
@@ -150,11 +150,11 @@ public class IMSemanticMatching extends SemanticMatching {
 		int ranking = 0;
 
 
-		for (Entry<InnovationManager, Double> e : firstEntries) {
+		for (Entry<IMSupplier, Double> e : firstEntries) {
 			ranking++;
 			System.out.println("\n" + ranking + "; Innovation Manager ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
 
-			for (InnovationManager innovationManager : innovationManagerData) {
+			for (IMSupplier innovationManager : innovationManagerData) {
 				if (e.getKey().getId().equals(innovationManager.getId())) {
 
 
@@ -175,15 +175,15 @@ public class IMSemanticMatching extends SemanticMatching {
 	}
 
 
-	private static Map<String, Double> extractBestInnovationManagers(Map<InnovationManager, Double> supplierScores, int numResults) {
+	private static Map<String, Double> extractBestInnovationManagers(Map<IMSupplier, Double> supplierScores, int numResults) {
 		//sort the results from highest to lowest score and return the [numResults] highest scores
-		Map<InnovationManager, Double> rankedResults = sortDescending(supplierScores);
-		Iterable<Entry<InnovationManager, Double>> firstEntries =
+		Map<IMSupplier, Double> rankedResults = sortDescending(supplierScores);
+		Iterable<Entry<IMSupplier, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
-		for (Entry<InnovationManager, Double> e : firstEntries) {
+		for (Entry<IMSupplier, Double> e : firstEntries) {
 			finalSupplierMap.put(e.getKey().getId(), e.getValue());
 		}
 

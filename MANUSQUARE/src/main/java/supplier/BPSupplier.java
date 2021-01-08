@@ -7,20 +7,20 @@ import edm.ByProduct;
 import edm.Certification;
 
 
-public class Supplier_BP {
+public class BPSupplier {
 	
 	private String id;
 	private List<ByProduct> byProducts;
 	private List<Certification> certifications;
 	
-	public Supplier_BP (String id, List<ByProduct> byProducts, List<Certification> certifications) {
+	public BPSupplier (String id, List<ByProduct> byProducts, List<Certification> certifications) {
 		this.id = id;
 		this.byProducts = byProducts;
 		this.certifications = certifications;
 	}
 	
 	
-	public Supplier_BP() {}
+	public BPSupplier() {}
 	
 
 	public String getId() {
@@ -56,7 +56,7 @@ public class Supplier_BP {
 	
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Supplier_BP && ((Supplier_BP) o).getId().equals(this.id)) {
+        if (o instanceof BPSupplier && ((BPSupplier) o).getId().equals(this.id)) {
             return true;
         } else {
             return false;

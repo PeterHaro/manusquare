@@ -34,8 +34,8 @@ import query.BPQuery;
 import similarity.ExtendedMatchingResult;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures_BP;
-import supplier.Supplier_BP;
-import supplierdata.SupplierData_BP;
+import supplier.BPSupplier;
+import supplierdata.BPSupplierData;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
@@ -105,15 +105,15 @@ public class BPSemanticMatching extends SemanticMatching {
 		graph = Graph.createGraph(ontology);
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<Supplier_BP> supplierData = SupplierData_BP.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+		List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
-		Map<Supplier_BP, Double> supplierScores = new HashMap<Supplier_BP, Double>();
+		Map<BPSupplier, Double> supplierScores = new HashMap<BPSupplier, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> supplierSim = new LinkedList<Double>();
 		
 		TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
 
-		for (Supplier_BP supplier : supplierData) {
+		for (BPSupplier supplier : supplierData) {
 			supplierByProductScoresMapping.putAll(SimilarityMeasures_BP.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
 			supplierScores.put(supplier, getAverageSupplierScore(supplierSim, numByProducts));	
 			
@@ -147,11 +147,11 @@ public class BPSemanticMatching extends SemanticMatching {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsole(List<Supplier_BP> supplierData, BPQuery query, Map<Supplier_BP, Double> supplierScores, int numResults) {
+	private static void printResultsToConsole(List<BPSupplier> supplierData, BPQuery query, Map<BPSupplier, Double> supplierScores, int numResults) {
 
-		Map<Supplier_BP, Double> rankedResults = sortDescending(supplierScores);
+		Map<BPSupplier, Double> rankedResults = sortDescending(supplierScores);
 
-		Iterable<Entry<Supplier_BP, Double>> firstEntries =
+		Iterable<Entry<BPSupplier, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//below code is used for testing purposes
@@ -173,7 +173,7 @@ public class BPSemanticMatching extends SemanticMatching {
 
 		//get all processes for the suppliers included in the ranked list
 		List<String> rankedSuppliers = new ArrayList<String>();
-		for (Entry<Supplier_BP, Double> e : firstEntries) {
+		for (Entry<BPSupplier, Double> e : firstEntries) {
 			rankedSuppliers.add(e.getKey().getId());
 		}
 
@@ -182,11 +182,11 @@ public class BPSemanticMatching extends SemanticMatching {
 		int ranking = 0;
 
 
-		for (Entry<Supplier_BP, Double> e : firstEntries) {
+		for (Entry<BPSupplier, Double> e : firstEntries) {
 			ranking++;
 			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
 
-			for (Supplier_BP sup : supplierData) {
+			for (BPSupplier sup : supplierData) {
 				if (e.getKey().getId().equals(sup.getId())) {
 
 					System.out.println("By-products:");
@@ -209,15 +209,15 @@ public class BPSemanticMatching extends SemanticMatching {
 		}
 	}
 
-	private static Map<String, Double> extractBestSuppliers(Map<Supplier_BP, Double> supplierScores, int numResults) {
+	private static Map<String, Double> extractBestSuppliers(Map<BPSupplier, Double> supplierScores, int numResults) {
 		//sort the results from highest to lowest score and return the [numResults] highest scores
-		Map<Supplier_BP, Double> rankedResults = sortDescending(supplierScores);
-		Iterable<Entry<Supplier_BP, Double>> firstEntries =
+		Map<BPSupplier, Double> rankedResults = sortDescending(supplierScores);
+		Iterable<Entry<BPSupplier, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
-		for (Entry<Supplier_BP, Double> e : firstEntries) {
+		for (Entry<BPSupplier, Double> e : firstEntries) {
 			finalSupplierMap.put(e.getKey().getId(), e.getValue());
 		}
 

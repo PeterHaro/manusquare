@@ -3,106 +3,112 @@ package sparqlresult;
 import java.util.Map;
 import java.util.Set;
 
-public class SparqlResult {
-	
+public abstract class SparqlResult {
+
+	//mandatory
 	private String supplierId;
-	private String supplierName;
-	private String material;
 	private String certification;
+
+	//optional
+	private String supplierName;
+	private String material;	
 	private Set<String> attributes;
 	private double attributeWeight;
 	private Map<String, String> attributeWeightMap;
-	
-	//used by BP
-	public SparqlResult (String supplierId, String material, String certification, Map<String, String> attributeWeightMap) {
-		this.supplierId = supplierId;
-		this.material = material;
-		this.certification = certification;
-		this.attributeWeightMap = attributeWeightMap;
-	}
-	
-	//used by IM
-	public SparqlResult (String supplierId, String supplierName, String material, String certification, Set<String> attributes, double attributeWeight) {
-		this.supplierId = supplierId;
-		this.supplierName = supplierName;
-		this.material = material;
-		this.certification = certification;
-		this.attributes = attributes;
-		this.attributeWeight = attributeWeight;
-	}
-	
-	public SparqlResult (String supplierId, String material, String certification, Set<String> attributes, double attributeWeight) {
-		this.supplierId = supplierId;
-		this.material = material;
-		this.certification = certification;
-		this.attributes = attributes;
-		this.attributeWeight = attributeWeight;
-	}
-	
-	public SparqlResult (String supplierId, String material, String certification, Set<String> attributes, Map<String, String> attributeWeightMap) {
-		this.supplierId = supplierId;
-		this.material = material;
-		this.certification = certification;
-		this.attributes = attributes;
-		this.attributeWeightMap = attributeWeightMap;
-	}
-	
-	
-	public SparqlResult(String supplierId, String material, String certification) {
-		this.supplierId = supplierId;
-		this.material = material;
-		this.certification = certification;
-
-	}
-	
-	public SparqlResult() {}
 
 	public String getSupplierId() {
 		return supplierId;
 	}
-	public void setSupplierId(String supplierId) {
-		this.supplierId = supplierId;
-	}
-	
-	public String getSupplierName() {
-		return supplierName;
+
+	public String getCertification() {
+		return certification;
 	}
 
-	public void setSupplierName(String supplierName) {
-		this.supplierName = supplierName;
+	public String getSupplierName() {
+		return supplierName;
 	}
 
 	public String getMaterial() {
 		return material;
 	}
-	public void setMaterial(String material) {
-		this.material = material;
-	}
-	public String getCertification() {
-		return certification;
-	}
-	public void setCertification(String certification) {
-		this.certification = certification;
-	}
+
 	public Set<String> getAttributes() {
 		return attributes;
 	}
-	public void setAttributes(Set<String> attributes) {
-		this.attributes = attributes;
-	}
+
 	public double getAttributeWeight() {
 		return attributeWeight;
 	}
-	public void setAttributeWeight(double attributeWeight) {
-		this.attributeWeight = attributeWeight;
-	}
+
 	public Map<String, String> getAttributeWeightMap() {
 		return attributeWeightMap;
 	}
-	public void setAttributeWeightMap(Map<String, String> attributeWeightMap) {
-		this.attributeWeightMap = attributeWeightMap;
+
+	SparqlResult(Builder<?> builder) {
+		this.supplierId = builder.supplierId;
+		this.certification = builder.certification;
+		this.supplierName = builder.supplierName;
+		this.material = builder.material;
+		this.attributes = builder.attributes;
+		this.attributeWeight = builder.attributeWeight;
+		this.attributeWeightMap = builder.attributeWeightMap;
 	}
-	
-	
+
+
+	public abstract static class Builder<T extends Builder> {
+
+		//mandatory
+		protected String supplierId;
+		protected String certification;
+
+		//optional
+		private String supplierName;
+		private String material;	
+		private Set<String> attributes;
+		private double attributeWeight;
+		private Map<String, String> attributeWeightMap;
+		
+		public Builder() {}
+		
+		public T setSupplierId(String supplierId) {
+			this.supplierId = supplierId;
+			return self();
+		}
+		
+		public T setCertification(String certification) {
+			this.certification = certification;
+			return self();
+		}
+
+		public T setSupplierName(String supplierName) {
+			this.supplierName = supplierName;
+			return self();
+		}
+
+		public T setMaterial(String material) {
+			this.material = material;
+			return self();
+		}
+
+		public T setAttributes(Set<String> attributes) {
+			this.attributes = attributes;
+			return self();
+		}
+
+		public T setAttributeWeight(double attributeWeight) {
+			this.attributeWeight = attributeWeight;
+			return self();
+		}
+
+		public T setAttributeWeightMap(Map<String, String> attributeWeightMap) {
+			this.attributeWeightMap = attributeWeightMap;
+			return self();
+		}
+
+		public abstract SparqlResult build();
+		
+		protected abstract T self();
+
+	}
 
 }

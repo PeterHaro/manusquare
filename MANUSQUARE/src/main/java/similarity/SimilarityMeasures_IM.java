@@ -22,13 +22,13 @@ import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import supplier.InnovationManager;
+import supplier.IMSupplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
 public class SimilarityMeasures_IM {
 
-	public static List<Double> computeSemanticSimilarity_IM (IMQuery query, InnovationManager innovationManager, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
+	public static List<Double> computeSemanticSimilarity_IM (IMQuery query, IMSupplier innovationManager, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
 
 
 		List<Certification> certificationList = innovationManager.getCertifications();

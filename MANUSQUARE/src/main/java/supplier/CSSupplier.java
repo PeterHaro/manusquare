@@ -7,7 +7,7 @@ import edm.Material;
 import edm.Process;
 
 
-public class Supplier {
+public class CSSupplier {
 	
 	String id;
 	String supplierName;
@@ -17,13 +17,13 @@ public class Supplier {
 	List<Process> processes;
 	//List<Material> materials;
 	
-	public Supplier (String id, List<Process> processes, List<Certification> certifications) {
+	public CSSupplier (String id, List<Process> processes, List<Certification> certifications) {
 		this.id = id;
 		this.processes = processes;
 		this.certifications = certifications;
 	}
 	
-	public Supplier (String id, List<Process> processes, List<Material> materials, List<Certification> certifications) {
+	public CSSupplier (String id, List<Process> processes, List<Material> materials, List<Certification> certifications) {
 		this.id = id;
 		this.processes = processes;
 		//this.materials = materials;
@@ -31,12 +31,12 @@ public class Supplier {
 	}
 	
 	
-	public Supplier(String supplierName) {
+	public CSSupplier(String supplierName) {
 		super();
 		this.supplierName = supplierName;
 	}
 	
-	public Supplier() {}
+	public CSSupplier() {}
 	
 
 	public String getId() {

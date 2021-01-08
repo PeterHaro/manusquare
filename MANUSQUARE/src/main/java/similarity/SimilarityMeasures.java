@@ -14,7 +14,7 @@ import similarity.SimilarityMethodologies.ISimilarity;
 import similarity.SimilarityMethodologies.SimilarityFactory;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
 import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
-import supplier.Supplier;
+import supplier.CSSupplier;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
@@ -32,7 +32,7 @@ import java.util.Map.Entry;
 public class SimilarityMeasures {
 	
 	/* ALT 1 */
-	public static List<Double> computeSemanticSimilarity (CSQuery query, Supplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
+	public static List<Double> computeSemanticSimilarity (CSQuery query, CSSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
 		
 		
 		List<Process> processList = supplier.getProcesses();

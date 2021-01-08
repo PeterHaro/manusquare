@@ -35,8 +35,8 @@ import graph.Graph;
 import query.CSQuery;
 import similarity.MatchingResult;
 import similarity.SimilarityMeasures;
-import sparqlquery.TripleStoreConnection;
-import supplier.Supplier;
+import supplier.CSSupplier;
+import supplierdata.CSSupplierData;
 import utilities.MathUtils;
 import utilities.StringUtilities;
 
@@ -103,13 +103,13 @@ public class CSSemanticMatching extends SemanticMatching {
 		graph = Graph.createGraph(ontology);
 
 		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<Supplier> supplierData = TripleStoreConnection.createSupplierData(query, testing, ontology);
+		List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
-		Map<Supplier, Double> supplierScores = new HashMap<Supplier, Double>();
+		Map<CSSupplier, Double> supplierScores = new HashMap<CSSupplier, Double>();
 		//for each supplier get the list of best matching processes (and certifications)
 		List<Double> supplierSim = new LinkedList<Double>();
 
-		for (Supplier supplier : supplierData) {
+		for (CSSupplier supplier : supplierData) {
 			supplierSim = SimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
 //			supplierScores.put(supplier, getHighestScore(supplierSim));	
@@ -139,11 +139,11 @@ public class CSSemanticMatching extends SemanticMatching {
 	 * @param numResults     number of results to include in the ranked list.
 	 *                       Nov 4, 2019
 	 */
-	private static void printResultsToConsole(List<Supplier> supplierData, CSQuery query, Map<Supplier, Double> supplierScores, int numResults) {
+	private static void printResultsToConsole(List<CSSupplier> supplierData, CSQuery query, Map<CSSupplier, Double> supplierScores, int numResults) {
 
-		Map<Supplier, Double> rankedResults = sortDescending(supplierScores);
+		Map<CSSupplier, Double> rankedResults = sortDescending(supplierScores);
 
-		Iterable<Entry<Supplier, Double>> firstEntries =
+		Iterable<Entry<CSSupplier, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//below code is used for testing purposes
@@ -172,7 +172,7 @@ public class CSSemanticMatching extends SemanticMatching {
 
 		//get all processes for the suppliers included in the ranked list
 		List<String> rankedSuppliers = new ArrayList<String>();
-		for (Entry<Supplier, Double> e : firstEntries) {
+		for (Entry<CSSupplier, Double> e : firstEntries) {
 			rankedSuppliers.add(e.getKey().getId());
 		}
 
@@ -181,11 +181,11 @@ public class CSSemanticMatching extends SemanticMatching {
 		int ranking = 0;
 
 
-		for (Entry<Supplier, Double> e : firstEntries) {
+		for (Entry<CSSupplier, Double> e : firstEntries) {
 			ranking++;
 			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtils.round(e.getValue(), 4) + ")");
 
-			for (Supplier sup : supplierData) {
+			for (CSSupplier sup : supplierData) {
 				if (e.getKey().getId().equals(sup.getId())) {
 
 					System.out.println("Processes:");
@@ -208,15 +208,15 @@ public class CSSemanticMatching extends SemanticMatching {
 		}
 	}
 
-	private static Map<String, Double> extractBestSuppliers(Map<Supplier, Double> supplierScores, int numResults) {
+	private static Map<String, Double> extractBestSuppliers(Map<CSSupplier, Double> supplierScores, int numResults) {
 		//sort the results from highest to lowest score and return the [numResults] highest scores
-		Map<Supplier, Double> rankedResults = sortDescending(supplierScores);
-		Iterable<Entry<Supplier, Double>> firstEntries =
+		Map<CSSupplier, Double> rankedResults = sortDescending(supplierScores);
+		Iterable<Entry<CSSupplier, Double>> firstEntries =
 				Iterables.limit(rankedResults.entrySet(), numResults);
 
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
-		for (Entry<Supplier, Double> e : firstEntries) {
+		for (Entry<CSSupplier, Double> e : firstEntries) {
 			finalSupplierMap.put(e.getKey().getId(), e.getValue());
 		}
 

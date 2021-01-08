@@ -8,6 +8,7 @@ import java.util.Set;
 import org.eclipse.rdf4j.query.BindingSet;
 
 import query.BPQuery;
+import query.CSQuery;
 import utilities.StringUtilities;
 
 public class Attribute {
@@ -66,6 +67,86 @@ public class Attribute {
 	public void setunitOfMeasurement(String unitOfMeasurement) {
 		this.unitOfMeasurement = unitOfMeasurement;
 	}	
+	
+	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, CSQuery query) {
+		
+		//create supplierAttribute that can be compared to consumerAttribute
+		supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
+		supplierAttribute.setunitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
+		supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
+
+		Set<Attribute> consumerAttributes = query.getAttributes();
+
+		String condition = mapAttributeConditions(supplierAttribute.getKey());
+
+		Attribute updatedSupplierAttribute = new Attribute();
+
+		Map<String, String> attributeMap = null;
+
+		for (Attribute bpa : consumerAttributes) {
+
+			if (StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")).equals(bpa.getKey())) {
+
+				updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
+
+				if (condition.equals(">=")) {
+					attributeMap = new HashMap<String, String>();
+
+					if (Double.parseDouble(bpa.getValue()) >= Double.parseDouble(updatedSupplierAttribute.getValue())) {
+						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
+
+					} else {
+						attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
+					}
+
+				}
+
+				else if (condition.equals("<=")) {
+
+					attributeMap = new HashMap<String, String>();
+					updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
+
+					if (Double.parseDouble(updatedSupplierAttribute.getValue()) <= Double.parseDouble(bpa.getValue()) ) {
+
+						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
+
+					} else {
+
+						attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
+
+					}
+
+				}
+
+				else if (condition.equals("=")) {
+
+					attributeMap = new HashMap<String, String>();
+					updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
+
+					if (Double.parseDouble(bpa.getValue()) == Double.parseDouble(updatedSupplierAttribute.getValue())) {
+						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");								
+
+					} else {
+
+						attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
+					}
+
+				}
+				
+				else if (condition.equals("T")) {
+					attributeMap.put(updatedSupplierAttribute.getKey(), "Y");
+				}
+
+			} else {
+				
+				attributeMap = new HashMap<String, String>();
+				attributeMap.put(bpa.getKey(), "N");
+				
+			}
+		}
+
+		return attributeMap;
+	}
 	
 
 	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, BPQuery query) {
