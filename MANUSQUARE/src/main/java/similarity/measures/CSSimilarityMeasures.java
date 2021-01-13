@@ -1,4 +1,4 @@
-package similarity;
+package similarity.measures;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,10 +21,11 @@ import edm.Certification;
 import edm.Process;
 import ontology.OntologyOperations;
 import query.CSQuery;
-import similarity.SimilarityMethodologies.ISimilarity;
-import similarity.SimilarityMethodologies.SimilarityFactory;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
+import similarity.SimilarityMethods;
+import similarity.methodologies.ISimilarity;
+import similarity.methodologies.SimilarityFactory;
+import similarity.methodologies.parameters.SimilarityParameters;
+import similarity.methodologies.parameters.SimilarityParametersFactory;
 import supplier.CSSupplier;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
@@ -175,7 +176,6 @@ public class CSSimilarityMeasures {
 
 		}	
 
-		//return the average score for all supplier processes
 		return similarityList;
 
 	}

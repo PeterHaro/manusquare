@@ -28,8 +28,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MANUSQUARE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MANUSQUARE.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/matchingResults.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/matchingResults.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edm/ByProduct_OLD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edm/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edm/Process.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edm/Process_OLD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edm/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/json/InnovationManagementRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/json/InnovationManagementRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sparqlresult/SparqlResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sparqlresult/SparqlResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,11 +182,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Manusquare_030820" />
+      <item itemvalue="Application.BasicMatchmaking_BP" />
       <item itemvalue="Application.BasicMatchmaking_IM" />
       <item itemvalue="Application.BasicMatchmaking_MVP" />
+      <item itemvalue="Application.Manusquare_030820" />
       <item itemvalue="Application.OpenAPIEndpoint" />
-      <item itemvalue="Application.BasicMatchmaking_BP" />
       <item itemvalue="JAR Application.Matchmaking.jar" />
     </list>
     <recent_temporary>

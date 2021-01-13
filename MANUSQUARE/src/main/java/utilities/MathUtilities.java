@@ -2,9 +2,7 @@ package utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author audunvennesland
@@ -126,6 +124,21 @@ public class MathUtilities {
 	    return sum;
 	}
 	
+	public static double getAverage(List<Double> inputDoubleList, int divisor) {
+		double sum = 0;
+
+		for (double d : inputDoubleList) {
+			sum += d;
+		}
+
+		return sum / (double)divisor;
+	}
 	
+
+	public static double getHighest(List<Double> inputDoubleList) {
+		inputDoubleList.sort(Collections.reverseOrder());
+		return inputDoubleList.get(0);
+
+	}
 
 }

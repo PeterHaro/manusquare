@@ -10,6 +10,8 @@ public class InnovationManagementRequest {
 	String selectionType;
 	String projectId;
 	String projectType;
+	
+	
 	public List<String> projectInnovationPhases;
 	public List<String> projectInnovationTypes;
 	public List<InnovationManagerSkill> innovationManagerSkills;

@@ -9,9 +9,9 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import com.google.common.graph.MutableGraph;
 
-import similarity.SimilarityMethodologies.ISimilarity;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
+import similarity.methodologies.ISimilarity;
+import similarity.methodologies.parameters.SimilarityParameters;
+import similarity.methodologies.parameters.SimilarityParametersFactory;
 import utilities.MathUtilities;
 import validation.QueryValidator;
 

@@ -1,4 +1,4 @@
-package similarity;
+package similarity.techniques;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package similarity;
+package similarity.measures;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,9 +18,14 @@ import edm.ByProduct;
 import edm.Certification;
 import ontology.OntologyOperations;
 import query.BPQuery;
-import similarity.SimilarityMethodologies.ISimilarity;
-import similarity.SimilarityMethodologies.SimilarityFactory;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
+import similarity.AppearanceSimilarity;
+import similarity.AttributeSimilarity;
+import similarity.CertificationSimilarity;
+import similarity.MaterialSimilarity;
+import similarity.SimilarityMethods;
+import similarity.methodologies.ISimilarity;
+import similarity.methodologies.SimilarityFactory;
+import similarity.methodologies.parameters.SimilarityParameters;
 import supplier.BPSupplier;
 
 public class BPSimilarityMeasures {

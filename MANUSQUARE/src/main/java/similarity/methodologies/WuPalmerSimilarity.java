@@ -1,7 +1,7 @@
-package similarity.SimilarityMethodologies;
+package similarity.methodologies;
 
 import graph.Graph;
-import similarity.SimilarityMethodologies.SimilarityParameters.WuPalmerParameters;
+import similarity.methodologies.parameters.WuPalmerParameters;
 
 public class WuPalmerSimilarity implements ISimilarity<WuPalmerParameters> {
 

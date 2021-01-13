@@ -1,7 +1,7 @@
-package similarity.SimilarityMethodologies;
+package similarity.methodologies;
 
 
-import similarity.SimilarityMethodologies.SimilarityParameters.ResnikSimilarityParameters;
+import similarity.methodologies.parameters.ResnikSimilarityParameters;
 import utilities.MathUtilities;
 
 public class ResnikSimilarity implements ISimilarity<ResnikSimilarityParameters> {

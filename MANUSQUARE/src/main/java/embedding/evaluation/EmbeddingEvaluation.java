@@ -11,7 +11,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import query.QueryConceptType;
-import similarity.Cosine;
+import similarity.techniques.Cosine;
 import utilities.MathUtilities;
 import validation.QueryValidator;
 

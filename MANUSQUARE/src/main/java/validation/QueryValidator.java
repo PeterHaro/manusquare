@@ -12,7 +12,7 @@ import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import query.QueryConceptType;
-import similarity.Cosine;
+import similarity.techniques.Cosine;
 import utilities.StringUtilities;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package similarity.SimilarityMethodologies;
+package similarity.methodologies;
 
-import similarity.SimilarityMethodologies.SimilarityParameters.LinSimilarityParameters;
+import similarity.methodologies.parameters.LinSimilarityParameters;
 
 public class LinSimilarity implements ISimilarity<LinSimilarityParameters> {
 

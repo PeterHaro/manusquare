@@ -1,4 +1,4 @@
-package similarity.SimilarityMethodologies.SimilarityParameters;
+package similarity.methodologies.parameters;
 
 public class LinSimilarityParameters extends SimilarityParameters {
 

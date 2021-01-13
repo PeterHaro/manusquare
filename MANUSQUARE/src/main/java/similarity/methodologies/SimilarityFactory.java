@@ -1,4 +1,4 @@
-package similarity.SimilarityMethodologies;
+package similarity.methodologies;
 
 import similarity.SimilarityMethods;
 

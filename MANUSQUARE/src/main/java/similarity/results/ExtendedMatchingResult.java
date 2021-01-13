@@ -1,4 +1,4 @@
-package similarity;
+package similarity.results;
 
 import java.util.Collections;
 import java.util.Comparator;

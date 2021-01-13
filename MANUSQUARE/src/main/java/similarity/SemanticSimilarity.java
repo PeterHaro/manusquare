@@ -15,10 +15,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import com.google.common.graph.MutableGraph;
 
 import ontology.OntologyOperations;
-import similarity.SimilarityMethodologies.ISimilarity;
-import similarity.SimilarityMethodologies.SimilarityFactory;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
+import similarity.methodologies.ISimilarity;
+import similarity.methodologies.SimilarityFactory;
+import similarity.methodologies.parameters.SimilarityParameters;
+import similarity.methodologies.parameters.SimilarityParametersFactory;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
 

@@ -1,4 +1,4 @@
-package similarity;
+package similarity.measures;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,10 +18,11 @@ import com.google.common.graph.MutableGraph;
 import edm.Certification;
 import ontology.OntologyOperations;
 import query.IMQuery;
-import similarity.SimilarityMethodologies.ISimilarity;
-import similarity.SimilarityMethodologies.SimilarityFactory;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParameters;
-import similarity.SimilarityMethodologies.SimilarityParameters.SimilarityParametersFactory;
+import similarity.SimilarityMethods;
+import similarity.methodologies.ISimilarity;
+import similarity.methodologies.SimilarityFactory;
+import similarity.methodologies.parameters.SimilarityParameters;
+import similarity.methodologies.parameters.SimilarityParametersFactory;
 import supplier.IMSupplier;
 import utilities.MathUtilities;
 import utilities.StringUtilities;

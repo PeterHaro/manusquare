@@ -1,6 +1,6 @@
-package similarity.SimilarityMethodologies;
+package similarity.methodologies;
 
-import similarity.SimilarityMethodologies.SimilarityParameters.JiangConrathSimilarityParameters;
+import similarity.methodologies.parameters.JiangConrathSimilarityParameters;
 
 public class JiangConrathSimilarity implements ISimilarity<JiangConrathSimilarityParameters> {
     @Override

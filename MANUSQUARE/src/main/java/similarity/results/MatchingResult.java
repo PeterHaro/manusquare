@@ -1,4 +1,4 @@
-package similarity;
+package similarity.results;
 
 public class MatchingResult {
 	

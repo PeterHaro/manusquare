@@ -16,34 +16,6 @@ public abstract class SparqlResult {
 	private double attributeWeight;
 	private Map<String, String> attributeWeightMap;
 
-	public String getSupplierId() {
-		return supplierId;
-	}
-
-	public String getCertification() {
-		return certification;
-	}
-
-	public String getSupplierName() {
-		return supplierName;
-	}
-
-	public String getMaterial() {
-		return material;
-	}
-
-	public Set<String> getAttributes() {
-		return attributes;
-	}
-
-	public double getAttributeWeight() {
-		return attributeWeight;
-	}
-
-	public Map<String, String> getAttributeWeightMap() {
-		return attributeWeightMap;
-	}
-
 	SparqlResult(Builder<?> builder) {
 		this.supplierId = builder.supplierId;
 		this.certification = builder.certification;
@@ -109,6 +81,34 @@ public abstract class SparqlResult {
 		
 		protected abstract T self();
 
+	}
+	
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public String getCertification() {
+		return certification;
+	}
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public Set<String> getAttributes() {
+		return attributes;
+	}
+
+	public double getAttributeWeight() {
+		return attributeWeight;
+	}
+
+	public Map<String, String> getAttributeWeightMap() {
+		return attributeWeightMap;
 	}
 
 }

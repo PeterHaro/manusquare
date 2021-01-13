@@ -1,4 +1,4 @@
-package similarity.SimilarityMethodologies.SimilarityParameters;
+package similarity.methodologies.parameters;
 
 import com.google.common.graph.MutableGraph;
 import org.semanticweb.owlapi.model.OWLOntology;

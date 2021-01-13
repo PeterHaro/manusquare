@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,9 +30,9 @@ import com.google.gson.GsonBuilder;
 import edm.Certification;
 import graph.Graph;
 import query.IMQuery;
-import similarity.MatchingResult;
-import similarity.IMSimilarityMeasures;
 import similarity.SimilarityMethods;
+import similarity.measures.IMSimilarityMeasures;
+import similarity.results.MatchingResult;
 import supplier.IMSupplier;
 import supplierdata.IMSupplierData;
 import utilities.MathUtilities;
@@ -82,9 +81,6 @@ public class IMSemanticMatching extends SemanticMatching {
 		MutableGraph<String> graph = null;
 
 		graph = Graph.createGraph(ontology);
-		
-		//System.out.println("Printing graph nodes");
-		//SimpleGraph.printGraphNodes(graph);
 
 		List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
@@ -96,7 +92,7 @@ public class IMSemanticMatching extends SemanticMatching {
 
 			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
-			innovationManagerScores.put(innovationManager, getHighestScore(innovationManagerSim));	
+			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
 			
 		}
 
@@ -209,56 +205,7 @@ public class IMSemanticMatching extends SemanticMatching {
 		writer.flush();
 		writer.close();
 	}
-
-	/**
-	 * Sorts the scores for each resource offered by a supplier (from highest to lowest)
-	 *
-	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
-	 * @return the n highest scores from a list of input scores
-	 * Oct 12, 2019
-	 */
-	private static double getHighestScore(List<Double> inputScores) {
-		inputScores.sort(Collections.reverseOrder());
-		return inputScores.get(0);
-
-	}
 	
-	/**
-	 * Get the average score relative to number of consumer processes (sum supplier scores / num consumer processes in query)
-	 *
-	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
-	 * @return the n highest scores from a list of input scores
-	 * Oct 12, 2019
-	 */
-	private static double getAverageSupplierScore(List<Double> inputScores, int numConsumerProcesses) {
-		double sum = 0;
-
-		for (double d : inputScores) {
-			sum += d;
-		}
-
-		return sum / (double)numConsumerProcesses;
-
-	}
-	
-	/**
-	 * Returns the average score of all scores for each resource offered by a supplier
-	 *
-	 * @param inputScores a list of scores for each supplier resource assigned by the semantic matching
-	 * @return the average score of all scores for each supplier resource
-	 * Oct 30, 2019
-	 */
-	private static double getAverageScore(List<Double> inputScores) {
-		double sum = 0;
-
-		for (double d : inputScores) {
-			sum += d;
-		}
-
-		return sum / inputScores.size();
-	}
-
-
 	/**
 	 * Sorts a map based on similarity scores (values in the map)
 	 *

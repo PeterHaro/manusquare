@@ -46,11 +46,6 @@ public class Process extends Resource {
 	}
 
 
-//	public String getName() {
-//		return this.getName();
-//	}
-
-
 	public Set<String> getEquivalentProcesses() {
 		return equivalentProcesses;
 	}
