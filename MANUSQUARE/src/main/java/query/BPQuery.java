@@ -228,9 +228,7 @@ public class BPQuery extends Query {
 							.setId(element.getByProductId())
 							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
 							.build());
-							
-//							new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
-//							element.getSupplyType(), element.getQuantity(), element.getUom(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation));
+
 				} else {
 					
 					if (bp.getKey().equals("AttributeMaterial")) {
@@ -251,11 +249,7 @@ public class BPQuery extends Query {
 							.setAttributes(attributeSet)
 							.build());
 							
-							System.out.println("TESTING ATTRIBUTES: ");
-							System.out.println("Adding " + element.getByProductAttributes() + " to " + QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses));
-//							new ByProduct(element.getByProductId(), QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses), 
-//							element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom(),  
-//							materials, appearances, element.getByProductAttributes()));
+
 				}
 			}
 			

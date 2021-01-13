@@ -3,15 +3,9 @@ package json;
 import java.util.List;
 import java.util.Set;
 
-import edm.Attribute;
 import edm.Customer;
 
-public class ByProductSharingRequest {
-
-	String projectName;
-	String projectDescription;
-	String selectionType;
-	String projectId;
+public class ByProductSharingRequest extends ConsumerRequest {
 	
 	private Set<ByProductElement> byProductElements;	
 	private List<SupplierAttributeKeys> supplierAttributes;
@@ -21,42 +15,75 @@ public class ByProductSharingRequest {
 	private int minNumberOfParticipants;
 	private int maxNumberOfParticipants;
 	private String purchasingGroupAbilitation;
-
-	public ByProductSharingRequest(String projectName, String projectDescription, String selectionType, double supplierMaxDistance,
-                               Customer customer, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation, String projectId, Set<ByProductElement> byProductElements, List<SupplierAttributeKeys> supplierAttributes) {
-		//super();
-		this.projectName = projectName;
-		this.projectDescription = projectDescription;
-		this.selectionType = selectionType;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customer = customer;
-		this.mode = mode;
-		this.minNumberOfParticipants = minNumberOfParticipants;
-		this.maxNumberOfParticipants = maxNumberOfParticipants;
-		this.purchasingGroupAbilitation = purchasingGroupAbilitation;
-		this.projectId = projectId;
-		this.byProductElements = byProductElements;
-		this.supplierAttributes = supplierAttributes;
+	
+	private ByProductSharingRequest (Builder builder) {
+		super(builder);
+		
+		this.supplierMaxDistance = builder.supplierMaxDistance;
+		this.customer = builder.customer;
+		this.mode = builder.mode;
+		this.minNumberOfParticipants = builder.minNumberOfParticipants;
+		this.maxNumberOfParticipants = builder.maxNumberOfParticipants;
+		this.purchasingGroupAbilitation = builder.purchasingGroupAbilitation;
+		this.byProductElements = builder.byProductElements;
+		this.supplierAttributes = builder.supplierAttributes;
 
 	}
 
-	public String getProjectName() {
-		return projectName;
+
+	public static class Builder extends ConsumerRequest.Builder<Builder> {
+		
+		private Set<ByProductElement> byProductElements;	
+		private List<SupplierAttributeKeys> supplierAttributes;
+		private double supplierMaxDistance;
+		private Customer customer;
+		private String mode;
+		private int minNumberOfParticipants;
+		private int maxNumberOfParticipants;
+		private String purchasingGroupAbilitation;
+
+		public Builder setByProductElements(Set<ByProductElement> byProductElements) {
+			this.byProductElements = byProductElements;
+			return this;
+		}
+		public Builder setSupplierAttributes(List<SupplierAttributeKeys> supplierAttributes) {
+			this.supplierAttributes = supplierAttributes;
+			return this;
+		}
+		public Builder setSupplierMaxDistance(double supplierMaxDistance) {
+			this.supplierMaxDistance = supplierMaxDistance;
+			return this;
+		}
+		public Builder setCustomer(Customer customer) {
+			this.customer = customer;
+			return this;
+		}
+		public Builder setMode(String mode) {
+			this.mode = mode;
+			return this;
+		}
+		public Builder setMinNumberOfParticipants(int minNumberOfParticipants) {
+			this.minNumberOfParticipants = minNumberOfParticipants;
+			return this;
+		}
+		public Builder setMaxNumberOfParticipants(int maxNumberOfParticipants) {
+			this.maxNumberOfParticipants = maxNumberOfParticipants;
+			return this;
+		}
+		public Builder setPurchasingGroupAbilitation(String purchasingGroupAbilitation) {
+			this.purchasingGroupAbilitation = purchasingGroupAbilitation;
+			return this;
+		}
+		@Override
+		public ConsumerRequest build() {
+			return new ByProductSharingRequest(this);
+		}
+		@Override
+		protected Builder self() {
+			return this;
+		}
 	}
-
-
-	public String getProjectDescription() {
-		return projectDescription;
-	}
-
-
-	public String getSelectionType() {
-		return selectionType;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
+	
 
 	public Set<ByProductElement> getByProductElements() {
 		return byProductElements;
@@ -81,17 +108,14 @@ public class ByProductSharingRequest {
 	public int getMinNumberOfParticipants() {
 		return minNumberOfParticipants;
 	}
-	
+
 	public int getMaxNumberOfParticipants() {
 		return maxNumberOfParticipants;
 	}
 
-
 	public String getPurchasingGroupAbilitation() {
 		return purchasingGroupAbilitation;
 	}
-
-
 
 	public class ByProductElement {
 		
@@ -142,9 +166,6 @@ public class ByProductSharingRequest {
 		public void setByProductAttributes(Set<ByProductAttribute> byProductAttributes) {
 			this.byProductAttributes = byProductAttributes;
 		}
-		
-		
-
 
 	}
 	
@@ -211,7 +232,5 @@ public class ByProductSharingRequest {
 		}
 
 	}
-
-
 
 }

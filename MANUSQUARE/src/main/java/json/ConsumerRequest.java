@@ -1,7 +1,5 @@
 package json;
 
-import edm.Customer;
-
 public class ConsumerRequest {
 	
 	private String projectName;
@@ -10,7 +8,6 @@ public class ConsumerRequest {
 	private String projectId;
 	private String projectType;
 	
-	private Customer customerInformation;
 	
 	ConsumerRequest(Builder<?> builder) {
 		this.projectName = builder.projectName;
@@ -28,9 +25,7 @@ public class ConsumerRequest {
 		private String selectionType;
 		private String projectId;
 		private String projectType;
-		
-		private Customer customerInformation;
-		
+				
 		public Builder() {}
 		
 		public T setProjectName(String projectName) {
@@ -57,11 +52,7 @@ public class ConsumerRequest {
 			this.projectType = projectType;
 			return self();
 		}
-		
-		public T setCustomerInformation(Customer customerInformation) {
-			this.customerInformation = customerInformation;
-			return self();
-		}
+
 		
 		public abstract ConsumerRequest build();
 		
@@ -94,13 +85,5 @@ public class ConsumerRequest {
 		return projectType;
 	}
 
-
-	public Customer getCustomerInformation() {
-		return customerInformation;
-	}
-	
-	
-	
-	
 
 }

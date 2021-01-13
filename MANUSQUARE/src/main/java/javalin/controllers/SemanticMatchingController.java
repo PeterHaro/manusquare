@@ -41,7 +41,7 @@ public class SemanticMatchingController {
         String jsonInput = Objects.requireNonNull(ctx.formParam("rfq")); // SWITCH DO QUERY PARAMS
         if (JSONValidator.isJSONValid(jsonInput)) {
             RequestForQuotation rfq = new Gson().fromJson(jsonInput, RequestForQuotation.class);
-            if (rfq.customer == null) {
+            if (rfq.getCustomer().customerInfo == null) {
                 throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");
             }
         }

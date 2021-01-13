@@ -131,7 +131,7 @@ public class MatchmakingController {
             String jsonInput = Objects.requireNonNull(ctx.formParam("rfq"));
             if (JSONValidator.isJSONValid(jsonInput)) {
                 RequestForQuotation requestForQuotation = new Gson().fromJson(jsonInput, RequestForQuotation.class);
-                if (requestForQuotation.customer == null) {
+                if (requestForQuotation.getCustomer().customerInfo == null) {
                     throw new BadRequestResponse("Invalid customer info. Please insert a valid customer in the request for quotation");
                 }
             }

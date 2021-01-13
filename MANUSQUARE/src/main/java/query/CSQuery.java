@@ -18,7 +18,6 @@ import com.google.gson.JsonSyntaxException;
 
 import edm.Attribute;
 import edm.Certification;
-import edm.Material;
 import edm.Process;
 import exceptions.NoProcessException;
 import json.RequestForQuotation;
@@ -150,10 +149,10 @@ public class CSQuery {
 			rfq = new Gson().fromJson(new FileReader(filename), RequestForQuotation.class);
 		}
 
-		if (rfq.projectAttributes == null || rfq.projectAttributes.isEmpty()) {
+		if (rfq.getProjectAttributes() == null || rfq.getProjectAttributes().isEmpty()) {
 			throw new NoProcessException("Processes must be included!");
 		} else {
-			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
+			for (ProjectAttributeKeys projectAttributes : rfq.getProjectAttributes()) {
 				processNames.add(projectAttributes.processName);
 			}
 		}
@@ -165,7 +164,7 @@ public class CSQuery {
 			Set<String> equivalentProcesses = new HashSet<String>();
 
 			//get the materials and other attributes if they´re present
-			for (ProjectAttributeKeys projectAttributes : rfq.projectAttributes) {
+			for (ProjectAttributeKeys projectAttributes : rfq.getProjectAttributes()) {
 				if (!projectAttributes.attributeKey.isEmpty()) {
 					if ((!projectAttributes.attributeKey.equalsIgnoreCase("material") && !projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) {
 						//check if uom is included in JSON
@@ -232,11 +231,11 @@ public class CSQuery {
 		CSQuery query = null;
 
 		//add geographical information to consumer query
-		double supplierMaxDistance = rfq.supplierMaxDistance;
-		Map<String, String> customerInformation = rfq.customer.customerInfo;
+		double supplierMaxDistance = rfq.getSupplierMaxDistance();
+		Map<String, String> customerInformation = rfq.getCustomer().customerInfo;
 
 		//get certifications if they are specified by the consumer
-		if (rfq.supplierAttributes == null || rfq.supplierAttributes.isEmpty()) {
+		if (rfq.getSupplierAttributes() == null || rfq.getSupplierAttributes().isEmpty()) {
 			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
 			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
 			
@@ -246,7 +245,7 @@ public class CSQuery {
 					build();
 
 		} else {
-			for (SupplierAttributeKeys supplierAttributes : rfq.supplierAttributes) {
+			for (SupplierAttributeKeys supplierAttributes : rfq.getSupplierAttributes()) {
 				if (supplierAttributes.attributeKey.equalsIgnoreCase("certification")) {
 					certifications.add(new Certification(supplierAttributes.attributeValue));
 				}

@@ -135,37 +135,37 @@ public class IMQuery {
 			imr = new Gson().fromJson(new FileReader(filename), InnovationManagementRequest.class);
 		}
 
-		if (imr.projectInnovationPhases != null || !imr.projectInnovationPhases.isEmpty()) {			
+		if (imr.getProjectInnovationPhases() != null || !imr.getProjectInnovationPhases().isEmpty()) {			
 
-			for (String ip : imr.projectInnovationPhases) {
+			for (String ip : imr.getProjectInnovationPhases()) {
 				innovationManagementPhases.add(QueryValidator.validateInnovationPhase(ip, onto, allOntologyClasses));
 			}
 		}
 
-		if (imr.projectInnovationTypes != null || !imr.projectInnovationTypes.isEmpty()) {
+		if (imr.getProjectInnovationPhases() != null || !imr.getProjectInnovationPhases().isEmpty()) {
 
-			for (String it : imr.projectInnovationTypes) {
+			for (String it : imr.getProjectInnovationPhases()) {
 				innovationManagementTypes.add(QueryValidator.validateInnovationType(it, onto, allOntologyClasses));
 			}
 		}
 
-		if (imr.innovationManagerSkills != null || !imr.innovationManagerSkills.isEmpty()) {
-			for (InnovationManagerSkill skill : imr.innovationManagerSkills) {
+		if (imr.getInnovationManagerSkills() != null || !imr.getInnovationManagerSkills().isEmpty()) {
+			for (InnovationManagerSkill skill : imr.getInnovationManagerSkills()) {
 				innovationManagementSkills.add(QueryValidator.validateSkill(skill.skill, onto, allOntologyClasses));
 			}
 		}
 
-		if (imr.innovationManagerSectors != null || !imr.innovationManagerSectors.isEmpty()) {
-			for (InnovationManagerSector sector : imr.innovationManagerSectors) {
+		if (imr.getInnovationManagerSectors() != null || !imr.getInnovationManagerSectors().isEmpty()) {
+			for (InnovationManagerSector sector : imr.getInnovationManagerSectors()) {
 				innovationManagementSectors.add(QueryValidator.validateSector(sector.sector, onto, allOntologyClasses));
 			}
 		}
 
 		IMQuery query = null;
 
-		if (imr.innovationManagerAttributes != null || !imr.innovationManagerAttributes.isEmpty()) {
+		if (imr.getInnovationManagerAttributes() != null || !imr.getInnovationManagerAttributes().isEmpty()) {
 
-			for (InnovationManagerAttribute attributes :  imr.innovationManagerAttributes) {
+			for (InnovationManagerAttribute attributes :  imr.getInnovationManagerAttributes()) {
 				if (attributes.attributeKey.equalsIgnoreCase("certification")) {
 					certifications.add(new Certification(attributes.attributeValue));
 				}

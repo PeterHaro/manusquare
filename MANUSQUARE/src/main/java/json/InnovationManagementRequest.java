@@ -2,128 +2,104 @@ package json;
 
 import java.util.List;
 
-public class InnovationManagementRequest {
-	
+import edm.Customer;
 
-	String projectName;
-	String projectDescription;
-	String selectionType;
-	String projectId;
-	String projectType;
+public class InnovationManagementRequest extends ConsumerRequest {
 	
+	List<String> projectInnovationPhases;
+	List<String> projectInnovationTypes;
+	List<InnovationManagerSkill> innovationManagerSkills;
+	List<InnovationManagerSector> innovationManagerSectors;
+	List<InnovationManagerAttribute> innovationManagerAttributes;
+	Customer customer;
 	
-	public List<String> projectInnovationPhases;
-	public List<String> projectInnovationTypes;
-	public List<InnovationManagerSkill> innovationManagerSkills;
-	public List<InnovationManagerSector> innovationManagerSectors;
-	public List<InnovationManagerAttribute> innovationManagerAttributes;
-
-	public InnovationManagementRequest(String projectName, String projectDescription, String selectionType,
-			String projectId, String projectType, List<String> innovationPhases,
-			List<String> innovationTypes, List<InnovationManagerSkill> skills,
-			List<InnovationManagerSector> sectors, List<InnovationManagerAttribute> innovationManagerAttributes) {
-		super();
-		this.projectName = projectName;
-		this.projectDescription = projectDescription;
-		this.selectionType = selectionType;
-		this.projectId = projectId;
-		this.projectType = projectType;
-		this.projectInnovationPhases = innovationPhases;
-		this.projectInnovationTypes = innovationTypes;
-		this.innovationManagerSkills = skills;
-		this.innovationManagerSectors = sectors;
-		this.innovationManagerAttributes = innovationManagerAttributes;
+	private InnovationManagementRequest(Builder builder) {
+		super(builder);
+		
+		this.projectInnovationPhases = builder.projectInnovationPhases;
+		this.projectInnovationTypes = builder.projectInnovationTypes;
+		this.innovationManagerSkills = builder.innovationManagerSkills;
+		this.innovationManagerSectors = builder.innovationManagerSectors;
+		this.innovationManagerAttributes = builder.innovationManagerAttributes;
+		this.customer = builder.customer;
+		
 	}
 	
-	
+	public static class Builder extends ConsumerRequest.Builder<Builder> {
+		
+		List<String> projectInnovationPhases;
+		List<String> projectInnovationTypes;
+		List<InnovationManagerSkill> innovationManagerSkills;
+		List<InnovationManagerSector> innovationManagerSectors;
+		List<InnovationManagerAttribute> innovationManagerAttributes;
+		Customer customer;
+		
+		public Builder setProjectInnovationPhases (List<String> projectInnovationPhases) {
+			this.projectInnovationPhases = projectInnovationPhases;
+			return this;
+		}
+		
+		public Builder setProjectInnovationTypes (List<String> projectInnovationTypes) {
+			this.projectInnovationTypes = projectInnovationTypes;
+			return this;
+		}
+		
+		public Builder setInnovationManagerSkills (List<InnovationManagerSkill> innovationManagerSkills) {
+			this.innovationManagerSkills = innovationManagerSkills;
+			return this;
+		}
+		
+		public Builder setInnovationManagerSectors (List<InnovationManagerSector> innovationManagerSectors) {
+			this.innovationManagerSectors = innovationManagerSectors;
+			return this;
+		}
+		
+		public Builder setInnovationManagerAttributes (List<InnovationManagerAttribute> innovationManagerAttributes) {
+			this.innovationManagerAttributes = innovationManagerAttributes;
+			return this;
+		}
+		
+		public Builder setCustomer (Customer customer) {
+			this.customer = customer;
+			return this;
+		}
 
-	public String getProjectName() {
-		return projectName;
-	}
+		@Override
+		public ConsumerRequest build() {
+			return new InnovationManagementRequest(this);
+		}
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public String getProjectDescription() {
-		return projectDescription;
-	}
-
-	public void setProjectDescription(String projectDescription) {
-		this.projectDescription = projectDescription;
-	}
-
-	public String getSelectionType() {
-		return selectionType;
-	}
-
-	public void setSelectionType(String selectionType) {
-		this.selectionType = selectionType;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getProjectType() {
-		return projectType;
-	}
-
-	public void setProjectType(String projectType) {
-		this.projectType = projectType;
+		@Override
+		protected Builder self() {
+			return this;
+		}
+		
+		
 	}
 
 	public List<String> getProjectInnovationPhases() {
 		return projectInnovationPhases;
 	}
 
-	public void setProjectInnovationPhases(List<String> projectInnovationPhases) {
-		this.projectInnovationPhases = projectInnovationPhases;
-	}
-
 	public List<String> getProjectInnovationTypes() {
 		return projectInnovationTypes;
-	}
-
-	public void setProjectInnovationTypes(List<String> projectInnovationTypes) {
-		this.projectInnovationTypes = projectInnovationTypes;
 	}
 
 	public List<InnovationManagerSkill> getInnovationManagerSkills() {
 		return innovationManagerSkills;
 	}
 
-	public void setInnovationManagerSkills(List<InnovationManagerSkill> innovationManagerSkills) {
-		this.innovationManagerSkills = innovationManagerSkills;
-	}
-	
-	
-
 	public List<InnovationManagerSector> getInnovationManagerSectors() {
 		return innovationManagerSectors;
 	}
-
-
-
-	public void setInnovationManagerSectors(List<InnovationManagerSector> sectors) {
-		this.innovationManagerSectors = sectors;
-	}
-
-
 
 	public List<InnovationManagerAttribute> getInnovationManagerAttributes() {
 		return innovationManagerAttributes;
 	}
 
-	public void setInnovationManagerAttributes(List<InnovationManagerAttribute> innovationManagerAttributes) {
-		this.innovationManagerAttributes = innovationManagerAttributes;
+	public Customer getCustomer() {
+		return customer;
 	}
-
-
 
 	public class InnovationManagerSkill {
 

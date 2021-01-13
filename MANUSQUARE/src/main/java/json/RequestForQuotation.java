@@ -5,63 +5,105 @@ import java.util.Set;
 
 import edm.Customer;
 
-public class RequestForQuotation {
+public class RequestForQuotation extends ConsumerRequest {
 
-	String nda;
-	String projectName;
-	String projectDescription;
-	String selectionType;
-	String servicePolicy;
-	Set<String> processNames;
-	String projectId;
 	String id;
-	String projectType;
+	Set<String> processNames;
+	List<ProjectAttributeKeys> projectAttributes;
+	List<SupplierAttributeKeys> supplierAttributes;
+	double supplierMaxDistance;
+	Customer customer;
+	
+	private RequestForQuotation(Builder builder) {
+		super(builder);
+		
+		this.id = builder.id;
+		this.processNames = builder.processNames;
+		this.customer = builder.customer;
+		this.projectAttributes = builder.projectAttributes;
+		this.supplierAttributes = builder.supplierAttributes;
+		this.supplierMaxDistance = builder.supplierMaxDistance;
+		
+	}
+	
+	public static class Builder extends ConsumerRequest.Builder<Builder> {
+		
+		String id;
+		Set<String> processNames;
+		List<ProjectAttributeKeys> projectAttributes;
+		List<SupplierAttributeKeys> supplierAttributes;
+		double supplierMaxDistance;
+		Customer customer;
+		
+		public Builder setId (String id) {
+			this.id = id;
+			return this;
+		}
+		
+		public Builder setProcessNames (Set<String> processNames) {
+			this.processNames = processNames;
+			return this;
+		}
+		
+		public Builder setProjectAttributes (List<ProjectAttributeKeys> projectAttributes) {
+			this.projectAttributes = projectAttributes;
+			return this;
+		}
+		
+		public Builder setSupplierAttributes (List<SupplierAttributeKeys> supplierAttributes) {
+			this.supplierAttributes = supplierAttributes;
+			return this;
+		}
+		
+		public Builder setSupplierMaxDistance (double supplierMaxDistance) {
+			this.supplierMaxDistance = supplierMaxDistance;
+			return this;
+		}
+		
+		public Builder setCustomer (Customer customer) {
+			this.customer = customer;
+			return this;
+		}
 
-	public List<ProjectAttributeKeys> projectAttributes;
-	public List<SupplierAttributeKeys> supplierAttributes;
-	public double supplierMaxDistance;
-	public Customer customer;
+		@Override
+		public ConsumerRequest build() {
+			return new RequestForQuotation(this);
+		}
 
-	public RequestForQuotation(String nda, String projectName, String projectDescription, String selectionType, double supplierMaxDistance,
-                               Customer customer, String servicePolicy, Set<String> processnames, String projectId, String id, String projectType,
-                               List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
-		this.nda = nda;
-		this.projectName = projectName;
-		this.projectDescription = projectDescription;
-		this.selectionType = selectionType;
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.customer = customer;
-		this.servicePolicy = servicePolicy;
-		this.processNames = processnames;
-		this.id = id;
-		this.projectId = projectId;
-		this.projectType = projectType;
-		this.projectAttributes = projectAttributes;
-		this.supplierAttributes = supplierAttributes;
+		@Override
+		protected Builder self() {
+			return this;
+		}
+		
+	}
+	
+	
+	
+	public String getId() {
+		return id;
+	}
 
+	public Set<String> getProcessNames() {
+		return processNames;
+	}
+
+	public List<ProjectAttributeKeys> getProjectAttributes() {
+		return projectAttributes;
+	}
+
+	public List<SupplierAttributeKeys> getSupplierAttributes() {
+		return supplierAttributes;
+	}
+
+	public double getSupplierMaxDistance() {
+		return supplierMaxDistance;
 	}
 	
-	public RequestForQuotation(double supplierMaxDistance, List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
-		this.supplierMaxDistance = supplierMaxDistance;
-		this.projectAttributes = projectAttributes;
-		this.supplierAttributes = supplierAttributes;
+
+	public Customer getCustomer() {
+		return customer;
 	}
-	
-	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes) {
-		this.projectAttributes = projectAttributes;
-		this.supplierAttributes = supplierAttributes;
-	}
-	
-	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes, List<SupplierAttributeKeys> supplierAttributes, Customer customer) {
-		this.projectAttributes = projectAttributes;
-		this.supplierAttributes = supplierAttributes;
-		this.customer = customer;
-	}
-	
-	public RequestForQuotation(List<ProjectAttributeKeys> projectAttributes) {
-		this.projectAttributes = projectAttributes;
-	}
-	
+
 	public class ProjectAttributeKeys {
 		
 		public String attributeId;
