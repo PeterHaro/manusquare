@@ -3,7 +3,7 @@ package validation;
 public class UnitOfMeasurementConverter {
 	
 	
-	//TODO: Use javax.measure for unit conversion + additional metrics
+	//FIXME: Use javax.measure for unit conversion + additional metrics
 	public static String convertUnitOfMeasurement (String inputValue, String inputUOM) {
 	
 		double outputValue = 0;

@@ -27,7 +27,7 @@ import ontology.OntologyOperations;
 import validation.JSONValidator;
 import validation.QueryValidator;
 
-public class BPQuery extends Query {
+public class BPQuery {
 
 	
 	//mandatory attributes	
@@ -55,8 +55,7 @@ public class BPQuery extends Query {
 		this.customerLocationInfo = builder.customerLocationInfo;
 		this.language = builder.language;
 		this.country = builder.country;
-		
-		
+	
 	}
 	
 	public static class BPQueryBuilder {
@@ -219,39 +218,64 @@ public class BPQuery extends Query {
 						
 			Set<Attribute> attributeSet = normaliseAttributes(element.getByProductAttributes());
 			
+			//get materials and appearances from attributeSet
 			for (Attribute bp : attributeSet) {
 				
-				if (bp.getKey() == null || bp.getKey().equals("")) {
-					byProducts.add(
-							
-							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
-							.setId(element.getByProductId())
-							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
-							.build());
-
-				} else {
-					
-					if (bp.getKey().equals("AttributeMaterial")) {
-						materials.add(bp.getValue());
-					}
-					
-					if (bp.getKey().equals("Appearance")) {
-						appearances.add(bp.getValue());
-					}
-					
-					byProducts.add(
-							
-							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
-							.setId(element.getByProductId())
-							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
-							.setMaterials(materials)
-							.setAppearance(appearances)
-							.setAttributes(attributeSet)
-							.build());
-							
-
+				if (bp.getKey().equals("AttributeMaterial")) {
+					materials.add(bp.getValue());
 				}
+				
+				if (bp.getKey().equals("Appearance")) {
+					appearances.add(bp.getValue());
+				}
+				
 			}
+			
+			byProducts.add(
+					
+					new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
+					.setId(element.getByProductId())
+					.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
+					.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
+					.setAppearance(appearances)
+					.setAttributes(attributeSet)
+					.build());
+			
+			
+			
+//			for (Attribute bp : attributeSet) {
+//				
+//				if (bp.getKey() == null || bp.getKey().equals("")) {
+//					byProducts.add(
+//							
+//							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
+//							.setId(element.getByProductId())
+//							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
+//							.build());
+//
+//				} else {
+//					
+//					if (bp.getKey().equals("AttributeMaterial")) {
+//						materials.add(bp.getValue());
+//					}
+//					
+//					if (bp.getKey().equals("Appearance")) {
+//						appearances.add(bp.getValue());
+//					}
+//					
+//					byProducts.add(
+//							
+//							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
+//							.setId(element.getByProductId())
+//							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
+//							.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
+//							.setAppearance(appearances)
+//							.setAttributes(attributeSet)
+//							.build());
+//							
+//
+//				}
+//			}
 			
 		}
 
@@ -335,11 +359,12 @@ public class BPQuery extends Query {
 		return query;
 	}
 	
-	private static Set<Attribute> normaliseAttributes (Set<ByProductAttribute> bps) {
+	public static Set<Attribute> normaliseAttributes (Set<ByProductAttribute> bps) {
+		
 		Set<Attribute> attrs = new HashSet<Attribute>();
-		Attribute attr = new Attribute();
-		for (ByProductAttribute bp :bps) {
-			
+		
+		for (ByProductAttribute bp : bps) {
+			Attribute attr = new Attribute();
 			attr.setKey(bp.getKey());
 			attr.setValue(bp.getValue());
 			attr.setUnitOfMeasurement(bp.getUnitOfMeasurement());
@@ -352,12 +377,14 @@ public class BPQuery extends Query {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_17122020/Radostin_17122020_1.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021/Radostin_13012021.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 		BPQuery query = createByProductQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
+		
+		System.out.println("Number of byproducts: " + query.getByProducts().size());
 
 		for (ByProduct bp : query.getByProducts()) {
 			System.out.println("Byproduct name: " + bp.getName());
@@ -368,10 +395,11 @@ public class BPQuery extends Query {
 			System.out.println("Appearances: " + bp.getAppearances());
 
 			System.out.println("\nOther attributes: ");
-			System.err.println(bp.getAttributes());
 			if (bp.getAttributes() != null) {
 			for (Attribute a : bp.getAttributes()) {
+				if (!a.getKey().equals("AttributeMaterial") && !a.getKey().equals("Appearance")) {
 				System.out.println("   Attribute: " + a.getKey());
+				}
 			}
 		} else {
 			System.out.println("There are no attributes!");

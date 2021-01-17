@@ -23,7 +23,6 @@ import com.google.common.collect.SetMultimap;
 
 import edm.Attribute;
 import edm.Certification;
-import edm.Material;
 import edm.Process;
 import query.CSQuery;
 import sparqlconnection.SparqlConnection;
@@ -150,7 +149,6 @@ public class CSSupplierData {
 	}
 
 
-		//TODO: CREATE A consolidateSuppliers() method as in BPSupplierData.java
 		public static List<CSSupplier> consolidateSuppliers(Set<CSSparqlResult> sparqlResults) {
 			
 			//get unique supplier ids used for constructing the supplier structure below
@@ -235,7 +233,6 @@ public class CSSupplierData {
 							//get list/set of materials
 							materialList = new HashSet<>(e_m.getValue());
 
-							//transform to Set<Material>
 							//FIXME: Is this transformation really necessary? Why not stick to *either* list or set?
 							for (Object o : materialList) {
 								if (o != null) { //Audun: if there are no suppliers materials retrieved from SPARQL, don´t add null-valued Material objects to the set of materials (should be handled properly with !isEmpty check in SimilarityMeasures.java)
@@ -245,10 +242,7 @@ public class CSSupplierData {
 
 							processName = (String) e_m.getKey();
 
-							//add relevant set of materials and attributes together with process name
-
-				//			process = new Process(processName, materialsSet, attributeMap);
-							
+							//add relevant set of materials and attributes together with process name							
 							process = new Process.Builder()
 									.setName(processName)
 									.setMaterials(materialsSet)

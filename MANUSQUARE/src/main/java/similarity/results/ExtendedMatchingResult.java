@@ -25,6 +25,18 @@ public class ExtendedMatchingResult {
 	
 	public ExtendedMatchingResult() {}
 	
+	public static List<ExtendedMatchingResult> returnEmptyResults() {
+		
+		List<ExtendedMatchingResult> results = new LinkedList<ExtendedMatchingResult>();
+		Map<String, Double> matchingScores = new HashMap<String, Double>();
+		matchingScores.put("", 0.0);
+		
+		results.add(new ExtendedMatchingResult(0, "", matchingScores));
+		
+		
+		return results;
+	}
+	
 	public static List<ExtendedMatchingResult> computeExtendedMatchingResult (Map<String, Map<String, Double>> input) {
 		
 		Map<String, Double> bestSuppliers = new HashMap<String, Double>();		
@@ -77,40 +89,6 @@ public class ExtendedMatchingResult {
 		
 		
 	}
-	
-//	public static List<ExtendedMatchingResult> computeExtendedMatchingResult (Map<String, Map<String, Double>> input) {
-//				
-//		Map<String, Double> bestSuppliers = new HashMap<String, Double>();		
-//		
-//		for (Entry<String, Map<String, Double>> e : input.entrySet()) {
-//						
-//			Map<String, Double> scoreMap = sortDescending(e.getValue());
-//			
-//			if (!e.getValue().isEmpty()) {
-//			bestSuppliers.put(e.getKey(), Collections.max(scoreMap.values())); //get the highest score from each suppliers map
-//			}
-//			
-//		}		
-//				
-//		List<ExtendedMatchingResult> results = new LinkedList<ExtendedMatchingResult>();
-//
-//		Map<String, Double> rankedSupplierMap = sortDescending(bestSuppliers);
-//		
-//		System.err.println("rankedSupplierMap: " + rankedSupplierMap);
-//		
-//		int rank = 0;
-//		
-//		for (Entry<String, Double> e : rankedSupplierMap.entrySet()) {
-//			rank++;
-//			Map<String, Double> supplierScore = sortDescending(input.get(e.getKey()));
-//			results.add(new ExtendedMatchingResult(rank, e.getKey(), supplierScore));
-//		}
-//
-//		return results;
-//		
-//		
-//	}
-	
 
 
 	public int getRank() {

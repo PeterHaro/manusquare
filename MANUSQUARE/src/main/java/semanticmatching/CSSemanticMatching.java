@@ -38,6 +38,7 @@ import supplier.CSSupplier;
 import supplierdata.CSSupplierData;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
+import validation.CapacitySharingValidator;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
@@ -85,46 +86,49 @@ public class CSSemanticMatching extends SemanticMatching {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
-		CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
-		List<String> processes = new ArrayList<>();
-
-		for (Process p : query.getProcesses()) {
-			processes.add(p.getName());
-
-		}
 		
-		int numConsumerProcesses = processes.size();
-		
+		//check if the consumer request is valid before proceeding with the matching		
+		if (CapacitySharingValidator.validQuery(inputJson, ontology)) {
+			CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); 
+			List<String> processes = new ArrayList<>();
 
-		//create graph using Guava´s graph library instead of using Neo4j
-		MutableGraph<String> graph = null;
+			for (Process p : query.getProcesses()) {
+				if (p.getName() != null) {
+					processes.add(p.getName());
+				}
 
-		graph = Graph.createGraph(ontology);
+			}
 
-		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+			MutableGraph<String> graph = Graph.createGraph(ontology);
 
-		Map<CSSupplier, Double> supplierScores = new HashMap<CSSupplier, Double>();
-		//for each supplier get the list of best matching processes (and certifications)
-		List<Double> supplierSim = new LinkedList<Double>();
+			//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
+			List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
-		for (CSSupplier supplier : supplierData) {
-			supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-			//get the highest score for the process chains offered by supplier n
-//			supplierScores.put(supplier, getHighestScore(supplierSim));	
-			supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, numConsumerProcesses));	
+			Map<CSSupplier, Double> supplierScores = new HashMap<CSSupplier, Double>();
+			//for each supplier get the list of best matching processes (and certifications)
+			List<Double> supplierSim = new LinkedList<Double>();
+
+			for (CSSupplier supplier : supplierData) {
+				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, processes.size()));	
+
+			}
+
+			//extract the n suppliers with the highest similarity scores
+			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
+
+			//prints the n best suppliers in ranked order to JSON
+			writeResultToOutput(bestSuppliers, writer);
+
+			//prints additional data to console for testing/validation
+			if (testing == true) {			
+				printResultsToConsole(supplierData, query, supplierScores, numResults);			
+			}
 			
-		}
-
-		//extract the n suppliers with the highest similarity scores
-		Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
-
-		//prints the n best suppliers in ranked order to JSON
-		writeResultToOutput(bestSuppliers, writer);
-
-		//prints additional data to console for testing/validation
-		if (testing == true) {			
-			printResultsToConsole(supplierData, query, supplierScores, numResults);			
+		} else {
+			
+			writeEmptyResultToOutput(writer);
+			
 		}
 
 	}
@@ -236,6 +240,21 @@ public class CSSemanticMatching extends SemanticMatching {
 			scores.add(new MatchingResult(++rank, e.getKey(), e.getValue()));
 		}
 
+		String output = new GsonBuilder().create().toJson(scores);
+		writer.write(output);
+		writer.flush();
+		writer.close();
+	}
+
+	/**
+	 * Prints an empty list of results
+	 *
+	 * @param writer Output writer
+	 * @throws IOException Jan 15, 2021
+	 */
+	private static void writeEmptyResultToOutput(BufferedWriter writer) throws IOException {
+		List<MatchingResult> scores = new LinkedList<>();
+		scores.add(new MatchingResult(0, "Not a valid consumer query", 0));
 		String output = new GsonBuilder().create().toJson(scores);
 		writer.write(output);
 		writer.flush();

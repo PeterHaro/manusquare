@@ -13,7 +13,7 @@ public class ByProductQuantityComparison {
 		boolean consumerQuantityLowerThanSupplierQuantity = lowerThan(consumerQuantity, consumerUOM, supplierQuantity, supplierMinQuantity, supplierUOM);
 		
 		//FIXME: Assuming that supplyTypeReq is satisfied if the consumer has quantity = "" (parsed into 0.0 which is not relevant in any other case)
-		if (consumerQuantity == 0.0) {
+		if (consumerQuantity == 0.0 || consumerSupplyType.equalsIgnoreCase("ANY")) {
 			reqSatisfied = true;
 		} else {
 		
@@ -24,7 +24,7 @@ public class ByProductQuantityComparison {
 		} else if (consumerSupplyType.equalsIgnoreCase("SINGLE_BATCH") || consumerSupplyType.equalsIgnoreCase("Single batch")) {
 			if (!consumerQuantityLowerThanSupplierQuantity) {
 				reqSatisfied = false;
-		}
+		} 
 		}
 		}
 		

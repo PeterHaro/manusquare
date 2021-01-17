@@ -117,14 +117,15 @@ public class IMQuery {
 	 * @throws IOException
 	 */
 	public static IMQuery createQuery (String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
-
+		IMQuery query = null;
+		
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> languages = new HashSet<String>();
 		List<String> innovationManagementPhases = new ArrayList<String>();
 		List<String> innovationManagementTypes = new ArrayList<String>();
 		List<String> innovationManagementSkills = new ArrayList<String>();
 		List<String> innovationManagementSectors = new ArrayList<String>();
-
+		
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		InnovationManagementRequest imr;
@@ -136,32 +137,44 @@ public class IMQuery {
 		}
 
 		if (imr.getProjectInnovationPhases() != null || !imr.getProjectInnovationPhases().isEmpty()) {			
-
+			String innovationManagementPhase = null;
 			for (String ip : imr.getProjectInnovationPhases()) {
-				innovationManagementPhases.add(QueryValidator.validateInnovationPhase(ip, onto, allOntologyClasses));
+				innovationManagementPhase = QueryValidator.validateInnovationPhase(ip, onto, allOntologyClasses);
+				if (innovationManagementPhase != null) {
+				innovationManagementPhases.add(innovationManagementPhase);
+				} 
 			}
 		}
 
-		if (imr.getProjectInnovationPhases() != null || !imr.getProjectInnovationPhases().isEmpty()) {
-
-			for (String it : imr.getProjectInnovationPhases()) {
-				innovationManagementTypes.add(QueryValidator.validateInnovationType(it, onto, allOntologyClasses));
+		if (imr.getProjectInnovationTypes() != null || !imr.getProjectInnovationTypes().isEmpty()) {
+			String innovationManagementType = null;
+			for (String it : imr.getProjectInnovationTypes()) {
+				innovationManagementType = QueryValidator.validateInnovationType(it, onto, allOntologyClasses);
+				if (innovationManagementType != null) {
+				innovationManagementTypes.add(innovationManagementType);
+				} 
 			}
 		}
 
 		if (imr.getInnovationManagerSkills() != null || !imr.getInnovationManagerSkills().isEmpty()) {
+			String innovationManagementSkill = null;			
 			for (InnovationManagerSkill skill : imr.getInnovationManagerSkills()) {
-				innovationManagementSkills.add(QueryValidator.validateSkill(skill.skill, onto, allOntologyClasses));
+				innovationManagementSkill = QueryValidator.validateSkill(skill.skill, onto, allOntologyClasses);
+				if (innovationManagementSkill != null) {
+				innovationManagementSkills.add(innovationManagementSkill);
+				}
 			}
 		}
 
 		if (imr.getInnovationManagerSectors() != null || !imr.getInnovationManagerSectors().isEmpty()) {
+			String innovationManagementSector = null;
 			for (InnovationManagerSector sector : imr.getInnovationManagerSectors()) {
-				innovationManagementSectors.add(QueryValidator.validateSector(sector.sector, onto, allOntologyClasses));
+				innovationManagementSector = QueryValidator.validateSector(sector.sector, onto, allOntologyClasses);
+				if (innovationManagementSector != null) {
+				innovationManagementSectors.add(innovationManagementSector);
+				}
 			}
 		}
-
-		IMQuery query = null;
 
 		if (imr.getInnovationManagerAttributes() != null || !imr.getInnovationManagerAttributes().isEmpty()) {
 
@@ -197,7 +210,7 @@ public class IMQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_8.json";
+		String filename = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_1.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));

@@ -15,10 +15,11 @@
     "mode":"buy",
     "minNumberOfPartecipants":"0",
     "maxNumberOfPartecipants":"10",
+    "purchasingGroupAbilitation": "true",
     "byProductElements": [{
         "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
         "byProductName": "Carbon Steel",
-        "supplyType": "Limited amount",
+        "supplyType": "Single batch",
         "quantity": "100",
         "unitOfMeasureQuantity": "Kg",
         "byProductAttributes": [{

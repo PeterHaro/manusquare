@@ -77,7 +77,7 @@ public class MatchmakingController {
         ctx.json(manager.getTransactionalData());
     }
 
-    // TODO: Reworke me for prod. This is generating fake offers for the mm algo
+    // FIXME: Reworke me for prod. This is generating fake offers for the mm algo
     // Call python API
 
     @OpenApi(
@@ -165,7 +165,7 @@ public class MatchmakingController {
             os.write(input, 0, input.length);
         }
 
-        //TODO: Multiple actions depending on MM status code!
+        //FIXME: Multiple actions depending on MM status code!
         int code = con.getResponseCode();
         try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))){
             String responseLine = null;

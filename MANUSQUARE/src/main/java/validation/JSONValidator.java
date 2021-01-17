@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class JSONValidator {
 	
-	// I am so sorry for this. TODO: Hack warning
+	// I am so sorry for this. FIXME: Hack warning
 	public static boolean isJSONValid(String jsonInString) {
 		Gson gson = new Gson();
 		try {

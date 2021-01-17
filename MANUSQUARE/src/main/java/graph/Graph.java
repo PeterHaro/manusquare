@@ -53,6 +53,15 @@ public class Graph {
 		return graph;
 	}
 	
+	public static boolean nodeInGraph(String node, MutableGraph graph) {
+
+		if (graph.nodes().contains(node)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public static void printGraphNodes (MutableGraph<String> graph) {
 		
 		Set<String> graphNodes = graph.nodes();

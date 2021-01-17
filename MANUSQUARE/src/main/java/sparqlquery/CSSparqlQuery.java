@@ -65,8 +65,7 @@ public class CSSparqlQuery {
 		
 		Set<String> languages = cq.getLanguage();        
 
-		//get the Least Common Subsumer (LCS) of the process concepts included by the consumer
-		
+		//get the Least Common Subsumer (LCS) of the process concepts included by the consumer		
 		String lcs = getLCS(processes, onto);
 
 		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
@@ -122,7 +121,6 @@ public class CSSparqlQuery {
 			strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
 		}
 
-		//TODO: Optimise code to differentiate SPARQL query on attributes and materials. Currently, the query asks for attributes even if there are no
 		//attributes specified in the consumer query as long as there are materials (included in materialsAndAttributes). Doesn´t seem to cause any issues of any sort though.
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
@@ -158,11 +156,9 @@ public class CSSparqlQuery {
 		//filter suppliers
 		if (supplierMaxDistance != 0) {
 
-			//strQuery += "\nOPTIONAL { \n"; TODO: Check if we need OPTIONAL here, this snippet is only included if the consumer adds a supplierMaxDistance other than '0'.
 			strQuery += "\n?supplier geo:asWKT ?location .\n";
 			strQuery += "BIND((geof:distance(?location, \"POINT(" + lat + " " + lon + ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n";
 			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n";
-			//strQuery += "} \n";
 		}
 
 		if (!isNullOrEmpty(languages)) {
@@ -354,7 +350,7 @@ public class CSSparqlQuery {
 	}
 
 	/**
-	 * Checks a collection for null or empty values TODO: this resolves earlier "dead code" warnings and can probably be used elsewhere (+ used as generic utility method and put elsewhere)
+	 * Checks a collection for null or empty values 
 	 * @param c
 	 * @return
        May 4, 2020

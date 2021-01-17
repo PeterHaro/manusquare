@@ -9,9 +9,9 @@ public class SearchInterfaceDataBuilder {
     private int onTimeDeliveryImportance;
     private int communicationAndCollaberationEffectivenessImportance;
     private int searchRadius;
-    private int profileRankingImportance; //TODO: CONSIDER CLASSIFYING THIS
-    private int sustainabilityRanking; // TODO: CONMSIDERING CLASSYFING THISA
-    private int priceRange; // TODO: CONSIDER CLASSIFY YO
+    private int profileRankingImportance; //FIXME: CONSIDER CLASSIFYING THIS
+    private int sustainabilityRanking; // FIXME: CONMSIDERING CLASSYFING THISA
+    private int priceRange; // FIXME: CONSIDER CLASSIFY YO
 
     public SearchInterfaceDataBuilder setQualityOfProjectResultsImportance(int qualityOfProjectResultsImportance) {
         if(MathUtilities.inRange(qualityOfProjectResultsImportance, 0, 5)) {

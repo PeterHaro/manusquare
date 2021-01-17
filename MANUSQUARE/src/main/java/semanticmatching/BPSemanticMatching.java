@@ -27,9 +27,11 @@ import graph.Graph;
 import query.BPQuery;
 import similarity.measures.BPSimilarityMeasures;
 import similarity.results.ExtendedMatchingResult;
+import similarity.results.MatchingResult;
 import supplier.BPSupplier;
 import supplierdata.BPSupplierData;
 import utilities.MathUtilities;
+import validation.ByProductValidator;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
@@ -77,48 +79,60 @@ public class BPSemanticMatching extends SemanticMatching {
 		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
-
-		BPQuery query = BPQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 		
-		List<String> byProducts = new ArrayList<>();
-
-		//just to get the number of relevant by-products
-		for (ByProduct p : query.getByProducts()) {
-			byProducts.add(p.getId());
-
-		}
-		
-		int numByProducts = byProducts.size();
-		
-
-		//create graph
-		MutableGraph<String> graph = null;
-
-		graph = Graph.createGraph(ontology);
-
-		//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-		List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
-
-		Map<BPSupplier, Double> supplierScores = new HashMap<BPSupplier, Double>();
-		//for each supplier get the list of best matching processes (and certifications)
-		List<Double> supplierSim = new LinkedList<Double>();
-		
-		TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
-
-		for (BPSupplier supplier : supplierData) {
-			supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
-			supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, numByProducts));	
+		if (ByProductValidator.validQuery(inputJson, ontology)) {
 			
-		}
-						
-		List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
-		
-		writeExtendedResultToOutput(results, writer);
+			BPQuery query = BPQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
+			
+			List<String> byProducts = new ArrayList<>();
 
-		//prints additional data to console for testing/validation
-		if (testing == true) {			
-			printResultsToConsole(query, results);			
+			//just to get the number of relevant by-products
+			for (ByProduct p : query.getByProducts()) {
+				byProducts.add(p.getId());
+
+			}
+			
+			int numByProducts = byProducts.size();
+			
+
+			//create graph
+			MutableGraph<String> graph = null;
+
+			graph = Graph.createGraph(ontology);
+
+			//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
+			List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+
+			Map<BPSupplier, Double> supplierScores = new HashMap<BPSupplier, Double>();
+			//for each supplier get the list of best matching processes (and certifications)
+			List<Double> supplierSim = new LinkedList<Double>();
+			
+			TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
+
+			for (BPSupplier supplier : supplierData) {
+				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, numByProducts));	
+				
+			}
+							
+			List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
+			
+			writeExtendedResultToOutput(results, writer);
+
+			//prints additional data to console for testing/validation
+			if (testing == true) {			
+				printResultsToConsole(query, results);			
+			}
+			
+		} else {
+			
+			List<ExtendedMatchingResult> results = ExtendedMatchingResult.returnEmptyResults();
+			
+			writeExtendedResultToOutput(results, writer);
+			//writeEmptyResultToOutput(writer);
 		}
+
+		
 
 	}
 
@@ -169,6 +183,21 @@ public class BPSemanticMatching extends SemanticMatching {
 	 */
 	private static void writeExtendedResultToOutput(List<ExtendedMatchingResult> results, BufferedWriter writer) throws IOException {
 		String output = new GsonBuilder().create().toJson(results);
+		writer.write(output);
+		writer.flush();
+		writer.close();
+	}
+	
+	/**
+	 * Prints an empty list of results
+	 *
+	 * @param writer Output writer
+	 * @throws IOException Jan 15, 2021
+	 */
+	private static void writeEmptyResultToOutput(BufferedWriter writer) throws IOException {
+		List<MatchingResult> scores = new LinkedList<>();
+		scores.add(new MatchingResult(0, "Not a valid consumer query due to non-valid byProductName and/or material attributes", 0));
+		String output = new GsonBuilder().create().toJson(scores);
 		writer.write(output);
 		writer.flush();
 		writer.close();

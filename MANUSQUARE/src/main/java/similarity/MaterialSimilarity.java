@@ -13,28 +13,29 @@ import similarity.methodologies.ISimilarity;
 import similarity.methodologies.parameters.SimilarityParameters;
 import similarity.methodologies.parameters.SimilarityParametersFactory;
 import utilities.MathUtilities;
-import validation.QueryValidator;
 
 public class MaterialSimilarity {
 
 	public static double computeMaterialSimilarity(Set<String> consumerByProductMaterials, Set<String> supplierMaterials, OWLOntology onto, ISimilarity similarityMethodology, SimilarityMethods similarityMethod, MutableGraph<String> graph, Set<String> allOntologyClasses) throws IOException {
+		
 		double materialSimilarity = 0;
 		List<Double> materialSimilarityList = new ArrayList<Double>();
 
 		SimilarityParameters parameters = null;
-
-		String validatedConsumerMaterial = null;
-		String validatedSupplierMaterial = null;
 
 		if ((!consumerByProductMaterials.isEmpty() && consumerByProductMaterials != null) && (!supplierMaterials.isEmpty() && supplierMaterials != null)) {
 
 			for (String consumerByProductMaterial : consumerByProductMaterials) {
 				
 				for (String supplierMaterial : supplierMaterials) {
-					validatedConsumerMaterial = QueryValidator.validateMaterialName(consumerByProductMaterial, onto, allOntologyClasses);
-					validatedSupplierMaterial = QueryValidator.validateMaterialName(supplierMaterial, onto, allOntologyClasses);
-					parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, validatedConsumerMaterial, validatedSupplierMaterial, onto, graph);
-					materialSimilarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
+					
+					System.out.println("Computing Material Similarity for consumer material: " + consumerByProductMaterial + " and supplier material: " + supplierMaterial);		
+
+					if (consumerByProductMaterial != null) {
+						parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerByProductMaterial, supplierMaterial, onto, graph);
+						materialSimilarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
+					} 
+					
 				}
 
 			}

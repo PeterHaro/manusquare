@@ -33,7 +33,7 @@ public class CSQuery {
 
 	//mandatory attributes
 	private Set<Process> processes;
-	
+
 	//optional attributes
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
@@ -48,48 +48,48 @@ public class CSQuery {
 		this.languages = builder.languages;
 
 	}
-	
+
 	public static class CSQueryBuilder {
-		
+
 		private Set<Process> processes;
-		
+
 		private Set<Certification> certifications;
 		private double supplierMaxDistance;
 		private Map<String, String> customerLocationInfo;
 		private Set<String> languages;
-		
+
 		public CSQueryBuilder(Set<Process> processes) {
 			this.processes = processes;
 
 		}
-		
+
 		public CSQueryBuilder setCertifications(Set<Certification> certifications) {
 			this.certifications = certifications;
 			return this;
 		}
-		
+
 		public CSQueryBuilder setSupplierMaxDistance(double supplierMaxDistance) {
 			this.supplierMaxDistance = supplierMaxDistance;
 			return this;
 		}
-		
+
 		public CSQueryBuilder setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
 			this.customerLocationInfo = customerLocationInfo;
 			return this;
 		}
-		
+
 		public CSQueryBuilder setLanguage(Set<String> language) {
 			this.languages = language;
 			return this;
 		}
 
-		
+
 		public CSQuery build() {
 			return new CSQuery(this);
 		}
-		
+
 	}
-	
+
 	public Set<Process> getProcesses() {
 		return processes;
 	}
@@ -112,7 +112,7 @@ public class CSQuery {
 	public Set<String> getLanguage() {
 		return languages;
 	}
-	
+
 	public Set<Attribute> getAttributes() {
 		Set<Attribute> attributes = new HashSet<Attribute>();
 		Set<Process> processes = getProcesses();
@@ -135,8 +135,10 @@ public class CSQuery {
 	 * @throws IOException
 	 */
 	public static CSQuery createConsumerQuery(String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
+		CSQuery query = null;
 		Set<Process> processes = new HashSet<>();
 		Set<Certification> certifications = new HashSet<Certification>();
+		String processName = null;
 		Set<String> processNames = new HashSet<String>();
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 		Set<String> languages = new HashSet<String>();
@@ -149,86 +151,100 @@ public class CSQuery {
 			rfq = new Gson().fromJson(new FileReader(filename), RequestForQuotation.class);
 		}
 
+
 		if (rfq.getProjectAttributes() == null || rfq.getProjectAttributes().isEmpty()) {
-			throw new NoProcessException("Processes must be included!");
+
+			query = null;
+			System.err.println("Processes must be included - returning empty CSQuery!");
+
 		} else {
+			//need to validate the process names according to concepts in the ontology before we continue with the rest of the process
 			for (ProjectAttributeKeys projectAttributes : rfq.getProjectAttributes()) {
-				processNames.add(projectAttributes.processName);
+
+				processName = QueryValidator.validateProcessName(projectAttributes.processName, onto, allOntologyClasses);
+
+				if (processName != null)
+
+					processNames.add(processName);
 			}
 		}
 
-		//get attribute and materials and map them to process
-		for (String process : processNames) {
-			Set<Attribute> attributeSet = new HashSet<Attribute>();
-			Set<String> materialSet = new HashSet<String>();
-			Set<String> equivalentProcesses = new HashSet<String>();
+		if (processNames.isEmpty()) {
 
-			//get the materials and other attributes if they´re present
-			for (ProjectAttributeKeys projectAttributes : rfq.getProjectAttributes()) {
-				if (!projectAttributes.attributeKey.isEmpty()) {
-					if ((!projectAttributes.attributeKey.equalsIgnoreCase("material") && !projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) {
-						//check if uom is included in JSON
-						if (projectAttributes.unitOfMeasure != null) {
-							if(StringUtilities.isValidNumber(projectAttributes.attributeValue)) {
-								attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConverter.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
+			query = null;
+			System.err.println("Processes must be included - returning empty CSQuery!");
+
+		} else {
+
+			//get attribute and materials and map them to process
+			for (String process : processNames) {
+
+				Set<Attribute> attributeSet = new HashSet<Attribute>();
+				Set<String> materialSet = new HashSet<String>();
+				Set<String> equivalentProcesses = new HashSet<String>();
+
+				//get the materials and other attributes if they´re present
+				for (ProjectAttributeKeys projectAttributes : rfq.getProjectAttributes()) {
+					if (!projectAttributes.attributeKey.isEmpty()) {
+						if ((!projectAttributes.attributeKey.equalsIgnoreCase("material") && !projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) {
+							//check if uom is included in JSON
+							if (projectAttributes.unitOfMeasure != null) {
+								if(StringUtilities.isValidNumber(projectAttributes.attributeValue)) {
+									attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConverter.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
+								} else {
+									attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
+								}
 							} else {
 								attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 							}
-						} else {
-							attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
+						} else if ((projectAttributes.attributeKey.equalsIgnoreCase("material") || projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) { //get the materials
+							materialSet.add(projectAttributes.attributeValue);
 						}
-					} else if ((projectAttributes.attributeKey.equalsIgnoreCase("material") || projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) { //get the materials
-						materialSet.add(projectAttributes.attributeValue);
+					} else {
+						System.out.println("There are no attributes in the JSON file!");
 					}
-				} else {
-					System.out.println("There are no attributes in the JSON file!");
 				}
-			}
 
-			//10.02.2020: get equivalent process concepts to process (after we have ensured the process is included in the ontology)
-			process = QueryValidator.validateProcessName(process, onto, allOntologyClasses);
-			equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
+				//get equivalent process concepts to process (after we have ensured the process is included in the ontology)
 
-			//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
-			if (equivalentProcesses == null || equivalentProcesses.isEmpty()) {
+				equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
 
-				//processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses)));
-				
-				processes.add(new Process.Builder()
-						.setName(process)
-						.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
-						.setAttributes(attributeSet)
-						.build()
-						);
+				//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
+				if (equivalentProcesses == null || equivalentProcesses.isEmpty()) {
 
-			} else {//if there are equivalent processes in the ontology we add those to the set of processes together with the process included by the consumer
-				for (String s : equivalentProcesses) {
-
-					//processes.add(new Process(process, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), equivalentProcesses));
-					//processes.add(new Process(s, QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses), QueryValidator.validateAttributeKeys(attributeSet, onto, allOntologyClasses), updateEquivalenceSet(equivalentProcesses, s, process)));
-					
 					processes.add(new Process.Builder()
 							.setName(process)
 							.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
 							.setAttributes(attributeSet)
-							.setEquivalentProcesses(equivalentProcesses)
 							.build()
 							);
-					
-					processes.add(new Process.Builder()
-							.setName(s)
-							.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
-							.setAttributes(attributeSet)
-							.setEquivalentProcesses(updateEquivalenceSet(equivalentProcesses, s, process))
-							.build()
-							);
-					
+
+				} else {//if there are equivalent processes in the ontology we add those to the set of processes together with the process included by the consumer
+
+					for (String s : equivalentProcesses) {
+
+
+						processes.add(new Process.Builder()
+								.setName(process)
+								.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
+								.setAttributes(attributeSet)
+								.setEquivalentProcesses(equivalentProcesses)
+								.build()
+								);
+
+						processes.add(new Process.Builder()
+								.setName(s)
+								.setMaterials(QueryValidator.validateMaterials(materialSet, onto, allOntologyClasses))
+								.setAttributes(attributeSet)
+								.setEquivalentProcesses(updateEquivalenceSet(equivalentProcesses, s, process))
+								.build()
+								);
+
+					}
 				}
+
 			}
 
-		}
-
-		CSQuery query = null;
 
 		//add geographical information to consumer query
 		double supplierMaxDistance = rfq.getSupplierMaxDistance();
@@ -238,8 +254,8 @@ public class CSQuery {
 		if (rfq.getSupplierAttributes() == null || rfq.getSupplierAttributes().isEmpty()) {
 			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
 			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
-			
-					query = new CSQuery.CSQueryBuilder(processes).
+
+			query = new CSQuery.CSQueryBuilder(processes).
 					setSupplierMaxDistance(supplierMaxDistance).
 					setCustomerLocationInfo(customerInformation).
 					build();
@@ -249,21 +265,21 @@ public class CSQuery {
 				if (supplierAttributes.attributeKey.equalsIgnoreCase("certification")) {
 					certifications.add(new Certification(supplierAttributes.attributeValue));
 				}
-				
+
 				if (supplierAttributes.attributeKey.equalsIgnoreCase("Language")) {
 					languages.add(supplierAttributes.attributeValue);
 				}
 			}
-			
+
 			if (languages != null) {
-				
+
 				query = new CSQuery.CSQueryBuilder(processes).
 						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 						setSupplierMaxDistance(supplierMaxDistance).
 						setCustomerLocationInfo(customerInformation).
 						setLanguage(languages).
 						build();
-				
+
 			} 
 			//if not we omit languages, and add only certifications from the supplier attributes
 			query = new CSQuery.CSQueryBuilder(processes).
@@ -272,6 +288,7 @@ public class CSQuery {
 					setCustomerLocationInfo(customerInformation).
 					build();
 
+		}
 		}
 
 		return query;
@@ -303,7 +320,7 @@ public class CSQuery {
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 		CSQuery query = createConsumerQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
-		
+
 		System.out.println("Printing processes: ");
 		for (Process p : query.getProcesses()) {
 			System.out.println(p.getName());
@@ -311,12 +328,12 @@ public class CSQuery {
 
 		for (Process p : query.getProcesses()) {
 			System.out.println("Process: " + p.getName());
-			
+
 			if (p.getMaterials() != null) {
-			System.out.println("Number of materials: " + p.getMaterials().size());
-			for (String m : p.getMaterials()) {
-				System.out.println("   Material: " + m);
-			}
+				System.out.println("Number of materials: " + p.getMaterials().size());
+				for (String m : p.getMaterials()) {
+					System.out.println("   Material: " + m);
+				}
 			}
 			for (Attribute a : p.getAttributes()) {
 				System.out.println("   Attribute: " + a.getKey());
@@ -328,7 +345,7 @@ public class CSQuery {
 		}
 
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
-		
+
 		System.out.println("Languages required: " + query.getLanguage());
 	}
 

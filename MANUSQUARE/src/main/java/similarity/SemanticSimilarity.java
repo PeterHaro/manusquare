@@ -100,7 +100,7 @@ public class SemanticSimilarity {
 	 * @return the best matching concept from the MANUSQUARE ontology
 	 * Nov 13, 2019
 	 */
-	private static String getMostSimilarConceptSyntactically(String input, Set<String> ontologyClassesAsString) {
+	public static String getMostSimilarConceptSyntactically(String input, Set<String> ontologyClassesAsString) {
 
 		Map<String, Double> similarityMap = new HashMap<String, Double>();
 		String mostSimilarConcept = null;

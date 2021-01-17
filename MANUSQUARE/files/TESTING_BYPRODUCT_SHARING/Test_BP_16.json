@@ -15,6 +15,7 @@
     "mode":"buy",
     "minNumberOfPartecipants":"0",
     "maxNumberOfPartecipants":"100",
+    "purchasingGroupAbilitation": "true",
     "byProductElements": [{
         "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
         "byProductName": "Carbon Steel",

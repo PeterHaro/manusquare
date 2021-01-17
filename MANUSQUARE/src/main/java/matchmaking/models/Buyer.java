@@ -6,7 +6,7 @@ import java.util.List;
 public class Buyer {
     private int id;
     private List<TransactionalData> HistoricalData;
-    //TODO: Consider removing these fields
+    //FIXME: Consider removing these fields
     int averageQuality;
     int averageDeliveryTime;
     int averagePacking;

@@ -4,7 +4,7 @@ import com.google.common.graph.MutableGraph;
 import org.semanticweb.owlapi.model.OWLOntology;
 import similarity.SimilarityMethods;
 
-//TODO: CONVERT TO BUILDERS (if more params
+//FIXME: CONVERT TO BUILDERS (if more params
 public class SimilarityParametersFactory {
     public static SimilarityParameters CreateSimpleGraphParameters(SimilarityMethods methodology, String sourceNode, String targetNode, OWLOntology ontology, MutableGraph<String> graph) {
         switch(methodology) {

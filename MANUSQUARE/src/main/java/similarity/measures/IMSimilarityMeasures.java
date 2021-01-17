@@ -58,8 +58,11 @@ public class IMSimilarityMeasures {
 
 		/* INNOVATION PHASE SIMILARITY */
 		List<String> initialConsumerInnovationPhases = query.getInnovationPhases();
-
-		if (initialConsumerInnovationPhases == null) {
+		
+		System.out.println("initialConsumerInnovationPhases: " + initialConsumerInnovationPhases);
+		System.out.println("initialConsumerInnovationPhases is empty: " + initialConsumerInnovationPhases.isEmpty());
+		
+		if (initialConsumerInnovationPhases == null || initialConsumerInnovationPhases.isEmpty()) {
 
 			innovationPhaseSim = 0;
 
@@ -77,7 +80,7 @@ public class IMSimilarityMeasures {
 		/* INNOVATION TYPE SIMILARITY */
 		List<String> initialConsumerInnovationTypes = query.getInnovationTypes();
 
-		if (initialConsumerInnovationTypes == null) {
+		if (initialConsumerInnovationTypes == null || initialConsumerInnovationTypes.isEmpty()) {
 			innovationTypeSim = 0;
 		} else {
 			innovationTypeSim = computeIndependentWUPSetSim (initialConsumerInnovationTypes, supplierInnovationTypes, similarityMethod, onto, graph, hard_coded_weight);
@@ -91,7 +94,7 @@ public class IMSimilarityMeasures {
 		/* SKILL SIMILARITY */
 		List<String> initialConsumerSkills = query.getSkills();
 
-		if (initialConsumerSkills == null) {
+		if (initialConsumerSkills == null || initialConsumerSkills.isEmpty()) {
 			skillSim = 0;
 		} else {
 			skillSim = computeIndependentWUPSetSim (initialConsumerSkills, supplierSkills, similarityMethod, onto, graph, hard_coded_weight);
@@ -105,7 +108,7 @@ public class IMSimilarityMeasures {
 		/* SECTOR SIMILARITY */
 		List<String> initialConsumerSectors = query.getSectors();
 
-		if (initialConsumerSectors == null) {
+		if (initialConsumerSectors == null || initialConsumerSectors.isEmpty()) {
 			sectorSim = 0;
 		} else {
 			sectorSim = computeIndependentWUPSetSim (initialConsumerSectors, supplierSectors, similarityMethod, onto, graph, hard_coded_weight);
@@ -216,25 +219,6 @@ public class IMSimilarityMeasures {
 		}
 
 	}
-	
-//	public static List<String> getConceptNamesAndLabels (List<String> inputSet, OWLOntology onto) {
-//		
-//		List<String> labels = new ArrayList<String>();
-//		
-//		OWLClass cls = null;
-//		
-//		for (String s : inputSet) {
-//			
-//			cls = OntologyOperations.getClass(s, onto);
-//			labels.add(OntologyOperations.getLabelFromClass(onto, cls));
-//			
-//		}
-//		
-//		inputSet.addAll(labels);
-//		
-//		return inputSet;
-//		
-//	}
 
 
 	private static boolean nodeInGraph(String node, MutableGraph graph) {

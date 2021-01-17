@@ -168,7 +168,6 @@ public class EmbeddingSingletonDataManager {
 
             //if the class name is a compound, split the compounds, and if the vectormap contains ANY of the compounds, extract the vectors from
             //the compound parts and average them in order to return the vector for the compound class name
-            //TODO: The compound head should probably have more impact on the score than the compound modifiers
         } else if (StringUtilities.isCompoundWord(label)) {
             //get the compound parts and check if any of them are in the vector file
             String[] compounds = StringUtilities.getCompoundParts(label);

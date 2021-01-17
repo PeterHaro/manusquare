@@ -1,0 +1,63 @@
+{
+    "projectName": "Draft123123",
+    "projectDescription": "",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+        "customer": {
+        "customerInfo": {
+            "location": "Vale de Cambra, Portugal",
+            "lat": "40.8498115",
+            "lon": "-8.3939142"
+        }
+    },
+    "projectId": "64745a40-2be5-4ffb-bb95-e4e63652b491",
+    "projectType": "By-product",
+    "mode": "buy",
+    "minNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 10,
+    "purchasingGroupAbilitation": "true",
+    "byProductElements": [{
+        "byProductId": "af3cbfd0-80fd-4529-bac2-d2658ec6066c",
+        "byProductName": "Chocolate bars",
+        "supplyType": "Single batch",
+        "quantity": "10",
+        "unitOfMeasureQuantity": "kg",
+        "byProductAttributes": [
+            {
+                "id": "2969aa5a-a6ca-4f70-a07e-081aae84eb82",
+                "attributeKey": "Appearance",
+                "attributeValue": "Bars",
+                "unitOfMeasure": "N/D"
+            },
+            {
+                "id": "134a0590-5306-4b94-b3da-856a55dd7543",
+                "attributeKey": "AttributeMaterial",
+                "attributeValue": "Metal",
+                "unitOfMeasure": "N/D"
+            },
+            {
+                "attributeKey": "MinLayerThickness",
+                "attributeValue": "3",
+                "unitOfMeasure": "mm"
+            }
+        ]
+    }],
+    "supplierAttributes": [
+    {
+        "id": "954fa97c-755d-4200-98b4-6756c9452a65",
+        "attributeKey": "Certification",
+        "attributeValue": "ISO9001"
+    },
+      {
+		"id": "2343252346356",
+		"attributeKey": "Country",
+		"attributeValue": "Spain"
+		},
+		{
+             
+		"id": "2343252346356",
+		"attributeKey": "Language",
+		"attributeValue": "Spanish"
+		
+    }]
+}

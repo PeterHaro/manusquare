@@ -4,7 +4,7 @@ public class Supplier {
     private int id;
     private int ProfileRanking;
     private int SustainabilityRanking;
-    private int DistanceFromBuyerInKm; //TODO: FIXME: I am just mocking this for now as I dont bother setting up random areas in some GEO area and converting coords to km etc etc
+    private int DistanceFromBuyerInKm; //FIXME: I am just mocking this for now as I dont bother setting up random areas in some GEO area and converting coords to km etc etc
 
     public Supplier(int supplierId, int profileRanking, int sustainabilityRanking, int distanceFromBuyerInKm) {
         id = supplierId;

@@ -15,10 +15,11 @@
     "mode":"buy",
     "minNumberOfPartecipants":"0",
     "maxNumberOfPartecipants":"10",
+    "purchasingGroupAbilitation": "true",
     "byProductElements": [{
         "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
-        "byProductName": "Steel",
-        "supplyType": "Limited amount",
+        "byProductName": "Bullshit",
+        "supplyType": "Single batch",
         "quantity": "150",
         "unitOfMeasureQuantity": "Kg",
         "byProductAttributes": [{

@@ -23,7 +23,7 @@ public class Main {
 		String jsonOut = "./files/matchingResults.json";
 
 		//if testing == true -> local KB + additional test data written to console, if testing == false, MANUSQUARE Semantic Infrastructure
-		boolean testing = true;
+		boolean testing = false;
 		//if weighted == true, we're trying a weight configuration of (process=0.75, materials 0.25; processAndMaterials=0.75, certifications=0.25)
 		boolean weighted = true;		
 		//used for situations where a process chain has no certifications|materials|attributes and this is required by the consumer in the RFQ JSON
@@ -32,22 +32,22 @@ public class Main {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "BP";
+		String functionality = "CS";
 
 		switch (functionality) {
 
 		case "CS":
-			String jsonIn = "./files/TESTING_CAPACITY_SHARING/Test10.json";
+			String jsonIn = "./files/TESTING_CAPACITY_SHARING/Test-Full.json";
 			CSSemanticMatching.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 
 		case "IM":
-			jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_1.json";
+			jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_8.json";
 			IMSemanticMatching.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 
 		case "BP":
-			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_1.json";
+			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_5.json";
 			BPSemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 

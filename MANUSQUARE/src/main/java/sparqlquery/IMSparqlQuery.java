@@ -97,7 +97,7 @@ public class IMSparqlQuery {
 
 
 	/**
-	 * Checks a collection for null or empty values TODO: this resolves earlier "dead code" warnings and can probably be used elsewhere (+ used as generic utility method and put elsewhere)
+	 * Checks a collection for null or empty values 
 	 * @param c
 	 * @return
        May 4, 2020

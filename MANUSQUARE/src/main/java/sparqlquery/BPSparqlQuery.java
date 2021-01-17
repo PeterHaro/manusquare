@@ -26,7 +26,7 @@ public class BPSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_17122020/Radostin_17122020_2.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021/Radostin_13012021.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -38,8 +38,6 @@ public class BPSparqlQuery {
 		System.out.println("min number of participants: "+ query.getMaxNumberOfParticipants());
 
 		String test = createSparqlQuery(query, onto);
-
-		System.out.println(test);
 
 
 	}
@@ -104,7 +102,7 @@ public class BPSparqlQuery {
 			strQuery += "PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/> \n";
 		}
 
-		//TODO: Optimise code to differentiate SPARQL query on attributes and materials. Currently, the query asks for attributes even if there are no
+		
 		//attributes specified in the consumer query as long as there are materials (included in materialsAndAttributes). Doesn´t seem to cause any issues of any sort though.
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
@@ -133,7 +131,6 @@ public class BPSparqlQuery {
 		//strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) >= " + minParticipants + " ) \n";
 		
 		strQuery +="?wsProfileId ind:hasMaxParticipants ?byProductMaxParticipants . \n";
-		//TODO: Not sure how the maxParticipants is registered with the supplier wsprofile (not in GUI)
 		//strQuery +="FILTER ( xsd:integer(?byProductMaxParticipants) <= " + maxParticipants + " ) \n";
 		
 		strQuery +="?wsProfileId ind:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
@@ -172,11 +169,9 @@ public class BPSparqlQuery {
 		//filter suppliers
 		if (supplierMaxDistance != 0) {
 
-			//strQuery += "\nOPTIONAL { \n"; TODO: Check if we need OPTIONAL here, this snippet is only included if the consumer adds a supplierMaxDistance other than '0'.
 			strQuery += "\n?supplierId geo:asWKT ?location .\n";
 			strQuery += "BIND((geof:distance(?location, \"POINT(" + lat + " " + lon + ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n";
 			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n";
-			//strQuery += "} \n";
 		}
 
 		if (!isNullOrEmpty(languages)) {
@@ -244,7 +239,7 @@ public class BPSparqlQuery {
 
 
 	/**
-	 * Checks a collection for null or empty values TODO: this resolves earlier "dead code" warnings and can probably be used elsewhere (+ used as generic utility method and put elsewhere)
+	 * Checks a collection for null or empty values 
 	 * @param c
 	 * @return
        May 4, 2020

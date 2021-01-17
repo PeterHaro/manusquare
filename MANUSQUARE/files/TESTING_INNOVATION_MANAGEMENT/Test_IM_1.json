@@ -12,21 +12,21 @@
 		}
 	},
 	"projectInnovationPhases": [
-		"Idea Development Phase"
+		"DesignPhase"
 	],
 	"projectInnovationTypes": [
-		"ProductInnovation"
+		"BusinessModelInnovation"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "3DDrawing"
+			"skill": "Horseshit"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "AutomationProduct"
+			"sector": "Donkeyshit"
 		}
 	],
 	"innovationManagerAttributes": [
