@@ -119,21 +119,91 @@ public class BPSemanticMatching extends SemanticMatching {
 			
 			writeExtendedResultToOutput(results, writer);
 
-			//prints additional data to console for testing/validation
-			if (testing == true) {			
-				printResultsToConsole(query, results);			
-			}
 			
 		} else {
 			
 			List<ExtendedMatchingResult> results = ExtendedMatchingResult.returnEmptyResults();
 			
 			writeExtendedResultToOutput(results, writer);
-			//writeEmptyResultToOutput(writer);
+			
 		}
 
 		
 
+	}
+	
+	public static List<ExtendedMatchingResult> testByProductMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		
+		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
+
+		if (sparql_endpoint_by_env != null) {	
+			SPARQL_ENDPOINT = sparql_endpoint_by_env;	
+		}
+
+		if (System.getenv("ONTOLOGY_KEY") != null) {		
+			AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
+		}
+
+		OWLOntology ontology = null;
+
+		try {			
+			ontology = manager.loadOntology(MANUSQUARE_ONTOLOGY_IRI);			
+		} catch (OWLOntologyCreationException e) {
+			System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
+			e.printStackTrace();
+		}
+
+		//save a local copy of the ontology for constructing an (up-to-date) (guava) graph used for the wu-palmer computation. 
+		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
+
+		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
+		
+		if (ByProductValidator.validQuery(inputJson, ontology)) {
+			
+			BPQuery query = BPQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
+			
+			List<String> byProducts = new ArrayList<>();
+
+			//just to get the number of relevant by-products
+			for (ByProduct p : query.getByProducts()) {
+				byProducts.add(p.getId());
+
+			}
+			
+			int numByProducts = byProducts.size();
+			
+
+			//create graph
+			MutableGraph<String> graph = null;
+
+			graph = Graph.createGraph(ontology);
+
+			//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
+			List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+
+			Map<BPSupplier, Double> supplierScores = new HashMap<BPSupplier, Double>();
+			//for each supplier get the list of best matching processes (and certifications)
+			List<Double> supplierSim = new LinkedList<Double>();
+			
+			TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
+
+			for (BPSupplier supplier : supplierData) {
+				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, numByProducts));	
+				
+			}
+							
+			List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
+			
+			return results;
+
+			
+		} else {
+			
+			return null;
+
+	}
 	}
 
 

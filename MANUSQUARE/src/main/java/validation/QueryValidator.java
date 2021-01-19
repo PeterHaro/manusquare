@@ -1,10 +1,12 @@
 package validation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -252,6 +254,46 @@ public class QueryValidator {
 
 		return validatedCertifications;
 
+	}
+	
+	/**
+	 * Checks if all certifications specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
+	 *
+	 * @param initialCertifications set of certifications specified by the consumer in the RFQ process
+	 * @return set of certifications we´re sure exist as concepts in the ontology
+	 * Nov 13, 2019
+	 * @throws IOException
+	 */
+	public static List<Certification> validateCertifications (List<Certification> initialCertifications, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+		
+		List<Certification> validatedCertifications = new ArrayList<Certification>();
+
+		for (Certification c : initialCertifications) {
+			if (!allOntologyClasses.contains(c.getId())) { //if not, get the concept from the ontology with the highest similarity
+				c.setId(getMostSimilarConcept(c.getId(), QueryConceptType.CERTIFICATION, onto, EmbeddingSingletonDataManager.VAM));
+				validatedCertifications.add(c);
+			} else {
+				validatedCertifications.add(c);
+			}
+		}
+
+		return validatedCertifications;
+
+	}
+	
+	public static Certification validateCertification (Certification cert, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
+		
+		Certification validatedCertification = new Certification();
+		
+		if (cert != null) {
+		if (!allOntologyClasses.contains(cert.getId())) {
+			validatedCertification.setId(getMostSimilarConcept(validatedCertification.getId(), QueryConceptType.CERTIFICATION, onto, EmbeddingSingletonDataManager.VAM));
+		}
+		
+		return validatedCertification;
+		} else {
+			return null;
+		}
 	}
 	
 	

@@ -1,0 +1,16 @@
+
+There are 4 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_8.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_Full.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_4.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_5.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_9.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_2.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_12.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_13.json
+There are no results from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_3.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_10.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_11.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_1.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_16.json
+There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_6.json
+There are 4 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_7.json

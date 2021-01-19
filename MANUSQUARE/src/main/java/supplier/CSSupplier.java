@@ -1,75 +1,63 @@
 package supplier;
 
 import java.util.List;
+import java.util.Objects;
 
-import edm.Certification;
-import edm.Material;
 import edm.Process;
 
 
-public class CSSupplier {
-	
-	String id;
-	String supplierName;
-	String supplierNationality;
-	String supplierCity;
-	List<Certification> certifications;
-	List<Process> processes;
-	//List<Material> materials;
-	
-	public CSSupplier (String id, List<Process> processes, List<Certification> certifications) {
-		this.id = id;
-		this.processes = processes;
-		this.certifications = certifications;
-	}
-	
-	public CSSupplier (String id, List<Process> processes, List<Material> materials, List<Certification> certifications) {
-		this.id = id;
-		this.processes = processes;
-		//this.materials = materials;
-		this.certifications = certifications;
-	}
-	
-	
-	public CSSupplier(String supplierName) {
-		super();
-		this.supplierName = supplierName;
-	}
-	
-	public CSSupplier() {}
+public class CSSupplier extends Supplier {
 	
 
-	public String getId() {
-		return id;
+	private List<Process> processes;
+	
+	
+	private CSSupplier(Builder builder) {
+		super(builder);
+		
+		this.processes = builder.processes;
 	}
+	
+	public static class Builder extends Supplier.Builder<Builder> {
+		private List<Process> processes;
+		
+		public Builder (List<Process> processes) {
+			super();
+			this.processes = processes;
+		}
 
-	public String getSupplierName() {
-		return supplierName;
-	}
+		@Override
+		public CSSupplier build() {
+			return new CSSupplier(this);
+		}
 
-
-	public String getSupplierNationality() {
-		return supplierNationality;
-	}
-
-	public String getSupplierCity() {
-		return supplierCity;
-	}
-
-	public List<Certification> getCertifications() {
-		return certifications;
+		@Override
+		protected Builder self() {
+			return this;
+		}
+		
+		
 	}
 
 	public List<Process> getProcesses() {
 		return processes;
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (o instanceof CSSupplier && ((CSSupplier) o).getSupplierId().equals(this.getSupplierId())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-//	public List<Material> getMaterials() {
-//		return materials;
-//	}
-//
-//	public void setMaterials(List<Material> materials) {
-//		this.materials = materials;
-//	}
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getSupplierId());
+    }
+	
+	
 
 }

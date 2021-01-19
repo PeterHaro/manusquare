@@ -1,0 +1,9 @@
+
+There are 6 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_1.json
+There are 6 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_6.json
+There are 10 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_7.json
+There are 10 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_8.json
+There are 10 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_4.json
+There are 6 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_5.json
+There are 10 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_2.json
+There are 10 suppliers returned from query in ./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_3.json

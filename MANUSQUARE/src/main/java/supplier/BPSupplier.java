@@ -4,59 +4,50 @@ import java.util.List;
 import java.util.Objects;
 
 import edm.ByProduct;
-import edm.Certification;
 
 
-public class BPSupplier {
+public class BPSupplier extends Supplier {
 	
-	private String id;
+
 	private List<ByProduct> byProducts;
-	private List<Certification> certifications;
 	
-	public BPSupplier (String id, List<ByProduct> byProducts, List<Certification> certifications) {
-		this.id = id;
-		this.byProducts = byProducts;
-		this.certifications = certifications;
+	
+	private BPSupplier(Builder builder) {
+		super(builder);
+		
+		this.byProducts = builder.byProducts;
 	}
 	
 	
-	public BPSupplier() {}
-	
+	public static class Builder extends Supplier.Builder<Builder> {
+		private List<ByProduct> byProducts;
+		
+		public Builder(List<ByProduct> byProducts) {
+			super();
+			this.byProducts = byProducts;
+		}
 
-	public String getId() {
-		return id;
+		@Override
+		public BPSupplier build() {
+			return new BPSupplier(this);
+		}
+
+		@Override
+		protected Builder self() {
+			return this;
+		}
 	}
 	
-	public void setId(String id) {
-		this.id = id;
-	}
 
-//	public String getSupplierName() {
-//		return supplierName;
-//	}
-//
-//	public String getSupplierNationality() {
-//		return supplierNationality;
-//	}
-//
-//	public String getSupplierCity() {
-//		return supplierCity;
-//	}
-
-
-
-
-	public List<Certification> getCertifications() {
-		return certifications;
-	}
-
-	public List<ByProduct> getByProducts() {
+	
+    public List<ByProduct> getByProducts() {
 		return byProducts;
 	}
-	
-    @Override
+
+
+	@Override
     public boolean equals(Object o) {
-        if (o instanceof BPSupplier && ((BPSupplier) o).getId().equals(this.id)) {
+        if (o instanceof BPSupplier && ((BPSupplier) o).getSupplierId().equals(this.getSupplierId())) {
             return true;
         } else {
             return false;
@@ -66,7 +57,7 @@ public class BPSupplier {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.getSupplierId());
     }
 
 }

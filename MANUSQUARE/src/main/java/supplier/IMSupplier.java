@@ -1,54 +1,66 @@
 package supplier;
 
 import java.util.List;
+import java.util.Objects;
 
-import edm.Certification;
 
-
-public class IMSupplier {
-	
-	String id;
-	String supplierName;
-	String supplierNationality;
-	String supplierCity;
-	List<Certification> certifications;
-	List<String> languages;
-	List<String> skills;
-	List<String> innovationPhases;
-	List<String> innovationTypes;
-	List<String> sectors;
-
-	
-	public IMSupplier(String id, String supplierName, List<Certification> certifications, List<String> skills,
-			List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {
-		super();
-		this.id = id;
-		this.supplierName = supplierName;
-		this.certifications = certifications;
-		this.skills = skills;
-		this.innovationPhases = innovationPhases;
-		this.innovationTypes = innovationTypes;
-		this.sectors = sectors;
-	}
-
-	
-	public IMSupplier() {}
+public class IMSupplier extends Supplier {
 	
 
-	public String getId() {
-		return id;
-	}
-
-	public String getSupplierName() {
-		return supplierName;
-	}
-
-	public String getSupplierNationality() {
-		return supplierNationality;
+	private List<String> skills;
+	private List<String> innovationPhases;
+	private List<String> innovationTypes;
+	private List<String> sectors;
+	
+	private IMSupplier(Builder builder) {
+		super(builder);
+		
+		this.skills = builder.skills;
+		this.innovationPhases = builder.innovationPhases;
+		this.innovationTypes = builder.innovationTypes;
+		this.sectors = builder.sectors;
 	}
 	
-	public String getSupplierCity() {
-		return supplierCity;
+	public static class Builder extends Supplier.Builder<Builder> {
+		
+		private List<String> skills;
+		private List<String> innovationPhases;
+		private List<String> innovationTypes;
+		private List<String> sectors;
+		
+	
+		public Builder() {}
+		
+		public Builder setSkills (List<String> skills) {
+			this.skills = skills;
+			return this;
+		}
+		
+		public Builder setInnovationPhases (List<String> innovationPhases) {
+			this.innovationPhases = innovationPhases;
+			return this;
+		}
+		
+		public Builder setInnovationTypes (List<String> innovationTypes) {
+			this.innovationTypes = innovationTypes;
+			return this;
+		}
+		
+		public Builder setSectors (List<String> sectors) {
+			this.sectors = sectors;
+			return this;
+		}
+
+		@Override
+		public IMSupplier build() {
+			return new IMSupplier(this);
+		}
+
+		@Override
+		protected Builder self() {
+			return this;
+		}
+
 	}
 
 	public List<String> getSkills() {
@@ -58,6 +70,7 @@ public class IMSupplier {
 	public List<String> getInnovationPhases() {
 		return innovationPhases;
 	}
+
 	public List<String> getInnovationTypes() {
 		return innovationTypes;
 	}
@@ -66,12 +79,21 @@ public class IMSupplier {
 		return sectors;
 	}
 
-	public List<Certification> getCertifications() {
-		return certifications;
-	}
+	@Override
+    public boolean equals(Object o) {
+        if (o instanceof IMSupplier && ((IMSupplier) o).getSupplierId().equals(this.getSupplierId())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	public List<String> getLanguages() {
-		return languages;
-	}
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getSupplierId());
+    }
+
+	
 
 }

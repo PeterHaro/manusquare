@@ -20,16 +20,14 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import query.BPQuery;
 import similarity.SimilarityMethods;
-import sparqlquery.BPSparqlQuery;
 
 public class TestSemanticInfrastructure {
 
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
 	//configuration of the MANUSQUARE Semantic Infrastructure
-	static String WorkshopSpaql = "http://manusquare.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
+	static String WorkshopSpaql = "http://manusquaredev.holonix.biz:8080/semantic-registry/repository/manusquare?infer=false&limit=0&offset=0";
 	static String SPARQL_ENDPOINT = WorkshopSpaql; //"http://116.203.187.118/semantic-registry-test/repository/manusquare?infer=false&limit=0&offset=0";
 	static String Workshop_token = "7777e8ed0d5eb1b63ab1815a56e31ff1";
 	static String AUTHORISATION_TOKEN = Workshop_token; //"c5ec0a8b494a30ed41d4d6fe3107990b";
@@ -42,7 +40,8 @@ public class TestSemanticInfrastructure {
 		//testSupplier();
 		//testProperties();
 		//testByProductSharing();
-		printResults();
+		//printResults();
+		getAllSuppliersHavingByProductsResults();
 
 	}
 
@@ -131,13 +130,13 @@ public class TestSemanticInfrastructure {
 		repository.initialize();
 		((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
 		
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin/Radostin_1.json";
+		String filename = "./files/Radostin/Radostin_1.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 
-		BPQuery query = BPQuery.createByProductQuery(filename, onto);
+		//BPQuery query = BPQuery.createByProductQuery(filename, onto);
 		
 		//String strQuery = SparqlQuery_BP.createSparqlQuery(query, onto);
 
@@ -305,7 +304,6 @@ public class TestSemanticInfrastructure {
 
 		String strQuery = byProductsAndSuppliers();
 
-
 		try (RepositoryConnection conn = repository.getConnection()) {
 			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
 
@@ -336,9 +334,6 @@ public class TestSemanticInfrastructure {
 					System.out.println("By-product Attribute: " + stripIRI(solution.getValue("attributeType").stringValue()));
 					System.out.println("By-product Attribute Value: " + stripIRI(solution.getValue("attributeValueType").stringValue()));
 
-					//					if (solution.getValue("certificationType").stringValue() != null) {
-					//					System.out.println("Certification: " + stripIRI(solution.getValue("certificationType").stringValue()));
-					//					}
 					System.out.println("\n");
 
 				}
@@ -351,6 +346,66 @@ public class TestSemanticInfrastructure {
 		System.out.println("The SPARQL query is: ");
 		System.out.println(strQuery);
 
+	}
+	
+	public static void getAllSuppliersHavingByProductsResults () {
+
+		Repository repository;
+
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Authorization", AUTHORISATION_TOKEN);
+		headers.put("accept", "application/JSON");
+		repository = new SPARQLRepository(SPARQL_ENDPOINT);
+		repository.initialize();
+		((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
+
+		String strQuery = getAllSuppliersHavingByProductsQuery();
+
+		try (RepositoryConnection conn = repository.getConnection()) {
+			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SPARQL, strQuery);
+
+			try (TupleQueryResult result = tupleQuery.evaluate()) {
+				while (result.hasNext()) {
+					BindingSet solution = result.next();  
+
+
+					System.out.println("Supplier: " + stripIRI(solution.getValue("supplier").stringValue()));
+					System.out.println("Supplier Name: " + stripIRI(solution.getValue("supplierName").stringValue()));
+					System.out.println("WsProfile: " + stripIRI(solution.getValue("wsProfile").stringValue()));
+					System.out.println("\n");
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+
+	}
+	
+	
+	public static String getAllSuppliersHavingByProductsQuery () {
+		
+		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"; 
+		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
+		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#>\n"; 
+		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
+		strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+		strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
+
+		strQuery += "SELECT DISTINCT ?wsProfile ?supplier ?supplierName  \n";
+
+		strQuery += "WHERE { \n";
+
+		strQuery += "?wsProfile core:hasSupplier ?supplier . \n";
+		strQuery +="?supplier core:hasName ?supplierName . \n";
+		
+
+		strQuery += "}\n";
+
+		return strQuery;
+		
 	}
 
 	public static String byProductsAndSuppliers () {
@@ -373,9 +428,6 @@ public class TestSemanticInfrastructure {
 		strQuery +="?wsProfile ind:hasStatus ?byProductStatus . \n";
 		strQuery +="?wsProfile ind:hasSupplyType ?byProductSupplyType . \n";
 		strQuery +="?wsProfile ind:hasDeadline ?byProductDeadline . \n";
-		//				strQuery +="?wsProfile ind:hasByproductType ?byProductType . \n";
-
-
 
 		strQuery +="?wsProfile ind:hasMinPartecipants ?byProductMinParticipants . \n";
 		strQuery +="?wsProfile ind:hasMaxPartecipants ?byProductMaxParticipants . \n";

@@ -2,6 +2,7 @@ package similarity.measures;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class BPSimilarityMeasures {
 		int supplierMinNumberOfParticipants = 0;
 		int supplierMaxNumberOfParticipants = 0;
 		Set<String> consumerByProductAppearances = null;
-		Set<String> consumerMaterials = null;
+		Set<String> consumerMaterials = new HashSet<String>();
 		
 		List<ByProduct> supplierByProducts = supplier.getByProducts();
 		List<Certification> supplierCertificationsList = supplier.getCertifications();
@@ -90,6 +91,7 @@ public class BPSimilarityMeasures {
 			
 			consumerByProductAppearances = bpc.getAppearances();
 			consumerMaterials = bpc.getMaterials();
+
 
 			for (ByProduct bps : supplierByProducts) {
 	
@@ -134,9 +136,15 @@ public class BPSimilarityMeasures {
 					/* BY-PRODUCT SIMILARITY BASED ON MATERIAL ATTRIBUTE */	
 					
 					consumerByProductMaterial = bpc.getName();
+					
+					//if there are no consumer materials from attributes, create a new hashset to keep byProductName
+					if (consumerMaterials == null) {
+						consumerMaterials = new HashSet<String>();
+					}
+					
 					consumerMaterials.add(consumerByProductMaterial);					
 					Set<String> supplierMaterials = bps.getMaterials();
-
+					
 					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);				
 
 					/* APPEARANCE SIMILARITY */
@@ -174,7 +182,7 @@ public class BPSimilarityMeasures {
 
 		}
 
-		supplierByProductScoresMapping.put(supplier.getId(), byProductScores);
+		supplierByProductScoresMapping.put(supplier.getSupplierId(), byProductScores);
 		
 		return supplierByProductScoresMapping;
 

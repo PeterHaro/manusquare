@@ -132,6 +132,85 @@ public class CSSemanticMatching extends SemanticMatching {
 		}
 
 	}
+	
+	/**
+	 * Test method
+	 * @param inputJson
+	 * @param numResults
+	 * @param writer
+	 * @param testing
+	 * @param isWeighted
+	 * @param hard_coded_weight
+	 * @return
+	 * @throws OWLOntologyStorageException
+	 * @throws IOException
+	   Jan 18, 2021
+	 */
+	public static Map<String, Double> testSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
+
+		if (sparql_endpoint_by_env != null) {	
+			SPARQL_ENDPOINT = sparql_endpoint_by_env;	
+		}
+
+		if (System.getenv("ONTOLOGY_KEY") != null) {		
+			AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
+		}
+
+		OWLOntology ontology = null;
+
+		try {			
+			ontology = manager.loadOntology(MANUSQUARE_ONTOLOGY_IRI);			
+		} catch (OWLOntologyCreationException e) {
+			System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
+			e.printStackTrace();
+		}
+
+		//save a local copy of the ontology for constructing an (up-to-date) (guava) graph used for the wu-palmer computation. 
+		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
+
+		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
+
+		
+		//check if the consumer request is valid before proceeding with the matching		
+		if (CapacitySharingValidator.validQuery(inputJson, ontology)) {
+			CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); 
+			List<String> processes = new ArrayList<>();
+
+			for (Process p : query.getProcesses()) {
+				if (p.getName() != null) {
+					processes.add(p.getName());
+				}
+
+			}
+
+			MutableGraph<String> graph = Graph.createGraph(ontology);
+
+			//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
+			List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+
+			Map<CSSupplier, Double> supplierScores = new HashMap<CSSupplier, Double>();
+			//for each supplier get the list of best matching processes (and certifications)
+			List<Double> supplierSim = new LinkedList<Double>();
+
+			for (CSSupplier supplier : supplierData) {
+				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, processes.size()));	
+
+			}
+
+			//extract the n suppliers with the highest similarity scores
+			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
+
+			return bestSuppliers;
+			
+		} else {
+			
+			return null;
+		}
+
+	}
 
 
 	/**
@@ -176,7 +255,7 @@ public class CSSemanticMatching extends SemanticMatching {
 		//get all processes for the suppliers included in the ranked list
 		List<String> rankedSuppliers = new ArrayList<String>();
 		for (Entry<CSSupplier, Double> e : firstEntries) {
-			rankedSuppliers.add(e.getKey().getId());
+			rankedSuppliers.add(e.getKey().getSupplierId());
 		}
 
 
@@ -186,10 +265,10 @@ public class CSSemanticMatching extends SemanticMatching {
 
 		for (Entry<CSSupplier, Double> e : firstEntries) {
 			ranking++;
-			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
+			System.out.println("\n" + ranking + "; Supplier ID: " + e.getKey().getSupplierId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
 
 			for (CSSupplier sup : supplierData) {
-				if (e.getKey().getId().equals(sup.getId())) {
+				if (e.getKey().getSupplierId().equals(sup.getSupplierId())) {
 
 					System.out.println("Processes:");
 					for (Process pro : sup.getProcesses()) {
@@ -220,7 +299,7 @@ public class CSSemanticMatching extends SemanticMatching {
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
 		for (Entry<CSSupplier, Double> e : firstEntries) {
-			finalSupplierMap.put(e.getKey().getId(), e.getValue());
+			finalSupplierMap.put(e.getKey().getSupplierId(), e.getValue());
 		}
 
 		return finalSupplierMap;

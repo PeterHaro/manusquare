@@ -18,6 +18,7 @@ public class StringUtilities {
 	static OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
 	
 	
+	
 	/**
 	 * Removes the IRIs in front of processes etc. retrieved from the Semantic Infrastructure
 	 *
@@ -53,6 +54,7 @@ public class StringUtilities {
 		}
 		return false;
 	}
+	
 	
 	/**
 	 * Checks if a target set of strings includes all strings in a source set of strings while ignoring the casing

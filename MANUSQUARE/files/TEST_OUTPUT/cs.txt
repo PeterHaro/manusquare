@@ -1,0 +1,12 @@
+
+There are 0 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test-Full.json
+There are 8 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test1.json
+There are 8 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test6.json
+There are 8 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test7.json
+There are 8 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test8.json
+There are 10 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test4.json
+There are 8 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test5.json
+There are 9 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test9.json
+There are 9 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test10.json
+There are 0 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test2.json
+There are 8 suppliers returned from query in ./files/TESTING_CAPACITY_SHARING/Test3.json

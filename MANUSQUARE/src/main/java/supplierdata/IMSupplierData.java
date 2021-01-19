@@ -134,8 +134,6 @@ public class IMSupplierData {
 
 					if (sr.getSupplierId().equals(id)) {
 											
-						imSupplier = new IMSupplier();
-
 						//add certifications
 						certification = new Certification(sr.getCertification());
 						if (certification.getId() != null && !certifications.contains(certification)) {
@@ -166,9 +164,16 @@ public class IMSupplierData {
 							sectors.add(sector);
 						}
 						
+						imSupplier = new IMSupplier.Builder()
+								.setInnovationPhases(innovationPhases)
+								.setInnovationTypes(innovationTypes)
+								.setSkills(skills)
+								.setSectors(sectors)
+								.setSupplierId(id)
+								.setSupplierName(sr.getSupplierName())
+								.setCertifications(certifications)
+								.build();
 
-						imSupplier = new IMSupplier(id, sr.getSupplierName(), certifications, skills, innovationPhases,
-								innovationTypes, sectors);
 						
 					}
 				}
@@ -176,6 +181,81 @@ public class IMSupplierData {
 
 				suppliersList.add(imSupplier);
 			}
+			
+			return suppliersList;
+			
+		}
+		
+		
+		//USED FOR TESTING AND CAN BE REMOVED
+		
+		public static List<IMSupplier> createTestSupplierData (String strQuery, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
+			
+			Set<IMSparqlResult> sparqlResults = new HashSet<IMSparqlResult>();
+
+			Repository repository;
+
+			if (!testing) {
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("Authorization", AUTHORISATION_TOKEN);
+				headers.put("accept", "application/JSON");
+				
+				repository = new SPARQLRepository(SPARQL_ENDPOINT);
+				repository.initialize();
+				((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
+			
+			} else {
+				//connect to GraphDB
+				repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+				HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+				System.out.println(repo.getRepositoryURL());
+				System.out.println(repo.getPreferredRDFFormat());
+				repository.initialize();
+				System.out.println(repository.isInitialized());
+			}
+
+			//connect to triplestore and retrieve sparql results
+			TupleQuery tupleQuery = SparqlConnection.connect(repository, testing, strQuery);
+
+				try (TupleQueryResult result = tupleQuery.evaluate()) {
+
+					IMSparqlResult sparqlResult = null;
+
+					while (result.hasNext()) {
+
+						BindingSet solution = result.next();
+						
+						String certification = null;
+						if (solution.getValue("certificationType") != null) {
+						certification = StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", ""));
+						}
+						
+						String innovationSector = StringUtilities.stripIRI(solution.getValue("innovationSectorType").stringValue().replaceAll("\\s+", ""));
+						String skill = StringUtilities.stripIRI(solution.getValue("skillType").stringValue().replaceAll("\\s+", ""));
+						String innovationType = StringUtilities.stripIRI(solution.getValue("innovationTypeType").stringValue().replaceAll("\\s+", ""));
+						String innovationPhase = StringUtilities.stripIRI(solution.getValue("innovationPhaseType").stringValue().replaceAll("\\s+", ""));
+						String supplierId = StringUtilities.stripIRI(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
+						String supplierName = StringUtilities.stripIRI(solution.getValue("supplierName").stringValue().replaceAll("\\s+", ""));
+						
+						sparqlResult = new IMSparqlResult.Builder(innovationSector, skill, innovationType, innovationPhase)
+								.setSupplierId(supplierId)
+								.setSupplierName(supplierName)
+								.setCertification(certification)
+								.build();
+
+						sparqlResults.add(sparqlResult);
+
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			
+
+			//close connection to KB repository
+			repository.shutDown();
+			
+			List<IMSupplier> suppliersList = consolidateSuppliers(sparqlResults);
 			
 			return suppliersList;
 			

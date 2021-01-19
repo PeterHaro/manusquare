@@ -12,9 +12,9 @@
     },
     "projectId": "82ae7be0-80a7-4065-b4ee-d3980f813e60",
     "projectType": "By-product",
-    "mode":"buy",
-    "minNumberOfPartecipants":"0",
-    "maxNumberOfPartecipants":"10",
+    "mode":"sell",
+    "minNumberOfParticipants":"0",
+    "maxNumberOfParticipants":"10",
     "purchasingGroupAbilitation": "true",
     "byProductElements": [{
         "byProductId": "e936a69f-015d-4739-9070-809cef03b847",

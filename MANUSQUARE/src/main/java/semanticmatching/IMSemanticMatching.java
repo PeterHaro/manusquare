@@ -108,6 +108,67 @@ public class IMSemanticMatching extends SemanticMatching {
 		}
 
 	}
+	
+	public static Map<String, Double> testSemanticMatching (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
+
+		if (sparql_endpoint_by_env != null) {	
+			SPARQL_ENDPOINT = sparql_endpoint_by_env;	
+		}
+
+		if (System.getenv("ONTOLOGY_KEY") != null) {		
+			AUTHORISATION_TOKEN = System.getenv("ONTOLOGY_KEY");
+		}
+
+		OWLOntology ontology = null;
+
+		try {			
+			ontology = manager.loadOntology(MANUSQUARE_ONTOLOGY_IRI);			
+		} catch (OWLOntologyCreationException e) {
+			System.err.println("It seems the MANUSQUARE ontology is not available from " + MANUSQUARE_ONTOLOGY_IRI.toString() + "\n");
+			e.printStackTrace();
+		}
+
+		//save a local copy of the ontology for constructing an (up-to-date) (guava) graph used for the wu-palmer computation. 
+		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
+
+		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
+		
+		IMQuery imq = IMQuery.createQuery(inputJson, ontology);
+
+		//create graph using Guava´s graph library instead of using Neo4j
+		MutableGraph<String> graph = null;
+
+		graph = Graph.createGraph(ontology);
+
+		List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+
+		Map<IMSupplier, Double> innovationManagerScores = new HashMap<IMSupplier, Double>();
+		//for each supplier get the list of best matching processes (and certifications)
+		List<Double> innovationManagerSim = new LinkedList<Double>();
+
+		for (IMSupplier innovationManager : innovationManagerData) {
+
+			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			//get the highest score for the process chains offered by supplier n
+			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
+			
+		}
+
+		//extract the n innovation managers with the highest similarity scores
+		Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
+		
+		if (bestSuppliers != null) {
+		
+		return bestSuppliers;
+		
+		} else {
+			return null;
+		}
+
+
+	}
 
 	/**
 	 * Prints the query and the ranked list of suppliers along with the similarity score as well as processes offered by each supplier (for validation of the algorithms).
@@ -138,7 +199,7 @@ public class IMSemanticMatching extends SemanticMatching {
 		//get all processes for the suppliers included in the ranked list
 		List<String> rankedSuppliers = new ArrayList<String>();
 		for (Entry<IMSupplier, Double> e : firstEntries) {
-			rankedSuppliers.add(e.getKey().getId());
+			rankedSuppliers.add(e.getKey().getSupplierId());
 		}
 
 
@@ -148,10 +209,10 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		for (Entry<IMSupplier, Double> e : firstEntries) {
 			ranking++;
-			System.out.println("\n" + ranking + "; Innovation Manager ID: " + e.getKey().getId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
+			System.out.println("\n" + ranking + "; Innovation Manager ID: " + e.getKey().getSupplierId() + "; Sim score: " + "(" + MathUtilities.round(e.getValue(), 4) + ")");
 
 			for (IMSupplier innovationManager : innovationManagerData) {
-				if (e.getKey().getId().equals(innovationManager.getId())) {
+				if (e.getKey().getSupplierId().equals(innovationManager.getSupplierId())) {
 
 
 					System.out.println("\nCertifications:");
@@ -180,7 +241,7 @@ public class IMSemanticMatching extends SemanticMatching {
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
 		for (Entry<IMSupplier, Double> e : firstEntries) {
-			finalSupplierMap.put(e.getKey().getId(), e.getValue());
+			finalSupplierMap.put(e.getKey().getSupplierId(), e.getValue());
 		}
 
 		return finalSupplierMap;

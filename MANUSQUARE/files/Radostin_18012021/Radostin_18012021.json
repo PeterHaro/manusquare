@@ -1,0 +1,32 @@
+{
+	"projectName": "Aluminium",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {},
+	"projectId": "70cf18e0-9b0a-4dd5-ae85-821471ef0bce",
+	"projectType": "By-product",
+	"mode": "sell",
+	"minNumberOfParticipants": 0,
+	"maxNumberOfParticipants": 0,
+	"purchasingGroupAbilitation": "",
+	"byProductElements": [{
+		"byProductId": "f6687ffa-750d-4fb0-8b9e-85d517680883",
+		"byProductName": "Aluminium scraps",
+		"supplyType": "Single batch",
+		"quantity": "10",
+		"unitOfMeasureQuantity": "kg",
+		"byProductAttributes": [{
+			"id": "7f3c364f-c12d-429b-b143-d40ae6b149be",
+			"attributeKey": "Appearance",
+			"attributeValue": "scraps",
+			"unitOfMeasure": "N/D"
+		}, {
+			"id": "db00fe48-3959-4bff-8266-aab43713ddfc",
+			"attributeKey": "AttributeMaterial",
+			"attributeValue": "Aluminium",
+			"unitOfMeasure": "N/D"
+		}]
+	}],
+	"supplierAttributes": []
+}

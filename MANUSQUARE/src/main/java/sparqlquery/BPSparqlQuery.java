@@ -106,12 +106,12 @@ public class BPSparqlQuery {
 		//attributes specified in the consumer query as long as there are materials (included in materialsAndAttributes). Doesn´t seem to cause any issues of any sort though.
 		if (isNullOrEmpty(materialsAndAttributes)) {
 
-			strQuery += "\nSELECT DISTINCT ?supplierId ?wsProfileId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?byProductMaxParticipants ?purchasingGroupAbilitation ?certificationType "
+			strQuery += "\nSELECT DISTINCT ?supplierId ?supplierName ?wsProfileId ?byProductName ?byProductSupplyType ?byProductMinParticipants ?byProductMaxParticipants ?purchasingGroupAbilitation ?certificationType "
 					+ "?byProductQuantity ?byProductMinQuantity ?byProductUOM ?materialType \n";
 
 		} else {
 
-			strQuery += "\nSELECT DISTINCT ?supplierId ?wsProfileId ?byProductName ?byProductSupplyType ?byProductMinParticipants "
+			strQuery += "\nSELECT DISTINCT ?supplierId ?supplierName ?wsProfileId ?byProductName ?byProductSupplyType ?byProductMinParticipants "
 					+ "?byProductMaxParticipants ?purchasingGroupAbilitation ?certificationType ?byProductQuantity ?byProductMinQuantity ?byProductUOM ?attributeType (str(?uom) as ?uomStr) ?attributeValue ?materialType \n";
 
 		}
@@ -119,6 +119,7 @@ public class BPSparqlQuery {
 		strQuery += "\nWHERE { \n\n";
 
 		strQuery += "?wsProfileId core:hasSupplier ?supplierId .\n";
+		strQuery += "?supplierId core:hasName ?supplierName .\n";
 		strQuery +="?wsProfileId core:hasName ?byProductName . \n";
 		strQuery +="?wsProfileId ind:hasMode ?byProductMode . \n";
 		

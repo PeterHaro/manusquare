@@ -124,10 +124,6 @@ public class CSSupplierData {
 							setCertification(certification).setAttributeWeightMap(attributeWeightMap).
 							build();
 
-
-
-				
-
 					sparqlResults.add(sparqlResult);
 
 
@@ -256,8 +252,13 @@ public class CSSupplierData {
 
 						}
 
-
-						supplier = new CSSupplier(id, processes, certifications);
+						supplier = new CSSupplier.Builder(processes)
+								.setSupplierId(id)
+								.setSupplierName(sr.getSupplierName())
+								.setCertifications(certifications)
+								.build();
+												
+						
 					}
 				}
 
@@ -270,6 +271,83 @@ public class CSSupplierData {
 		}
 
 
+		//USED FOR TESTING AND CAN BE REMOVED
+
+		public static List<CSSupplier> createTestSupplierData(String strQuery, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
+
+			Set<CSSparqlResult> sparqlResults = new HashSet<CSSparqlResult>();		
+
+
+			Repository repository;
+
+			if (!testing) {
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("Authorization", AUTHORISATION_TOKEN);
+				headers.put("accept", "application/JSON");
+				
+				repository = new SPARQLRepository(SPARQL_ENDPOINT);
+				repository.initialize();
+				((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
+				
+			} else {
+				//connect to GraphDB
+				repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+				HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+				System.out.println(repo.getRepositoryURL());
+				System.out.println(repo.getPreferredRDFFormat());
+				repository.initialize();
+				System.out.println(repository.isInitialized());
+			}
+
+			
+			//connect to triplestore
+			TupleQuery tupleQuery = SparqlConnection.connect(repository, testing, strQuery);
+
+				try (TupleQueryResult result = tupleQuery.evaluate()) {
+
+					CSSparqlResult sparqlResult = null;
+					
+					while (result.hasNext()) {
+
+						BindingSet solution = result.next();
+
+						String certification = null;
+						if (solution.getValue("certificationType") != null) {
+							certification = StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", ""));
+						}
+						
+						String material = null;
+						if (solution.getValue("materialType") != null) {
+							material = StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", ""));
+						}
+						
+						
+						sparqlResult = new CSSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")))
+								.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""))
+								.setSupplierName(solution.getValue("supplierName").stringValue().replaceAll("\\s+", ""))
+								.setMaterial(material)
+								.setCertification(certification)
+								.build();
+
+						sparqlResults.add(sparqlResult);
+
+
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			
+
+			//close connection to KB repository
+			repository.shutDown();
+			
+			List<CSSupplier> suppliersList = consolidateSuppliers(sparqlResults);
+			
+			return suppliersList;
+			
+			
+		}
 	
 
 }

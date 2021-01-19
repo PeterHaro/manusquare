@@ -38,7 +38,7 @@ public class IMSimilarityMeasures {
 		List<String> supplierSkills = innovationManager.getSkills();
 		List<String> supplierSectors = innovationManager.getSectors();
 		String supplierName = innovationManager.getSupplierName();
-		String supplierID = innovationManager.getId();
+		String supplierID = innovationManager.getSupplierId();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 

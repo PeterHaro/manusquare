@@ -29,8 +29,6 @@ public class MaterialSimilarity {
 				
 				for (String supplierMaterial : supplierMaterials) {
 					
-					System.out.println("Computing Material Similarity for consumer material: " + consumerByProductMaterial + " and supplier material: " + supplierMaterial);		
-
 					if (consumerByProductMaterial != null) {
 						parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerByProductMaterial, supplierMaterial, onto, graph);
 						materialSimilarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
