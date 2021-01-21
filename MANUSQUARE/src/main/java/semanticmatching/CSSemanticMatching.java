@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -324,22 +323,6 @@ public class CSSemanticMatching extends SemanticMatching {
 		writer.flush();
 		writer.close();
 	}
-
-	/**
-	 * Prints an empty list of results
-	 *
-	 * @param writer Output writer
-	 * @throws IOException Jan 15, 2021
-	 */
-	private static void writeEmptyResultToOutput(BufferedWriter writer) throws IOException {
-		List<MatchingResult> scores = new LinkedList<>();
-		scores.add(new MatchingResult(0, "Not a valid consumer query", 0));
-		String output = new GsonBuilder().create().toJson(scores);
-		writer.write(output);
-		writer.flush();
-		writer.close();
-	}
-
 
 
 	/**

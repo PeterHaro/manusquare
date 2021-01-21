@@ -39,7 +39,7 @@ public class Test {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "IM";
+		String functionality = "BP";
 
 
 		File folder = null;

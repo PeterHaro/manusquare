@@ -19,6 +19,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import com.google.common.graph.MutableGraph;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edm.ByProduct;
@@ -122,9 +123,7 @@ public class BPSemanticMatching extends SemanticMatching {
 			
 		} else {
 			
-			List<ExtendedMatchingResult> results = ExtendedMatchingResult.returnEmptyResults();
-			
-			writeExtendedResultToOutput(results, writer);
+			writeEmptyResultToOutput(writer);
 			
 		}
 
@@ -257,20 +256,6 @@ public class BPSemanticMatching extends SemanticMatching {
 		writer.flush();
 		writer.close();
 	}
-	
-	/**
-	 * Prints an empty list of results
-	 *
-	 * @param writer Output writer
-	 * @throws IOException Jan 15, 2021
-	 */
-	private static void writeEmptyResultToOutput(BufferedWriter writer) throws IOException {
-		List<MatchingResult> scores = new LinkedList<>();
-		scores.add(new MatchingResult(0, "Not a valid consumer query due to non-valid byProductName and/or material attributes", 0));
-		String output = new GsonBuilder().create().toJson(scores);
-		writer.write(output);
-		writer.flush();
-		writer.close();
-	}
+
 
 }

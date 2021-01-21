@@ -17,7 +17,6 @@ public class ExtendedMatchingResult {
 
 	
 	public ExtendedMatchingResult(int rank, String supplierId, Map<String, Double> matchingScores) {
-		super();
 		this.rank = rank;
 		this.supplierId = supplierId;
 		this.matchingScores = matchingScores;

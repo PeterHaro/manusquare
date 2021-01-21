@@ -47,8 +47,8 @@ public class Main {
 			return;
 
 		case "BP":
-//			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_7.json";
-			jsonIn = "./files/Radostin_18012021/Radostin_18012021.json";
+			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_7.json";
+			//jsonIn = "./files/Radostin_18012021/Radostin_18012021.json";
 			BPSemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 

@@ -121,38 +121,26 @@ public class BPSparqlQuery {
 		strQuery += "?wsProfileId core:hasSupplier ?supplierId .\n";
 		strQuery += "?supplierId core:hasName ?supplierName .\n";
 		strQuery +="?wsProfileId core:hasName ?byProductName . \n";
-		strQuery +="?wsProfileId ind:hasMode ?byProductMode . \n";
+		strQuery +="?wsProfileId core:hasMode ?byProductMode . \n";
 		
-		strQuery +="OPTIONAL { ?wsProfileId ind:hasDeadline ?deadline . \n";
+		strQuery +="OPTIONAL { ?wsProfileId core:hasDeadline ?deadline . \n";
 		strQuery +="FILTER ( ?deadline >= NOW() ) \n";
 		strQuery += "} \n";
 		
-		strQuery +="?wsProfileId ind:hasMinParticipants ?byProductMinParticipants . \n";
-		//TODO: Not sure how the minParticipants is registered with the supplier wsprofile (not in GUI)
-		//strQuery +="FILTER ( xsd:integer(?byProductMinParticipants) >= " + minParticipants + " ) \n";
-		
-		strQuery +="?wsProfileId ind:hasMaxParticipants ?byProductMaxParticipants . \n";
-		//strQuery +="FILTER ( xsd:integer(?byProductMaxParticipants) <= " + maxParticipants + " ) \n";
-		
-		strQuery +="?wsProfileId ind:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
-		
+		strQuery +="?wsProfileId core:hasMinParticipants ?byProductMinParticipants . \n";	
+		strQuery +="?wsProfileId core:hasMaxParticipants ?byProductMaxParticipants . \n";		
+		strQuery +="?wsProfileId core:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductMode, \""+mode+"\", \"i\") ) \n";
-		
-		strQuery +="?wsProfileId ind:hasStatus ?byProductStatus . \n";
+		strQuery +="FILTER ( regex(?byProductMode, \""+mode+"\", \"i\") ) \n";		
+		strQuery +="?wsProfileId core:hasStatus ?byProductStatus . \n";
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductStatus, \"Available\", \"i\") ) \n";
-		
-		strQuery +="?wsProfileId ind:hasSupplyType ?byProductSupplyType . \n";
+		strQuery +="FILTER ( regex(?byProductStatus, \"Available\", \"i\") ) \n";		
+		strQuery +="?wsProfileId core:hasSupplyType ?byProductSupplyType . \n";
 		
 		//the quantity and unit of measurement of quantity must be compared with reqs in consumer query (in java)
-		strQuery +="?wsProfileId core:hasQuantity ?byProductQuantity . \n";
-		
-		strQuery +="?wsProfileId ind:hasMinQuantity ?byProductMinQuantity . \n";
-		
-		strQuery +="?wsProfileId ind:hasUnitOfMeasureQuantity ?byProductUOM . \n";
-		
-		
+		strQuery +="?wsProfileId core:hasQuantity ?byProductQuantity . \n";		
+		strQuery +="?wsProfileId core:hasMinQuantity ?byProductMinQuantity . \n";		
+		strQuery +="?wsProfileId core:hasUnitOfMeasureQuantity ?byProductUOM . \n";
 
 		//get attributes
 		if (!isNullOrEmpty (materialsAndAttributes)) {
