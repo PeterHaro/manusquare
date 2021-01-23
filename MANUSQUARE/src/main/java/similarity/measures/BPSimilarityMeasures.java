@@ -95,28 +95,15 @@ public class BPSimilarityMeasures {
 
 			for (ByProduct bps : supplierByProducts) {
 	
-				//FIXME: Find a better solution to handle situations where quantity is "" from the consumer query
-				if (bps.getQuantity().equals("") || bps.getQuantity().equals(" ")) {
-					
-					supplierQuantity = 0;
-					
-				} else {
-					
+				
 				supplierQuantity = Double.parseDouble(bps.getQuantity());
 				
-				}
+				System.out.println("\nSupplier quantity for " + bps.getId() + " is " + supplierQuantity);
 				
 				supplierMinQuantity = bps.getMinQuantity();
 				
-				//FIXME: Find a better solution to handle situations where minQuantity is not specified by supplier
-				if (supplierMinQuantity == 0) {
-					
-					supplierMinQuantity = supplierQuantity;
-					
-				} else {
-					
-				}
-							
+				System.out.println("Supplier minQuantity for " + bps.getId() + " is " + supplierMinQuantity);
+	
 				supplierUOM = bps.getUom();
 				supplierSupplyType = bps.getSupplyType();
 				
@@ -127,6 +114,8 @@ public class BPSimilarityMeasures {
 				boolean supplyTypeReqSatisfied = ByProductQuantityComparison.supplyTypeReqSatisfied(consumerSupplyType, consumerQuantity, consumerUOM, supplierSupplyType, supplierQuantity, supplierMinQuantity, supplierUOM);
 				boolean validPurchasingGroupAbility = PurchaseGroupAbilitation.validPurchaseGroupAbilitation(consumerPurchasingGroupAbilitation, consumerMinNumberOfParticipants, consumerMaxNumberOfParticipants, supplierPurchasingGroupAbilitation, supplierMinNumberOfParticipants, supplierMaxNumberOfParticipants);
 
+				System.out.println("supplyTypeReqSatisfied is: " + supplyTypeReqSatisfied + " for wsProfileId: " + bps.getId());
+				System.out.println("validPurchasingGroupAbility is: " + validPurchasingGroupAbility + " for wsProfileId: " + bps.getId());
 				
 				Set<String> supplierByProductAppearances = bps.getAppearances();
 				
@@ -146,25 +135,28 @@ public class BPSimilarityMeasures {
 					Set<String> supplierMaterials = bps.getMaterials();
 					
 					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);				
-
+					System.out.println("materialSim: " + materialSim);
+					
 					/* APPEARANCE SIMILARITY */
 					appearanceSim = AppearanceSimilarity.computeAppearanceSimilarity(consumerByProductAppearances, supplierByProductAppearances);					
-					
+					System.out.println("appearanceSim: " + appearanceSim);
 					
 					/* ATTRIBUTE SIMILARITY */		
 
 					Set<Attribute> consumerAttributes = bpc.getAttributes();
 					Map<String, String> attributeWeightMap = bps.getAttributeWeightMap();
 					double avgAttributeSim = AttributeSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
+					System.out.println("avgAttributeSim: " + avgAttributeSim);
 					finalByProductSim = (materialSim * 0.6) + (appearanceSim * 0.2) + (avgAttributeSim * 0.2);
-
+					System.out.println("finalByProductSim (before certificationSim): " + finalByProductSim);
 
 					/* CERTIFICATION SIMILARITY */
 
 					Set<Certification> initialConsumerCertifications = query.getCertifications();
 					certificationSim = CertificationSimilarity.computeCertificationSimilarity(initialConsumerCertifications, supplierCertificationsList, similarityMethod, onto, graph, hard_coded_weight);
 					finalByProductSim = (finalByProductSim * 0.7) + (certificationSim * 0.3);
-
+					System.out.println("finalByProductSim (after certificationSim): " + finalByProductSim);
+					
 
 					//if supply type requirements nor quantity requirements are satisfied for this by-product add zero for this by-product
 				} else {
@@ -181,7 +173,9 @@ public class BPSimilarityMeasures {
 			}		
 
 		}
-
+		
+		System.out.println("Adding: " + supplier.getSupplierId() + ": " + byProductScores + " to supplierByProductScoresMapping");
+		System.out.println("\n");
 		supplierByProductScoresMapping.put(supplier.getSupplierId(), byProductScores);
 		
 		return supplierByProductScoresMapping;

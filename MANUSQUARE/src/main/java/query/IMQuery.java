@@ -37,6 +37,7 @@ public class IMQuery {
 	//optional attributes
 	private Set<Certification> certifications;
 	private Set<String> languages;
+	private Set<String> countries;
 
 	public Set<Certification> getCertifications() {
 		return certifications;
@@ -44,6 +45,10 @@ public class IMQuery {
 
 	public Set<String> getLanguages() {
 		return languages;
+	}
+	
+	public Set<String> getCountries() {
+		return countries;
 	}
 
 	public List<String> getInnovationPhases() {
@@ -61,6 +66,8 @@ public class IMQuery {
 	public List<String> getSectors() {
 		return sectors;
 	}
+	
+	
 
 
 	private IMQuery(IMQueryBuilder builder) {
@@ -70,12 +77,14 @@ public class IMQuery {
 		this.sectors = builder.sectors;
 		this.certifications = builder.certifications;
 		this.languages = builder.languages;
+		this.countries = builder.countries;
 
 	}
 
 	public static class IMQueryBuilder {
 
 		private Set<String> languages;
+		private Set<String> countries;
 		private Set<Certification> certifications;
 		private List<String> innovationPhases;
 		private List<String> innovationTypes;
@@ -97,6 +106,11 @@ public class IMQuery {
 
 		public IMQueryBuilder setLanguage(Set<String> language) {
 			this.languages = language;
+			return this;
+		}	
+		
+		public IMQueryBuilder setCountries(Set<String> countries) {
+			this.countries = countries;
 			return this;
 		}	
 
@@ -121,6 +135,7 @@ public class IMQuery {
 		
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> languages = new HashSet<String>();
+		Set<String> countries = new HashSet<String>();
 		List<String> innovationManagementPhases = new ArrayList<String>();
 		List<String> innovationManagementTypes = new ArrayList<String>();
 		List<String> innovationManagementSkills = new ArrayList<String>();
@@ -185,6 +200,10 @@ public class IMQuery {
 				if (attributes.attributeKey.equalsIgnoreCase("language")) {
 					languages.add(attributes.attributeValue);
 				}
+				
+				if (attributes.attributeKey.equalsIgnoreCase("Country")) {
+					countries.add(attributes.attributeValue);
+				}
 
 			}
 		}
@@ -192,16 +211,18 @@ public class IMQuery {
 			if ((certifications != null || !certifications.isEmpty())
 					&& (languages != null || !languages.isEmpty())) {
 
-				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors).
-						setCertifications(certifications).
-						setLanguage(languages).
-						build();
+				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors)
+						.setCertifications(certifications)
+						.setLanguage(languages)
+						.setCountries(countries)
+						.build();
 
 			} else if (languages == null || languages.isEmpty()) {
 				
-				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors).
-						setCertifications(certifications).
-						build();
+				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors)
+						.setCertifications(certifications)
+						.setCountries(countries)
+						.build();
 			}
 
 		return query;
@@ -210,7 +231,7 @@ public class IMQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_1.json";
+		String filename = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_6.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -222,9 +243,11 @@ public class IMQuery {
 		System.out.println("Innovation Manager Skills: " + query.getSkills());
 		System.out.println("Sectors: " + query.getSectors());
 		System.out.println("Languages: " + query.getLanguages());
+		System.out.println("Countries: " + query.getCountries());
 		for (Certification c : query.getCertifications()) {
 			System.out.println("Certifications: " + c.getId());
 		}
+		
 
 	}
 

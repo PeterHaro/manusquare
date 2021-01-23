@@ -4,13 +4,7 @@
 	"projectDescription": "",
 	"selectionType": "Manual",
 	"supplierMaxDistance": "0",
-	"customer": {
-		"customerInfo": {
-			"location": "",
-			"lat": "",
-			"lon": ""
-		}
-	},
+	"customer": {},
 	"servicePolicy": "true",
 	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
@@ -18,10 +12,17 @@
 	"projectAttributes": [
 	{
 		"unitOfMeasure": "",
-		"attributeId": "",
-		"processName": "CNBMilling",
-		"attributeKey": "",
-		"attributeValue": ""
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "CNCMilling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
+	},
+	{
+		"unitOfMeasure": "mm",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "CNCMilling",
+		"attributeKey": "MaxPartSizeX",
+		"attributeValue": "150"
 	}
 	],
 	"supplierAttributes": []

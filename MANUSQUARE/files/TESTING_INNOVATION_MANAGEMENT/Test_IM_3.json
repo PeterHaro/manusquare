@@ -4,39 +4,34 @@
 	"selectionType": "Manual",
 	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"projectType": "DEMO - Innovation Management",
-	"customer": {
-		"customerInfo": {
-			"location": "Vale de Cambra, Portugal",
-			"lat": "40.8498115",
-			"lon": "-8.3939142"
-		}
-	},
+	"customer": {},
 	"projectInnovationPhases": [
 		"Idea Development Phase",
-		"Industrialization"
+		"Concept Development Phase",
+		"Engineering Phase"
 	],
 	"projectInnovationTypes": [
-		"ProductInnovation",
-		"TechnologyInnovation"
+		"TechnologyInnovation",
+		"MaterialInnovation"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "3DDrawing"
+			"skill": "3DModeling"
 		},
 		{
 			"id": "23536676",
-			"skill": "2DDrawing"
+			"skill": "3DDrawing"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "AutomationProduct"
+			"sector": "Textile Machinery Parts"
 		},
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456433",
-			"sector": "ElectricalMachineryAndApparatus"
+			"sector": "Textile Machinery Manufacturing"
 		}
 	],
 	"innovationManagerAttributes": []

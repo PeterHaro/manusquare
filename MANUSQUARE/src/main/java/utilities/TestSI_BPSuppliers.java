@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -19,8 +17,6 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-
-import com.ontotext.trree.big.collections.Iterator;
 
 import edm.ByProduct;
 import sparqlconnection.SparqlConnection;
@@ -56,23 +52,8 @@ public class TestSI_BPSuppliers {
 		System.out.println("There are " + supplierData.size() + " suppliers.");
 
 		for (BPSupplier bps : supplierData) {
-			System.out.println("\nSupplier ID: " + bps.getSupplierId());
-			System.out.println("Supplier Name: " + bps.getSupplierName());
-
-			for (ByProduct bp : bps.getByProducts()) {
-				System.out.println("\nBy-product ID: " + bp.getId());
-				System.out.println("By-product Materials: " + bp.getMaterials());
-				System.out.println("By-product Appearances: " + bp.getAppearances());
-				System.out.println("By-product Supply Type: " + bp.getSupplyType());
-				System.out.println("By-product Name: " + bp.getName());
-				System.out.println("By-product Quantity: " + bp.getQuantity());
-				System.out.println("By-product Min Quantity: " + bp.getMinQuantity());
-				System.out.println("By-product Purchasing Group Abilitation: " + bp.getPurchasingGroupAbilitation());
-				System.out.println("By-product Min Participants: " + bp.getMinParticipants());
-				System.out.println("By-product Max Participants: " + bp.getMaxParticipants());
-				//System.out.println("By-product Attributes: " + bp.getAttributeWeightMap());
-
-			}
+			
+			System.out.println(bps.toString());
 		}
 	}
 
@@ -197,7 +178,12 @@ public class TestSI_BPSuppliers {
 		strQuery += "?wsProfileId core:hasSupplier ?supplierId . \n";
 		strQuery += "?supplierId core:hasName ?supplierName . \n";
 		strQuery += "OPTIONAL { ?wsProfileId core:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . } \n";
-		strQuery += "OPTIONAL { ?wsProfileId core:hasStatus ?byProductStatus . } \n";
+		strQuery += "OPTIONAL { ?wsProfileId core:hasStatus ?byProductStatus .  } \n";
+		
+//		strQuery +="FILTER (?byProductStatus=\"Available\"^^xsd:string)  \n";	
+		
+//		strQuery +="FILTER regex(?byProductStatus, \"Available\")  \n";	
+		
 //		strQuery += "?wsProfileId ind:hasSupplyType ?byProductSupplyType . \n";
 		strQuery += "?wsProfileId core:hasCreationDate ?creationDate . \n";
 		//strQuery += "?wsProfileId ind:hasMode ?mode . \n";

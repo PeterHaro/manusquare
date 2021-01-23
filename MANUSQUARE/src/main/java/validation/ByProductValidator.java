@@ -27,7 +27,7 @@ public class ByProductValidator extends Validator {
 		Set<String> validByProductNames = new HashSet<String>();
 		Set<String> validMaterials = new HashSet<String>();
 		
-		ByProductSharingRequest bpsr = null;;
+		ByProductSharingRequest bpsr = null;
 
 		if (JSONValidator.isJSONValid(inputJson)) {
 			bpsr = new Gson().fromJson(inputJson, ByProductSharingRequest.class);

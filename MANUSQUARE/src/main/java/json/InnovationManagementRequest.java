@@ -149,7 +149,7 @@ public class InnovationManagementRequest extends ConsumerRequest {
 			this.id = id;
 		}
 
-		public String getSectorl() {
+		public String getSector() {
 			return sector;
 		}
 

@@ -124,17 +124,18 @@ public class BPSparqlQuery {
 		strQuery +="?wsProfileId core:hasMode ?byProductMode . \n";
 		
 		strQuery +="OPTIONAL { ?wsProfileId core:hasDeadline ?deadline . \n";
-		strQuery +="FILTER ( ?deadline >= NOW() ) \n";
+		//strQuery +="FILTER ( ?deadline >= NOW() ) \n";
 		strQuery += "} \n";
 		
 		strQuery +="?wsProfileId core:hasMinParticipants ?byProductMinParticipants . \n";	
 		strQuery +="?wsProfileId core:hasMaxParticipants ?byProductMaxParticipants . \n";		
 		strQuery +="?wsProfileId core:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductMode, \""+mode+"\", \"i\") ) \n";		
+		//strQuery +="FILTER ( regex(?byProductMode, \""+mode+"\", \"i\") ) \n";		
 		strQuery +="?wsProfileId core:hasStatus ?byProductStatus . \n";
 		//fixed filter not from consumer query
-		strQuery +="FILTER ( regex(?byProductStatus, \"Available\", \"i\") ) \n";		
+//		strQuery +="FILTER ( regex(?byProductStatus, \"Available\", \"i\") ) \n";		//FIXME: not sure why, but string matching using either = or regex doesn´t work
+//		strQuery +="FILTER ( ?byProductStatus = \"Available\" ) \n";		
 		strQuery +="?wsProfileId core:hasSupplyType ?byProductSupplyType . \n";
 		
 		//the quantity and unit of measurement of quantity must be compared with reqs in consumer query (in java)

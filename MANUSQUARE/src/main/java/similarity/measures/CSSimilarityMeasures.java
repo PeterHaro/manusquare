@@ -24,10 +24,13 @@ import similarity.methodologies.parameters.SimilarityParameters;
 import similarity.methodologies.parameters.SimilarityParametersFactory;
 import supplier.CSSupplier;
 import utilities.MathUtilities;
+import validation.QueryValidator;
 
 public class CSSimilarityMeasures {
 
 	public static List<Double> computeSemanticSimilarity (CSQuery query, CSSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
+
+		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		List<Process> processList = supplier.getProcesses();
 		List<Certification> certificationList = supplier.getCertifications();
@@ -47,7 +50,6 @@ public class CSSimilarityMeasures {
 		double finalProcessSim = 0;
 
 		List<Double> similarityList = new LinkedList<Double>();
-		int numConsumerProcesses = query.getProcesses().size();
 
 		for (Process pc : query.getProcesses()) {
 			Set<String> consumerMaterials = new HashSet<String>();
@@ -71,6 +73,9 @@ public class CSSimilarityMeasures {
 				//represent processes as graph nodes
 				consumerQueryProcessNode = pc.getName();
 				supplierResourceProcessNode = ps.getName();
+				
+				System.out.println("\nconsumerQueryProcessNode: " + consumerQueryProcessNode);
+				System.out.println("supplierResourceProcessNode: " + supplierResourceProcessNode);
 
 				Set<String> equivalentProcesses = pc.getEquivalentProcesses();
 
@@ -82,20 +87,24 @@ public class CSSimilarityMeasures {
 					processSim = similarityMethodology.ComputeSimilaritySimpleGraph(parameters);
 				}
 
-
+				System.out.println("processSim for supplier " + supplier.getSupplierId() + ": " + processSim);
+				
 				/* MATERIAL SIMILARITY */	
 
 				Set<String> supplierMaterials = ps.getMaterials();
-				//TODO: Implement so that a generic method MaterialSimilarity.computeMaterialSimilarity() can be applied here.
-				//return hard_coded_weight if no supplier materials
-//				if (supplierMaterials == null || supplierMaterials.isEmpty()) {
-//					materialSim = hard_coded_weight;
-//				} else {
-//					Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
-//					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses, hard_coded_weight);
-//				}
+
+				//ensure valid supplier materials
+				Set<String> validatedSupplierMaterials = QueryValidator.validateMaterials(supplierMaterials, onto, allOntologyClasses);
 				
-				materialSim = SemanticSimilarity.computeSemanticSetSimilarity(consumerMaterials, supplierMaterials, similarityMethod, onto, graph, hard_coded_weight);
+				System.out.println("consumerMaterials: " + consumerMaterials);
+				System.out.println("supplierMaterials: " + validatedSupplierMaterials);
+
+				if (consumerMaterials != null && consumerMaterials.isEmpty()) {
+					materialSim = 1.0;
+				} else {
+					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, validatedSupplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);
+				}
+				System.out.println("materialSim for supplier " + supplier.getSupplierId() + ": " + materialSim);
 
 				/* ATTRIBUTE SIMILARITY */		
 
@@ -143,8 +152,11 @@ public class CSSimilarityMeasures {
 
 				}
 
+				System.out.println("avgAttributeSim for supplier " + supplier.getSupplierId() + ": " + avgAttributeSim);
 
 				finalProcessSim = (processSim * 0.7) + (materialSim * 0.15) + (avgAttributeSim * 0.15);
+
+				System.out.println("finalProcessSim for supplier " + supplier.getSupplierId() + ": " + finalProcessSim);
 
 				/* CERTIFICATION SIMILARITY */
 
@@ -164,14 +176,19 @@ public class CSSimilarityMeasures {
 
 				certificationSim = SemanticSimilarity.computeSemanticSetSimilarity (consumerCertifications, supplierCertifications, similarityMethod, onto, graph, hard_coded_weight);
 
+				System.out.println("certificationSim for supplier " + supplier.getSupplierId() + ": " + certificationSim);
 
 				double finalSim = (finalProcessSim * 0.7) + (certificationSim * 0.3);
+
+				System.out.println("finalSim for supplier " + supplier.getSupplierId() + ": " + finalSim);
 
 				processSimList.add(finalSim);
 
 			}		
 
 			similarityList.add(MathUtilities.getHighest(processSimList));
+
+			System.out.println("FINAL AND BEST SIMILARITY for supplier " + supplier.getSupplierId() + ": " + MathUtilities.getHighest(processSimList));
 
 		}	
 

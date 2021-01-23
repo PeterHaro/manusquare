@@ -119,10 +119,10 @@ public class BPSupplierData {
 				// deal with attributes ("Y", "N" or "O") according to attributes required in the consumer query
 				if (solution.getValue("attributeType") != null 
 						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
-						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
-
-					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);								
-
+						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {				
+					
+					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);	
+					
 				} 
 
 
@@ -305,7 +305,6 @@ public class BPSupplierData {
 
 					String material = sr.getMaterial();
 
-					//FIXME: Validate material			
 					String validatedMaterial = null;
 					if (material != null) {
 						validatedMaterial = QueryValidator.validateMaterialName(material, onto, allOntologyClasses);

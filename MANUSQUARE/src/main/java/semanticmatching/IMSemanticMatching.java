@@ -37,6 +37,7 @@ import supplier.IMSupplier;
 import supplierdata.IMSupplierData;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
+import validation.InnovationManagementValidator;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
@@ -48,7 +49,7 @@ public class IMSemanticMatching extends SemanticMatching {
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
 
-	
+
 	public static void performSemanticMatching_IM (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
@@ -74,41 +75,51 @@ public class IMSemanticMatching extends SemanticMatching {
 		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
-		
-		IMQuery imq = IMQuery.createQuery(inputJson, ontology);
 
-		//create graph using Guava´s graph library instead of using Neo4j
-		MutableGraph<String> graph = null;
 
-		graph = Graph.createGraph(ontology);
 
-		List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+		if (InnovationManagementValidator.validQuery(inputJson, ontology)) {
 
-		Map<IMSupplier, Double> innovationManagerScores = new HashMap<IMSupplier, Double>();
-		//for each supplier get the list of best matching processes (and certifications)
-		List<Double> innovationManagerSim = new LinkedList<Double>();
+			IMQuery imq = IMQuery.createQuery(inputJson, ontology);
 
-		for (IMSupplier innovationManager : innovationManagerData) {
+			//create graph using Guava´s graph library instead of using Neo4j
+			MutableGraph<String> graph = null;
 
-			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-			//get the highest score for the process chains offered by supplier n
-			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
-			
-		}
+			graph = Graph.createGraph(ontology);
 
-		//extract the n innovation managers with the highest similarity scores
-		Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
+			List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
-		//prints the n best innovation managers in ranked order to JSON
-		writeResultToOutput(bestSuppliers, writer);		
-		
-		//prints additional data to console for testing/validation
-		if (testing == true) {			
-			printResultsToConsoleIM(innovationManagerData, imq, innovationManagerScores, numResults);			
+			Map<IMSupplier, Double> innovationManagerScores = new HashMap<IMSupplier, Double>();
+			//for each supplier get the list of best matching processes (and certifications)
+			List<Double> innovationManagerSim = new LinkedList<Double>();
+
+			for (IMSupplier innovationManager : innovationManagerData) {
+
+				innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+				//get the highest score for the process chains offered by supplier n
+				innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
+
+			}
+
+			//extract the n innovation managers with the highest similarity scores
+			Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
+
+			//prints the n best innovation managers in ranked order to JSON
+			writeResultToOutput(bestSuppliers, writer);		
+
+			//prints additional data to console for testing/validation
+			if (testing == true) {			
+				printResultsToConsoleIM(innovationManagerData, imq, innovationManagerScores, numResults);			
+			}
+
+		} else {
+
+			writeEmptyResultToOutput(writer);
+
 		}
 
 	}
-	
+
 	public static Map<String, Double> testSemanticMatching (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
@@ -134,7 +145,7 @@ public class IMSemanticMatching extends SemanticMatching {
 		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
-		
+
 		IMQuery imq = IMQuery.createQuery(inputJson, ontology);
 
 		//create graph using Guava´s graph library instead of using Neo4j
@@ -153,16 +164,16 @@ public class IMSemanticMatching extends SemanticMatching {
 			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
 			//get the highest score for the process chains offered by supplier n
 			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
-			
+
 		}
 
 		//extract the n innovation managers with the highest similarity scores
 		Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
-		
+
 		if (bestSuppliers != null) {
-		
-		return bestSuppliers;
-		
+
+			return bestSuppliers;
+
 		} else {
 			return null;
 		}
@@ -187,7 +198,7 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		//below code is used for testing purposes
 		System.out.println("Consumer query:");
-		
+
 		//check if the query includes certifications
 		if (query.getCertifications() != null && !query.getCertifications().isEmpty()) {
 			System.out.println("Certifications: ");
@@ -222,7 +233,7 @@ public class IMSemanticMatching extends SemanticMatching {
 					}
 
 					System.out.println(StringUtilities.printSetItems(certificationNames));
-					
+
 
 				}
 			}
@@ -266,7 +277,7 @@ public class IMSemanticMatching extends SemanticMatching {
 		writer.flush();
 		writer.close();
 	}
-	
+
 	/**
 	 * Sorts a map based on similarity scores (values in the map)
 	 *

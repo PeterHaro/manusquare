@@ -1,16 +1,73 @@
 
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_8.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_Full.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_4.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_5.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_9.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_2.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_12.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_13.json
-There are no results from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_3.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_10.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_11.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_1.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_16.json
-There are 0 suppliers returned from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_6.json
-There are no results from query in files/TESTING_BYPRODUCT_SHARING/Test_BP_7.json
+
+Test_BP_8.json (1)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c: 0.6882905982905982
+
+Test_BP_4.json (5)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:2a231f99-975f-4539-92ff-b371322749ab: 0.9299999999999999
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.72
+wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c: 0.6882905982905982
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+wsprofiles:2246d6a2-6160-4e19-bd4e-f66e60d66bc4: 0.572991452991453
+wsprofiles:f98f8242-c38e-40fb-89ce-c4c223a626b2: 0.572991452991453
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+wsprofiles:6b6c2985-fe5f-4e8c-8dc6-eefcfbdffdd4: 0.5723931623931624
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.5681746031746031
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+wsprofiles:5967d6c5-fe94-49ec-a7c3-1b787447e885: 0.2861111111111111
+
+Test_BP_5.json (5)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:2a231f99-975f-4539-92ff-b371322749ab: 0.8607692307692307
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.6507692307692308
+wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c: 0.619059829059829
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+wsprofiles:2246d6a2-6160-4e19-bd4e-f66e60d66bc4: 0.6422222222222222
+wsprofiles:f98f8242-c38e-40fb-89ce-c4c223a626b2: 0.6422222222222222
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+wsprofiles:6b6c2985-fe5f-4e8c-8dc6-eefcfbdffdd4: 0.5916239316239316
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.5846581196581196
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+wsprofiles:5967d6c5-fe94-49ec-a7c3-1b787447e885: 0.2861111111111111
+
+Test_BP_9.json (2)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.9299999999999999
+wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c: 0.833076923076923
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.72
+
+Test_BP_2.json (2)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.51
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.51
+
+Test_BP_3.json does not pass query validation!
+
+Test_BP_10.json (1)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.9299999999999999
+
+Test_BP_1.json (0)
+
+Test_BP_6.json (0)
+
+Test_BP_7.json (5)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:2a231f99-975f-4539-92ff-b371322749ab: 0.9299999999999999
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.72
+wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c: 0.6882905982905982
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.6538888888888889
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+wsprofiles:2246d6a2-6160-4e19-bd4e-f66e60d66bc4: 0.6422222222222222
+wsprofiles:f98f8242-c38e-40fb-89ce-c4c223a626b2: 0.6422222222222222
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+wsprofiles:6b6c2985-fe5f-4e8c-8dc6-eefcfbdffdd4: 0.6416239316239316
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+wsprofiles:5967d6c5-fe94-49ec-a7c3-1b787447e885: 0.4361111111111111

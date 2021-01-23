@@ -1,43 +1,29 @@
 {
-    "projectName": "Polias XPTO",
-    "projectDescription": "XPTO",
+    "projectName": "Carbon steel match t1",
+    "projectDescription": "",
     "selectionType": "Manual",
     "supplierMaxDistance": "0",
-    "customer": {
-        "customerInfo": {
-            "location": "Vale de Cambra, Portugal",
-            "lat": "40.8498115",
-            "lon": "-8.3939142"
-        }
-    },
-    "projectId": "82ae7be0-80a7-4065-b4ee-d3980f813e60",
+    "customer": {},
+    "projectId": "7a82fc73-0c2c-4a89-a0f5-86d850b077c7",
     "projectType": "By-product",
-    "mode":"buy",
-    "minNumberOfParticipants":"0",
-    "maxNumberOfParticipants":"10",
-    "purchasingGroupAbilitation": "true",
+    "mode": "Sell",
+    "minNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 0,
+    "purchasingGroupAbilitation": "false",
     "byProductElements": [{
-        "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
-        "byProductName": "Carbon Steel",
-        "supplyType": "Single batch",
-        "quantity": "100",
-        "unitOfMeasureQuantity": "Kg",
-        "byProductAttributes": [{
-                "attributeKey": "",
-                "attributeValue": "",
-                "unitOfMeasure": ""
-            }
+        "byProductId": "8beab8d8-88d3-4ba2-8a6d-27b26ebee753",
+        "byProductName": "Steel",
+        "supplyType": "SINGLE_BATCH",
+        "quantity": "200",
+        "unitOfMeasureQuantity": "kg",
+        "byProductAttributes": [
+        {
+            "id": "6fa845d9-dd23-4d62-8da9-31a6569db4ea",
+            "attributeKey": "AttributeMaterial",
+            "attributeValue": "Steel",
+            "unitOfMeasure": ""
+        }
         ]
-
     }],
-    "supplierAttributes": [
-      {
-        "id": "954fa97c-755d-4200-98b4-6756c9452a65",
-        "attributeKey": "Certification",
-        "attributeValue": "ISO9000"
-    }
-	]
+    "supplierAttributes": []
 }
-
-
-

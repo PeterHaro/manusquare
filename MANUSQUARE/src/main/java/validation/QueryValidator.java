@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,8 +13,6 @@ import java.util.TreeMap;
 
 import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
-
-import com.google.common.collect.Iterables;
 
 import data.EmbeddingSingletonDataManager;
 import edm.Attribute;
@@ -29,7 +26,7 @@ import utilities.StringUtilities;
 public class QueryValidator {
 	
 	final static double SEMANTIC_SIMILARITY_TRESHOLD = 0.7;
-	final static double SYNTACTIC_SIMILARITY_TRESHOLD = 0.9;
+	final static double SYNTACTIC_SIMILARITY_TRESHOLD = 0.8;
 		
 	public static String validateByProductName(String byProductName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 		

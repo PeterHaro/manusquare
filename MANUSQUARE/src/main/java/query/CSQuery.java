@@ -182,11 +182,17 @@ public class CSQuery {
 				Set<Attribute> attributeSet = new HashSet<Attribute>();
 				Set<String> materialSet = new HashSet<String>();
 				Set<String> equivalentProcesses = new HashSet<String>();
+				String validatedProcessName = null;
 
 				//get the materials and other attributes if they´re present
 				for (ProjectAttributeKeys projectAttributes : rfq.getProjectAttributes()) {
 					if (!projectAttributes.attributeKey.isEmpty()) {
-						if ((!projectAttributes.attributeKey.equalsIgnoreCase("material") && !projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) {
+						
+						//Need to validate all process names
+						validatedProcessName = QueryValidator.validateProcessName(projectAttributes.processName, onto, allOntologyClasses);
+
+						if ((!projectAttributes.attributeKey.equalsIgnoreCase("AttributeMaterial")) && validatedProcessName.equals(process)) {
+							
 							//check if uom is included in JSON
 							if (projectAttributes.unitOfMeasure != null) {
 								if(StringUtilities.isValidNumber(projectAttributes.attributeValue)) {
@@ -197,7 +203,8 @@ public class CSQuery {
 							} else {
 								attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 							}
-						} else if ((projectAttributes.attributeKey.equalsIgnoreCase("material") || projectAttributes.attributeKey.equalsIgnoreCase("attributeMaterial")) && projectAttributes.processName.equals(process)) { //get the materials
+						} else if ((projectAttributes.attributeKey.equalsIgnoreCase("AttributeMaterial")) && validatedProcessName.equals(process)) { //get the materials
+
 							materialSet.add(projectAttributes.attributeValue);
 						}
 					} else {
@@ -208,7 +215,7 @@ public class CSQuery {
 				//get equivalent process concepts to process (after we have ensured the process is included in the ontology)
 
 				equivalentProcesses = OntologyOperations.getEquivalentClassesAsString(OntologyOperations.getClass(process, onto), onto);
-
+								
 				//if there are no equivalent processes in the ontology we just the process described by the consumer to the set of processes
 				if (equivalentProcesses == null || equivalentProcesses.isEmpty()) {
 
@@ -222,7 +229,6 @@ public class CSQuery {
 				} else {//if there are equivalent processes in the ontology we add those to the set of processes together with the process included by the consumer
 
 					for (String s : equivalentProcesses) {
-
 
 						processes.add(new Process.Builder()
 								.setName(process)
@@ -246,50 +252,54 @@ public class CSQuery {
 			}
 
 
-		//add geographical information to consumer query
-		double supplierMaxDistance = rfq.getSupplierMaxDistance();
-		Map<String, String> customerInformation = rfq.getCustomer().customerInfo;
+			//add geographical information to consumer query
+			double supplierMaxDistance = rfq.getSupplierMaxDistance();
+			Map<String, String> customerInformation = rfq.getCustomer().customerInfo;
 
-		//get certifications if they are specified by the consumer
-		if (rfq.getSupplierAttributes() == null || rfq.getSupplierAttributes().isEmpty()) {
-			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
-			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
+			//get certifications if they are specified by the consumer
+			if (rfq.getSupplierAttributes() == null || rfq.getSupplierAttributes().isEmpty()) {
+				//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
+				//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included and manager further in the process even if 0 or null.
 
-			query = new CSQuery.CSQueryBuilder(processes).
-					setSupplierMaxDistance(supplierMaxDistance).
-					setCustomerLocationInfo(customerInformation).
-					build();
+				query = new CSQuery.CSQueryBuilder(processes).
+						setSupplierMaxDistance(supplierMaxDistance).
+						setCustomerLocationInfo(customerInformation).
+						build();
 
-		} else {
-			for (SupplierAttributeKeys supplierAttributes : rfq.getSupplierAttributes()) {
-				if (supplierAttributes.attributeKey.equalsIgnoreCase("certification")) {
-					certifications.add(new Certification(supplierAttributes.attributeValue));
+			} else {
+
+				for (SupplierAttributeKeys supplierAttributes : rfq.getSupplierAttributes()) {
+					if (supplierAttributes.attributeKey.equalsIgnoreCase("certification")) {
+						certifications.add(new Certification(supplierAttributes.attributeValue));
+					}
+
+					if (supplierAttributes.attributeKey.equalsIgnoreCase("Language")) {
+
+						languages.add(supplierAttributes.attributeValue);
+					}
 				}
 
-				if (supplierAttributes.attributeKey.equalsIgnoreCase("Language")) {
-					languages.add(supplierAttributes.attributeValue);
-				}
-			}
+				if (languages != null) {
 
-			if (languages != null) {
+					query = new CSQuery.CSQueryBuilder(processes).
+							setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+							setSupplierMaxDistance(supplierMaxDistance).
+							setCustomerLocationInfo(customerInformation).
+							setLanguage(languages).
+							build();
 
+				} else {
+				//if not we omit languages, and add only certifications from the supplier attributes
 				query = new CSQuery.CSQueryBuilder(processes).
 						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 						setSupplierMaxDistance(supplierMaxDistance).
 						setCustomerLocationInfo(customerInformation).
-						setLanguage(languages).
 						build();
+				}
 
-			} 
-			//if not we omit languages, and add only certifications from the supplier attributes
-			query = new CSQuery.CSQueryBuilder(processes).
-					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
-					setSupplierMaxDistance(supplierMaxDistance).
-					setCustomerLocationInfo(customerInformation).
-					build();
+			}
+		}
 
-		}
-		}
 
 		return query;
 	}
@@ -314,7 +324,7 @@ public class CSQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_CAPACITY_SHARING/Test-Full.json";
+		String filename = "./files/TESTING_CAPACITY_SHARING/Test_CS_7.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -328,6 +338,9 @@ public class CSQuery {
 
 		for (Process p : query.getProcesses()) {
 			System.out.println("Process: " + p.getName());
+			System.out.println("Materials: " + p.getMaterials());
+			System.out.println("Attributes: " + p.getAttributes());
+			System.out.println("Equivalent processes: " + p.getEquivalentProcesses());
 
 			if (p.getMaterials() != null) {
 				System.out.println("Number of materials: " + p.getMaterials().size());
@@ -335,13 +348,17 @@ public class CSQuery {
 					System.out.println("   Material: " + m);
 				}
 			}
+			if (p.getAttributes() != null) {
 			for (Attribute a : p.getAttributes()) {
 				System.out.println("   Attribute: " + a.getKey());
 			}
+			}
 		}
 
+		if (query.getCertifications() != null && !query.getCertifications().isEmpty()) {
 		for (Certification cert : query.getCertifications()) {
 			System.out.println("Certification: " + cert.getId());
+		}
 		}
 
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());

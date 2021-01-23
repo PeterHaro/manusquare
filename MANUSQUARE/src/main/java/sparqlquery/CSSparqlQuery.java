@@ -27,7 +27,6 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import edm.Attribute;
-import edm.Material;
 import edm.Process;
 import exceptions.NoAttributeException;
 import graph.Graph;
@@ -40,7 +39,7 @@ public class CSSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_CAPACITY_SHARING/Test-Full.json";
+		String filename = "./files/TESTING_CAPACITY_SHARING/Test_CS_6.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -160,7 +159,7 @@ public class CSSparqlQuery {
 			strQuery += "BIND((geof:distance(?location, \"POINT(" + lat + " " + lon + ")\"^^geo:wktLiteral, uom:metre)/1000) as ?distance)\n";
 			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n";
 		}
-
+		
 		if (!isNullOrEmpty(languages)) {
 
 			strQuery += "\nOPTIONAL { \n";

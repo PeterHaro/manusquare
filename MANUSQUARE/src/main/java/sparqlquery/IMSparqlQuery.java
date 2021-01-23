@@ -21,7 +21,7 @@ public class IMSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/InnovationManagementJSON.json";
+		String filename = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_6.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -39,6 +39,7 @@ public class IMSparqlQuery {
 	public static String createSparqlQuery_IM (IMQuery imq, OWLOntology onto) {
 
 		Set<String> languages = imq.getLanguages();
+		Set<String> countries = imq.getCountries();
 		
 
 		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n";
@@ -83,6 +84,18 @@ public class IMSparqlQuery {
 			strQuery += "VALUES ?languageAttributeType {ind:Language} . \n";
 			//strQuery += "} \n";
 			strQuery += "FILTER(?language in (" + StringUtilities.printLanguageSetItems(languages) + ")) \n";
+
+		}
+		
+		if (!isNullOrEmpty(countries)) {
+
+			//strQuery += "\nOPTIONAL { \n";
+			strQuery += "\n?supplier core:hasAttribute ?countryAttribute . \n";
+			strQuery += "?countryAttribute rdf:type ?countryAttributeType . \n";       
+			strQuery += "?countryAttribute core:hasValue ?country . \n";
+			//strQuery += "VALUES ?countryAttributeType {ind:Country} . \n";
+			//strQuery += "} \n";
+			strQuery += "FILTER(?country in (" + StringUtilities.printLanguageSetItems(countries) + ")) \n";
 
 		}
 

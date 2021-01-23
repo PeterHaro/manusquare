@@ -6,32 +6,43 @@ import java.util.Set;
 import utilities.StringUtilities;
 
 public class ByProductQuantityComparison {
-	
+
 	public static boolean supplyTypeReqSatisfied (String consumerSupplyType, double consumerQuantity, String consumerUOM, String supplierSupplyType, double supplierQuantity, double supplierMinQuantity, String supplierUOM) {
 		
+		System.out.println("consumerSupplyType: " + consumerSupplyType);
+		System.out.println("supplierSupplyType: " + supplierSupplyType);
+		System.out.println("consumerQuantity: " + consumerQuantity);
+		System.out.println("supplierQuantity: " + supplierQuantity);
+		System.out.println("supplierMinQuantity: " + supplierMinQuantity);
+		System.out.println("consumerUOM: " + consumerUOM);
+		System.out.println("supplierUOM: " + supplierUOM);
+
 		boolean reqSatisfied = true;
 		boolean consumerQuantityLowerThanSupplierQuantity = lowerThan(consumerQuantity, consumerUOM, supplierQuantity, supplierMinQuantity, supplierUOM);
-		
+		System.out.println("consumerQuantityLowerThanSupplierQuantity: " + consumerQuantityLowerThanSupplierQuantity);
+		System.out.println("lowerThan: " + lowerThan(consumerQuantity, consumerUOM, supplierQuantity, supplierMinQuantity, supplierUOM));
+
 		//FIXME: Assuming that supplyTypeReq is satisfied if the consumer has quantity = "" (parsed into 0.0 which is not relevant in any other case)
 		if (consumerQuantity == 0.0 || consumerSupplyType.equalsIgnoreCase("ANY")) {
 			reqSatisfied = true;
+
 		} else {
-		
-		if (consumerSupplyType.equalsIgnoreCase("continuous")) {
-			if (!supplierSupplyType.equalsIgnoreCase("continuous") || !consumerQuantityLowerThanSupplierQuantity) {
-				reqSatisfied = false;
+
+			if (consumerSupplyType.equalsIgnoreCase("continuous")) {
+				if (!supplierSupplyType.equalsIgnoreCase("continuous") || !consumerQuantityLowerThanSupplierQuantity) {
+					reqSatisfied = false;
+				}
+			} else if (consumerSupplyType.equalsIgnoreCase("SINGLE_BATCH") || consumerSupplyType.equalsIgnoreCase("Single batch")) {
+				if (!consumerQuantityLowerThanSupplierQuantity) {
+					reqSatisfied = false;
+				} 
 			}
-		} else if (consumerSupplyType.equalsIgnoreCase("SINGLE_BATCH") || consumerSupplyType.equalsIgnoreCase("Single batch")) {
-			if (!consumerQuantityLowerThanSupplierQuantity) {
-				reqSatisfied = false;
-		} 
 		}
-		}
-		
+
 		return reqSatisfied;
-		
+
 	}
-	
+
 	public static boolean lowerThan (double consumerQuantity, String consumerUOM, double supplierQuantity, double supplierMinQuantity, String supplierUOM) {
 
 		boolean lowerThan = true;
@@ -55,7 +66,7 @@ public class ByProductQuantityComparison {
 		} else {
 			lowerThan = false;
 		}
-		
+
 		return lowerThan;
 
 	}
@@ -127,7 +138,7 @@ public class ByProductQuantityComparison {
 			}
 
 		} else if (consumerUOM.equalsIgnoreCase("m")) {
-			
+
 			if (supplierUOM.equalsIgnoreCase("m")) {
 				if (consumerQuantity <= supplierQuantity) {
 					cLowerThanS = true;
@@ -154,10 +165,10 @@ public class ByProductQuantityComparison {
 					cLowerThanS = false;
 				}
 			}
-			
-			
+
+
 		}
-		
+
 		else if (consumerUOM.equalsIgnoreCase("mg")) {
 
 			if (supplierUOM.equalsIgnoreCase("mg")) {
@@ -206,7 +217,7 @@ public class ByProductQuantityComparison {
 
 
 		}
-		
+
 		else if (consumerUOM.equalsIgnoreCase("g")) {
 
 			if (supplierUOM.equalsIgnoreCase("g")) {
@@ -307,6 +318,6 @@ public class ByProductQuantityComparison {
 		return cLowerThanS;
 
 	}
-	
+
 
 }

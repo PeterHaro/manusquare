@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -39,7 +40,7 @@ public class Test {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "BP";
+		String functionality = "IM";
 
 
 		File folder = null;
@@ -62,9 +63,15 @@ public class Test {
 				csResult = CSSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
 				
 				if (csResult != null) {
-					bfwriter.append("\nThere are " + csResult.size() + " suppliers returned from query in " + f.getPath());
+					bfwriter.append("\n\n" + f.getName() + "( " + csResult.size() + ")");
+					for (Entry<String, Double> e : csResult.entrySet()) {
+						bfwriter.append("\n" + e.getKey() + ": " + e.getValue());
+					}
+					
+					
 				} else {
-					bfwriter.append("\nThere are no results from query in " + f.getPath());
+					
+					bfwriter.append("\n\n" + f.getName() + " does not pass query validation!");
 				}
 			}
 			
@@ -87,9 +94,13 @@ public class Test {
 				imResult = IMSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
 				
 				if (imResult != null) {
-					bfwriter.append("\nThere are " + imResult.size() + " suppliers returned from query in " + f.getPath());
+					bfwriter.append("\n\n" + f.getName() + " (" + imResult.size() + ")");
+					for (Entry<String, Double> e : imResult.entrySet()) {
+						bfwriter.append("\n" + e.getKey() + ": " + e.getValue());
+					}
 				} else {
-					bfwriter.append("\nThere are no results from query in " + f.getPath());
+					
+					bfwriter.append("\n\n" + f.getName() + " does not pass query validation!");
 				}
 			}
 			
@@ -115,9 +126,16 @@ public class Test {
 				bpResult = BPSemanticMatching.testByProductMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
 				
 				if (bpResult != null) {
-					bfwriter.append("\nThere are " + bpResult.size() + " suppliers returned from query in " + f.getPath());
+					bfwriter.append("\n\n" + f.getName() + " (" + bpResult.size() + ")");
+					for (ExtendedMatchingResult e : bpResult) {
+						bfwriter.append("\n" + e.getSupplierId());
+						for (Entry<String, Double> m : e.getByProductScores().entrySet()) {
+							bfwriter.append("\n" + m.getKey() + ": " + m.getValue());
+						}
+					}
 				} else {
-					bfwriter.append("\nThere are no results from query in " + f.getPath());
+					
+					bfwriter.append("\n\n" + f.getName() + " does not pass query validation!");
 				}
 			}
 			

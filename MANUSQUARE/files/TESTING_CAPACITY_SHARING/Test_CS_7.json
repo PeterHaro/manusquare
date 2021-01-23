@@ -4,22 +4,22 @@
 	"projectDescription": "",
 	"selectionType": "Manual",
 	"supplierMaxDistance": "0",
-	"customer": {
-		"customerInfo": {
-			"location": "",
-			"lat": "",
-			"lon": ""
-		}
-	},
+	"customer": {},
 	"servicePolicy": "true",
 	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"projectType": "DEMO - Capacity Sharing",
-	"projectAttributes": [
-	{
+	"projectAttributes": [{
 		"unitOfMeasure": "",
 		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "CNCMilling",
+		"processName": "Miling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "KarbonSteel"
+	},
+	{
+		"unitOfMeasure": "mm",
+		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
+		"processName": "Miling",
 		"attributeKey": "MaxPartSizeX",
 		"attributeValue": "1.0"
 	}

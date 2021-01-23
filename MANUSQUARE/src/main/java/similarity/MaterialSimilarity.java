@@ -16,20 +16,23 @@ import utilities.MathUtilities;
 
 public class MaterialSimilarity {
 
-	public static double computeMaterialSimilarity(Set<String> consumerByProductMaterials, Set<String> supplierMaterials, OWLOntology onto, ISimilarity similarityMethodology, SimilarityMethods similarityMethod, MutableGraph<String> graph, Set<String> allOntologyClasses) throws IOException {
+	public static double computeMaterialSimilarity(Set<String> consumerMaterials, Set<String> supplierMaterials, OWLOntology onto, ISimilarity similarityMethodology, SimilarityMethods similarityMethod, MutableGraph<String> graph, Set<String> allOntologyClasses) throws IOException {
 		
 		double materialSimilarity = 0;
 		List<Double> materialSimilarityList = new ArrayList<Double>();
 
 		SimilarityParameters parameters = null;
+		
+		System.out.println("\n" + consumerMaterials);
+		System.out.println(supplierMaterials);
 
-		if ((!consumerByProductMaterials.isEmpty() && consumerByProductMaterials != null) && (!supplierMaterials.isEmpty() && supplierMaterials != null)) {
+		if ((consumerMaterials != null && !consumerMaterials.isEmpty()) && (supplierMaterials != null && !supplierMaterials.isEmpty())) {
 
-			for (String consumerByProductMaterial : consumerByProductMaterials) {
+			for (String consumerByProductMaterial : consumerMaterials) {
 				
 				for (String supplierMaterial : supplierMaterials) {
 					
-					if (consumerByProductMaterial != null) {
+					if (consumerByProductMaterial != null && supplierMaterial != null) {
 						parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerByProductMaterial, supplierMaterial, onto, graph);
 						materialSimilarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 					} 
