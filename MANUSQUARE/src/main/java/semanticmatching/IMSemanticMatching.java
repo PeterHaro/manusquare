@@ -114,7 +114,9 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		} else {
 
-			writeEmptyResultToOutput(writer);
+			Map<String, Double> bestSuppliers = new HashMap<String, Double>();
+			writeResultToOutput(bestSuppliers, writer);	
+			//writeEmptyResultToOutput(writer);
 
 		}
 

@@ -59,11 +59,6 @@ public class InnovationManagementValidator extends Validator {
 			sectors.add(sec.getSector());
 		}
 
-		System.err.println("ProjectInnvoationPhases are empty?: "  + imr.getProjectInnovationPhases().contains(""));
-		System.err.println("ProjectInnvoationTypes are empty?: "  + imr.getProjectInnovationTypes().isEmpty());
-		System.err.println("Skills are empty?: "  + skills.isEmpty());		
-		System.err.println("Sectors are empty: "  + sectors.isEmpty());
-
 		//if either phases, types, skills or sectors are empty validation is false
 		if (!imr.getProjectInnovationPhases().isEmpty() || !imr.getProjectInnovationTypes().isEmpty() || !skills.isEmpty() || !sectors.isEmpty()) {
 

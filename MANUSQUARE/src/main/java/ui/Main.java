@@ -37,17 +37,17 @@ public class Main {
 		switch (functionality) {
 
 		case "CS":
-			String jsonIn = "./files/TESTING_CAPACITY_SHARING/Test_CS_5.json";
+			String jsonIn = "./files/TESTING_CAPACITY_SHARING/Test_CS_8.json";
 			CSSemanticMatching.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 
 		case "IM":
-			jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_8.json";
+			jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_7.json";
 			IMSemanticMatching.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 
 		case "BP":
-			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_10.json";
+			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_3.json";
 			BPSemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 

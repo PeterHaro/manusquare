@@ -47,11 +47,30 @@ wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.51
 http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
 wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.51
 
+Radostin_18012021.json (5)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+wsprofiles:acbe8ec7-59aa-4ab8-a285-3c19b9ab0e2b: 0.9299999999999999
+wsprofiles:2246d6a2-6160-4e19-bd4e-f66e60d66bc4: 0.9144444444444444
+wsprofiles:f98f8242-c38e-40fb-89ce-c4c223a626b2: 0.9144444444444444
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+wsprofiles:d12c7d33-335a-4395-a827-7f9a567f3798: 0.8526797385620914
+wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591: 0.6675
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.7899999999999999
+wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c: 0.6906837606837606
+wsprofiles:2a231f99-975f-4539-92ff-b371322749ab: 0.6577777777777778
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+wsprofiles:6b6c2985-fe5f-4e8c-8dc6-eefcfbdffdd4: 0.7038461538461538
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+wsprofiles:5967d6c5-fe94-49ec-a7c3-1b787447e885: 0.45944444444444443
+
 Test_BP_3.json does not pass query validation!
 
 Test_BP_10.json (1)
 http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
 wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 0.9299999999999999
+
+Radostin_13012021.json does not pass query validation!
 
 Test_BP_1.json (0)
 

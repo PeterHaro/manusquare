@@ -59,9 +59,6 @@ public class IMSimilarityMeasures {
 		/* INNOVATION PHASE SIMILARITY */
 		List<String> initialConsumerInnovationPhases = query.getInnovationPhases();
 		
-		System.out.println("initialConsumerInnovationPhases: " + initialConsumerInnovationPhases);
-		System.out.println("initialConsumerInnovationPhases is empty: " + initialConsumerInnovationPhases.isEmpty());
-		
 		if (initialConsumerInnovationPhases == null || initialConsumerInnovationPhases.isEmpty()) {
 
 			innovationPhaseSim = 0;
@@ -209,7 +206,6 @@ public class IMSimilarityMeasures {
 							simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 
 						}
-
 					}
 				}
 

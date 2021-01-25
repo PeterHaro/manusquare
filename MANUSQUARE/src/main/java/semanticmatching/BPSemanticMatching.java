@@ -118,12 +118,18 @@ public class BPSemanticMatching extends SemanticMatching {
 							
 			List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
 			
+			System.err.println("results: " + results);
+			
 			writeExtendedResultToOutput(results, writer);
 
 			
 		} else {
 			
-			writeEmptyResultToOutput(writer);
+			List<ExtendedMatchingResult> results = new ArrayList<ExtendedMatchingResult>();
+			
+			writeExtendedResultToOutput(results, writer);
+			
+			//writeEmptyResultToOutput(writer);
 			
 		}
 
