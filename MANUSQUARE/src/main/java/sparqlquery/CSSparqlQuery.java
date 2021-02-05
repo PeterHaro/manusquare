@@ -39,7 +39,7 @@ public class CSSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_CAPACITY_SHARING/Test_CS_6.json";
+		String filename = "./files/Davide_040221/Audun_CS_040221.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -63,6 +63,7 @@ public class CSSparqlQuery {
 		Set<edm.Process> processes = cq.getProcesses();
 		
 		Set<String> languages = cq.getLanguage();        
+		Set<String> countries = cq.getCountry();
 
 		//get the Least Common Subsumer (LCS) of the process concepts included by the consumer		
 		String lcs = getLCS(processes, onto);
@@ -160,6 +161,8 @@ public class CSSparqlQuery {
 			strQuery += "FILTER (xsd:double(?distance)<" + supplierMaxDistance + " ) \n";
 		}
 		
+
+		
 		if (!isNullOrEmpty(languages)) {
 
 			strQuery += "\nOPTIONAL { \n";
@@ -171,6 +174,20 @@ public class CSSparqlQuery {
 			strQuery += "FILTER(?language in (" + StringUtilities.printLanguageSetItems(languages) + ")) \n";
 
 		}
+		
+		
+		if (!isNullOrEmpty(countries)) {
+
+			//strQuery += "\nOPTIONAL { \n";
+			strQuery += "\n?supplier core:hasAttribute ?countryAttribute . \n";
+			strQuery += "?countryAttribute rdf:type ?countryAttributeType . \n";       
+			strQuery += "?countryAttribute core:hasValue ?country . \n";
+			//strQuery += "VALUES ?countryAttributeType {ind:Country} . \n";
+			//strQuery += "} \n";
+			strQuery += "FILTER(?country in (" + StringUtilities.printLanguageSetItems(countries) + ")) \n";
+
+		}
+		
 
 		strQuery += "}";
 

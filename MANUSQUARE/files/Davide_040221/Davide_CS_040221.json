@@ -1,0 +1,35 @@
+{
+	"nda": "",
+	"projectName": "t1",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		"customerInfo": {
+			"location": "mendrisio",
+			"lat": "45.8709902",
+			"lon": "8.9873461"
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "3488fa54-9ee5-4a75-9626-8c6981a775e2",
+	"id": "3488fa54-9ee5-4a75-9626-8c6981a775e2",
+	"projectType": "Capacity Sharing",
+	"projectAttributes": [{
+		"attributeId": "2ac968e1-a465-4ba2-99f5-a8149c6480e0",
+		"processName": "CNCMilling",
+		"attributeKey": "",
+		"attributeValue": "",
+		"unitOfMeasure": ""
+	}],
+	"supplierAttributes": [{
+		"id": "1b39fb24-bb4d-46ef-a492-6b760ad429ca",
+		"attributeKey": "Country",
+		"attributeValue": "Switzerland"
+	},
+	{
+		"id": "1b39fb24-bb4d-46ef-a492-6b760ad429ca",
+		"attributeKey": "Country",
+		"attributeValue": "Italy"
+	}]
+}

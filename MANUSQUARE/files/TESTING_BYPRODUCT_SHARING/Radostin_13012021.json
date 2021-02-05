@@ -29,11 +29,17 @@
 				{
 					"id": "134a0590-5306-4b94-b3da-856a55dd7543",
 					"attributeKey": "AttributeMaterial",
-					"attributeValue": "Chocolate",
+					"attributeValue": "Steel",
 					"unitOfMeasure": "N/D"
 				}
 			]
 		}
 	],
-	"supplierAttributes": []
+	"supplierAttributes": [
+
+	{
+		"id": "1b39fb24-bb4d-46ef-a492-6b760ad429ca",
+		"attributeKey": "Country",
+		"attributeValue": "Norway"
+	}]
 }

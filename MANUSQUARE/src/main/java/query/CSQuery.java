@@ -19,11 +19,11 @@ import com.google.gson.JsonSyntaxException;
 import edm.Attribute;
 import edm.Certification;
 import edm.Process;
-import exceptions.NoProcessException;
 import json.RequestForQuotation;
 import json.RequestForQuotation.ProjectAttributeKeys;
 import json.RequestForQuotation.SupplierAttributeKeys;
 import ontology.OntologyOperations;
+import query.BPQuery.BPQueryBuilder;
 import utilities.StringUtilities;
 import validation.JSONValidator;
 import validation.QueryValidator;
@@ -39,6 +39,7 @@ public class CSQuery {
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private Set<String> languages;
+	private Set<String> countries;
 
 	private CSQuery(CSQueryBuilder builder) {
 		this.processes = builder.processes;
@@ -46,6 +47,7 @@ public class CSQuery {
 		this.supplierMaxDistance = builder.supplierMaxDistance;
 		this.customerLocationInfo = builder.customerLocationInfo;
 		this.languages = builder.languages;
+		this.countries = builder.countries;
 
 	}
 
@@ -57,6 +59,7 @@ public class CSQuery {
 		private double supplierMaxDistance;
 		private Map<String, String> customerLocationInfo;
 		private Set<String> languages;
+		private Set<String> countries;
 
 		public CSQueryBuilder(Set<Process> processes) {
 			this.processes = processes;
@@ -80,6 +83,11 @@ public class CSQuery {
 
 		public CSQueryBuilder setLanguage(Set<String> language) {
 			this.languages = language;
+			return this;
+		}
+		
+		public CSQueryBuilder setCountries(Set<String> country) {
+			this.countries = country;
 			return this;
 		}
 
@@ -112,6 +120,10 @@ public class CSQuery {
 	public Set<String> getLanguage() {
 		return languages;
 	}
+	
+	public Set<String> getCountry() {
+		return countries;
+	}
 
 	public Set<Attribute> getAttributes() {
 		Set<Attribute> attributes = new HashSet<Attribute>();
@@ -142,6 +154,7 @@ public class CSQuery {
 		Set<String> processNames = new HashSet<String>();
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 		Set<String> languages = new HashSet<String>();
+		Set<String> countries = new HashSet<String>();
 
 		RequestForQuotation rfq;
 
@@ -277,19 +290,45 @@ public class CSQuery {
 
 						languages.add(supplierAttributes.attributeValue);
 					}
+					
+					if (supplierAttributes.getAttributeKey().equalsIgnoreCase("Country")) {
+						countries.add(supplierAttributes.getAttributeValue());
+					}
 				}
 
-				if (languages != null) {
+				//if both languages and countries
+				if (!languages.isEmpty() && !countries.isEmpty()) {
 
-					query = new CSQuery.CSQueryBuilder(processes).
-							setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
-							setSupplierMaxDistance(supplierMaxDistance).
-							setCustomerLocationInfo(customerInformation).
-							setLanguage(languages).
-							build();
+					query = new CSQuery.CSQueryBuilder(processes)
+							.setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses))
+							.setSupplierMaxDistance(supplierMaxDistance)
+							.setCustomerLocationInfo(customerInformation)
+							.setLanguage(languages)
+							.setCountries(countries)
+							.build();
+					
+				// if only languages
+				} else if (!languages.isEmpty() && countries.isEmpty()) {
+					
+					query = new CSQuery.CSQueryBuilder(processes)
+							.setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses))
+							.setSupplierMaxDistance(supplierMaxDistance)
+							.setCustomerLocationInfo(customerInformation)
+							.setLanguage(languages)
+							.build();
+					
+				//if only countries
+				} else if (!countries.isEmpty() && languages.isEmpty()) {
+					
+					query = new CSQuery.CSQueryBuilder(processes)
+							.setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses))
+							.setSupplierMaxDistance(supplierMaxDistance)
+							.setCustomerLocationInfo(customerInformation)
+							.setCountries(countries)
+							.build();
 
 				} else {
-				//if not we omit languages, and add only certifications from the supplier attributes
+				//if not we omit languages and countries, and add only certifications from the supplier attributes
 				query = new CSQuery.CSQueryBuilder(processes).
 						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 						setSupplierMaxDistance(supplierMaxDistance).
@@ -324,7 +363,7 @@ public class CSQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_CAPACITY_SHARING/Test_CS_7.json";
+		String filename = "./files/Davide_040221/Davide_CS_040221.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
@@ -364,6 +403,8 @@ public class CSQuery {
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
 
 		System.out.println("Languages required: " + query.getLanguage());
+		
+		System.out.println("Countries required: " + query.getCountry());
 	}
 
 }

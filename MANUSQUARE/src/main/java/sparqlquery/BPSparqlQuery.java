@@ -26,7 +26,7 @@ public class BPSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021/Radostin_13012021.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -36,6 +36,7 @@ public class BPSparqlQuery {
 		
 		System.out.println("min number of participants: "+ query.getMinNumberOfParticipants());
 		System.out.println("min number of participants: "+ query.getMaxNumberOfParticipants());
+		System.out.println("Countries: " + query.getCountry());
 
 		String test = createSparqlQuery(query, onto);
 
@@ -49,6 +50,8 @@ public class BPSparqlQuery {
 		String mode = bpq.getMode();
 				
 		Set<String> languages = bpq.getLanguage();        
+		
+		Set<String> countries = bpq.getCountry();
 
 		Set<ByProduct> byProductSet = bpq.getByProducts();
 		
@@ -173,6 +176,18 @@ public class BPSparqlQuery {
 			strQuery += "VALUES ?languageAttributeType {ind:Language} . \n";
 			strQuery += "} \n";
 			strQuery += "FILTER(?language in (" + StringUtilities.printLanguageSetItems(languages) + ")) \n";
+
+		}
+		
+		if (!isNullOrEmpty(countries)) {
+
+			//strQuery += "\nOPTIONAL { \n";
+			strQuery += "\n?supplierId core:hasAttribute ?countryAttribute . \n";
+			strQuery += "?countryAttribute rdf:type ?countryAttributeType . \n";       
+			strQuery += "?countryAttribute core:hasValue ?country . \n";
+			//strQuery += "VALUES ?countryAttributeType {ind:Country} . \n";
+			//strQuery += "} \n";
+			strQuery += "FILTER(?country in (" + StringUtilities.printLanguageSetItems(countries) + ")) \n";
 
 		}
 

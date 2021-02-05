@@ -42,7 +42,7 @@ public class BPQuery {
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private Set<String> language;
-	private Set<String> country;
+	private Set<String> countries;
 	
 	private BPQuery(BPQueryBuilder builder) {
 		this.byProducts = builder.byProducts;
@@ -54,7 +54,7 @@ public class BPQuery {
 		this.supplierMaxDistance = builder.supplierMaxDistance;
 		this.customerLocationInfo = builder.customerLocationInfo;
 		this.language = builder.language;
-		this.country = builder.country;
+		this.countries = builder.countries;
 	
 	}
 	
@@ -70,7 +70,7 @@ public class BPQuery {
 		private double supplierMaxDistance;
 		private Map<String, String> customerLocationInfo;
 		private Set<String> language;
-		private Set<String> country;
+		private Set<String> countries;
 		
 		public BPQueryBuilder(Set<ByProduct> byProducts, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation) {
 			this.byProducts = byProducts;
@@ -100,8 +100,8 @@ public class BPQuery {
 			return this;
 		}
 		
-		public BPQueryBuilder setCountry(Set<String> country) {
-			this.country = country;
+		public BPQueryBuilder setCountries(Set<String> country) {
+			this.countries = country;
 			return this;
 		}
 		
@@ -153,7 +153,7 @@ public class BPQuery {
 	}
 	
 	public Set<String> getCountry() {
-		return country;
+		return countries;
 	}
 	
 	public Set<Attribute> getAttributes() {
@@ -240,42 +240,7 @@ public class BPQuery {
 					.setAppearance(appearances)
 					.setAttributes(attributeSet)
 					.build());
-			
-			
-			
-//			for (Attribute bp : attributeSet) {
-//				
-//				if (bp.getKey() == null || bp.getKey().equals("")) {
-//					byProducts.add(
-//							
-//							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
-//							.setId(element.getByProductId())
-//							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
-//							.build());
-//
-//				} else {
-//					
-//					if (bp.getKey().equals("AttributeMaterial")) {
-//						materials.add(bp.getValue());
-//					}
-//					
-//					if (bp.getKey().equals("Appearance")) {
-//						appearances.add(bp.getValue());
-//					}
-//					
-//					byProducts.add(
-//							
-//							new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
-//							.setId(element.getByProductId())
-//							.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
-//							.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
-//							.setAppearance(appearances)
-//							.setAttributes(attributeSet)
-//							.build());
-//							
-//
-//				}
-//			}
+
 			
 		}
 
@@ -320,7 +285,7 @@ public class BPQuery {
 				query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
 						setCustomerLocationInfo(customerInformation).
 						setSupplierMaxDistance(supplierMaxDistance).
-						setCountry(countries).
+						setCountries(countries).
 						setLanguage(languages).
 						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 						build();
@@ -341,7 +306,7 @@ public class BPQuery {
 				query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
 						setCustomerLocationInfo(customerInformation).
 						setSupplierMaxDistance(supplierMaxDistance).
-						setCountry(countries).
+						setCountries(countries).
 						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
 						build();
 			}
