@@ -342,7 +342,8 @@ public class BPQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021/Radostin_13012021.json";
+		//String filename = "./files/Davide_040221/Davide_BP_040221.json";
+		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));

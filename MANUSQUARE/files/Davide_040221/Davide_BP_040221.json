@@ -1,0 +1,32 @@
+{
+	"projectName": "chocolate proj",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {},
+	"projectId": "70cf18e0-9b0a-4dd5-ae85-821471ef0bce",
+	"projectType": "By-product",
+	"mode": "sell",
+	"minNumberOfParticipants": 0,
+	"maxNumberOfParticipants": 0,
+	"purchasingGroupAbilitation": "",
+	"byProductElements": [{
+		"byProductId": "14092bd2-d224-405a-942b-444af37bd377",
+		"byProductName": "Chocolate bars",
+		"supplyType": "Single batch",
+		"quantity": "5",
+		"unitOfMeasureQuantity": "kg",
+		"byProductAttributes": [{
+			"id": "7f3c364f-c12d-429b-b143-d40ae6b149be",
+			"attributeKey": "Appearance",
+			"attributeValue": "bars",
+			"unitOfMeasure": "N/D"
+		}, {
+			"id": "39092c40-76db-4732-b132-ff5fc23b6b3b",
+			"attributeKey": "AttributeMaterial",
+			"attributeValue": "Chocolate",
+			"unitOfMeasure": "N/D"
+		}]
+	}],
+	"supplierAttributes": []
+}

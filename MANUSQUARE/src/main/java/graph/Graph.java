@@ -19,6 +19,41 @@ import java.util.Map.Entry;
 public class Graph {
 
 	public Graph() {}
+	
+	public static MutableGraph<String> createGraph (OWLOntology onto, Set<String> concepts) {
+
+		//get classes and their superclasses
+		Map<String, String> superClassMap = OntologyOperations.getClassesAndSuperClassesUsingPellet(onto);
+
+		//get individual classes from the superClassMap
+		Set<String> classes = superClassMap.keySet();
+		
+		classes.addAll(concepts);
+
+		//create the graph
+		MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(false).build();
+
+		//create a node for thing
+		String thingNode = "Thing";
+
+		for (String s : classes) {
+			String superClass = null;
+
+			for (Entry<String, String> entry : superClassMap.entrySet()) {
+				if (s.equals(entry.getKey())) {
+					superClass = superClassMap.get(entry.getKey());
+					//create an is-a relationship from the class to its superclass. If a class does not have any defined superclasses, create an is-relationship to thing
+					if (superClass != null) {
+						graph.putEdge(s.toLowerCase(), superClass.toLowerCase());
+					} else {
+						graph.putEdge(s.toLowerCase(), thingNode.toLowerCase());
+					}
+				}
+			}
+		}
+
+		return graph;
+	}
 
 	public static MutableGraph<String> createGraph (OWLOntology onto) {
 

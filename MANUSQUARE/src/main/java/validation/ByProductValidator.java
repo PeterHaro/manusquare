@@ -24,6 +24,7 @@ public class ByProductValidator extends Validator {
 		
 		boolean valid = true;
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(ontology);
+		
 		Set<String> validByProductNames = new HashSet<String>();
 		Set<String> validMaterials = new HashSet<String>();
 		

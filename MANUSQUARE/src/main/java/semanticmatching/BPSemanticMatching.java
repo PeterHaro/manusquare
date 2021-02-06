@@ -19,7 +19,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import com.google.common.graph.MutableGraph;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edm.ByProduct;
@@ -28,7 +27,6 @@ import graph.Graph;
 import query.BPQuery;
 import similarity.measures.BPSimilarityMeasures;
 import similarity.results.ExtendedMatchingResult;
-import similarity.results.MatchingResult;
 import supplier.BPSupplier;
 import supplierdata.BPSupplierData;
 import utilities.MathUtilities;
@@ -80,6 +78,8 @@ public class BPSemanticMatching extends SemanticMatching {
 		File localOntoFile = new File("files/ONTOLOGIES/updatedOntology.owl");
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
+		
+		System.err.println("BPSemanticMatching: Valid query: " + ByProductValidator.validQuery(inputJson, ontology));
 		
 		if (ByProductValidator.validQuery(inputJson, ontology)) {
 			

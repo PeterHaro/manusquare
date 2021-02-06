@@ -24,12 +24,12 @@ import similarity.techniques.Cosine;
 import utilities.StringUtilities;
 
 public class QueryValidator {
-	
+
 	final static double SEMANTIC_SIMILARITY_TRESHOLD = 0.7;
 	final static double SYNTACTIC_SIMILARITY_TRESHOLD = 0.8;
-		
+
 	public static String validateByProductName(String byProductName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
-		
+
 		String validatedByProductName = null;
 
 		if (!allOntologyClasses.contains(byProductName)) {
@@ -37,10 +37,10 @@ public class QueryValidator {
 		} else {
 			validatedByProductName = byProductName;
 		}
-						
+
 		return validatedByProductName;
 	}
-	
+
 	/**
 	 * Ensures that an innovation phase included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param innovationPhase innovation phase included by the consumer
@@ -59,10 +59,10 @@ public class QueryValidator {
 		} else {
 			validatedInnovationPhase = innovationPhase;
 		}
-				
+
 		return validatedInnovationPhase;
 	}
-	
+
 	/**
 	 * Ensures that an innovation type included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param innovationType innovation type included by the consumer
@@ -81,10 +81,10 @@ public class QueryValidator {
 		} else {
 			validatedInnovationType = innovationType;
 		}
-				
+
 		return validatedInnovationType;
 	}
-	
+
 	/**
 	 * Ensures that a skill included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param skill skill included by the consumer
@@ -103,10 +103,10 @@ public class QueryValidator {
 		} else {
 			validatedSkill = skill;
 		}
-				
+
 		return validatedSkill;
 	}
-	
+
 	/**
 	 * Ensures that a sector included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param sector sector included by the consumer
@@ -125,10 +125,10 @@ public class QueryValidator {
 		} else {
 			validatedSector = sector;
 		}
-				
+
 		return validatedSector;
 	}
-	
+
 	/**
 	 * Ensures that a process included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param processName process included by the consumer
@@ -147,10 +147,10 @@ public class QueryValidator {
 		} else {
 			validatedProcessName = processName;
 		}
-				
+
 		return validatedProcessName;
 	}
-	
+
 	/**
 	 * Ensures that a material included by the consumer is in fact in the ontology (if not, the closest matching concept from the ontology is returned)
 	 * @param materialName included by the consumer
@@ -161,7 +161,7 @@ public class QueryValidator {
 	   Dec 3, 2020
 	 */
 	public static String validateMaterialName(String materialName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
-		
+
 		String validatedMaterialName = null;
 
 		if (!allOntologyClasses.contains(materialName)) {
@@ -169,12 +169,12 @@ public class QueryValidator {
 		} else {
 			validatedMaterialName = materialName;
 		}
-				
+
 		return validatedMaterialName;
-		
+
 	}
 
-	
+
 	/**
 	 * Checks if all materials specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
 	 *
@@ -252,7 +252,7 @@ public class QueryValidator {
 		return validatedCertifications;
 
 	}
-	
+
 	/**
 	 * Checks if all certifications specified by the consumer actually exist as concepts in the ontology. If they´re not, find the closest matching concept.
 	 *
@@ -262,7 +262,7 @@ public class QueryValidator {
 	 * @throws IOException
 	 */
 	public static List<Certification> validateCertifications (List<Certification> initialCertifications, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
-		
+
 		List<Certification> validatedCertifications = new ArrayList<Certification>();
 
 		for (Certification c : initialCertifications) {
@@ -277,24 +277,24 @@ public class QueryValidator {
 		return validatedCertifications;
 
 	}
-	
+
 	public static Certification validateCertification (Certification cert, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
-		
+
 		Certification validatedCertification = new Certification();
-		
+
 		if (cert != null) {
-		if (!allOntologyClasses.contains(cert.getId())) {
-			validatedCertification.setId(getMostSimilarConcept(validatedCertification.getId(), QueryConceptType.CERTIFICATION, onto, EmbeddingSingletonDataManager.VAM));
-		}
-		
-		return validatedCertification;
+			if (!allOntologyClasses.contains(cert.getId())) {
+				validatedCertification.setId(getMostSimilarConcept(validatedCertification.getId(), QueryConceptType.CERTIFICATION, onto, EmbeddingSingletonDataManager.VAM));
+			}
+
+			return validatedCertification;
 		} else {
 			return null;
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Retrieves the most similar concept from a concept included by the consumer in the GUI. 
 	 * @param consumerInput				the input (i.e. requested process, material, attribute type or certification) from the consumer
@@ -306,69 +306,69 @@ public class QueryValidator {
 	   Mar 27, 2020
 	 */
 	private static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
-		
+
 		String mostSimilarConcept = null;
 		String mostSyntacticallySimilarConcept = null;
 		String mostSemanticallySimilarConcept = null;
-		
+
 		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
-			
+
 		Set<String> classes = getRelevantOntologyClasses (conceptType, onto);
 
 		//if the consumerInput equals an ontology concept we return this without using syntactic/semantic matching
 		if (containsIgnoreCase(classes, consumerInput)) {
-			
+
 			mostSimilarConcept = findConceptName(consumerInput, classes);
 
-		//else check the sim score of the most syntactically similar concept, if this is above SYNTACTIC_SIMILARITY_THRESHOLD, use this as the most similar concept
+			//else check the sim score of the most syntactically similar concept, if this is above SYNTACTIC_SIMILARITY_THRESHOLD, use this as the most similar concept
 		} else {
-						
+
 			String preProcessedConsumerInput = preProcess(consumerInput);			
 			mostSyntacticallySimilarConcept = getMostSimilarConceptSyntactically(preProcessedConsumerInput, classes, SYNTACTIC_SIMILARITY_TRESHOLD);
-					
+
 			if (mostSyntacticallySimilarConcept != null) {
-				
+
 				mostSimilarConcept = mostSyntacticallySimilarConcept;
-				
-			//if not, we do the semantic matching process	
+
+				//if not, we do the semantic matching process	
 			} else {
 
-			//create a vector map from the embeddings file for ontology concepts
-			Map<String, double[]> vectorOntologyMap = embeddingManager.createOntologyVectorMap(classes, vectorAggregationMethod);
-			double[] consumerInputVectors = embeddingManager.getLabelVector(preProcessedConsumerInput, vectorAggregationMethod);
-						
-			//as long as there are relevant embedding vectors for the consumer input, we do to the semantic matching
-			if (consumerInputVectors != null) {
-								
-				//check if vectormap/embeddings file contains consumerProcess as-is
-				if (vectorOntologyMap.containsKey(preProcessedConsumerInput.toLowerCase())) {
-										
-					mostSemanticallySimilarConcept = preProcessedConsumerInput;
-					
-				} else { //if not, retrieve the most similar concept based on vector similarity										
-					
-					mostSemanticallySimilarConcept = getMostSemanticallySimilarConcept(consumerInputVectors, vectorOntologyMap, classes, SEMANTIC_SIMILARITY_TRESHOLD);							
-					
+				//create a vector map from the embeddings file for ontology concepts
+				Map<String, double[]> vectorOntologyMap = embeddingManager.createOntologyVectorMap(classes, vectorAggregationMethod);
+				double[] consumerInputVectors = embeddingManager.getLabelVector(preProcessedConsumerInput, vectorAggregationMethod);
+
+				//as long as there are relevant embedding vectors for the consumer input, we do to the semantic matching
+				if (consumerInputVectors != null) {
+
+					//check if vectormap/embeddings file contains consumerProcess as-is
+					if (vectorOntologyMap.containsKey(preProcessedConsumerInput.toLowerCase())) {
+
+						mostSemanticallySimilarConcept = preProcessedConsumerInput;
+
+					} else { //if not, retrieve the most similar concept based on vector similarity										
+
+						mostSemanticallySimilarConcept = getMostSemanticallySimilarConcept(consumerInputVectors, vectorOntologyMap, classes, SEMANTIC_SIMILARITY_TRESHOLD);							
+
+					}
+
+					if (mostSemanticallySimilarConcept != null) {
+
+						mostSimilarConcept = mostSemanticallySimilarConcept;				
+
+					} else {
+
+						mostSimilarConcept = null;
+					}
 				}
-				
-				if (mostSemanticallySimilarConcept != null) {
-				
-					mostSimilarConcept = mostSemanticallySimilarConcept;				
-				
-				} else {
-					
-					mostSimilarConcept = null;
-				}
-			}
 			}
 
 		}
-				
+
 		return mostSimilarConcept;
 	}
-	
 
-	
+
+
 	/**
 	 * Uses cosine similarity to find the most similar word in the embeddings file by its vector representation
 	 *
@@ -387,10 +387,10 @@ public class QueryValidator {
 			if (localSim > sim && localSim >= SEMANTIC_SIMILARITY_TRESHOLD) {
 				mostSimilar = e.getKey();
 				sim = localSim;
-								
+
 			}
 		}
-		
+
 		//return with proper casing
 		String mostSimilarityWithProperCasing = null;
 		if (mostSimilar != null) {
@@ -401,7 +401,7 @@ public class QueryValidator {
 		}
 
 	}
-	
+
 	/**
 	 * Returns an ontology concept name (with proper casing) from a word in the embeddings file
 	 *
@@ -411,10 +411,10 @@ public class QueryValidator {
 	 * Mar 3, 2020
 	 */
 	private static String findConceptName(String concept, Set<String> allClasses) {
-		
+
 		String conceptName = null;
 		for (String s : allClasses) {
-				if (concept.equalsIgnoreCase(s)) {
+			if (concept.equalsIgnoreCase(s)) {
 				conceptName = s;
 				break;//break process if a concept name is found
 			} else {
@@ -443,7 +443,7 @@ public class QueryValidator {
 		}
 
 		mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-		
+
 		//only return if similarity is higher than threshold
 		if (similarityMap.get(mostSimilarConcept) >= SYNTACTIC_SIMILARITY_TRESHOLD) {
 			return mostSimilarConcept;
@@ -452,7 +452,7 @@ public class QueryValidator {
 		}
 
 	}
-	
+
 	/**
 	 * Returns the concept (name) with the highest (similarity) score from a map of concepts
 	 *
@@ -466,7 +466,7 @@ public class QueryValidator {
 		String conceptWithHighestSim = entry.getKey();
 		return conceptWithHighestSim;
 	}
-	
+
 
 	/**
 	 * Sorts a map based on similarity scores (values in the map)
@@ -497,13 +497,13 @@ public class QueryValidator {
 	   Mar 27, 2020
 	 */
 	private static String preProcess(String input) {
-				
+
 		input = new String(StringUtilities.capitaliseWord(input).replaceAll("\\s+", ""));
-		
+
 
 		return input;
 	}
-	
+
 	/**
 	 * Checks if a set of strings includes the given string while ignoring the casing
 	 * @param set set of strings
@@ -519,9 +519,9 @@ public class QueryValidator {
 		}
 		return false;
 	}
-	
-private static Set<String> getRelevantOntologyClasses (QueryConceptType conceptType, OWLOntology onto) {
-		
+
+	private static Set<String> getRelevantOntologyClasses (QueryConceptType conceptType, OWLOntology onto) {
+
 		Set<String> classes = new HashSet<String>();
 		//we only consider the classes below the stated ontology classes (e.g. MfgProcess for processes)
 		if (conceptType == QueryConceptType.PROCESS) {
@@ -545,9 +545,9 @@ private static Set<String> getRelevantOntologyClasses (QueryConceptType conceptT
 		} else if (conceptType == QueryConceptType.BYPRODUCT) {
 			classes = OntologyOperations.getAllEntitySubclassesFragments(onto, OntologyOperations.getClass("MaterialType", onto));
 		} 
-		
+
 		return classes;
 	}
-	
+
 
 }

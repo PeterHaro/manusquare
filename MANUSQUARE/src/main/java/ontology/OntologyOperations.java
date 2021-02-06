@@ -1,6 +1,9 @@
 package ontology;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,57 +55,29 @@ public class OntologyOperations {
 
 	}
 
-	public static void main(String[] args) throws OWLOntologyCreationException {
+	public static void main(String[] args) throws OWLOntologyCreationException, IOException {
 
 		File ontoFile = new File ("./files/ONTOLOGIES/updatedOntology.owl");
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
 		
-		Map<String, String> classLabelMap = getClassLabels(onto);
+//		Map<String, String> classLabelMap = getClassLabels(onto);
+//		
+//		System.out.println("The classLabelMap contains " + classLabelMap.size() + " entries.");
+//		
+//		for (Entry<String, String> e : classLabelMap.entrySet()) {
+//			System.out.println("Class: " + e.getKey() + ": " + e.getValue());
+//		}
+
 		
-		System.out.println("The classLabelMap contains " + classLabelMap.size() + " entries.");
+		Map<String, String> classesAndSuperClasses = getClassesAndSuperClassesUsingPellet (onto);
 		
-		for (Entry<String, String> e : classLabelMap.entrySet()) {
-			System.out.println("Class: " + e.getKey() + ": " + e.getValue());
+		BufferedWriter bfwriter = new BufferedWriter(new FileWriter("./files/TEST_OUTPUT/ontologyclasses.txt"));
+		
+		for (Entry<String, String> e : classesAndSuperClasses.entrySet()) {
+			bfwriter.append("\nClass: " + e.getKey() + ", superclass: " + e.getValue());
 		}
 
-//		OWLClass cl = getClass("Allocation", onto);
-//
-//		System.out.println("The class is " + cl.getIRI());
-//
-//		String label = getLabelFromClass (onto, cl);
-//
-//		System.out.println("The label is " + label);
-//
-//		Set<String> allClasses = new HashSet<String>();
-//
-//		for (OWLClass c : onto.getClassesInSignature()) {
-//
-//			allClasses.add(c.getIRI().getFragment().toLowerCase());
-//		}
-//
-//		System.out.println("There are " + allClasses.size() + " classes");
-//
-//		Set<String> allLabels = new HashSet<String>();
-//
-//		for (OWLClass c : onto.getClassesInSignature()) {
-//
-//			System.out.println("Getting label from OWLClass: " + c);
-//			allLabels.add(getLabelFromClass(onto, c).toLowerCase());
-//
-//		}
-//
-//		System.out.println("Num labels: + " + allLabels.size() + " num classes: " + allClasses.size());
-//
-//		allLabels.removeAll(allClasses);
-//
-//		System.out.println("Labels different from classes");
-//		for (String s : allLabels) {
-//			System.out.println(s);
-//		}
-
-
-
-
+		bfwriter.close();
 
 	}
 

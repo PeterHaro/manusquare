@@ -33,13 +33,89 @@ public class TestSI_BPSuppliers {
 
 	public static void main(String[] args) throws IOException, OWLOntologyCreationException {
 
-		supplierDataResults();
+		//supplierDataResults();
 		//fullBPQueryResults();
 		//getAllByProductResults();
 		//getAllPropertiesResults(); 
+		materialResults();
 
 
 	}
+	
+	public static void materialResults () throws IOException, OWLOntologyCreationException {
+		
+		String query = material();
+		
+		System.out.println(query);
+		
+		Repository repository = SparqlConnection.initRepository();	
+
+		TupleQuery tupleQuery = SparqlConnection.connect(repository, TESTING, query);
+		
+		BufferedWriter bfwriter = new BufferedWriter(new FileWriter("./files/TEST_OUTPUT/bp_materials.txt"));
+
+		try (TupleQueryResult result = tupleQuery.evaluate()) {
+
+			while (result.hasNext()) {
+				BindingSet solution = result.next();  
+				
+				System.out.println("Bindings: " + solution.getBindingNames());
+				System.out.println("\nWS Profile ID: " + solution.getValue("wsProfileId").stringValue());
+				System.out.println("Supplier ID: " + solution.getValue("supplierId").stringValue());
+				System.out.println("Supplier Name: " + StringUtilities.stripIRI(solution.getValue("supplierName").stringValue()));
+				
+				bfwriter.append("\n\nWS Profile ID: " + StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue()));
+				bfwriter.append("\nSupplier ID: " + StringUtilities.stripIRI(solution.getValue("supplierId").stringValue()));
+				bfwriter.append("\nSupplier Name: " + solution.getValue("supplierName").stringValue());
+				
+				if (solution.getValue("materialType") != null) {
+				System.out.println("Material: " + StringUtilities.stripIRI(solution.getValue("materialType").stringValue()));
+				bfwriter.append("\nMaterial: " + StringUtilities.stripIRI(solution.getValue("materialType").stringValue()));
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		bfwriter.close();
+		
+	}
+	
+	
+	public static String material () {
+
+		String strQuery = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"; 
+		strQuery += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n";
+		strQuery += "PREFIX core: <http://manusquare.project.eu/core-manusquare#>\n"; 
+		strQuery += "PREFIX ind: <http://manusquare.project.eu/industrial-manusquare#> \n";
+		strQuery += "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n";
+		strQuery += "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n";
+
+		strQuery += "SELECT DISTINCT ?wsProfileId ?supplierId ?supplierName ?materialType \n";
+
+		strQuery += "WHERE { \n";
+
+		strQuery += "?wsProfileId core:hasSupplier ?supplierId. \n";
+		strQuery += "?supplierId core:hasName ?supplierName . \n";
+
+		strQuery += "OPTIONAL {?wsProfileId core:hasAttribute ?attribute . \n";
+		strQuery += "?attribute rdf:type ?attributeType . \n";
+		strQuery += "#GET MATERIALS \n";
+		strQuery += "OPTIONAL {?attribute core:hasObjectValue ?attributeMaterialValue . \n";
+		strQuery += "?attributeMaterialValue rdf:type ?materialType .  \n";
+		strQuery += "FILTER ( ?materialType not in ( owl:NamedIndividual ))  \n";
+		strQuery += "}  \n";
+		strQuery += "VALUES ?attributeType {ind:AttributeMaterial}  \n";
+		strQuery += "FILTER ( ?attributeType not in ( owl:NamedIndividual ))  \n";
+		strQuery += "} \n";
+
+		strQuery += "}";
+
+		return strQuery;
+	}
+	
 
 	public static void supplierDataResults() throws IOException, OWLOntologyCreationException {
 

@@ -100,6 +100,7 @@ public class BPSupplierData {
 
 				BindingSet solution = result.next();
 
+				System.err.println("BPSupplierData: bindings: " + solution.getBindingNames());
 
 				String certification = null;
 				if (solution.getValue("certificationType") != null) {
@@ -156,6 +157,20 @@ public class BPSupplierData {
 
 		// create list of suppliers according to the results from SPARQL
 		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
+		
+		System.err.println("BPSupplierData: suppliersList");
+		for (BPSupplier sup : suppliersList) {
+			System.err.println("\nSupplier ID: ");
+			System.err.println("Supplier Name: ");
+			
+			List<ByProduct> byProducts = sup.getByProducts();
+			
+			for (ByProduct bp : byProducts) {
+				System.err.println("WSProfileID: " + bp.getId());
+				System.err.println("Material: " + bp.getMaterials());
+			}
+			
+		}
 
 		return suppliersList;
 

@@ -97,6 +97,8 @@ public class CSSemanticMatching extends SemanticMatching {
 				}
 
 			}
+			
+			//Testing adding concepts not in ontology to graph
 
 			MutableGraph<String> graph = Graph.createGraph(ontology);
 

@@ -1,0 +1,399 @@
+
+
+WS Profile ID: improfiles:5ec8cd95-f3cf-49e5-b93a-5ec8cd95
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+
+WS Profile ID: improfiles:7ddea753-cb9d-4eb0-98fa-f182067d5c50
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+
+WS Profile ID: processchains:5556b6f1-80f4-43dc-bc0e-e9d774f64cc0
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+
+WS Profile ID: wsprofiles:a68dec79-1fc4-4444-81db-cef9e799e51f
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+
+WS Profile ID: wsprofiles:6b6c2985-fe5f-4e8c-8dc6-eefcfbdffdd4
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: LCD
+
+WS Profile ID: wsprofiles:6b6c2985-fe5f-4e8c-8dc6-eefcfbdffdd4
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: AcetalWhite
+
+WS Profile ID: wsprofiles:23889d75-d9af-4c4c-83c2-f05ed07867ac
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: StainlessSteel304
+
+WS Profile ID: wsprofiles:ffc2b827-81b5-4af1-913e-0087bb4640aa
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: StainlessSteel304
+
+WS Profile ID: wsprofiles:0a0581f3-81e1-48fd-a232-7645a4fb6b95
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: GrayIron
+
+WS Profile ID: wsprofiles:0a0581f3-81e1-48fd-a232-7645a4fb6b95
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:0a0581f3-81e1-48fd-a232-7645a4fb6b95
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: Wood
+
+WS Profile ID: wsprofiles:fa951c65-40f5-4958-a117-11c43dd92100
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:cbfcc68a-55fc-408e-bf6d-48be00d0bd31
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+Material: LCD
+
+WS Profile ID: processchains:93c9b174-4016-4d43-8a18-53c0afc9b79d
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+Supplier Name: Techxtile srl
+
+WS Profile ID: processchains:0c06123a-b2d5-43cd-9701-785a88f7802c
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+
+WS Profile ID: processchains:1ba10018-93b6-4a1a-8d49-ca0c0c4534f1
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+
+WS Profile ID: processchains:27231828-014e-428a-b18b-788c66397e2b
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+
+WS Profile ID: processchains:2cfb6530-5277-448b-80f8-c8edfea5041f
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+
+WS Profile ID: processchains:ceb656ff-4f92-42f3-924e-b1a018f1f487
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+
+WS Profile ID: processchains:73aa9ac5-495e-416b-b1ae-ce4a2f4f6df1
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+
+WS Profile ID: processchains:a4122311-fe38-47f0-9f90-85816d62b2a6
+Supplier ID: stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5
+Supplier Name: Advanced Milling srl
+
+WS Profile ID: processchains:b9a9713f-0858-4169-b9e6-546b6dd4c6e1
+Supplier ID: stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5
+Supplier Name: Advanced Milling srl
+
+WS Profile ID: processchains:a5982b6a-6b6a-4d06-bfd0-4281c455421a
+Supplier ID: stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa
+Supplier Name:  Kunststoff Guss GMBH
+
+WS Profile ID: processchains:0e05330e-b797-4a9f-8ecf-31a4d57acbb8
+Supplier ID: stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa
+Supplier Name:  Kunststoff Guss GMBH
+
+WS Profile ID: processchains:ccee34dd-64d6-42d1-8eae-a285462e098c
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+Supplier Name: MRT-3DPrint
+
+WS Profile ID: improfiles:d6fd3f31-af5d-4e06-b3bd-de663905f4f7
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+Supplier Name: MRT-3DPrint
+
+WS Profile ID: improfiles:a0830af7-d281-4a97-a81f-de4c20468ed9
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+
+WS Profile ID: processchains:6cf35da7-6000-47ca-a457-86b77dfc6745
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+
+WS Profile ID: wsprofiles:cb567723-acde-4f67-8a15-ef76db9ce314
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+
+WS Profile ID: wsprofiles:d12c7d33-335a-4395-a827-7f9a567f3798
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: Aluminium
+
+WS Profile ID: wsprofiles:8eed82af-f930-4224-9695-db0f28c0a4d2
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+
+WS Profile ID: wsprofiles:7538d93d-7e00-475c-a8fc-71329d7d0591
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: Polypropylene,PP
+
+WS Profile ID: wsprofiles:237633fe-b423-41d9-b8cc-c530e1d9e669
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: GrayIron
+
+WS Profile ID: wsprofiles:237633fe-b423-41d9-b8cc-c530e1d9e669
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:237633fe-b423-41d9-b8cc-c530e1d9e669
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: Wood
+
+WS Profile ID: wsprofiles:fbe1d320-5ff6-4fab-897a-32926444c392
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:bb344ce7-b896-499b-919b-3a6ab36006a8
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:6a14385a-ad65-472c-82b7-3fcb72334e2f
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: StainlessSteel
+
+WS Profile ID: processchains:8a1a53f5-b083-4a8d-ae03-e9d592363dda
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+
+WS Profile ID: wsprofiles:6dced261-cae0-420f-bb79-141fb430b618
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: Thermoplastic
+
+WS Profile ID: wsprofiles:6dced261-cae0-420f-bb79-141fb430b618
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: Aluminium
+
+WS Profile ID: wsprofiles:6998b3d3-a744-40a2-af26-8086c71f47c9
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+Material: Aluminium
+
+WS Profile ID: processchains:db534d47-d627-435f-b52b-0b927c4fb52b
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+Supplier Name: davCusCompany
+
+WS Profile ID: improfiles:10cba900-a42b-483f-879f-596c0342adef
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+Supplier Name: davSupCompany
+
+WS Profile ID: processchains:3e27328f-6e37-4b40-a276-bebbd61c89db
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+Supplier Name: davSupCompany
+
+WS Profile ID: processchains:8b9e5893-0058-41c8-b8e9-cd6bcdad936e
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+Supplier Name: davSupCompany
+
+WS Profile ID: wsprofiles:ac6fb7ca-9e04-4a3e-a46e-3024745a7187
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+Supplier Name: davSupCompany
+Material: Chocolate
+
+WS Profile ID: wsprofiles:e974f990-1a1f-4049-ba51-1ba5950ed0a1
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+Supplier Name: davSupCompany
+Material: Aluminium
+
+WS Profile ID: improfiles:09c28f96-6faa-48fe-9bbf-1bc6648682f4
+Supplier ID: stakeholders:01c43bfa-1533-4fd4-9734-ea23af450047
+Supplier Name: Tamiya
+
+WS Profile ID: improfiles:eb515da9-d411-46ae-96a2-ebef5af47b54
+Supplier ID: stakeholders:831fbf75-6716-4cf2-8402-4d7739d74eb9
+Supplier Name: caio
+
+WS Profile ID: improfiles:d428f695-43e0-4cfc-8754-ab04c731af93
+Supplier ID: stakeholders:71f9f13a-54f2-4ff9-8e7a-82127fd114f2
+Supplier Name: EM supplier
+
+WS Profile ID: wsprofiles:61d01d96-35b3-4f7f-931e-1603fad35cf0
+Supplier ID: stakeholders:71f9f13a-54f2-4ff9-8e7a-82127fd114f2
+Supplier Name: EM supplier
+Material: Titanium
+
+WS Profile ID: wsprofiles:ca1f6efd-433f-42e7-9dbe-f0763cfe0f87
+Supplier ID: stakeholders:71f9f13a-54f2-4ff9-8e7a-82127fd114f2
+Supplier Name: EM supplier
+Material: Titaium
+
+WS Profile ID: wsprofiles:1b8b461d-90dd-48f6-bfa9-851ad861d62a
+Supplier ID: stakeholders:71f9f13a-54f2-4ff9-8e7a-82127fd114f2
+Supplier Name: EM supplier
+Material: Titanium
+
+WS Profile ID: processchains:8630187a-3c5a-44b5-a12e-a272aa8a07e2
+Supplier ID: stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25
+Supplier Name: PRODUTECH | Production Technologies Cluster
+
+WS Profile ID: processchains:6b862093-9c56-4f88-94eb-f1dbe450607f
+Supplier ID: stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25
+Supplier Name: PRODUTECH | Production Technologies Cluster
+
+WS Profile ID: processchains:a965fc97-26fc-4bf6-8b26-185fecb0f9cc
+Supplier ID: stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25
+Supplier Name: PRODUTECH | Production Technologies Cluster
+
+WS Profile ID: processchains:ae331f4e-9904-4022-b4ca-60686994ff21
+Supplier ID: stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25
+Supplier Name: PRODUTECH | Production Technologies Cluster
+
+WS Profile ID: improfiles:d0a7ef8d-f97f-48fb-976d-aa903283526d
+Supplier ID: stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e
+Supplier Name: SINTEF4
+
+WS Profile ID: processchains:97400ead-4b86-4e79-ae89-c3dcc30b77f2
+Supplier ID: stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e
+Supplier Name: SINTEF4
+
+WS Profile ID: processchains:6e50f182-2cc5-41db-a1e1-7c46329913f1
+Supplier ID: stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e
+Supplier Name: SINTEF4
+
+WS Profile ID: improfiles:e897a599-8f1c-40df-9cd8-e272a93f2f39
+Supplier ID: stakeholders:ed18dadf-3100-4b77-9a37-95a3db60467a
+Supplier Name: InnovHub 
+
+WS Profile ID: improfiles:d04c67d0-d4f4-4f33-a1f1-96c7f0c639bf
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+Supplier Name: Cosmetics Innovation spa
+
+WS Profile ID: wsprofiles:90ddabc5-792f-46fa-8e94-0e87a0d0b3e9
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+Supplier Name: Cosmetics Innovation spa
+Material: Metal
+
+WS Profile ID: wsprofiles:2983ba44-7bef-46bd-80e7-62439e7fea8e
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+Supplier Name: Cosmetics Innovation spa
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:92b81e3b-120f-467d-8840-1ed26e2c6f15
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+Supplier Name: Cosmetics Innovation spa
+Material: GrayIron
+
+WS Profile ID: wsprofiles:92b81e3b-120f-467d-8840-1ed26e2c6f15
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+Supplier Name: Cosmetics Innovation spa
+Material: StainlessSteel
+
+WS Profile ID: wsprofiles:92b81e3b-120f-467d-8840-1ed26e2c6f15
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+Supplier Name: Cosmetics Innovation spa
+Material: Wood
+
+WS Profile ID: improfiles:517e74bb-38e1-49f4-84f8-2c79ba973c41
+Supplier ID: stakeholders:7c13a8ab-c67d-4e5d-8a54-de5f7454b03b
+Supplier Name: NewcoCus
+
+WS Profile ID: improfiles:04fe2aa1-64c3-40ef-9f26-7c6986bfe972
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+
+WS Profile ID: processchains:95d5e437-93c7-4837-87a9-15339000cf8b
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+
+WS Profile ID: processchains:a0019b25-7283-441d-8f95-233fcca88b5d
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+
+WS Profile ID: processchains:3c1115c7-0077-475c-8e68-97e9a9dcbd88
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+
+WS Profile ID: wsprofiles:68871f56-3e89-4f6b-9365-b3b8a65f4104
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+Material: Titanium
+
+WS Profile ID: wsprofiles:b7c28108-e2df-43e5-bb6a-206e06ff5471
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+Material: Titanium
+
+WS Profile ID: wsprofiles:168cf795-444a-4e87-97f1-2a5fbdcb37cc
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+Material: Chocolate
+
+WS Profile ID: wsprofiles:647e6d14-8f5b-4d67-ad23-3e1613ca0ae6
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+Material: Wood
+
+WS Profile ID: wsprofiles:74d61606-cccb-4cad-8c98-79c1317e2f6b
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+Supplier Name: Made in Swiss Furniture SA
+Material: Uranium
+
+WS Profile ID: improfiles:2babe42a-ff05-4123-8ce7-e071a8743ec7
+Supplier ID: stakeholders:407d43b7-301d-4721-9fff-c14d5b2ffab2
+Supplier Name: Textile Industrial Innovation
+
+WS Profile ID: improfiles:f86ae3ec-6d64-4fdd-b1f7-4dfc85b21988
+Supplier ID: stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+Supplier Name: SINTEF
+
+WS Profile ID: wsprofiles:b11ab072-abe5-4c61-b5e3-f4ab6fbdbd7c
+Supplier ID: stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+Supplier Name: SINTEF
+Material: CarbonSteel
+
+WS Profile ID: wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345
+Supplier ID: stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+Supplier Name: SINTEF
+Material: Steel
+
+WS Profile ID: wsprofiles:2a231f99-975f-4539-92ff-b371322749ab
+Supplier ID: stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+Supplier Name: SINTEF
+Material: Silk
+
+WS Profile ID: processchains:be0fb9ab-d06f-4c3a-abb5-e1ef88c4612a
+Supplier ID: stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+Supplier Name: SINTEF
+
+WS Profile ID: improfiles:29c9163b-a995-4f74-8c0f-ffc1d9b470a1
+Supplier ID: stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6
+Supplier Name: SINTEF3
+
+WS Profile ID: improfiles:39a23e52-c7c7-4c42-9144-0d920aa6fad7
+Supplier ID: stakeholders:771155dc-74be-462c-a51e-717061b839c4
+Supplier Name: SINTEF2
+
+WS Profile ID: processchains:ab1d2f5c-c465-4868-aef1-ec8d7f078df4
+Supplier ID: stakeholders:771155dc-74be-462c-a51e-717061b839c4
+Supplier Name: SINTEF2
+
+WS Profile ID: improfiles:0fa4afef-bb6d-4c79-853b-77a5b0d90852
+Supplier ID: stakeholders:31e80afb-7be7-4a46-a6b5-97ee3f2ab5a0
+Supplier Name: abracadabra
+
+WS Profile ID: processchains:4835c695-9fec-4a31-a932-d0d313e26228
+Supplier ID: stakeholders:a05136ea-b018-4c74-b33b-72eefc2e9f13
+Supplier Name: petzlSupCompany
+
+WS Profile ID: improfiles:3d286e55-c191-4a76-aed9-be6af7c1b2bb
+Supplier ID: stakeholders:a05136ea-b018-4c74-b33b-72eefc2e9f13
+Supplier Name: petzlSupCompany
