@@ -10,7 +10,7 @@ public class WuPalmerSimilarity implements ISimilarity<WuPalmerParameters> {
     public double ComputeSimilaritySimpleGraph(WuPalmerParameters params) {
                 
         String LCS = Graph.getLCS(params.sourceNode, params.targetNode, params.graph);
-
+        
         int sourceNodeDepth = Graph.getNodeDepth(params.sourceNode, params.graph);
         int targetNodeDepth = Graph.getNodeDepth(params.targetNode, params.graph);
         int lcsNodeDepth = Graph.getNodeDepth(LCS, params.graph);

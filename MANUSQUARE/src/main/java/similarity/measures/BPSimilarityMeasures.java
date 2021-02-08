@@ -92,7 +92,6 @@ public class BPSimilarityMeasures {
 			consumerByProductAppearances = bpc.getAppearances();
 			consumerMaterials = bpc.getMaterials();
 
-
 			for (ByProduct bps : supplierByProducts) {
 	
 				
@@ -124,15 +123,19 @@ public class BPSimilarityMeasures {
 
 					/* BY-PRODUCT SIMILARITY BASED ON MATERIAL ATTRIBUTE */	
 					
-					consumerByProductMaterial = bpc.getName();
+					//TODO: Should byProductName be considered in the matching? consumerByProductMaterial = bpc.getName();
 					
 					//if there are no consumer materials from attributes, create a new hashset to keep byProductName
 					if (consumerMaterials == null) {
 						consumerMaterials = new HashSet<String>();
 					}
 					
-					consumerMaterials.add(consumerByProductMaterial);					
+					//TODO: Can be removed? consumerMaterials.add(consumerByProductMaterial);			
+					
 					Set<String> supplierMaterials = bps.getMaterials();
+					
+					System.out.println("consumerMaterials: " + consumerMaterials);
+					System.out.println("supplierMaterials: " + supplierMaterials);
 					
 					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);				
 					System.out.println("materialSim: " + materialSim);

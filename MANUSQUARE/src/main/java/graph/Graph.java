@@ -20,19 +20,27 @@ public class Graph {
 
 	public Graph() {}
 	
-	public static MutableGraph<String> createGraph (OWLOntology onto, Set<String> concepts) {
+	public static MutableGraph<String> createGraph (OWLOntology onto, List<String> userDefinedMaterials, List<String> userDefinedProcesses) {
 
 		//get classes and their superclasses
 		Map<String, String> superClassMap = OntologyOperations.getClassesAndSuperClassesUsingPellet(onto);
-
-		//get individual classes from the superClassMap
-		Set<String> classes = superClassMap.keySet();
 		
-		classes.addAll(concepts);
+		for (Entry<String, String> e : superClassMap.entrySet()) {
+			System.out.println(e);
+		}
+		
+		Set<String> classes = new HashSet<String>();
+		classes.addAll(superClassMap.keySet());
+		
+		//TODO: Adding user-defined materials and processes as sub-nodes to "resource"
+		System.err.println("Graph: Adding " + userDefinedMaterials + " to classes");
+		classes.addAll(userDefinedMaterials);
+		classes.addAll(userDefinedProcesses);
 
+		System.err.println("Creating the graph...");
 		//create the graph
 		MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(false).build();
-
+		System.err.println("Graph created...");
 		//create a node for thing
 		String thingNode = "Thing";
 
@@ -44,16 +52,71 @@ public class Graph {
 					superClass = superClassMap.get(entry.getKey());
 					//create an is-a relationship from the class to its superclass. If a class does not have any defined superclasses, create an is-relationship to thing
 					if (superClass != null) {
+						//System.err.println("Adding edge " + s.toLowerCase() + " --- " + superClass.toLowerCase());
 						graph.putEdge(s.toLowerCase(), superClass.toLowerCase());
 					} else {
+						//System.err.println("Adding edge " + s.toLowerCase() + " --- " + thingNode.toLowerCase());
 						graph.putEdge(s.toLowerCase(), thingNode.toLowerCase());
 					}
-				}
+				} 
+			}
+			
+			if (!superClassMap.containsKey(s)) {
+				graph.putEdge(s.toLowerCase(), "resource");
 			}
 		}
 
 		return graph;
 	}
+	
+	public static MutableGraph<String> createGraph (OWLOntology onto, Set<String> userDefinedMaterials) {
+
+		//get classes and their superclasses
+		Map<String, String> superClassMap = OntologyOperations.getClassesAndSuperClassesUsingPellet(onto);
+		
+		for (Entry<String, String> e : superClassMap.entrySet()) {
+			System.out.println(e);
+		}
+		
+		Set<String> classes = new HashSet<String>();
+		classes.addAll(superClassMap.keySet());
+		
+		System.err.println("Graph: Adding " + userDefinedMaterials + " to classes");
+		classes.addAll(userDefinedMaterials);
+
+		System.err.println("Creating the graph...");
+		//create the graph
+		MutableGraph<String> graph = GraphBuilder.directed().allowsSelfLoops(false).build();
+		System.err.println("Graph created...");
+		//create a node for thing
+		String thingNode = "Thing";
+
+		for (String s : classes) {
+			String superClass = null;
+
+			for (Entry<String, String> entry : superClassMap.entrySet()) {
+				if (s.equals(entry.getKey())) {
+					superClass = superClassMap.get(entry.getKey());
+					//create an is-a relationship from the class to its superclass. If a class does not have any defined superclasses, create an is-relationship to thing
+					if (superClass != null) {
+						//System.err.println("Adding edge " + s.toLowerCase() + " --- " + superClass.toLowerCase());
+						graph.putEdge(s.toLowerCase(), superClass.toLowerCase());
+					} else {
+						//System.err.println("Adding edge " + s.toLowerCase() + " --- " + thingNode.toLowerCase());
+						graph.putEdge(s.toLowerCase(), thingNode.toLowerCase());
+					}
+				} 
+			}
+			
+			if (!superClassMap.containsKey(s)) {
+				graph.putEdge(s.toLowerCase(), "resource");
+			}
+		}
+
+		return graph;
+	}
+	
+	
 
 	public static MutableGraph<String> createGraph (OWLOntology onto) {
 
@@ -197,29 +260,32 @@ public class Graph {
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
+		
+		Set<String> userDefinedConcepts = new HashSet<String>();
+		userDefinedConcepts.add("Chocolate");
+		userDefinedConcepts.add("lkjslgkjsdlkgjs");
 
 		//create graph
-		MutableGraph<String> graph = createGraph(onto);
+		MutableGraph<String> graph = createGraph(onto, userDefinedConcepts);
+		
+		//print graph
+		printGraphNodes(graph);
+		
+		System.out.println(graph.toString());
 
 		//get the lcs of sourceNode and targetNode
-		String sourceNode = "VerticalMilling";
-		String targetNode = "Turning";
-		String lcs = getLCS(sourceNode, targetNode, graph);
-		System.out.println("\nThe lcs of " + sourceNode + " and " + targetNode + " is " + lcs);
-		System.out.println("\nThe depth of " + sourceNode + " is " + getNodeDepth(sourceNode, graph));
-
-		Map<String, Integer> hierarchyMap = getOntologyHierarchy(onto, graph);
-//		Set<String> conceptsSet = OntologyOperations.getClassesAsString(onto);
-//		for (String s : conceptsSet) {
-//			if (!s.equals("Thing"))
-//			hierarchyMap.put(s, getNodeDepth(s, graph));
+//		String sourceNode = "VerticalMilling";
+//		String targetNode = "Turning";
+//		String lcs = getLCS(sourceNode, targetNode, graph);
+//		System.out.println("\nThe lcs of " + sourceNode + " and " + targetNode + " is " + lcs);
+//		System.out.println("\nThe depth of " + sourceNode + " is " + getNodeDepth(sourceNode, graph));
+//
+//		Map<String, Integer> hierarchyMap = getOntologyHierarchy(onto, graph);
+//
+//		System.out.println("\nPrinting hierarchyMap:");
+//		for (Entry<String, Integer> e : hierarchyMap.entrySet()) {
+//			System.out.println(e.getKey() + " : " + e.getValue());
 //		}
-
-		System.out.println("\nPrinting hierarchyMap:");
-		for (Entry<String, Integer> e : hierarchyMap.entrySet()) {
-			System.out.println(e.getKey() + " : " + e.getValue());
-		}
-
 
 	}
 

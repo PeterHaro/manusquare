@@ -231,12 +231,16 @@ public class BPQuery {
 				
 			}
 			
+			System.out.println("BPQuery: Materials: " + materials);
+			System.out.println("BPQuery: Appearances: " + appearances);
+			
 			byProducts.add(
 					
 					new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
 					.setId(element.getByProductId())
 					.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
-					.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
+					.setMaterials(materials)
+//					.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
 					.setAppearance(appearances)
 					.setAttributes(attributeSet)
 					.build());
