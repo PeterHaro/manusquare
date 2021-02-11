@@ -37,7 +37,6 @@ import supplier.IMSupplier;
 import supplierdata.IMSupplierData;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
-import validation.InnovationManagementValidator;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
@@ -76,49 +75,53 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
+		IMQuery imq = IMQuery.createQuery(inputJson, ontology);
+
+		//TODO: Sort this graph creation process out!
+		MutableGraph<String> graph = Graph.createGraph(ontology);
+
+		if (!imq.getInnovationTypes().isEmpty() && imq.getInnovationTypes() != null) {
+			Graph.addInnovationTypesToGraph(graph, imq.getInnovationTypes());
+		}
+
+		if (!imq.getInnovationPhases().isEmpty() && imq.getInnovationPhases() != null) {
+			Graph.addInnovationPhasesToGraph(graph, imq.getInnovationPhases());
+		}
+		
+		if (imq.getSkills() != null && !imq.getSkills().isEmpty()) {
+			Graph.addSkillsToGraph(graph, imq.getSkills());
+		}
+
+		if (imq.getSectors() != null && !imq.getSectors().isEmpty()) {
+			Graph.addSectorsToGraph(graph, imq.getSectors());
+		}
 
 
-		if (InnovationManagementValidator.validQuery(inputJson, ontology)) {
+		List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
-			IMQuery imq = IMQuery.createQuery(inputJson, ontology);
+		Map<IMSupplier, Double> innovationManagerScores = new HashMap<IMSupplier, Double>();
+		//for each supplier get the list of best matching processes (and certifications)
+		List<Double> innovationManagerSim = new LinkedList<Double>();
 
-			//create graph using Guava´s graph library instead of using Neo4j
-			MutableGraph<String> graph = null;
+		for (IMSupplier innovationManager : innovationManagerData) {
 
-			graph = Graph.createGraph(ontology);
-
-			List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
-
-			Map<IMSupplier, Double> innovationManagerScores = new HashMap<IMSupplier, Double>();
-			//for each supplier get the list of best matching processes (and certifications)
-			List<Double> innovationManagerSim = new LinkedList<Double>();
-
-			for (IMSupplier innovationManager : innovationManagerData) {
-
-				innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-				//get the highest score for the process chains offered by supplier n
-				innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
-
-			}
-
-			//extract the n innovation managers with the highest similarity scores
-			Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
-
-			//prints the n best innovation managers in ranked order to JSON
-			writeResultToOutput(bestSuppliers, writer);		
-
-			//prints additional data to console for testing/validation
-			if (testing == true) {			
-				printResultsToConsoleIM(innovationManagerData, imq, innovationManagerScores, numResults);			
-			}
-
-		} else {
-
-			Map<String, Double> bestSuppliers = new HashMap<String, Double>();
-			writeResultToOutput(bestSuppliers, writer);	
-			//writeEmptyResultToOutput(writer);
+			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			//get the highest score for the process chains offered by supplier n
+			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
 
 		}
+
+		//extract the n innovation managers with the highest similarity scores
+		Map<String, Double> bestSuppliers = extractBestInnovationManagers(innovationManagerScores, numResults);
+
+		//prints the n best innovation managers in ranked order to JSON
+		writeResultToOutput(bestSuppliers, writer);		
+
+		//prints additional data to console for testing/validation
+		if (testing == true) {			
+			printResultsToConsoleIM(innovationManagerData, imq, innovationManagerScores, numResults);			
+		}
+
 
 	}
 
@@ -150,10 +153,25 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		IMQuery imq = IMQuery.createQuery(inputJson, ontology);
 
-		//create graph using Guava´s graph library instead of using Neo4j
-		MutableGraph<String> graph = null;
+		//TODO: Sort this graph creation process out!
+		MutableGraph<String> graph = Graph.createGraph(ontology);
 
-		graph = Graph.createGraph(ontology);
+		if (!imq.getInnovationTypes().isEmpty() && imq.getInnovationTypes() != null) {
+			Graph.addInnovationTypesToGraph(graph, imq.getInnovationTypes());
+		}
+
+		if (!imq.getInnovationPhases().isEmpty() && imq.getInnovationPhases() != null) {
+			Graph.addInnovationPhasesToGraph(graph, imq.getInnovationPhases());
+		}
+		
+		if (imq.getSkills() != null && !imq.getSkills().isEmpty()) {
+			Graph.addSkillsToGraph(graph, imq.getSkills());
+		}
+
+		if (imq.getSectors() != null && !imq.getSectors().isEmpty()) {
+			Graph.addSectorsToGraph(graph, imq.getSectors());
+		}
+
 
 		List<IMSupplier> innovationManagerData = IMSupplierData.createInnovationManagerData(imq, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 

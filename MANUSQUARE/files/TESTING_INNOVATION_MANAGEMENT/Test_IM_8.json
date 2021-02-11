@@ -6,28 +6,22 @@
 	"projectType": "DEMO - Innovation Management",
 	"customer": {},
 	"projectInnovationPhases": [
-		"Design"
+		"DesignPhase"
 	],
 	"projectInnovationTypes": [
-		"Material"
+		"Product"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "Concept Definition or Design"
+			"skill": "Cakebaking"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "Textile"
+			"sector": "bakingProduction"
 		}
 	],
-	"innovationManagerAttributes": [
-		{
-			"id": "2343252346355",
-			"attributeKey": "Country",
-			"attributeValue": "Monaco"
-		}
-	]
+  "innovationManagerAttributes": []
 }

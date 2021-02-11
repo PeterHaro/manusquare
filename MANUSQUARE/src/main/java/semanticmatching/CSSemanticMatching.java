@@ -37,7 +37,6 @@ import supplier.CSSupplier;
 import supplierdata.CSSupplierData;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
-import validation.CapacitySharingValidator;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
@@ -85,25 +84,38 @@ public class CSSemanticMatching extends SemanticMatching {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
-		
-		//check if the consumer request is valid before proceeding with the matching		
-		if (CapacitySharingValidator.validQuery(inputJson, ontology)) {
-			CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); 
-			List<String> processes = new ArrayList<>();
+		CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); 
+
+		if (query != null) {
+
+			List<String> consumerDefinedProcesses = new ArrayList<>();
+			List<String> consumerDefinedMaterials = new ArrayList<>();
 
 			for (Process p : query.getProcesses()) {
 				if (p.getName() != null) {
-					processes.add(p.getName());
+					consumerDefinedProcesses.add(p.getName());
+					
+					if (p.getMaterials() != null && !p.getMaterials().isEmpty()) {
+					consumerDefinedMaterials.addAll(p.getMaterials());
+					}
 				}
 
 			}
-			
-			//Testing adding concepts not in ontology to graph
 
+			//TODO: Sort this graph creation process out!
 			MutableGraph<String> graph = Graph.createGraph(ontology);
 
+			if (!consumerDefinedProcesses.isEmpty() && consumerDefinedProcesses != null) {
+				Graph.addProcessesToGraph(graph, consumerDefinedProcesses);
+			}
+
+			if (!consumerDefinedMaterials.isEmpty() && consumerDefinedMaterials != null) {
+				Graph.addMaterialsToGraph(graph, consumerDefinedMaterials);
+			}
+
+
 			//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-			List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+			List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, graph, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
 			Map<CSSupplier, Double> supplierScores = new HashMap<CSSupplier, Double>();
 			//for each supplier get the list of best matching processes (and certifications)
@@ -111,7 +123,7 @@ public class CSSemanticMatching extends SemanticMatching {
 
 			for (CSSupplier supplier : supplierData) {
 				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, processes.size()));	
+				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, consumerDefinedProcesses.size()));	
 
 			}
 
@@ -125,18 +137,18 @@ public class CSSemanticMatching extends SemanticMatching {
 			if (testing == true) {			
 				printResultsToConsole(supplierData, query, supplierScores, numResults);			
 			}
-			
+
 		} else {
-			
+
 			Map<String, Double> bestSuppliers = new HashMap<String, Double>();
 			writeResultToOutput(bestSuppliers, writer);
-			
-			//writeEmptyResultToOutput(writer);
-			
+
+
 		}
 
+
 	}
-	
+
 	/**
 	 * Test method
 	 * @param inputJson
@@ -176,23 +188,38 @@ public class CSSemanticMatching extends SemanticMatching {
 
 		manager.saveOntology(Objects.requireNonNull(ontology), IRI.create(localOntoFile.toURI()));
 
-		
-		//check if the consumer request is valid before proceeding with the matching		
-		if (CapacitySharingValidator.validQuery(inputJson, ontology)) {
-			CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); 
-			List<String> processes = new ArrayList<>();
+		CSQuery query = CSQuery.createConsumerQuery(inputJson, ontology); 
+
+		if (query != null) {
+
+			List<String> consumerDefinedProcesses = new ArrayList<>();
+			List<String> consumerDefinedMaterials = new ArrayList<>();
 
 			for (Process p : query.getProcesses()) {
 				if (p.getName() != null) {
-					processes.add(p.getName());
+					consumerDefinedProcesses.add(p.getName());
+					
+					if (p.getMaterials() != null && !p.getMaterials().isEmpty()) {
+					consumerDefinedMaterials.addAll(p.getMaterials());
+					}
 				}
 
 			}
 
+			//TODO: Sort this graph creation process out!
 			MutableGraph<String> graph = Graph.createGraph(ontology);
 
+			if (!consumerDefinedProcesses.isEmpty() && consumerDefinedProcesses != null) {
+				Graph.addProcessesToGraph(graph, consumerDefinedProcesses);
+			}
+
+			if (!consumerDefinedMaterials.isEmpty() && consumerDefinedMaterials != null) {
+				Graph.addMaterialsToGraph(graph, consumerDefinedMaterials);
+			}
+
+
 			//re-organise the SupplierResourceRecords so that we have ( Supplier (1) -> Resource (*) )
-			List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+			List<CSSupplier> supplierData = CSSupplierData.createSupplierData(query, testing, graph, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
 
 			Map<CSSupplier, Double> supplierScores = new HashMap<CSSupplier, Double>();
 			//for each supplier get the list of best matching processes (and certifications)
@@ -200,7 +227,7 @@ public class CSSemanticMatching extends SemanticMatching {
 
 			for (CSSupplier supplier : supplierData) {
 				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, processes.size()));	
+				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, consumerDefinedProcesses.size()));	
 
 			}
 
@@ -208,12 +235,12 @@ public class CSSemanticMatching extends SemanticMatching {
 			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
 
 			return bestSuppliers;
-			
-		} else {
-			
-			return null;
-		}
 
+		} else {
+
+			Map<String, Double> notValidQuery = new HashMap<String, Double>();
+			return notValidQuery;
+		}
 	}
 
 

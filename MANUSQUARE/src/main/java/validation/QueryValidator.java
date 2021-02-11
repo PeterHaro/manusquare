@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -25,9 +27,59 @@ import utilities.StringUtilities;
 
 public class QueryValidator {
 
-	final static double SEMANTIC_SIMILARITY_TRESHOLD = 0.7;
+	final static double SEMANTIC_SIMILARITY_TRESHOLD = 0.9;
 	final static double SYNTACTIC_SIMILARITY_TRESHOLD = 0.8;
+	
+	public static void main(String[] args) {
+		
+		String string = "abcdedf55_sdfdf";
+		
+		System.out.println("onlyNumbers: " + onlyNumbers(string));		
+		System.out.println("tooManyConsecutiveCharacters: " + tooManyConsecutiveCharacters(string));		
+		System.out.println("sufficientAmountOfCharacters: " + sufficientAmountOfCharacters(string));		
+		System.out.println("onlyDigitsAndNumbers: " + onlyLettersAndNumbers(string));
+		
+	}
 
+	public static Boolean onlyNumbers(String input) {
+		
+		Pattern pattern = Pattern.compile("^[0-9]*$");
+		Matcher matcher = pattern.matcher(input);
+		
+		return matcher.find();
+		
+	}
+	
+	public static Boolean tooManyConsecutiveCharacters (String input) {
+		
+		Pattern pattern = Pattern.compile("([A-Za-z0-9])\\1{2}");
+		Matcher matcher = pattern.matcher(input);
+		
+		return matcher.find();
+		
+		
+	}
+	
+	public static Boolean onlyLettersAndNumbers (String input) {
+		
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_ ]+$");
+		Matcher matcher = pattern.matcher(input);
+		
+		return matcher.find();
+		
+	}
+	
+	
+	public static Boolean sufficientAmountOfCharacters (String input) {
+		
+		Pattern pattern = Pattern.compile("^.{3,100}$");
+		Matcher matcher = pattern.matcher(input);
+		
+		return matcher.find();
+
+	}
+	
+	
 	public static String validateByProductName(String byProductName, OWLOntology onto, Set<String> allOntologyClasses) throws IOException {
 
 		String validatedByProductName = null;
@@ -306,7 +358,7 @@ public class QueryValidator {
 	   Mar 27, 2020
 	 */
 	private static String getMostSimilarConcept(String consumerInput, QueryConceptType conceptType, OWLOntology onto, VectorAggregationMethod vectorAggregationMethod) throws IOException {
-
+		
 		String mostSimilarConcept = null;
 		String mostSyntacticallySimilarConcept = null;
 		String mostSemanticallySimilarConcept = null;
@@ -355,15 +407,16 @@ public class QueryValidator {
 
 						mostSimilarConcept = mostSemanticallySimilarConcept;				
 
+						//if the syntactic nor the semantic similarity is above threshold, we return the concepts entered by the consumer for further processing.
 					} else {
 
-						mostSimilarConcept = null;
+						mostSimilarConcept = consumerInput;
 					}
 				}
 			}
 
 		}
-
+		
 		return mostSimilarConcept;
 	}
 
@@ -390,7 +443,7 @@ public class QueryValidator {
 
 			}
 		}
-
+		
 		//return with proper casing
 		String mostSimilarityWithProperCasing = null;
 		if (mostSimilar != null) {
@@ -443,6 +496,7 @@ public class QueryValidator {
 		}
 
 		mostSimilarConcept = getConceptWithHighestSim(similarityMap);
+		
 
 		//only return if similarity is higher than threshold
 		if (similarityMap.get(mostSimilarConcept) >= SYNTACTIC_SIMILARITY_TRESHOLD) {

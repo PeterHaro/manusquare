@@ -3,26 +3,26 @@
 	"projectName": "Prova",
 	"projectDescription": "",
 	"selectionType": "Manual",
-	"supplierMaxDistance": "10",
-	"customer": {
-		"customerInfo": {
-			"location": "Denia, Spain",
-			"lat": "38.846228",
-			"lon": "0.096789"
-		}
-		},
+	"supplierMaxDistance": "0",
+	"customer": {},
 	"servicePolicy": "true",
 	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
 	"projectType": "DEMO - Capacity Sharing",
 	"projectAttributes": [
 	{
-		"unitOfMeasure": "",
+		"unitOfMeasure": "mm",
 		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
 		"processName": "CNCMilling",
 		"attributeKey": "MaxPartSizeX",
 		"attributeValue": "1.0"
 	}
 	],
-	"supplierAttributes": []
+	"supplierAttributes": [
+	{
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
+        "attributeKey": "Language",
+        "attributeValue": "Greek"
+	}
+	]
 }

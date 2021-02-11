@@ -47,7 +47,7 @@ public class CSSparqlQuery {
 
 		CSQuery query = CSQuery.createConsumerQuery(filename, onto);
 
-		String test = createSparqlQuery(query, onto);
+		String test = createSparqlQuery(query);
 
 		System.out.println(test);
 
@@ -56,7 +56,7 @@ public class CSSparqlQuery {
 	
 	
 
-	public static String createSparqlQuery(CSQuery cq, OWLOntology onto) {
+	public static String createSparqlQuery(CSQuery cq) {
 
 		Set<String> materials = new HashSet<String>();
 		Set<Attribute> attributes = new HashSet<Attribute>();
@@ -66,7 +66,7 @@ public class CSSparqlQuery {
 		Set<String> countries = cq.getCountry();
 
 		//get the Least Common Subsumer (LCS) of the process concepts included by the consumer		
-		String lcs = getLCS(processes, onto);
+		//TODO: Trying without LCS for processes String lcs = getLCS(processes, graph);
 
 		//14.02.2020: Added supplierMaxDistance and map holding location, lat, lon from RFQ JSON
 		double supplierMaxDistance = cq.getSupplierMaxDistance();
@@ -137,7 +137,7 @@ public class CSSparqlQuery {
 		//get all subclasses of LCS
 		strQuery += "\n?processChain core:hasProcess ?process .\n";
 		strQuery += "?process rdf:type ?processType .\n";
-		strQuery += "?processType rdfs:subClassOf* ind:" + lcs + " .\n";
+	//TODO Trying without the LCS mechanism	strQuery += "?processType rdfs:subClassOf* ind:" + lcs + " .\n";
 		strQuery += "?processChain core:hasSupplier ?supplier .\n";
 
 		//get attributes
@@ -239,43 +239,55 @@ public class CSSparqlQuery {
 		return values.toString();
 	}
 
-	private static String getLCS(Set<Process> consumerProcesses, OWLOntology onto) {
-
-		//27.02.2020: Find the LCS of an arbitrary set of process concepts
-		List<List<String>> supersList = new LinkedList<List<String>>();
-
-		for (Process p : consumerProcesses) {
-			supersList.add(OntologyOperations.getEntitySuperclassesFragmentsAsList(onto, OntologyOperations.getClass(p.getName(), onto)));
-		}
-
-		//collect all super-lists into a common list
-		List<List<String>> lists = new ArrayList<List<String>>();
-		for (List<String> l : supersList) {
-			lists.add(l);
-		}
-
-		Set<String> commonSupers = getCommonElements(lists);
-		
-
-		//get the depth of the superclasses and let the superclass with highest depth be the LCS
-		MutableGraph<String> ontoGraph = Graph.createGraph(onto);
-		Map<String, Integer> ontologyHierarchyMap = Graph.getOntologyHierarchy(onto, ontoGraph);
-		
-
-		Map<String, Integer> supersAndDepthsMap = new LinkedHashMap<String, Integer>();
-		for (String s : commonSupers) {
-			if (ontologyHierarchyMap.containsKey(s)) {
-				supersAndDepthsMap.put(s, ontologyHierarchyMap.get(s));
-			}
-		}		
-
-		Map<String, Integer> sortedOntologyHierarchy = sortDescending(supersAndDepthsMap);
-		
-		Entry<String, Integer> entry = sortedOntologyHierarchy.entrySet().iterator().next();
-		String lcs = entry.getKey();
-		
-		return lcs;
-	}
+//	private static String getLCS(Set<Process> consumerProcesses, MutableGraph<String> ontoGraph) {
+//		
+//		System.err.println("CSSparqlQuery: consumerProcesses: ");
+//		for (Process p : consumerProcesses) {
+//			System.err.println(p.getName());
+//		}
+//
+//		//27.02.2020: Find the LCS of an arbitrary set of process concepts
+//		List<Set<String>> supersList = new LinkedList<Set<String>>();
+//
+////		for (Process p : consumerProcesses) {
+////			supersList.add(OntologyOperations.getEntitySuperclassesFragmentsAsList(onto, OntologyOperations.getClass(p.getName(), onto)));
+////		}
+//		
+//		for (Process p : consumerProcesses) {
+//			supersList.add(ontoGraph.predecessors(p.getName()));
+//		}
+//
+//		//collect all super-lists into a common list
+//		List<Set<String>> lists = new ArrayList<Set<String>>();
+//		for (Set<String> l : supersList) {
+//			lists.add(l);
+//		}
+//
+//		Set<String> commonSupers = getCommonElements(lists);
+//		
+//
+//		//get the depth of the superclasses and let the superclass with highest depth be the LCS
+//		MutableGraph<String> ontoGraph = Graph.createGraph(onto);
+//		Map<String, Integer> ontologyHierarchyMap = Graph.getOntologyHierarchy(onto, ontoGraph);
+//		
+//		
+//		System.err.println("CSSparqlQuery:Parent nodes to ChocolateProcessing: " + ontoGraph.predecessors("ChocolateProcessing"));
+//		
+//
+//		Map<String, Integer> supersAndDepthsMap = new LinkedHashMap<String, Integer>();
+//		for (String s : commonSupers) {
+//			if (ontologyHierarchyMap.containsKey(s)) {
+//				supersAndDepthsMap.put(s, ontologyHierarchyMap.get(s));
+//			}
+//		}		
+//
+//		Map<String, Integer> sortedOntologyHierarchy = sortDescending(supersAndDepthsMap);
+//		
+//		Entry<String, Integer> entry = sortedOntologyHierarchy.entrySet().iterator().next();
+//		String lcs = entry.getKey();
+//		
+//		return lcs;
+//	}
 
 
 	public static boolean isSupportedAttribute (Attribute attribute) {

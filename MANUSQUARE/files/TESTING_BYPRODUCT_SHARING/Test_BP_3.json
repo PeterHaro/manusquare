@@ -23,8 +23,8 @@
         "quantity": "150",
         "unitOfMeasureQuantity": "Kg",
         "byProductAttributes": [{
-                "attributeKey": "",
-                "attributeValue": "",
+                "attributeKey": "AttributeMaterial",
+                "attributeValue": "ae%y",
                 "unitOfMeasure": ""
             }
         ]

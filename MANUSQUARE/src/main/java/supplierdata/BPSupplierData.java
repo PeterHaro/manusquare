@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.rdf4j.query.BindingSet;
@@ -22,14 +23,12 @@ import com.google.common.collect.ArrayListMultimap;
 import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
-import ontology.OntologyOperations;
 import query.BPQuery;
 import sparqlconnection.SparqlConnection;
 import sparqlquery.BPSparqlQuery;
 import sparqlresult.BPSparqlResult;
 import supplier.BPSupplier;
 import utilities.StringUtilities;
-import validation.QueryValidator;
 
 public class BPSupplierData {
 
@@ -91,9 +90,9 @@ public class BPSupplierData {
 
 		try (TupleQueryResult result = tupleQuery.evaluate()) {
 
-			Attribute supplierAttribute = new Attribute();
-			BPSparqlResult sparqlResult = null;			
-			Map<String, String> attributeWeightMap = null;
+			//			Attribute supplierAttribute = new Attribute();
+			//BPSparqlResult sparqlResult = null;			
+			//			Map<String, String> attributeWeightMap = null;
 
 
 			while (result.hasNext()) {
@@ -115,17 +114,24 @@ public class BPSupplierData {
 					appearance = solution.getValue("attributeValue").stringValue().replaceAll("\\s+", "");
 				}
 
+				Map<String, String> attributeWeightMap = null;
 				// deal with attributes ("Y", "N" or "O") according to attributes required in the consumer query
 				if (solution.getValue("attributeType") != null 
 						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
-						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {				
-					
-					attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);	
-					
+						&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {			
+
+					Attribute supplierAttribute = new Attribute();
+
+					supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
+					supplierAttribute.setUnitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
+					supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
+
+					attributeWeightMap = Attribute.createBPAttributeWeightMap(supplierAttribute, query);	
+
 				} 
 
 
-				sparqlResult = new BPSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")), 
+				BPSparqlResult sparqlResult = new BPSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")), 
 						solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""), 
 						solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""), 
 						solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""), 
@@ -153,22 +159,33 @@ public class BPSupplierData {
 		// close connection to KB repository
 		repository.shutDown();
 
+		//		System.out.println("\nSparqlResults:");
+		//		for (BPSparqlResult b : sparqlResults) {
+		//			System.out.println("Supplier ID: "  + b.getSupplierId());
+		//			System.out.println("WSProfile ID : " + b.getWsProfileId());
+		//			System.out.println("AttributeWeightMap: " + b.getAttributeWeightMap());
+		//		}
+
+
+
+
 		// create list of suppliers according to the results from SPARQL
 		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
-		
-//		System.err.println("BPSupplierData: suppliersList");
-//		for (BPSupplier sup : suppliersList) {
-//			System.err.println("\nSupplier ID: ");
-//			System.err.println("Supplier Name: ");
-//			
-//			List<ByProduct> byProducts = sup.getByProducts();
-//			
-//			for (ByProduct bp : byProducts) {
-//				System.err.println("WSProfileID: " + bp.getId());
-//				System.err.println("Material: " + bp.getMaterials());
-//			}
-//			
-//		}
+
+		//		System.err.println("BPSupplierData: suppliersList");
+		//		for (BPSupplier sup : suppliersList) {
+		//			System.err.println("\nSupplier ID: " + sup.getSupplierId());
+		//			System.err.println("Supplier Name: " + sup.getSupplierName());
+		//
+		//			List<ByProduct> byProducts = sup.getByProducts();
+		//
+		//			for (ByProduct bp : byProducts) {
+		//				System.err.println("WSProfileID: " + bp.getId());
+		//				System.err.println("Material: " + bp.getMaterials());
+		//				System.err.println("AttributeWeightMap" + bp.getAttributeWeightMap());
+		//			}
+		//
+		//		}
 
 		return suppliersList;
 
@@ -185,36 +202,42 @@ public class BPSupplierData {
 
 		List<BPSupplier> supplierList = new ArrayList<BPSupplier>();
 
-		//for validation purposes
-		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
-
 		//get all supplier ids for filtering
 		Set<String> supplierids = new HashSet<String>();
 		for (BPSparqlResult sr : sparqlResults) {
 			supplierids.add(sr.getSupplierId());
 		}
-		
+
 		//consolidate by-products
 		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (sparqlResults, onto);
+
+
+		//		System.out.println("\nconsolidatedByProducts: ");
+		//		for (Entry<String, List<ByProduct>>  e : consolidatedByProducts.entrySet()) {
+		//			System.out.println("WSProfile ID: " + e.getKey());
+		//			for (ByProduct bp : e.getValue()) {
+		//				System.out.println("Attribute weight map: " + bp.getAttributeWeightMap());
+		//			}
+		//		}
 
 		BPSupplier supplier = null;
 
 		for (String sup : supplierids) {
 
 			List<Certification> certifications = new ArrayList<Certification>();
-			
+
 			for (BPSparqlResult sr : sparqlResults) {
 
 				Certification cert = null;	
 
 				if (sr.getSupplierId().equals(sup)) {
-					
+
 					cert = new Certification(sr.getCertification());
-					
+
 					if (!certifications.contains(cert) && cert.getId() != null) {
 						certifications.add(cert);
 					}					
-					
+
 					supplier = new BPSupplier.Builder(consolidatedByProducts.get(sr.getSupplierId()))
 							.setSupplierId(sr.getSupplierId())
 							.setSupplierName(sr.getSupplierName())
@@ -230,7 +253,7 @@ public class BPSupplierData {
 				}
 			}
 		}		
-		
+
 
 
 		return supplierList;
@@ -245,10 +268,11 @@ public class BPSupplierData {
 	 * @throws IOException 
 	 */
 	private static Map<String, List<ByProduct>> consolidateByProducts (Set<BPSparqlResult> sparqlResults, OWLOntology onto) throws IOException {
-		Map<String, ByProduct> byProductMap = new HashMap<String, ByProduct>();
 
-		//for validation purposes
-		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
+		//look-up table for getting valid attributeWeightMaps per WSProfile
+		Map<String, Map<String, String>> attributeWeightMapLookup = createAttributeMapLookupMap(sparqlResults);
+
+		Map<String, ByProduct> byProductMap = new HashMap<String, ByProduct>();
 
 		Set<String> uniqueByProducts = new HashSet<String>();
 		for (BPSparqlResult sr : sparqlResults) {		
@@ -261,7 +285,6 @@ public class BPSupplierData {
 		}
 
 		ByProduct byProduct = null;
-		Map<String, String> attributeWeightMap = new HashMap<String, String>();
 
 		for (String s : uniqueByProducts) {
 
@@ -272,10 +295,10 @@ public class BPSupplierData {
 
 				if (sr.getWsProfileId().equals(s)) {
 
+					String wsProfileId = sr.getWsProfileId();
+
 					String byProductName = sr.getByProductName();
 					String byProductSupplyType = sr.getByProductSupplyType();
-
-					//FIXME: sometimes minParticipants is "", so converting this to 0 to avoid errors later (according to the spec from SUPSI it could then be ignored in the match).
 
 					int byProductMinParticipants = 0;
 					if (sr.getByProductMinParticipants().equals("") || sr.getByProductMinParticipants().equals(" ")) {
@@ -298,7 +321,6 @@ public class BPSupplierData {
 					}
 
 					String purchasingGroupAbilitation = sr.getPurchasingGroupAbilitation();
-
 					String quantity = sr.getByProductQuantity();
 
 					double minQuantity = 0;
@@ -315,22 +337,11 @@ public class BPSupplierData {
 					}
 
 					String uom = sr.getByProductUOM();
-
 					String material = sr.getMaterial();
-					
+
 					if (!materials.contains(material) && material != null) {
 						materials.add(material);
 					}
-
-//					//TODO: Try without validating materials String validatedMaterial = null;
-//					if (material != null) {
-//						validatedMaterial = QueryValidator.validateMaterialName(material, onto, allOntologyClasses);
-//					}
-//
-//
-//					if (!materials.contains(validatedMaterial) && validatedMaterial != null) {
-//						materials.add(validatedMaterial);
-//					}
 
 					String appearance = sr.getAppearance();
 
@@ -338,24 +349,23 @@ public class BPSupplierData {
 						appearances.add(appearance);
 					}
 
-					attributeWeightMap = sr.getAttributeWeightMap();
 
 					byProduct = new ByProduct.Builder(byProductSupplyType, byProductMinParticipants, byProductMaxParticipants, purchasingGroupAbilitation, quantity, uom)
-							.setId(sr.getWsProfileId())
+							.setId(wsProfileId)
 							.setName(byProductName)
 							.setMaterials(materials)
 							.setAppearance(appearances)
-							.setAttributeWeightMap(attributeWeightMap)
+							.setAttributeWeightMap(attributeWeightMapLookup.get(wsProfileId))
 							.build();
 
 
 					byProductMap.put(sr.getWsProfileId(), byProduct);
 
+
 				}
 
 			}
 		}
-
 
 		ArrayListMultimap<String, String> supplierToByProductMapping = ArrayListMultimap.create();
 
@@ -474,8 +484,24 @@ public class BPSupplierData {
 
 		// create list of suppliers according to the results from SPARQL
 		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
-		
+
 		return suppliersList;
+
+	}
+
+	public static Map<String, Map<String, String>> createAttributeMapLookupMap (Set<BPSparqlResult> sparqlResults) {
+
+		Map<String, Map<String, String>> cleanedAttributeWeightMap = new HashMap<String, Map<String, String>>();
+
+		for (BPSparqlResult b : sparqlResults) {
+
+			if (b.getAttributeWeightMap() != null) {
+				cleanedAttributeWeightMap.put(b.getWsProfileId(), b.getAttributeWeightMap());
+			}
+
+		}
+
+		return cleanedAttributeWeightMap;
 
 	}
 

@@ -6,21 +6,21 @@
 	"projectType": "DEMO - Innovation Management",
 	"customer": {},
 	"projectInnovationPhases": [
-		"Bullshit"
+		"DesignPhase"
 	],
 	"projectInnovationTypes": [
-		"Ballony"
+		"Product"
 	],
 	"innovationManagerSkills": [
 		{
 			"id": "23536675",
-			"skill": "WhatTheHeck"
+			"skill": "aaa%/b123"
 		}
 	],
 	"innovationManagerSectors": [
 		{
 			"id": "659cc6fc-0846-4198-9d16-147662456432",
-			"sector": "SayWhat??"
+			"sector": "12345"
 		}
 	],
   "innovationManagerAttributes": []

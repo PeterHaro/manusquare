@@ -29,21 +29,21 @@ import validation.QueryValidator;
 
 public class BPQuery {
 
-	
+
 	//mandatory attributes	
 	private Set<ByProduct> byProducts;
 	private String mode;
 	private int minNumberOfParticipants;
 	private int maxNumberOfParticipants;
 	private String purchasingGroupAbilitation;
-	
+
 	//optional attributes
 	private Set<Certification> certifications;
 	private double supplierMaxDistance;
 	private Map<String, String> customerLocationInfo;
 	private Set<String> language;
 	private Set<String> countries;
-	
+
 	private BPQuery(BPQueryBuilder builder) {
 		this.byProducts = builder.byProducts;
 		this.mode = builder.mode;
@@ -55,11 +55,11 @@ public class BPQuery {
 		this.customerLocationInfo = builder.customerLocationInfo;
 		this.language = builder.language;
 		this.countries = builder.countries;
-	
+
 	}
-	
+
 	public static class BPQueryBuilder {
-		
+
 		private Set<ByProduct> byProducts;
 		private String mode;
 		private int minNumberOfParticipants;
@@ -71,7 +71,7 @@ public class BPQuery {
 		private Map<String, String> customerLocationInfo;
 		private Set<String> language;
 		private Set<String> countries;
-		
+
 		public BPQueryBuilder(Set<ByProduct> byProducts, String mode, int minNumberOfParticipants, int maxNumberOfParticipants, String purchasingGroupAbilitation) {
 			this.byProducts = byProducts;
 			this.mode = mode;
@@ -79,39 +79,39 @@ public class BPQuery {
 			this.maxNumberOfParticipants = maxNumberOfParticipants;
 			this.purchasingGroupAbilitation = purchasingGroupAbilitation;
 		}
-		
+
 		public BPQueryBuilder setCertifications(Set<Certification> certifications) {
 			this.certifications = certifications;
 			return this;
 		}
-		
+
 		public BPQueryBuilder setSupplierMaxDistance(double supplierMaxDistance) {
 			this.supplierMaxDistance = supplierMaxDistance;
 			return this;
 		}
-		
+
 		public BPQueryBuilder setCustomerLocationInfo(Map<String, String> customerLocationInfo) {
 			this.customerLocationInfo = customerLocationInfo;
 			return this;
 		}
-		
+
 		public BPQueryBuilder setLanguage(Set<String> language) {
 			this.language = language;
 			return this;
 		}
-		
+
 		public BPQueryBuilder setCountries(Set<String> country) {
 			this.countries = country;
 			return this;
 		}
-		
+
 		public BPQuery build() {
 			return new BPQuery(this);
 		}
-		
+
 	}
-	
-	
+
+
 
 	public BPQuery() {
 	}
@@ -119,11 +119,11 @@ public class BPQuery {
 	public Set<ByProduct> getByProducts() {
 		return byProducts;
 	}
-	
+
 	public String getMode() {
 		return mode;
 	}
-	
+
 	public int getMinNumberOfParticipants() {
 		return minNumberOfParticipants;
 	}
@@ -131,11 +131,11 @@ public class BPQuery {
 	public int getMaxNumberOfParticipants() {
 		return maxNumberOfParticipants;
 	}
-	
+
 	public String getPurchasingGroupAbilitation() {
 		return purchasingGroupAbilitation;
 	}
-	
+
 	public Set<Certification> getCertifications() {
 		return certifications;
 	}
@@ -151,11 +151,11 @@ public class BPQuery {
 	public Set<String> getLanguage() {
 		return language;
 	}
-	
+
 	public Set<String> getCountry() {
 		return countries;
 	}
-	
+
 	public Set<Attribute> getAttributes() {
 		Set<ByProduct> byProducts = getByProducts();
 		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
@@ -200,67 +200,78 @@ public class BPQuery {
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		ByProductSharingRequest bpsr;
-		
+
 
 		if (JSONValidator.isJSONValid(filename)) {
 			bpsr = new Gson().fromJson(filename, ByProductSharingRequest.class);
 		} else {
 			bpsr = new Gson().fromJson(new FileReader(filename), ByProductSharingRequest.class);
 		}
-		
+
 		String purchasingGroupAbilitation = bpsr.getPurchasingGroupAbilitation();
 		int minNumberOfParticipants = bpsr.getMinNumberOfParticipants();
 		int maxNumberOfParticipants = bpsr.getMaxNumberOfParticipants();
-		
+
 
 		//get all byproduct (names) from the JSON
 		for (ByProductElement element : bpsr.getByProductElements()) {
-						
+
 			Set<Attribute> attributeSet = normaliseAttributes(element.getByProductAttributes());
-			
+
 			//get materials and appearances from attributeSet
 			for (Attribute bp : attributeSet) {
-				
+
 				if (bp.getKey().equals("AttributeMaterial")) {
+
+					if (QueryValidator.onlyLettersAndNumbers(bp.getValue())
+							&& QueryValidator.sufficientAmountOfCharacters(bp.getValue())
+							&& !QueryValidator.onlyNumbers(bp.getValue())
+							&& !QueryValidator.tooManyConsecutiveCharacters(bp.getValue())
+							&& bp.getValue() != null) {					
+					
 					materials.add(bp.getValue());
+					}
 				}
-				
+
 				if (bp.getKey().equals("Appearance")) {
 					appearances.add(bp.getValue());
 				}
-				
+
 			}
-			
-			System.out.println("BPQuery: Materials: " + materials);
-			System.out.println("BPQuery: Appearances: " + appearances);
-			
+
+
 			byProducts.add(
-					
+
 					new ByProduct.Builder(element.getSupplyType(), minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation, element.getQuantity(), element.getUom())
 					.setId(element.getByProductId())
 					.setName(QueryValidator.validateByProductName(element.getByProductName(), onto, allOntologyClasses))
-					.setMaterials(materials)
-//					.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
+					.setMaterials(QueryValidator.validateMaterials(materials, onto, allOntologyClasses))
 					.setAppearance(appearances)
 					.setAttributes(attributeSet)
 					.build());
-
-			
 		}
 
+
 		BPQuery query = null;
+		
+		//if materials is empty we return query = null
+		if (materials.isEmpty()) {
+			query = null;
+		}
+		
+		else {
 
 		//add geographical information to consumer query
 		double supplierMaxDistance = bpsr.getSupplierMaxDistance();
 		Map<String, String> customerInformation = bpsr.getCustomer().getCustomerInfo();
-		
+
 		String mode = bpsr.getMode();
 
 		//get certifications if they are specified by the consumer
 		if (bpsr.getSupplierAttributes() == null || bpsr.getSupplierAttributes().isEmpty()) {
 			//if no attributes nor certifications, we only add the processes to the ConsumerQuery object
 			//assuming that supplierMaxDistance and customerInformation (name, location, coordinates) are always included
-						
+
 			query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
 					setCustomerLocationInfo(customerInformation).
 					setSupplierMaxDistance(supplierMaxDistance).
@@ -276,62 +287,63 @@ public class BPQuery {
 				if (supplierAttributes.getAttributeKey().equalsIgnoreCase("Language")) {
 					languages.add(supplierAttributes.getAttributeValue());
 				}
-				
+
 				if (supplierAttributes.getAttributeKey().equalsIgnoreCase("Country")) {
 					countries.add(supplierAttributes.getAttributeValue());
 				}
 			}
 		}
 
-			//if both languages and countries
-			if (!languages.isEmpty() && !countries.isEmpty()) {
+		//if both languages and countries
+		if (!languages.isEmpty() && !countries.isEmpty()) {
 
-				query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
-						setCustomerLocationInfo(customerInformation).
-						setSupplierMaxDistance(supplierMaxDistance).
-						setCountries(countries).
-						setLanguage(languages).
-						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
-						build();
+			query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
+					setCustomerLocationInfo(customerInformation).
+					setSupplierMaxDistance(supplierMaxDistance).
+					setCountries(countries).
+					setLanguage(languages).
+					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+					build();
 
 
-			} else if (!languages.isEmpty() && countries.isEmpty()) {
-				
-				query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
-						setCustomerLocationInfo(customerInformation).
-						setSupplierMaxDistance(supplierMaxDistance).
-						setLanguage(languages).
-						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
-						build();
-				
-				
-			} else if (!countries.isEmpty() && languages.isEmpty())  {
-				
-				query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
-						setCustomerLocationInfo(customerInformation).
-						setSupplierMaxDistance(supplierMaxDistance).
-						setCountries(countries).
-						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
-						build();
-			}
-			else {
-			
-				//if there are certifications specified we add those along with processes to the ConsumerQuery object
-				query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
-						setCustomerLocationInfo(customerInformation).
-						setSupplierMaxDistance(supplierMaxDistance).
-						setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
-						build();
-			}
-		
+		} else if (!languages.isEmpty() && countries.isEmpty()) {
+
+			query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
+					setCustomerLocationInfo(customerInformation).
+					setSupplierMaxDistance(supplierMaxDistance).
+					setLanguage(languages).
+					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+					build();
+
+
+		} else if (!countries.isEmpty() && languages.isEmpty())  {
+
+			query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
+					setCustomerLocationInfo(customerInformation).
+					setSupplierMaxDistance(supplierMaxDistance).
+					setCountries(countries).
+					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+					build();
+		}
+		else {
+
+			//if there are certifications specified we add those along with processes to the ConsumerQuery object
+			query = new BPQuery.BPQueryBuilder(byProducts, mode, minNumberOfParticipants, maxNumberOfParticipants, purchasingGroupAbilitation).
+					setCustomerLocationInfo(customerInformation).
+					setSupplierMaxDistance(supplierMaxDistance).
+					setCertifications(QueryValidator.validateCertifications(certifications, onto, allOntologyClasses)).
+					build();
+		}
+		}
+
 
 		return query;
 	}
-	
+
 	public static Set<Attribute> normaliseAttributes (Set<ByProductAttribute> bps) {
-		
+
 		Set<Attribute> attrs = new HashSet<Attribute>();
-		
+
 		for (ByProductAttribute bp : bps) {
 			Attribute attr = new Attribute();
 			attr.setKey(bp.getKey());
@@ -353,7 +365,7 @@ public class BPQuery {
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));
 		BPQuery query = createByProductQuery(filename, onto);
 		System.out.println("Printing query from JSON file: " + filename);
-		
+
 		System.out.println("Number of byproducts: " + query.getByProducts().size());
 
 		for (ByProduct bp : query.getByProducts()) {
@@ -366,20 +378,20 @@ public class BPQuery {
 
 			System.out.println("\nOther attributes: ");
 			if (bp.getAttributes() != null) {
-			for (Attribute a : bp.getAttributes()) {
-				if (!a.getKey().equals("AttributeMaterial") && !a.getKey().equals("Appearance")) {
-				System.out.println("   Attribute: " + a.getKey());
+				for (Attribute a : bp.getAttributes()) {
+					if (!a.getKey().equals("AttributeMaterial") && !a.getKey().equals("Appearance")) {
+						System.out.println("   Attribute: " + a.getKey());
+					}
 				}
+			} else {
+				System.out.println("There are no attributes!");
 			}
-		} else {
-			System.out.println("There are no attributes!");
-		}
 		}
 
 
-//		for (Certification cert : query.getCertifications()) {
-//			System.out.println("Certification: " + cert.getId());
-//		}
+		//		for (Certification cert : query.getCertifications()) {
+		//			System.out.println("Certification: " + cert.getId());
+		//		}
 
 		System.out.println("Max supplier distance: " + query.getSupplierMaxDistance());
 		System.out.println("Mode: " + query.getMode());

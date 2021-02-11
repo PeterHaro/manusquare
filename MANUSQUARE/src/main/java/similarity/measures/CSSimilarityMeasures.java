@@ -1,6 +1,7 @@
 package similarity.measures;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.google.common.graph.MutableGraph;
 import edm.Attribute;
 import edm.Certification;
 import edm.Process;
+import graph.Graph;
 import ontology.OntologyOperations;
 import query.CSQuery;
 import similarity.MaterialSimilarity;
@@ -24,7 +26,6 @@ import similarity.methodologies.parameters.SimilarityParameters;
 import similarity.methodologies.parameters.SimilarityParametersFactory;
 import supplier.CSSupplier;
 import utilities.MathUtilities;
-import validation.QueryValidator;
 
 public class CSSimilarityMeasures {
 
@@ -34,6 +35,18 @@ public class CSSimilarityMeasures {
 
 		List<Process> processList = supplier.getProcesses();
 		List<Certification> certificationList = supplier.getCertifications();
+		
+		//TODO:  Check if this is a good approach for updating the graph with supplier-defined concepts
+		List<String> supplierDefinedProcesses = new ArrayList<String>();
+		List<String> supplierDefinedMaterials = new ArrayList<String>();
+		
+		for (Process p : processList) {
+			supplierDefinedProcesses.add(p.getName());
+			supplierDefinedMaterials.addAll(p.getMaterials());
+		}
+		
+		Graph.addProcessesToGraph(graph, supplierDefinedProcesses);
+		Graph.addMaterialsToGraph(graph, supplierDefinedMaterials);
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
 
@@ -93,23 +106,22 @@ public class CSSimilarityMeasures {
 
 				Set<String> supplierMaterials = ps.getMaterials();
 
-				//ensure valid supplier materials
-				Set<String> validatedSupplierMaterials = QueryValidator.validateMaterials(supplierMaterials, onto, allOntologyClasses);
+				//TODO: Skip validation since all materials are added to graph // ensure valid supplier materials
+				//Set<String> validatedSupplierMaterials = QueryValidator.validateMaterials(supplierMaterials, onto, allOntologyClasses);
 				
 				System.out.println("consumerMaterials: " + consumerMaterials);
-				System.out.println("supplierMaterials: " + validatedSupplierMaterials);
+				System.out.println("supplierMaterials: " + supplierMaterials);
 
-				if (consumerMaterials != null && consumerMaterials.isEmpty()) {
-					materialSim = 1.0;
-				} else {
-					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, validatedSupplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);
-				}
+				materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);
+				
 				System.out.println("materialSim for supplier " + supplier.getSupplierId() + ": " + materialSim);
 
 				/* ATTRIBUTE SIMILARITY */		
 
 				Set<Attribute> consumerAttributes = pc.getAttributes();
 				double avgAttributeSim = 0;
+				
+				System.out.println("CSSimilarityMeasures: AttributeWeightMap: " + ps.getAttributeWeightMap());
 
 				//if there are any consumer attributes, we use these to influence the processAndMaterialSim
 				if (consumerAttributes != null && !consumerAttributes.isEmpty()) {

@@ -46,7 +46,7 @@ public class IMQuery {
 	public Set<String> getLanguages() {
 		return languages;
 	}
-	
+
 	public Set<String> getCountries() {
 		return countries;
 	}
@@ -66,8 +66,8 @@ public class IMQuery {
 	public List<String> getSectors() {
 		return sectors;
 	}
-	
-	
+
+
 
 
 	private IMQuery(IMQueryBuilder builder) {
@@ -90,7 +90,7 @@ public class IMQuery {
 		private List<String> innovationTypes;
 		private List<String> skills;
 		private List<String> sectors;
-		
+
 		public IMQueryBuilder(List<String> skills, List<String> innovationPhases, List<String> innovationTypes, List<String> sectors) {		
 			this.skills = skills;
 			this.innovationPhases = innovationPhases;
@@ -108,7 +108,7 @@ public class IMQuery {
 			this.languages = language;
 			return this;
 		}	
-		
+
 		public IMQueryBuilder setCountries(Set<String> countries) {
 			this.countries = countries;
 			return this;
@@ -132,7 +132,7 @@ public class IMQuery {
 	 */
 	public static IMQuery createQuery (String filename, OWLOntology onto) throws JsonSyntaxException, JsonIOException, IOException {
 		IMQuery query = null;
-		
+
 		Set<Certification> certifications = new HashSet<Certification>();
 		Set<String> languages = new HashSet<String>();
 		Set<String> countries = new HashSet<String>();
@@ -140,7 +140,7 @@ public class IMQuery {
 		List<String> innovationManagementTypes = new ArrayList<String>();
 		List<String> innovationManagementSkills = new ArrayList<String>();
 		List<String> innovationManagementSectors = new ArrayList<String>();
-		
+
 		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		InnovationManagementRequest imr;
@@ -156,7 +156,7 @@ public class IMQuery {
 			for (String ip : imr.getProjectInnovationPhases()) {
 				innovationManagementPhase = QueryValidator.validateInnovationPhase(ip, onto, allOntologyClasses);
 				if (innovationManagementPhase != null) {
-				innovationManagementPhases.add(innovationManagementPhase);
+					innovationManagementPhases.add(innovationManagementPhase);
 				} 
 			}
 		}
@@ -166,28 +166,61 @@ public class IMQuery {
 			for (String it : imr.getProjectInnovationTypes()) {
 				innovationManagementType = QueryValidator.validateInnovationType(it, onto, allOntologyClasses);
 				if (innovationManagementType != null) {
-				innovationManagementTypes.add(innovationManagementType);
+					innovationManagementTypes.add(innovationManagementType);
 				} 
 			}
 		}
 
 		if (imr.getInnovationManagerSkills() != null || !imr.getInnovationManagerSkills().isEmpty()) {
-			String innovationManagementSkill = null;			
+			String innovationManagementSkill = null;		
+			
 			for (InnovationManagerSkill skill : imr.getInnovationManagerSkills()) {
-				innovationManagementSkill = QueryValidator.validateSkill(skill.skill, onto, allOntologyClasses);
-				if (innovationManagementSkill != null) {
-				innovationManagementSkills.add(innovationManagementSkill);
+				
+				if (QueryValidator.onlyLettersAndNumbers(skill.getSkill())
+						&& QueryValidator.sufficientAmountOfCharacters(skill.getSkill())
+						&& !QueryValidator.onlyNumbers(skill.getSkill())
+						&& !QueryValidator.tooManyConsecutiveCharacters(skill.getSkill())
+						&& skill.getSkill() != null) {
+
+					innovationManagementSkill = QueryValidator.validateSkill(skill.getSkill(), onto, allOntologyClasses);
+
+					if (innovationManagementSkill != null) {
+						innovationManagementSkills.add(innovationManagementSkill);
+					}
+				} else {
+					
+					
+					innovationManagementSkills = null;
 				}
 			}
 		}
 
 		if (imr.getInnovationManagerSectors() != null || !imr.getInnovationManagerSectors().isEmpty()) {
 			String innovationManagementSector = null;
+			
 			for (InnovationManagerSector sector : imr.getInnovationManagerSectors()) {
-				innovationManagementSector = QueryValidator.validateSector(sector.sector, onto, allOntologyClasses);
-				if (innovationManagementSector != null) {
-				innovationManagementSectors.add(innovationManagementSector);
+				
+				System.out.println("Initial sector before validation is: " + sector.sector);
+
+				if (QueryValidator.onlyLettersAndNumbers(sector.getSector())
+						&& QueryValidator.sufficientAmountOfCharacters(sector.getSector())
+						&& !QueryValidator.onlyNumbers(sector.getSector())
+						&& !QueryValidator.tooManyConsecutiveCharacters(sector.getSector())
+						&& sector.getSector() != null) {
+
+					System.out.println("Initial sector is: " + sector.sector);
+					innovationManagementSector = QueryValidator.validateSector(sector.sector, onto, allOntologyClasses);
+					System.out.println("Validated sector is: " + innovationManagementSector);
+					if (innovationManagementSector != null) {
+						innovationManagementSectors.add(innovationManagementSector);
+					}
+				} else {
+					
+					System.out.println("Returning null for " + sector.sector);
+					
+					innovationManagementSectors = null;
 				}
+
 			}
 		}
 
@@ -200,7 +233,7 @@ public class IMQuery {
 				if (attributes.attributeKey.equalsIgnoreCase("language")) {
 					languages.add(attributes.attributeValue);
 				}
-				
+
 				if (attributes.attributeKey.equalsIgnoreCase("Country")) {
 					countries.add(attributes.attributeValue);
 				}
@@ -208,22 +241,22 @@ public class IMQuery {
 			}
 		}
 
-			if ((certifications != null || !certifications.isEmpty())
-					&& (languages != null || !languages.isEmpty())) {
+		if ((certifications != null || !certifications.isEmpty())
+				&& (languages != null || !languages.isEmpty())) {
 
-				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors)
-						.setCertifications(certifications)
-						.setLanguage(languages)
-						.setCountries(countries)
-						.build();
+			query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors)
+					.setCertifications(certifications)
+					.setLanguage(languages)
+					.setCountries(countries)
+					.build();
 
-			} else if (languages == null || languages.isEmpty()) {
-				
-				query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors)
-						.setCertifications(certifications)
-						.setCountries(countries)
-						.build();
-			}
+		} else if (languages == null || languages.isEmpty()) {
+
+			query = new IMQuery.IMQueryBuilder(innovationManagementSkills, innovationManagementPhases, innovationManagementTypes, innovationManagementSectors)
+					.setCertifications(certifications)
+					.setCountries(countries)
+					.build();
+		}
 
 		return query;
 	}
@@ -247,7 +280,7 @@ public class IMQuery {
 		for (Certification c : query.getCertifications()) {
 			System.out.println("Certifications: " + c.getId());
 		}
-		
+
 
 	}
 

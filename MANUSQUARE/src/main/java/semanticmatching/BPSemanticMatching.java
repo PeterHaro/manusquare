@@ -4,9 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,15 +22,12 @@ import com.google.common.graph.MutableGraph;
 import com.google.gson.GsonBuilder;
 
 import edm.ByProduct;
-import edm.Certification;
 import graph.Graph;
 import query.BPQuery;
 import similarity.measures.BPSimilarityMeasures;
 import similarity.results.ExtendedMatchingResult;
 import supplier.BPSupplier;
 import supplierdata.BPSupplierData;
-import utilities.MathUtilities;
-import validation.ByProductValidator;
 
 /**
  * Contains functionality for performing the semantic matching in the Matchmaking service.
@@ -83,33 +78,47 @@ public class BPSemanticMatching extends SemanticMatching {
 
 		BPQuery query = BPQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 
-		Set<String> materials = new HashSet<String>();
+		if (query != null) {
 
-		//just to get the number of relevant by-products
-		for (ByProduct p : query.getByProducts()) {
-			materials.addAll(p.getMaterials());
+			Set<String> materials = new HashSet<String>();
 
+			//just to get the number of relevant by-products
+			for (ByProduct p : query.getByProducts()) {
+				materials.addAll(p.getMaterials());
+
+			}
+
+			//create graph
+			MutableGraph<String> graph = null;
+			graph = Graph.createGraph(ontology);
+
+			if (!materials.isEmpty() && materials != null) {
+				Graph.addMaterialsToGraph(graph, new ArrayList<>(materials));
+			}
+
+
+			//get supplier data from SI and re-organise
+			List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+
+			TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
+
+			for (BPSupplier supplier : supplierData) {
+				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+
+			}
+
+			List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
+
+			System.err.println("results: " + results);
+
+			writeExtendedResultToOutput(results, writer);
+
+		} else {
+
+			List<ExtendedMatchingResult> noResults = new ArrayList<ExtendedMatchingResult>();
+
+			writeExtendedResultToOutput(noResults, writer);
 		}
-
-		//create graph
-		MutableGraph<String> graph = null;
-		graph = Graph.createGraph(ontology, materials);
-
-		//get supplier data from SI and re-organise
-		List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
-
-		TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
-
-		for (BPSupplier supplier : supplierData) {
-			supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
-
-		}
-
-		List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
-
-		System.err.println("results: " + results);
-
-		writeExtendedResultToOutput(results, writer);
 
 	}
 
@@ -142,69 +151,45 @@ public class BPSemanticMatching extends SemanticMatching {
 
 		BPQuery query = BPQuery.createByProductQuery(inputJson, ontology); // get process(s) from the query and use them to subset the supplier records in the SPARQL query
 
-		Set<String> materials = new HashSet<String>();
+		if (query != null) {
 
-		//just to get the number of relevant by-products
-		for (ByProduct p : query.getByProducts()) {
-			materials.addAll(p.getMaterials());
+			Set<String> materials = new HashSet<String>();
 
-		}
+			//just to get the number of relevant by-products
+			for (ByProduct p : query.getByProducts()) {
+				materials.addAll(p.getMaterials());
 
-		//create graph
-		MutableGraph<String> graph = null;
-		graph = Graph.createGraph(ontology, materials);
-
-		//get supplier data from SI and re-organise
-		List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
-
-		TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
-
-		for (BPSupplier supplier : supplierData) {
-			supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
-
-		}
-
-		List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
-
-		return results;
-
-	}
-
-
-	/**
-	 * Prints the query and the ranked list of suppliers along with the similarity score as well as processes offered by each supplier (for validation of the algorithms).
-	 *
-	 * @param query          The query from which a ranked list of suppliers is computed.
-	 * @param supplierScores Map holding suppliers (key) and their similarity scores (value)
-	 * @param numResults     number of results to include in the ranked list.
-	 *                       Nov 4, 2019
-	 */
-	private static void printResultsToConsole(BPQuery query, List<ExtendedMatchingResult> results) {
-
-		//below code is used for testing purposes
-		System.out.println("Consumer query:");
-		int n = 1;
-		for (ByProduct p : query.getByProducts()) {
-			System.out.println("ByProduct " + n + ": " + p.getName());
-
-			n++;
-		}
-
-		//check if the query includes certifications
-		if (query.getCertifications() != null && !query.getCertifications().isEmpty()) {
-			System.out.println("Certifications: ");
-			for (Certification c : query.getCertifications()) {
-				System.out.println(c.getId());
 			}
+
+			//create graph
+			MutableGraph<String> graph = null;
+			graph = Graph.createGraph(ontology);
+
+			if (!materials.isEmpty() && materials != null) {
+				Graph.addMaterialsToGraph(graph, new ArrayList<>(materials));
+			}
+
+
+			//get supplier data from SI and re-organise
+			List<BPSupplier> supplierData = BPSupplierData.createSupplierData(query, testing, ontology, SPARQL_ENDPOINT, AUTHORISATION_TOKEN);
+
+			TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
+
+			for (BPSupplier supplier : supplierData) {
+				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+
+			}
+
+			List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
+			return results;
+
+		} else {
+			
+			List<ExtendedMatchingResult> noResults = new ArrayList<ExtendedMatchingResult>();
+			return noResults;
 		}
 
-		System.out.println("\nRanked results from semantic matching");
-		int ranking = 0;
 
-		for (ExtendedMatchingResult result : results) {
-			ranking++;
-			System.out.println("\n" + ranking + "; Supplier ID: " + result.getSupplierId() + "; Sim score: " + result.getByProductScores().values() + "; Rank: " + result.getRank());
-		}
 
 	}
 

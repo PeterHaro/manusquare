@@ -11,11 +11,18 @@
 	"projectType": "DEMO - Capacity Sharing",
 	"projectAttributes": [
 	{
+		"unitOfMeasure": "m",
+		"attributeId": "",
+		"processName": "3DFDMPrinter",
+		"attributeKey": "Length",
+		"attributeValue": "5"
+	},
+	{
 		"unitOfMeasure": "",
 		"attributeId": "",
-		"processName": "ChocolateProcessing",
+		"processName": "3DFDMPrinter",
 		"attributeKey": "AttributeMaterial",
-		"attributeValue": "Chocolate"
+		"attributeValue": "Plastic"
 	}
 	],
 	"supplierAttributes": []

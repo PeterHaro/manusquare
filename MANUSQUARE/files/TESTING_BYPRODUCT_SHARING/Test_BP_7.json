@@ -30,11 +30,6 @@
                 "attributeKey": "MinLayerThickness",
                 "attributeValue": "3",
                 "unitOfMeasure": "mm"
-            },
-            {
-                "attributeKey": "AttributeMaterial",
-                "attributeValue": "Silk",
-                "unitOfMeasure": ""
             }
         ]
 

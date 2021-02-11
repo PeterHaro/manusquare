@@ -40,15 +40,13 @@ public class Test {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "BP";
+		String functionality = "IM";
 
 
 		File folder = null;
 		File[] files = null;
 		BufferedWriter bfwriter = null;
 		switch (functionality) {
-		
-		
 
 		case "CS":
 			
@@ -60,6 +58,9 @@ public class Test {
 			bfwriter = new BufferedWriter(new FileWriter("./files/TEST_OUTPUT/cs.txt"));
 			
 			for (File f : files) {
+				
+				System.out.println("Testing " + f.getPath());
+				
 				csResult = CSSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
 				
 				if (csResult != null) {
@@ -91,6 +92,9 @@ public class Test {
 			bfwriter = new BufferedWriter(new FileWriter("./files/TEST_OUTPUT/im.txt"));
 			
 			for (File f : files) {
+				
+				System.out.println("Testing " + f.getPath());
+				
 				imResult = IMSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
 				
 				if (imResult != null) {
@@ -121,7 +125,7 @@ public class Test {
 			
 			for (File f : files) {
 				
-				System.err.println("Trying file " + f.getPath());
+				System.out.println("Testing " + f.getPath());
 				
 				bpResult = BPSemanticMatching.testByProductMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
 				

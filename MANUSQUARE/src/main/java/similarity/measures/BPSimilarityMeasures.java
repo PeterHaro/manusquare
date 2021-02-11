@@ -1,6 +1,7 @@
 package similarity.measures;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -17,6 +18,7 @@ import NEW.PurchaseGroupAbilitation;
 import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
+import graph.Graph;
 import ontology.OntologyOperations;
 import query.BPQuery;
 import similarity.AppearanceSimilarity;
@@ -125,14 +127,18 @@ public class BPSimilarityMeasures {
 					
 					//TODO: Should byProductName be considered in the matching? consumerByProductMaterial = bpc.getName();
 					
-					//if there are no consumer materials from attributes, create a new hashset to keep byProductName
-					if (consumerMaterials == null) {
-						consumerMaterials = new HashSet<String>();
-					}
+					//TODO: Can be removed?if there are no consumer materials from attributes, create a new hashset to keep byProductName
+//					if (consumerMaterials == null) {
+//						consumerMaterials = new HashSet<String>();
+//					}
 					
 					//TODO: Can be removed? consumerMaterials.add(consumerByProductMaterial);			
 					
 					Set<String> supplierMaterials = bps.getMaterials();
+					
+					//TODO:  Check if this is a good approach for updating the graph with supplier-defined concepts
+					List<String> supplierMaterialsList = new ArrayList<>(supplierMaterials);
+					Graph.addMaterialsToGraph(graph, supplierMaterialsList);
 					
 					System.out.println("consumerMaterials: " + consumerMaterials);
 					System.out.println("supplierMaterials: " + supplierMaterials);
@@ -148,6 +154,7 @@ public class BPSimilarityMeasures {
 
 					Set<Attribute> consumerAttributes = bpc.getAttributes();
 					Map<String, String> attributeWeightMap = bps.getAttributeWeightMap();
+					System.out.println("BPSimilarityMeasures: attributeWeightMap: " + attributeWeightMap);
 					double avgAttributeSim = AttributeSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
 					System.out.println("avgAttributeSim: " + avgAttributeSim);
 					finalByProductSim = (materialSim * 0.6) + (appearanceSim * 0.2) + (avgAttributeSim * 0.2);

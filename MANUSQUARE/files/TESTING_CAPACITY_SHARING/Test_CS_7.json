@@ -11,18 +11,21 @@
 	"projectType": "DEMO - Capacity Sharing",
 	"projectAttributes": [{
 		"unitOfMeasure": "",
-		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "Miling",
-		"attributeKey": "AttributeMaterial",
-		"attributeValue": "KarbonSteel"
-	},
+		"attributeId": "",
+		"processName": "abcde%df",
+		"attributeKey": "",
+		"attributeValue": ""
+	}],
+	"supplierAttributes": [
 	{
-		"unitOfMeasure": "mm",
-		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
-		"processName": "Miling",
-		"attributeKey": "MaxPartSizeX",
-		"attributeValue": "1.0"
-	}
-	],
-	"supplierAttributes": []
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO9001"
+		},
+		{
+			"id": "234234234",
+			"attributeKey": "certification",
+			"attributeValue": "ISO14001"
+		}
+	]
 }

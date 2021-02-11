@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import com.google.common.graph.MutableGraph;
 
 import edm.Certification;
+import graph.Graph;
 import ontology.OntologyOperations;
 import query.IMQuery;
 import similarity.SimilarityMethods;
@@ -31,12 +32,17 @@ public class IMSimilarityMeasures {
 
 	public static List<Double> computeSemanticSimilarity_IM (IMQuery query, IMSupplier innovationManager, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) {
 
-
-		List<Certification> certificationList = innovationManager.getCertifications();
 		List<String> supplierInnovationPhases = innovationManager.getInnovationPhases();
 		List<String> supplierInnovationTypes = innovationManager.getInnovationTypes();
 		List<String> supplierSkills = innovationManager.getSkills();
 		List<String> supplierSectors = innovationManager.getSectors();
+		
+		Graph.addInnovationPhasesToGraph(graph, supplierInnovationPhases);
+		Graph.addInnovationTypesToGraph(graph, supplierInnovationTypes);
+		Graph.addSkillsToGraph(graph, supplierSkills);
+		Graph.addSectorsToGraph(graph, supplierSectors);
+		
+		List<Certification> certificationList = innovationManager.getCertifications();
 		String supplierName = innovationManager.getSupplierName();
 		String supplierID = innovationManager.getSupplierId();
 
@@ -177,7 +183,7 @@ public class IMSimilarityMeasures {
 		else {
 			
 			//List<String> classesAndLabels = getConceptNamesAndLabels(consumerSet, onto);
-			
+						
 			if (StringUtilities.containsAllIgnoreCase(consumerSet, supplierSet)) {
 				return 1.0;
 			}

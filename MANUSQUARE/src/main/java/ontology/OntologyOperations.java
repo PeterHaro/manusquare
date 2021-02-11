@@ -59,20 +59,20 @@ public class OntologyOperations {
 
 		File ontoFile = new File ("./files/ONTOLOGIES/updatedOntology.owl");
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
-		
-//		Map<String, String> classLabelMap = getClassLabels(onto);
-//		
-//		System.out.println("The classLabelMap contains " + classLabelMap.size() + " entries.");
-//		
-//		for (Entry<String, String> e : classLabelMap.entrySet()) {
-//			System.out.println("Class: " + e.getKey() + ": " + e.getValue());
-//		}
 
-		
+		//		Map<String, String> classLabelMap = getClassLabels(onto);
+		//		
+		//		System.out.println("The classLabelMap contains " + classLabelMap.size() + " entries.");
+		//		
+		//		for (Entry<String, String> e : classLabelMap.entrySet()) {
+		//			System.out.println("Class: " + e.getKey() + ": " + e.getValue());
+		//		}
+
+
 		Map<String, String> classesAndSuperClasses = getClassesAndSuperClassesUsingPellet (onto);
-		
+
 		BufferedWriter bfwriter = new BufferedWriter(new FileWriter("./files/TEST_OUTPUT/ontologyclasses.txt"));
-		
+
 		for (Entry<String, String> e : classesAndSuperClasses.entrySet()) {
 			bfwriter.append("\nClass: " + e.getKey() + ", superclass: " + e.getValue());
 		}
@@ -92,15 +92,15 @@ public class OntologyOperations {
 		Map<String, String> classLabels = new HashMap<String, String>();
 
 		for (OWLClass cls : onto.getClassesInSignature()) {
-				for (OWLAnnotationAssertionAxiom a : onto.getAnnotationAssertionAxioms(cls.getIRI())) {
-					
-					System.out.println("The annotation for " + cls + " is " + a.getProperty());
-					
-					if (a.getProperty() != null && a.getProperty().isLabel()) {
-						//need to use a.getValue() instead of a.getAnnotation() to avoid including 'Annotation rdfs comment' that is included before the real definition.						
-						classLabels.put(cls.getIRI().getFragment(), a.getValue().toString().substring(a.getValue().toString().indexOf("\"")+1, a.getValue().toString().lastIndexOf("\"")));
-						
-					}
+			for (OWLAnnotationAssertionAxiom a : onto.getAnnotationAssertionAxioms(cls.getIRI())) {
+
+				System.out.println("The annotation for " + cls + " is " + a.getProperty());
+
+				if (a.getProperty() != null && a.getProperty().isLabel()) {
+					//need to use a.getValue() instead of a.getAnnotation() to avoid including 'Annotation rdfs comment' that is included before the real definition.						
+					classLabels.put(cls.getIRI().getFragment(), a.getValue().toString().substring(a.getValue().toString().indexOf("\"")+1, a.getValue().toString().lastIndexOf("\"")));
+
+				}
 
 			}
 
@@ -118,27 +118,35 @@ public class OntologyOperations {
 	 * @return
 	Feb 10, 2020
 	 */
-	public static Set<String> getEquivalentClassesAsString(OWLClassExpression cls, OWLOntology o) {
-		Set<String> result = new HashSet<String>();
+	public static Set<String> getEquivalentClassesAsString(String cls, OWLOntology o) {
 
-		OpenlletReasoner reasoner = OpenlletReasonerFactory.getInstance().createReasoner(o);
+		OWLClassExpression owlCls = getClass(cls, o);
 
-		Node<OWLClass> equivalentClasses = reasoner.getEquivalentClasses(cls);
-
-		Set<OWLClass> owlSet = null;
-
-		if (cls.isAnonymous()) {
-			owlSet = equivalentClasses.getEntities();
+		if (owlCls == null) {
+			return null;
 		} else {
-			owlSet = equivalentClasses.getEntitiesMinus(cls.asOWLClass()); //get (equivalent) entities minus cls
+
+			Set<String> result = new HashSet<String>();
+
+			OpenlletReasoner reasoner = OpenlletReasonerFactory.getInstance().createReasoner(o);
+
+			Node<OWLClass> equivalentClasses = reasoner.getEquivalentClasses(owlCls);
+
+			Set<OWLClass> owlSet = null;
+
+			if (owlCls.isAnonymous()) {
+				owlSet = equivalentClasses.getEntities();
+			} else {
+				owlSet = equivalentClasses.getEntitiesMinus(owlCls.asOWLClass()); //get (equivalent) entities minus cls
+			}
+
+			for (OWLClass c : owlSet) {
+
+				result.add(getFragmentHack(c.getIRI().toString()));
+			}
+
+			return result;
 		}
-
-		for (OWLClass c : owlSet) {
-
-			result.add(getFragmentHack(c.getIRI().toString()));
-		}
-
-		return result;
 
 	}
 

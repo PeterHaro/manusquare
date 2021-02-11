@@ -20,6 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import com.google.common.graph.MutableGraph;
 
 import edm.Attribute;
 import edm.Certification;
@@ -47,9 +48,9 @@ public class CSSupplierData {
 	 * Nov 9, 2019
 	 * @throws OWLOntologyCreationException
 	 */
-	public static List<CSSupplier> createSupplierData(CSQuery query, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
+	public static List<CSSupplier> createSupplierData(CSQuery query, boolean testing, MutableGraph<String> graph, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) {
 
-		String strQuery = CSSparqlQuery.createSparqlQuery(query, onto);
+		String strQuery = CSSparqlQuery.createSparqlQuery(query);
 		Set<CSSparqlResult> sparqlResults = new HashSet<CSSparqlResult>();		
 
 		//use name of processes in query to retrieve subset of relevant supplier data from semantic infrastructure
@@ -88,7 +89,6 @@ public class CSSupplierData {
 		//connect to triplestore
 		TupleQuery tupleQuery = SparqlConnection.connect(repository, testing, strQuery);
 
-
 			try (TupleQueryResult result = tupleQuery.evaluate()) {
 
 				Attribute supplierAttribute = new Attribute();
@@ -115,6 +115,7 @@ public class CSSupplierData {
 							&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
 							&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
 										
+						System.out.println("CSSupplierData: creating attributeweightmap for supplier id: " + solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
 						attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);								
 
 					} 
