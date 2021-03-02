@@ -12,8 +12,9 @@ public class AttributeSimilarity {
 
 		double attributeSim = 0;
 		double avgAttributeSim = 0;
+		
 
-		if (consumerAttributes != null) {
+		if (consumerAttributes != null && containsAttributes(consumerAttributes)) {
 
 			if (attributeWeightMap != null) {
 
@@ -65,6 +66,23 @@ public class AttributeSimilarity {
 		}
 
 		return avgAttributeSim;
+	}
+	
+	private static boolean containsAttributes (Set<Attribute> attributes) {
+		
+		int counter = 0;
+		
+		for (Attribute att : attributes) {
+			if (!att.getKey().equalsIgnoreCase("AttributeMaterial") && !att.getKey().equalsIgnoreCase("Appearance")) {
+				counter++;
+			} 
+		}
+				
+		if (counter > 0) {
+			return true;
+		}
+		
+		return false;
 	}
 
 }
