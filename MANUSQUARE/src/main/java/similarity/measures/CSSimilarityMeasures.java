@@ -106,8 +106,6 @@ public class CSSimilarityMeasures {
 
 				Set<String> supplierMaterials = ps.getMaterials();
 
-				//TODO: Skip validation since all materials are added to graph // ensure valid supplier materials
-				//Set<String> validatedSupplierMaterials = QueryValidator.validateMaterials(supplierMaterials, onto, allOntologyClasses);
 				
 				System.out.println("consumerMaterials: " + consumerMaterials);
 				System.out.println("supplierMaterials: " + supplierMaterials);

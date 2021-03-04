@@ -1,0 +1,70 @@
+{
+	"nda": "",
+	"projectName": "Prova",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+		"customer": {
+		"customerInfo": {
+			"location": "",
+			"lat": "",
+			"lon": ""
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"projectType": "DEMO - Capacity Sharing",
+	"projectAttributes": [
+	{
+		"unitOfMeasure": "",
+		"attributeId": "",
+		"processName": "Milling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "Aluminium"
+	},
+	{
+		"unitOfMeasure": "",
+		"attributeId": "",
+		"processName": "Milling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
+	},
+	{
+		"unitOfMeasure": "mm",
+		"attributeId": "",
+		"processName": "Milling",
+		"attributeKey": "Axis",
+		"attributeValue": "5"
+	},
+	{
+		"unitOfMeasure": "mm",
+		"attributeId": "",
+		"processName": "Milling",
+		"attributeKey": "MaxPartSizeX",
+		"attributeValue": "50"
+	},
+	{
+		"unitOfMeasure": "mm",
+		"attributeId": "",
+		"processName": "Milling",
+		"attributeKey": "MaxPartSizeY",
+		"attributeValue": "20"
+	},
+	{
+		"unitOfMeasure": "mm",
+		"attributeId": "",
+		"processName": "Milling",
+		"attributeKey": "MaxWallThickness",
+		"attributeValue": "1"
+	}
+	],
+	"supplierAttributes": [
+
+	{
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
+        "attributeKey": "Certification",
+        "attributeValue": "ISO9001"
+	}
+	]
+}

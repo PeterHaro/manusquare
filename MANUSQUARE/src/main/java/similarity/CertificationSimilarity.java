@@ -48,5 +48,22 @@ public class CertificationSimilarity {
 
 		return certificationSimilarity;
 	}
+	
+	public static boolean containsCertifications (Set<Certification> initialConsumerCertifications) {
+		
+		int counter = 0;
+		
+		for (Certification cert : initialConsumerCertifications) {
+			if (cert.getId() != null && !cert.getId().isEmpty()) {
+				counter++;
+			} 
+		}
+				
+		if (counter > 0) {
+			return true;
+		}
+		
+		return false;
+	}
 
 }

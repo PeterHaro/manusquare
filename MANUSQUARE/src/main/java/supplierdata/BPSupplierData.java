@@ -290,6 +290,7 @@ public class BPSupplierData {
 
 			Set<String> materials = new HashSet<String>();
 			Set<String> appearances = new HashSet<String>();
+			double minQuantity = 0;
 
 			for (BPSparqlResult sr : sparqlResults) {
 
@@ -322,9 +323,7 @@ public class BPSupplierData {
 
 					String purchasingGroupAbilitation = sr.getPurchasingGroupAbilitation();
 					String quantity = sr.getByProductQuantity();
-
-					double minQuantity = 0;
-
+					
 					//TODO: Check if minQuantity is mandatory
 					if (sr.getByProductMinQuantity() != null && !sr.getByProductMinQuantity().isEmpty()) {
 
@@ -335,7 +334,7 @@ public class BPSupplierData {
 						minQuantity = 0;
 
 					}
-
+					
 					String uom = sr.getByProductUOM();
 					String material = sr.getMaterial();
 
@@ -356,6 +355,7 @@ public class BPSupplierData {
 							.setMaterials(materials)
 							.setAppearance(appearances)
 							.setAttributeWeightMap(attributeWeightMapLookup.get(wsProfileId))
+							.setMinQuantity(minQuantity)
 							.build();
 
 

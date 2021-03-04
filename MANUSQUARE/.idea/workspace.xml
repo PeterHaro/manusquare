@@ -29,19 +29,8 @@
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/Radostin_13012021/Radostin_13012021.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/TESTING_BYPRODUCT_SHARING/Radostin_13012021.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/Radostin_18012021/Radostin_18012021.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/TESTING_BYPRODUCT_SHARING/Radostin_18012021.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/TESTING_BYPRODUCT_SHARING/Test_BP_3.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/TESTING_BYPRODUCT_SHARING/Test_BP_3.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/TEST_OUTPUT/bp.txt" beforeDir="false" afterPath="$PROJECT_DIR$/files/TEST_OUTPUT/bp.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/embedding/evaluation/EmbeddingEvaluation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/semanticmatching/BPSemanticMatching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/semanticmatching/BPSemanticMatching.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/semanticmatching/CSSemanticMatching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/semanticmatching/CSSemanticMatching.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/semanticmatching/IMSemanticMatching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/semanticmatching/IMSemanticMatching.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/similarity/measures/IMSimilarityMeasures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/similarity/measures/IMSimilarityMeasures.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/supplierdata/BPSupplierData_OLD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/TESTING_CAPACITY_SHARING/Test_CS_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/TESTING_CAPACITY_SHARING/Test_CS_1.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/validation/InnovationManagementValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/validation/InnovationManagementValidator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,10 +177,10 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Manusquare_030820" />
       <item itemvalue="Application.BasicMatchmaking_BP" />
       <item itemvalue="Application.BasicMatchmaking_IM" />
       <item itemvalue="Application.BasicMatchmaking_MVP" />
+      <item itemvalue="Application.Manusquare_030820" />
       <item itemvalue="Application.OpenAPIEndpoint" />
       <item itemvalue="JAR Application.Matchmaking.jar" />
     </list>
@@ -250,38 +239,34 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1294" height="125" key="GridCell.Tab.0.bottom" timestamp="1611654593484">
-      <screen x="1792" y="124" width="2560" height="1417" />
+    <state width="2518" height="454" key="GridCell.Tab.0.bottom" timestamp="1613028683563">
+      <screen x="1792" y="101" width="2560" height="1440" />
     </state>
-    <state width="2518" height="184" key="GridCell.Tab.0.bottom/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1608221537327" />
+    <state width="2518" height="454" key="GridCell.Tab.0.bottom/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683563" />
     <state width="1750" height="134" key="GridCell.Tab.0.bottom/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085973" />
     <state width="1294" height="125" key="GridCell.Tab.0.bottom/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1611654593484" />
     <state width="913" height="86" key="GridCell.Tab.0.bottom/0.23.1792.1097@0.23.1792.1097" timestamp="1611474293317" />
-    <state width="2518" height="184" key="GridCell.Tab.0.bottom/1792.101.2560.1440/0.0.1792.1120@1792.101.2560.1440" timestamp="1603792271296" />
-    <state width="1294" height="125" key="GridCell.Tab.0.center" timestamp="1611654593480">
-      <screen x="1792" y="124" width="2560" height="1417" />
+    <state width="2518" height="454" key="GridCell.Tab.0.center" timestamp="1613028683562">
+      <screen x="1792" y="101" width="2560" height="1440" />
     </state>
-    <state width="2518" height="184" key="GridCell.Tab.0.center/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1608221537325" />
+    <state width="2518" height="454" key="GridCell.Tab.0.center/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683562" />
     <state width="1750" height="134" key="GridCell.Tab.0.center/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085972" />
     <state width="1294" height="125" key="GridCell.Tab.0.center/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1611654593480" />
     <state width="913" height="86" key="GridCell.Tab.0.center/0.23.1792.1097@0.23.1792.1097" timestamp="1611474293315" />
-    <state width="2518" height="184" key="GridCell.Tab.0.center/1792.101.2560.1440/0.0.1792.1120@1792.101.2560.1440" timestamp="1603792271295" />
-    <state width="1294" height="125" key="GridCell.Tab.0.left" timestamp="1611654593479">
-      <screen x="1792" y="124" width="2560" height="1417" />
+    <state width="2518" height="454" key="GridCell.Tab.0.left" timestamp="1613028683562">
+      <screen x="1792" y="101" width="2560" height="1440" />
     </state>
-    <state width="2518" height="184" key="GridCell.Tab.0.left/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1608221537324" />
+    <state width="2518" height="454" key="GridCell.Tab.0.left/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683562" />
     <state width="1750" height="134" key="GridCell.Tab.0.left/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085972" />
     <state width="1294" height="125" key="GridCell.Tab.0.left/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1611654593479" />
     <state width="913" height="86" key="GridCell.Tab.0.left/0.23.1792.1097@0.23.1792.1097" timestamp="1611474293315" />
-    <state width="2518" height="184" key="GridCell.Tab.0.left/1792.101.2560.1440/0.0.1792.1120@1792.101.2560.1440" timestamp="1603792271290" />
-    <state width="1294" height="125" key="GridCell.Tab.0.right" timestamp="1611654593484">
-      <screen x="1792" y="124" width="2560" height="1417" />
+    <state width="2518" height="454" key="GridCell.Tab.0.right" timestamp="1613028683563">
+      <screen x="1792" y="101" width="2560" height="1440" />
     </state>
-    <state width="2518" height="184" key="GridCell.Tab.0.right/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1608221537326" />
+    <state width="2518" height="454" key="GridCell.Tab.0.right/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683563" />
     <state width="1750" height="134" key="GridCell.Tab.0.right/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085973" />
     <state width="1294" height="125" key="GridCell.Tab.0.right/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1611654593484" />
     <state width="913" height="86" key="GridCell.Tab.0.right/0.23.1792.1097@0.23.1792.1097" timestamp="1611474293316" />
-    <state width="2518" height="184" key="GridCell.Tab.0.right/1792.101.2560.1440/0.0.1792.1120@1792.101.2560.1440" timestamp="1603792271296" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -123,16 +123,7 @@ public class BPSimilarityMeasures {
 				if (supplyTypeReqSatisfied && validPurchasingGroupAbility) {
 
 
-					/* BY-PRODUCT SIMILARITY BASED ON MATERIAL ATTRIBUTE */	
-					
-					//TODO: Should byProductName be considered in the matching? consumerByProductMaterial = bpc.getName();
-					
-					//TODO: Can be removed?if there are no consumer materials from attributes, create a new hashset to keep byProductName
-//					if (consumerMaterials == null) {
-//						consumerMaterials = new HashSet<String>();
-//					}
-					
-					//TODO: Can be removed? consumerMaterials.add(consumerByProductMaterial);			
+					/* BY-PRODUCT SIMILARITY BASED ON MATERIAL ATTRIBUTE */		
 					
 					Set<String> supplierMaterials = bps.getMaterials();
 					
@@ -148,24 +139,45 @@ public class BPSimilarityMeasures {
 					
 					/* APPEARANCE SIMILARITY */
 					appearanceSim = AppearanceSimilarity.computeAppearanceSimilarity(consumerByProductAppearances, supplierByProductAppearances);					
-					System.out.println("appearanceSim: " + appearanceSim);
+					System.out.println("appearanceSim for consumer appearancaes ( " + consumerByProductAppearances + " ) and supplier appearances (" +  supplierByProductAppearances + " : " + appearanceSim);
 					
 					/* ATTRIBUTE SIMILARITY */		
 
 					Set<Attribute> consumerAttributes = bpc.getAttributes();
-					Map<String, String> attributeWeightMap = bps.getAttributeWeightMap();
-					System.out.println("BPSimilarityMeasures: attributeWeightMap: " + attributeWeightMap);
-					double avgAttributeSim = AttributeSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
-					System.out.println("avgAttributeSim: " + avgAttributeSim);
-					finalByProductSim = (materialSim * 0.6) + (appearanceSim * 0.2) + (avgAttributeSim * 0.2);
+					
+					if (AttributeSimilarity.containsAttributes(consumerAttributes)) {
+						
+						Map<String, String> attributeWeightMap = bps.getAttributeWeightMap();
+						if (attributeWeightMap != null) {
+						System.out.println("BPSimilarityMeasures: bps.getAttributeWeightMap() contains " + attributeWeightMap.size() + " entry.");
+						}
+						System.out.println("BPSimilarityMeasures: attributeWeightMap for by-product " + bps.getId() + ": " + attributeWeightMap);
+						double avgAttributeSim = AttributeSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
+						System.out.println("avgAttributeSim: " + avgAttributeSim);
+						finalByProductSim = (materialSim * 0.6) + (appearanceSim * 0.2) + (avgAttributeSim * 0.2);
+					
+					} else {
+						
+						finalByProductSim = (materialSim * 0.8) + (appearanceSim * 0.2);
+					}
+					
+
+					
+					
 					System.out.println("finalByProductSim (before certificationSim): " + finalByProductSim);
 
 					/* CERTIFICATION SIMILARITY */
 
 					Set<Certification> initialConsumerCertifications = query.getCertifications();
-					certificationSim = CertificationSimilarity.computeCertificationSimilarity(initialConsumerCertifications, supplierCertificationsList, similarityMethod, onto, graph, hard_coded_weight);
-					finalByProductSim = (finalByProductSim * 0.7) + (certificationSim * 0.3);
-					System.out.println("finalByProductSim (after certificationSim): " + finalByProductSim);
+										
+					if (CertificationSimilarity.containsCertifications(initialConsumerCertifications)) {
+						
+						certificationSim = CertificationSimilarity.computeCertificationSimilarity(initialConsumerCertifications, supplierCertificationsList, similarityMethod, onto, graph, hard_coded_weight);
+						finalByProductSim = (finalByProductSim * 0.7) + (certificationSim * 0.3);
+						System.out.println("finalByProductSim (after certificationSim): " + finalByProductSim);
+						
+					} 
+
 					
 
 					//if supply type requirements nor quantity requirements are satisfied for this by-product add zero for this by-product
@@ -184,7 +196,7 @@ public class BPSimilarityMeasures {
 
 		}
 		
-		System.out.println("Adding: " + supplier.getSupplierId() + ": " + byProductScores + " to supplierByProductScoresMapping");
+		System.out.println("Adding: " + supplier.getSupplierId() + " with name: " + supplier.getSupplierName() + ": " + byProductScores + " to supplierByProductScoresMapping");
 		System.out.println("\n");
 		supplierByProductScoresMapping.put(supplier.getSupplierId(), byProductScores);
 		

@@ -109,7 +109,7 @@ public class CSSupplierData {
 					if (solution.getValue("materialType") != null) {
 						material = StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", ""));
 					}
-					
+										
 					// deal with attributes ("Y", "N" or "O") according to attributes required in the consumer query
 					if (solution.getValue("attributeType") != null 
 							&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
@@ -182,6 +182,8 @@ public class CSSupplierData {
 				supplierToProcessMap.put(supplierID, process2MaterialMap);
 				supplierToProcessMapAttributes.put(supplierID, process2AttributeMap);
 			}
+			
+			System.out.println("CSSupplierData: supplierToProcessMapAttributes contains: " + supplierToProcessMapAttributes);
 
 			Process process = null;
 
@@ -265,6 +267,20 @@ public class CSSupplierData {
 
 
 				suppliersList.add(supplier);
+			}
+			
+			System.out.println("CSSupplierData: ");
+			
+			for (CSSupplier sup : suppliersList) {
+				
+				System.out.println("Supplier: " + sup.getSupplierId() + " (" + sup.getSupplierName() + ")");
+				List<Process> processes = sup.getProcesses();
+				for (Process p : processes) {
+					System.out.println("Process: " + p.getName());
+					System.out.println("Materials: " + p.getMaterials());
+					System.out.println("AttributeWeightMap: " + p.getAttributeWeightMap());
+				}
+				
 			}
 
 			return suppliersList;

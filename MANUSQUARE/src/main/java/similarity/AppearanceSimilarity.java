@@ -21,7 +21,7 @@ public class AppearanceSimilarity {
 
 				for (String supplierMaterial : supplierByProductAppearances) {
 
-					appearanceSimilarityList.add(new JaroWinklerSimilarity().apply(consumerByProductMaterial, supplierMaterial));
+					appearanceSimilarityList.add(new JaroWinklerSimilarity().apply(consumerByProductMaterial.replaceAll("\\s", ""), supplierMaterial.replaceAll("\\s", "")));
 				}
 
 			}

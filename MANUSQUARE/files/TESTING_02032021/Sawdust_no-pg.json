@@ -1,0 +1,59 @@
+{
+    "projectName": "Sawdust no-pg",
+    "projectDescription": "",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {},
+    "projectId": "e3210dc0-f0a7-4850-a0cc-ab493dcf9c00",
+    "projectType": "By-product",
+    "mode": "sell",
+    "minNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 0,
+    "purchasingGroupAbilitation": "",
+    "byProductElements": [{
+        "byProductId": "3b6219b8-55f1-4ad6-ba49-5ecabcc22dc2",
+        "byProductName": "Sawdust",
+        "supplyType": "Single batch",
+        "quantity": "6",
+        "unitOfMeasureQuantity": "kg",
+        "byProductAttributes": [
+            {
+                "id": "3400b3c3-7196-4094-afc8-7d2b5eeffeef",
+                "attributeKey": "Appearance",
+                "attributeValue": "Finegrained sawdust",
+                "unitOfMeasure": "N/D"
+            },
+            {
+                "id": "443866f1-bcab-4a8f-bbe3-198f3aa3eded",
+                "attributeKey": "AttributeMaterial",
+                "attributeValue": "Wood",
+                "unitOfMeasure": "N/D"
+            },
+            {
+                "id": "443866f1-bcab-4a8f-bbe3-198f3aa3eded",
+                "attributeKey": "MaxPartSizeX",
+                "attributeValue": "2",
+                "unitOfMeasure": "mm"
+            },
+            {
+                "id": "443866f1-bcab-4a8f-bbe3-198f3aa3eded",
+                "attributeKey": "MaxPartSizeY",
+                "attributeValue": "2",
+                "unitOfMeasure": "mm"
+            },
+            {
+                "id": "443866f1-bcab-4a8f-bbe3-198f3aa3eded",
+                "attributeKey": "MaxPartSizeZ",
+                "attributeValue": "2",
+                "unitOfMeasure": "mm"
+            }
+        ]
+    }],
+    "supplierAttributes": [
+    {
+	  "id": "ac9d6ea6-b07e-4901-9231-c667b7d7ddf0",
+        "attributeKey": "Country",
+        "attributeValue": "Monaco"
+	}
+    ]
+}

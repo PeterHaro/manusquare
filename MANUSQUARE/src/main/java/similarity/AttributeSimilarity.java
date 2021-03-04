@@ -68,7 +68,7 @@ public class AttributeSimilarity {
 		return avgAttributeSim;
 	}
 	
-	private static boolean containsAttributes (Set<Attribute> attributes) {
+	public static boolean containsAttributes (Set<Attribute> attributes) {
 		
 		int counter = 0;
 		

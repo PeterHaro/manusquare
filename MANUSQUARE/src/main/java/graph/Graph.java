@@ -141,6 +141,8 @@ public class Graph {
 
 	public static String getLCS (String sourceNode, String targetNode, MutableGraph<String> graph) {
 		
+		System.err.println("Graph: Getting LCS of " + sourceNode + " and " + targetNode);
+		
 		//make all nodes lowercased
 		sourceNode = sourceNode.toLowerCase();
 		targetNode = targetNode.toLowerCase();
@@ -154,10 +156,12 @@ public class Graph {
 		}
 
 		//remove the sourceNode from the list so that only parents remain
-		sourceNodeList.remove(sourceNode);
+		//sourceNodeList.remove(sourceNode);
 
 		//reverse the linked list to get the right order of generality of the parent nodes
 		Collections.reverse(sourceNodeList);
+		
+		System.err.println("sourceNodeList: " + sourceNodeList);
 
 		//traverse the graph to get parents of targetNode
 		Iterator<String> iterTarget = Traverser.forGraph(graph).breadthFirst(targetNode).iterator();
@@ -168,11 +172,12 @@ public class Graph {
 		}
 
 		//remove the targetNode from the list so that only parents remain
-		targetNodeList.remove(targetNode);
+		//targetNodeList.remove(targetNode);
 
 		//reverse the linked list to get the right order of generality of the parent nodes
 		Collections.reverse(targetNodeList);
 
+		System.err.println("targetNodeList: " + targetNodeList);
 
 		String lcs = null;
 
@@ -184,6 +189,8 @@ public class Graph {
 				}
 			}
 		}
+		
+		System.err.println("LCS: " + lcs);
 
 		return lcs;
 
@@ -220,22 +227,28 @@ public class Graph {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(ontoFile);
 		
-		Set<String> userDefinedConcepts = new HashSet<String>();
-		userDefinedConcepts.add("Chocolate");
+//		Set<String> userDefinedConcepts = new HashSet<String>();
+//		userDefinedConcepts.add("Chocolate");
 		
 		//create graph
 		MutableGraph<String> graph = createGraph(onto);
 		
-		System.out.println("Depth First (chocolate):");
-		Traverser.forGraph(graph).depthFirstPostOrder("chocolate").forEach(x->System.out.println(x));
-
-		List<String> userDefinedProcesses = new ArrayList<String>();
-		userDefinedProcesses.add("TestProcessAudun");
+//		System.out.println("Depth First (chocolate):");
+//		Traverser.forGraph(graph).depthFirstPostOrder("chocolate").forEach(x->System.out.println(x));
+//
+//		List<String> userDefinedProcesses = new ArrayList<String>();
+//		userDefinedProcesses.add("TestProcessAudun");
+//		
+//		addProcessesToGraph(graph, userDefinedProcesses);
+//				
+//		System.out.println("Depth First (testprocessaudun):");
+//		Traverser.forGraph(graph).depthFirstPostOrder("testprocessaudun").forEach(x->System.out.println(x));
 		
-		addProcessesToGraph(graph, userDefinedProcesses);
-				
-		System.out.println("Depth First (testprocessaudun):");
-		Traverser.forGraph(graph).depthFirstPostOrder("testprocessaudun").forEach(x->System.out.println(x));
+		System.out.println("Get ontology hierarchy");
+		Map<String, Integer> hierarchy = getOntologyHierarchy(onto, graph);
+		for (Entry<String, Integer> e : hierarchy.entrySet()) {
+			System.out.println(e.getKey() + ": " + e.getValue());
+		}
 		
 
 		

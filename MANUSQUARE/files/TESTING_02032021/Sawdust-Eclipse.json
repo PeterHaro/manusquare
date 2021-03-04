@@ -1,5 +1,5 @@
 {
-    "projectName": "Carbon steel match t1",
+    "projectName": "Sawdust",
     "projectDescription": "",
     "selectionType": "Manual",
     "supplierMaxDistance": "0",
@@ -8,31 +8,26 @@
     "projectType": "By-product",
     "mode": "Sell",
     "minNumberOfParticipants": 0,
-    "maxNumberOfParticipants": 10,
-    "purchasingGroupAbilitation": "false",
+    "maxNumberOfParticipants": 0,
+    "purchasingGroupAbilitation": "",
     "byProductElements": [{
         "byProductId": "8beab8d8-88d3-4ba2-8a6d-27b26ebee753",
-        "byProductName": "carbon steel",
-        "supplyType": "Continuous",
-        "quantity": "200",
+        "byProductName": "Sawdust",
+        "supplyType": "SINGLE_BATCH",
+        "quantity": "8",
         "unitOfMeasureQuantity": "kg",
         "byProductAttributes": [
         {
             "id": "6fa845d9-dd23-4d62-8da9-31a6569db4ea",
             "attributeKey": "AttributeMaterial",
-            "attributeValue": "Carbon Steel",
+            "attributeValue": "Wood",
             "unitOfMeasure": ""
         },
        {
                 "id": "2969aa5a-a6ca-4f70-a07e-081aae84eb82",
                 "attributeKey": "Appearance",
-                "attributeValue": "Sheets",
+                "attributeValue": "Finegrained sawdust",
                 "unitOfMeasure": "N/D"
-            },
-            {
-                "attributeKey": "MinLayerThickness",
-                "attributeValue": "3",
-                "unitOfMeasure": "mm"
             }
         ]
     }],
