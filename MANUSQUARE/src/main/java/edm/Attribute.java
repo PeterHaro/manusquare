@@ -67,10 +67,10 @@ public class Attribute {
 	public void setUnitOfMeasurement(String unitOfMeasurement) {
 		this.unitOfMeasurement = unitOfMeasurement;
 	}	
-	
+
 	//TODO: Simplify and have the same method for both CS and BP
 	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, CSQuery query) {
-		
+
 		//create supplierAttribute that can be compared to consumerAttribute
 		supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
 		supplierAttribute.setUnitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
@@ -89,11 +89,11 @@ public class Attribute {
 			if (StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")).equals(bpa.getKey())) {
 
 				updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
-				
+
 
 				if (condition.equals(">=")) {
 					attributeMap = new HashMap<String, String>();
-					
+
 					if (Double.parseDouble(updatedSupplierAttribute.getValue()) >= Double.parseDouble(bpa.getValue())) {
 						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
 
@@ -134,108 +134,110 @@ public class Attribute {
 					}
 
 				}
-				
+
 				else if (condition.equals("T")) {
 					attributeMap.put(updatedSupplierAttribute.getKey(), "Y");
 				}
 
 			} else {
-				
+
 				attributeMap = new HashMap<String, String>();
 				attributeMap.put(bpa.getKey(), "N");
-				
+
 			}
 		}
 
 		return attributeMap;
 	}
+
 	
-	public static Map<String, String> createBPAttributeWeightMap (Attribute supplierAttribute, BPQuery query) {
-		
-		Set<Attribute> consumerAttributes = new HashSet<Attribute>();
-		for (Attribute ca : query.getAttributes()) {
-			if (!ca.getKey().equals("AttributeMaterial") && !ca.getKey().equals("Appearance")) {
-				consumerAttributes.add(ca);
-			}
-		}
-		
-		Attribute updatedSupplierAttribute = new Attribute();
 
-		Map<String, String> attributeMap = null;
-	
-		for (Attribute bpa : consumerAttributes) {
-									
-			if (!bpa.getKey().equals("Appearance") 
-					&& !bpa.getKey().equals("AttributeMaterial") 
-					&& supplierAttribute.getKey().equals(bpa.getKey())) {
-				
-				
-				String condition = mapAttributeConditions(StringUtilities.stripIRI(supplierAttribute.getKey()));
-				
-
-				updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
-				
-				if (condition.equals(">=")) {
-					attributeMap = new HashMap<String, String>();
-
-					if (Double.parseDouble(updatedSupplierAttribute.getValue()) >= Double.parseDouble(bpa.getValue())) {
-						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
-
-					} else {
-						attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
-					}
-
+		public static Map<String, String> createBPAttributeWeightMap (Attribute supplierAttribute, BPQuery query) {
+			
+			Set<Attribute> consumerAttributes = new HashSet<Attribute>();
+			for (Attribute ca : query.getAttributes()) {
+				if (!ca.getKey().equals("AttributeMaterial") && !ca.getKey().equals("Appearance")) {
+					consumerAttributes.add(ca);
 				}
-
-				else if (condition.equals("<=")) {
-
-					attributeMap = new HashMap<String, String>();
+			}
+			
+			Attribute updatedSupplierAttribute = new Attribute();
+	
+			Map<String, String> attributeMap = null;
+		
+			for (Attribute bpa : consumerAttributes) {
+										
+				if (!bpa.getKey().equals("Appearance") 
+						&& !bpa.getKey().equals("AttributeMaterial") 
+						&& supplierAttribute.getKey().equals(bpa.getKey())) {
+					
+					
+					String condition = mapAttributeConditions(StringUtilities.stripIRI(supplierAttribute.getKey()));
+					
+	
 					updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
-
-					if (Double.parseDouble(updatedSupplierAttribute.getValue()) <= Double.parseDouble(bpa.getValue()) ) {
-
-						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
-
-					} else {
-
-						attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
-
-					}
-
-				}
-
-				else if (condition.equals("=")) {
-
-					attributeMap = new HashMap<String, String>();
-					updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
-
-					if (Double.parseDouble(bpa.getValue()) == Double.parseDouble(updatedSupplierAttribute.getValue())) {
-						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");								
-
-					} else {
-
-						attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
-					}
-
-				}
-				
-				else if (condition.equals("T")) {
-					attributeMap.put(updatedSupplierAttribute.getKey(), "Y");
-				}
-
-			 else {
-				
-				attributeMap = new HashMap<String, String>();
-				attributeMap.put(supplierAttribute.getKey(), "N");
-				
-			}
-			}
-		}
-		
-
-		return attributeMap;
-	}
+					
+					if (condition.equals(">=")) {
+						attributeMap = new HashMap<String, String>();
 	
+						if (Double.parseDouble(updatedSupplierAttribute.getValue()) >= Double.parseDouble(bpa.getValue())) {
+							attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
+	
+						} else {
+							attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
+						}
+	
+					}
+	
+					else if (condition.equals("<=")) {
+	
+						attributeMap = new HashMap<String, String>();
+						updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
+	
+						if (Double.parseDouble(updatedSupplierAttribute.getValue()) <= Double.parseDouble(bpa.getValue()) ) {
+	
+							attributeMap.put(updatedSupplierAttribute.getKey(), "Y");									
+	
+						} else {
+	
+							attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
+	
+						}
+	
+					}
+	
+					else if (condition.equals("=")) {
+	
+						attributeMap = new HashMap<String, String>();
+						updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
+	
+						if (Double.parseDouble(bpa.getValue()) == Double.parseDouble(updatedSupplierAttribute.getValue())) {
+							attributeMap.put(updatedSupplierAttribute.getKey(), "Y");								
+	
+						} else {
+	
+							attributeMap.put(updatedSupplierAttribute.getKey(), "N");									
+						}
+	
+					}
+					
+					else if (condition.equals("T")) {
+						attributeMap.put(updatedSupplierAttribute.getKey(), "Y");
+					}
+	
+				 else {
+					
+					attributeMap = new HashMap<String, String>();
+					attributeMap.put(supplierAttribute.getKey(), "N");
+					
+				}
+				}
+			}
+			
+	
+			return attributeMap;
+		}
+
 
 	public static Attribute alignAttributeValues (Attribute supplierAttribute, Attribute consumerAttribute) {
 
@@ -319,10 +321,10 @@ public class Attribute {
 				newValue = Double.parseDouble(supplierAttribute.getValue()) * 1000000;
 				supplierAttribute.setValue(Double.toString(newValue));
 			}
-			
-			
+
+
 		} 
-		
+
 		else if (consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase("kg")) {
 
 			if (supplierAttribute.getUnitOfMeasurement().equalsIgnoreCase("kg")) {
@@ -346,10 +348,10 @@ public class Attribute {
 				newValue = Double.parseDouble(supplierAttribute.getValue()) * 1000000;
 				supplierAttribute.setValue(Double.toString(newValue));
 			}
-			
-			
+
+
 		} 		
-		
+
 		else if (consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase("MPa")) {
 
 			if (supplierAttribute.getUnitOfMeasurement().equalsIgnoreCase("MPa")) {
@@ -373,10 +375,10 @@ public class Attribute {
 				newValue = Double.parseDouble(supplierAttribute.getValue()) * 145.0378;
 				supplierAttribute.setValue(Double.toString(newValue));
 			}
-			
-			
+
+
 		} 
-		
+
 		else if (consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase("ºC") || consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase("C") || consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase("celcius")) {
 
 			if (supplierAttribute.getUnitOfMeasurement().equalsIgnoreCase("ºC") || supplierAttribute.getUnitOfMeasurement().equalsIgnoreCase("C") || supplierAttribute.getUnitOfMeasurement().equalsIgnoreCase("celcius")) {
@@ -388,9 +390,9 @@ public class Attribute {
 				newValue = Double.parseDouble(supplierAttribute.getValue()) * 274.15;
 				supplierAttribute.setValue(Double.toString(newValue));
 			} 
-			
+
 		}
-		
+
 		else if (consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase("") || consumerAttribute.getUnitOfMeasurement().equalsIgnoreCase(" ")) { //if true/false attribute
 			return supplierAttribute;
 		}
@@ -398,7 +400,7 @@ public class Attribute {
 		return supplierAttribute;
 
 	}
-	
+
 	/**
 	 * Finds the relevant conditions ('<=', '>=' or '=') for a given sample of attributes.
 	 *
@@ -407,11 +409,11 @@ public class Attribute {
 	 * Feb 8, 2020
 	 */
 	public static String mapAttributeConditions(String attribute) {
-		
+
 		String condition = null;
 
 		if (attribute == null) {
-			
+
 			condition = "!";
 
 		} else if (attribute.equalsIgnoreCase("Length") || attribute.equalsIgnoreCase("Width") || attribute.equalsIgnoreCase("Depth") || attribute.equalsIgnoreCase("MinFeatureSize")
@@ -423,35 +425,35 @@ public class Attribute {
 				|| attribute.equalsIgnoreCase("MinUltimateStrengthRm")  || attribute.equalsIgnoreCase("MinBrinellHardnessHB")  || attribute.equalsIgnoreCase("Area")  || attribute.equalsIgnoreCase("Diameter") 
 				|| attribute.equalsIgnoreCase("MinGlassTransitionTemperature")  || attribute.equalsIgnoreCase("MinWaterAbsorption")  || attribute.equalsIgnoreCase("MinShoreDHardness")  
 				|| attribute.equalsIgnoreCase("WeightCapacity") || attribute.equalsIgnoreCase("Weight")) {
-			
+
 			condition = ">=";
-			
-			
+
+
 		} else if (attribute.equalsIgnoreCase("Tolerance") || attribute.equalsIgnoreCase("SurfaceFinishing") || attribute.equalsIgnoreCase("MaxWallThickness")
 				|| attribute.equalsIgnoreCase("MaxPartSizeX") || attribute.equalsIgnoreCase("MaxPartSizeY") || attribute.equalsIgnoreCase("MaxPartSizeZ")
 				|| attribute.equalsIgnoreCase("MaxKerfWidth") || attribute.equalsIgnoreCase("MaxSheetThickness") || attribute.equalsIgnoreCase("MaxMeltingTemperature") 
 				|| attribute.equalsIgnoreCase("MaxYoungModulusE") || attribute.equalsIgnoreCase("MaxLoadAtPermanentSetLimitRp") || attribute.equalsIgnoreCase("MaxUltimateStrengthRm")
 				|| attribute.equalsIgnoreCase("MaxBrinellHardnessHB") || attribute.equalsIgnoreCase("Thickness") || attribute.equalsIgnoreCase("MaxGlassTransitionTemperature") 
 				|| attribute.equalsIgnoreCase("MaxWaterAbsorption") || attribute.equalsIgnoreCase("MaxShoreDHardness")) {
-		
-			
+
+
 			condition = "<=";
-			
+
 		} else if (attribute.equalsIgnoreCase("Axis") || attribute.equalsIgnoreCase("CuttingSpeed")) {
-			
+
 			condition = "=";
-			
+
 		} else if (attribute.equalsIgnoreCase("Model") || attribute.equalsIgnoreCase("Stackability") || attribute.equalsIgnoreCase("PresenceOfHandles") || attribute.equalsIgnoreCase("PresenceOfCover")
 				|| attribute.equalsIgnoreCase("Material")) {
-			
+
 			condition = "T";
-			
+
 		}
-		
+
 		return condition;
 
 	}
-	
+
 	public static boolean isSupportedAttribute (String attributeKey) {
 
 		Set<String> supportedAttributes = new HashSet<String>();
@@ -521,6 +523,6 @@ public class Attribute {
 
 
 	}
-	
+
 
 }

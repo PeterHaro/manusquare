@@ -2,13 +2,16 @@ package supplierdata;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.jena.ext.com.google.common.collect.TreeMultimap;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -19,6 +22,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 
 import edm.Attribute;
 import edm.ByProduct;
@@ -89,12 +96,7 @@ public class BPSupplierData {
 
 
 		try (TupleQueryResult result = tupleQuery.evaluate()) {
-
-			//			Attribute supplierAttribute = new Attribute();
-			//BPSparqlResult sparqlResult = null;			
-			//			Map<String, String> attributeWeightMap = null;
-
-
+			
 			while (result.hasNext()) {
 
 				BindingSet solution = result.next();
@@ -113,8 +115,8 @@ public class BPSupplierData {
 				if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
 					appearance = solution.getValue("attributeValue").stringValue().replaceAll("\\s+", "");
 				}
-
-				Map<String, String> attributeWeightMap = null;
+				
+				Map<String, String> attributeWeightMap = new HashMap<String, String>();
 				// deal with attributes ("Y", "N" or "O") according to attributes required in the consumer query
 				if (solution.getValue("attributeType") != null 
 						&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
@@ -125,8 +127,9 @@ public class BPSupplierData {
 					supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
 					supplierAttribute.setUnitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
 					supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
-
-					attributeWeightMap = Attribute.createBPAttributeWeightMap(supplierAttribute, query);	
+					
+					attributeWeightMap = Attribute.createBPAttributeWeightMap(supplierAttribute, query);
+					
 
 				} 
 
@@ -159,12 +162,12 @@ public class BPSupplierData {
 		// close connection to KB repository
 		repository.shutDown();
 
-		//		System.out.println("\nSparqlResults:");
-		//		for (BPSparqlResult b : sparqlResults) {
-		//			System.out.println("Supplier ID: "  + b.getSupplierId());
-		//			System.out.println("WSProfile ID : " + b.getWsProfileId());
-		//			System.out.println("AttributeWeightMap: " + b.getAttributeWeightMap());
-		//		}
+//				System.out.println("\nSparqlResults:");
+//				for (BPSparqlResult b : sparqlResults) {
+//					System.out.println("Supplier ID: "  + b.getSupplierId());
+//					System.out.println("WSProfile ID : " + b.getWsProfileId());
+//					System.out.println("AttributeWeightMap: " + b.getAttributeWeightMap());
+//				}
 
 
 
@@ -269,7 +272,7 @@ public class BPSupplierData {
 	 */
 	private static Map<String, List<ByProduct>> consolidateByProducts (Set<BPSparqlResult> sparqlResults, OWLOntology onto) throws IOException {
 
-		//look-up table for getting valid attributeWeightMaps per WSProfile
+		//look-up table for getting valid attributeWeightMaps per WSProfile		
 		Map<String, Map<String, String>> attributeWeightMapLookup = createAttributeMapLookupMap(sparqlResults);
 
 		Map<String, ByProduct> byProductMap = new HashMap<String, ByProduct>();
@@ -324,7 +327,7 @@ public class BPSupplierData {
 					String purchasingGroupAbilitation = sr.getPurchasingGroupAbilitation();
 					String quantity = sr.getByProductQuantity();
 					
-					//TODO: Check if minQuantity is mandatory
+					//FIXME: Check if minQuantity is mandatory - It is, but keep the check for now anyway
 					if (sr.getByProductMinQuantity() != null && !sr.getByProductMinQuantity().isEmpty()) {
 
 						minQuantity = Double.parseDouble(sr.getByProductMinQuantity());
@@ -347,7 +350,6 @@ public class BPSupplierData {
 					if (!appearances.contains(appearance) && appearance != null) {
 						appearances.add(appearance);
 					}
-
 
 					byProduct = new ByProduct.Builder(byProductSupplyType, byProductMinParticipants, byProductMaxParticipants, purchasingGroupAbilitation, quantity, uom)
 							.setId(wsProfileId)
@@ -488,21 +490,50 @@ public class BPSupplierData {
 		return suppliersList;
 
 	}
-
+	
+	
 	public static Map<String, Map<String, String>> createAttributeMapLookupMap (Set<BPSparqlResult> sparqlResults) {
 
-		Map<String, Map<String, String>> cleanedAttributeWeightMap = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, String>> attributeMapLookupMap = new HashMap<String, Map<String, String>>();
+				
+		Multimap<String, Map<String, String>> cleanedAttributeWeightMap = LinkedHashMultimap.create();
+		
+		//get all wsprofileIds to create keys
+		Set<String> wsProfileIds = new HashSet<String>();
 
 		for (BPSparqlResult b : sparqlResults) {
 
+			wsProfileIds.add(b.getWsProfileId());
+			
 			if (b.getAttributeWeightMap() != null) {
+								
 				cleanedAttributeWeightMap.put(b.getWsProfileId(), b.getAttributeWeightMap());
 			}
 
 		}
-
-		return cleanedAttributeWeightMap;
+		
+		
+		for (String s : wsProfileIds) {
+			
+			Collection<Map<String, String>> entries = cleanedAttributeWeightMap.get(s);
+			
+			Map<String, String> localMap = new HashMap<String, String>();
+			
+			for (Map<String, String> map : entries) {
+				
+				for (Entry<String, String> e : map.entrySet()) {
+					localMap.put(e.getKey(), e.getValue());
+				}				
+				
+			}
+			
+			attributeMapLookupMap.put(s, localMap);
+		}
+		
+		return attributeMapLookupMap;
 
 	}
+
+
 
 }
