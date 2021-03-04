@@ -19,6 +19,8 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.graph.MutableGraph;
 
@@ -114,15 +116,21 @@ public class CSSupplierData {
 					if (solution.getValue("attributeType") != null 
 							&& !solution.getValue("attributeType").stringValue().endsWith("AttributeMaterial") 
 							&& !solution.getValue("attributeType").stringValue().endsWith("Appearance")) {
-										
-						System.out.println("CSSupplierData: creating attributeweightmap for supplier id: " + solution.getValue("supplier").stringValue().replaceAll("\\s+", ""));
-						attributeWeightMap = Attribute.createAttributeWeightMap(solution, supplierAttribute, query);								
+																
+						
+						supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
+						supplierAttribute.setUnitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
+						supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
+						
+						attributeWeightMap = Attribute.createCSAttributeWeightMap(supplierAttribute, query);								
 
 					} 
 					
-					sparqlResult = new CSSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", ""))).
-							setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", "")).setMaterial(material).
-							setCertification(certification).setAttributeWeightMap(attributeWeightMap).
+					sparqlResult = new CSSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("processType").stringValue().replaceAll("\\s+", "")))
+							.setSupplierId(solution.getValue("supplier").stringValue().replaceAll("\\s+", ""))
+							.setMaterial(material)
+							.setCertification(certification)
+							.setAttributeWeightMap(attributeWeightMap).
 							build();
 
 					sparqlResults.add(sparqlResult);
@@ -138,6 +146,7 @@ public class CSSupplierData {
 		//close connection to KB repository
 		repository.shutDown();
 		
+		
 		List<CSSupplier> suppliersList = consolidateSuppliers(sparqlResults);
 		
 		return suppliersList;
@@ -147,6 +156,8 @@ public class CSSupplierData {
 
 
 		public static List<CSSupplier> consolidateSuppliers(Set<CSSparqlResult> sparqlResults) {
+			//look-up table for getting valid attributeWeightMaps per WSProfile		
+			Map<String, Map<String, String>> attributeWeightMapLookup = createAttributeMapLookupMap(sparqlResults);
 			
 			//get unique supplier ids used for constructing the supplier structure below
 			Set<String> supplierIds = new HashSet<String>();
@@ -174,7 +185,8 @@ public class CSSupplierData {
 					if (sr.getSupplierId().equals(id)) { 
 
 						process2MaterialMap.put(sr.getProcess(), sr.getMaterial());
-						process2AttributeMap.put(sr.getProcess(), sr.getAttributeWeightMap());
+						process2AttributeMap.put(sr.getProcess(), attributeWeightMapLookup.get(sr.getProcess()));						
+		
 						supplierID = sr.getSupplierId();
 					}
 				}
@@ -183,8 +195,6 @@ public class CSSupplierData {
 				supplierToProcessMapAttributes.put(supplierID, process2AttributeMap);
 			}
 			
-			System.out.println("CSSupplierData: supplierToProcessMapAttributes contains: " + supplierToProcessMapAttributes);
-
 			Process process = null;
 
 			//create supplier objects (supplier id, processes (including materials) and certifications) based on the multimap created in the previous step
@@ -208,7 +218,7 @@ public class CSSupplierData {
 						//add processes and associated materials
 						processAndMaterialMap = supplierToProcessMap.get(sr.getSupplierId());
 						processAndAttributeMap = supplierToProcessMapAttributes.get(sr.getSupplierId());
-
+						
 						Map<String, String> attributeMap = new HashMap<String, String>();
 
 						Set<Map<String, String>> attributeMapSet = new HashSet<>(processAndAttributeMap.values());
@@ -245,7 +255,9 @@ public class CSSupplierData {
 							process = new Process.Builder()
 									.setName(processName)
 									.setMaterials(materialsSet)
-									.setAttributeWeightMap(attributeMap)
+									
+//									.setAttributeWeightMap(attributeMap)
+									.setAttributeWeightMap(attributeWeightMapLookup.get(processName))
 									.build();
 
 							//add processes
@@ -269,22 +281,53 @@ public class CSSupplierData {
 				suppliersList.add(supplier);
 			}
 			
-			System.out.println("CSSupplierData: ");
 			
-			for (CSSupplier sup : suppliersList) {
-				
-				System.out.println("Supplier: " + sup.getSupplierId() + " (" + sup.getSupplierName() + ")");
-				List<Process> processes = sup.getProcesses();
-				for (Process p : processes) {
-					System.out.println("Process: " + p.getName());
-					System.out.println("Materials: " + p.getMaterials());
-					System.out.println("AttributeWeightMap: " + p.getAttributeWeightMap());
-				}
-				
-			}
 
 			return suppliersList;
 			
+		}
+		
+		public static Map<String, Map<String, String>> createAttributeMapLookupMap (Set<CSSparqlResult> sparqlResults) {
+
+			Map<String, Map<String, String>> attributeMapLookupMap = new HashMap<String, Map<String, String>>();
+					
+			Multimap<String, Map<String, String>> cleanedAttributeWeightMap = LinkedHashMultimap.create();
+			
+			//get all process names to create keys
+			Set<String> processes = new HashSet<String>();
+
+			//get all attribute weights from sparql results
+			for (CSSparqlResult b : sparqlResults) {
+
+				processes.add(b.getProcess());
+				
+				if (b.getAttributeWeightMap() != null) {
+									
+					cleanedAttributeWeightMap.put(b.getProcess(), b.getAttributeWeightMap());
+				}
+
+			}
+			
+			//create map holding attribute weights for each by-product
+			for (String s : processes) {
+				
+				Collection<Map<String, String>> entries = cleanedAttributeWeightMap.get(s);
+				
+				Map<String, String> localMap = new HashMap<String, String>();
+				
+				for (Map<String, String> map : entries) {
+					
+					for (Entry<String, String> e : map.entrySet()) {
+						localMap.put(e.getKey(), e.getValue());
+					}				
+					
+				}
+				
+				attributeMapLookupMap.put(s, localMap);
+			}
+			
+			return attributeMapLookupMap;
+
 		}
 
 

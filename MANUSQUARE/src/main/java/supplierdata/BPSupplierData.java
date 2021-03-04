@@ -128,8 +128,7 @@ public class BPSupplierData {
 					supplierAttribute.setUnitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
 					supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
 					
-					attributeWeightMap = Attribute.createBPAttributeWeightMap(supplierAttribute, query);
-					
+					attributeWeightMap = Attribute.createBPAttributeWeightMap(supplierAttribute, query);				
 
 				} 
 
@@ -162,33 +161,9 @@ public class BPSupplierData {
 		// close connection to KB repository
 		repository.shutDown();
 
-//				System.out.println("\nSparqlResults:");
-//				for (BPSparqlResult b : sparqlResults) {
-//					System.out.println("Supplier ID: "  + b.getSupplierId());
-//					System.out.println("WSProfile ID : " + b.getWsProfileId());
-//					System.out.println("AttributeWeightMap: " + b.getAttributeWeightMap());
-//				}
-
-
-
-
 		// create list of suppliers according to the results from SPARQL
 		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
 
-		//		System.err.println("BPSupplierData: suppliersList");
-		//		for (BPSupplier sup : suppliersList) {
-		//			System.err.println("\nSupplier ID: " + sup.getSupplierId());
-		//			System.err.println("Supplier Name: " + sup.getSupplierName());
-		//
-		//			List<ByProduct> byProducts = sup.getByProducts();
-		//
-		//			for (ByProduct bp : byProducts) {
-		//				System.err.println("WSProfileID: " + bp.getId());
-		//				System.err.println("Material: " + bp.getMaterials());
-		//				System.err.println("AttributeWeightMap" + bp.getAttributeWeightMap());
-		//			}
-		//
-		//		}
 
 		return suppliersList;
 
@@ -213,15 +188,6 @@ public class BPSupplierData {
 
 		//consolidate by-products
 		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (sparqlResults, onto);
-
-
-		//		System.out.println("\nconsolidatedByProducts: ");
-		//		for (Entry<String, List<ByProduct>>  e : consolidatedByProducts.entrySet()) {
-		//			System.out.println("WSProfile ID: " + e.getKey());
-		//			for (ByProduct bp : e.getValue()) {
-		//				System.out.println("Attribute weight map: " + bp.getAttributeWeightMap());
-		//			}
-		//		}
 
 		BPSupplier supplier = null;
 
@@ -401,95 +367,6 @@ public class BPSupplierData {
 
 	}
 
-
-
-	//USED FOR TESTING AND CAN BE REMOVED
-	public static List<BPSupplier> createTestSupplierData(String strQuery, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) throws IOException {
-
-		Set<BPSparqlResult> sparqlResults = new HashSet<BPSparqlResult>();
-
-		Repository repository;
-
-		if (!testing) {
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put("Authorization", AUTHORISATION_TOKEN);
-			headers.put("accept", "application/JSON");
-
-			repository = new SPARQLRepository(SPARQL_ENDPOINT);
-			repository.initialize();
-			((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
-
-		} else {
-			//connect to GraphDB
-			repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
-			HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
-			System.out.println(repo.getRepositoryURL());
-			System.out.println(repo.getPreferredRDFFormat());
-			repository.initialize();
-			System.out.println(repository.isInitialized());
-		}
-
-
-		//connect to triplestore
-		TupleQuery tupleQuery = SparqlConnection.connect(repository, testing, strQuery);
-
-
-		try (TupleQueryResult result = tupleQuery.evaluate()) {
-
-			BPSparqlResult sparqlResult = null;			
-
-			while (result.hasNext()) {
-
-				BindingSet solution = result.next();
-
-				String certification = null;
-				if (solution.getValue("certificationType") != null) {
-					certification = StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", ""));
-				}
-
-				String material = null;
-				if (solution.getValue("materialType") != null) {
-					material = StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", ""));
-				}
-
-				String appearance = null;
-				if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
-					appearance = solution.getValue("attributeValue").stringValue().replaceAll("\\s+", "");
-				}
-
-				sparqlResult = new BPSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")), 
-						solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""), 
-						solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", "")).
-						setCertification(certification).
-						setMaterial(material).
-						setAppearance(appearance).
-						setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", "")).
-						setSupplierName(solution.getValue("supplierName").stringValue().replaceAll("\\s+", "")).
-						build();
-
-				sparqlResults.add(sparqlResult);
-			}
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// close connection to KB repository
-		repository.shutDown();
-
-		// create list of suppliers according to the results from SPARQL
-		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
-
-		return suppliersList;
-
-	}
 	
 	
 	public static Map<String, Map<String, String>> createAttributeMapLookupMap (Set<BPSparqlResult> sparqlResults) {
@@ -501,6 +378,7 @@ public class BPSupplierData {
 		//get all wsprofileIds to create keys
 		Set<String> wsProfileIds = new HashSet<String>();
 
+		//get all attribute weights from sparql results
 		for (BPSparqlResult b : sparqlResults) {
 
 			wsProfileIds.add(b.getWsProfileId());
@@ -512,7 +390,7 @@ public class BPSupplierData {
 
 		}
 		
-		
+		//create map holding attribute weights for each by-product
 		for (String s : wsProfileIds) {
 			
 			Collection<Map<String, String>> entries = cleanedAttributeWeightMap.get(s);
@@ -535,5 +413,92 @@ public class BPSupplierData {
 	}
 
 
+	//USED FOR TESTING AND CAN BE REMOVED
+		public static List<BPSupplier> createTestSupplierData(String strQuery, boolean testing, OWLOntology onto, String SPARQL_ENDPOINT, String AUTHORISATION_TOKEN) throws IOException {
+
+			Set<BPSparqlResult> sparqlResults = new HashSet<BPSparqlResult>();
+
+			Repository repository;
+
+			if (!testing) {
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("Authorization", AUTHORISATION_TOKEN);
+				headers.put("accept", "application/JSON");
+
+				repository = new SPARQLRepository(SPARQL_ENDPOINT);
+				repository.initialize();
+				((SPARQLRepository) repository).setAdditionalHttpHeaders(headers);
+
+			} else {
+				//connect to GraphDB
+				repository = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+				HTTPRepository repo = new HTTPRepository(GRAPHDB_SERVER, REPOSITORY_ID);
+				System.out.println(repo.getRepositoryURL());
+				System.out.println(repo.getPreferredRDFFormat());
+				repository.initialize();
+				System.out.println(repository.isInitialized());
+			}
+
+
+			//connect to triplestore
+			TupleQuery tupleQuery = SparqlConnection.connect(repository, testing, strQuery);
+
+
+			try (TupleQueryResult result = tupleQuery.evaluate()) {
+
+				BPSparqlResult sparqlResult = null;			
+
+				while (result.hasNext()) {
+
+					BindingSet solution = result.next();
+
+					String certification = null;
+					if (solution.getValue("certificationType") != null) {
+						certification = StringUtilities.stripIRI(solution.getValue("certificationType").stringValue().replaceAll("\\s+", ""));
+					}
+
+					String material = null;
+					if (solution.getValue("materialType") != null) {
+						material = StringUtilities.stripIRI(solution.getValue("materialType").stringValue().replaceAll("\\s+", ""));
+					}
+
+					String appearance = null;
+					if (solution.getValue("attributeType") != null && solution.getValue("attributeType").stringValue().endsWith("Appearance") && solution.getValue("attributeValue") != null) {
+						appearance = solution.getValue("attributeValue").stringValue().replaceAll("\\s+", "");
+					}
+
+					sparqlResult = new BPSparqlResult.Builder(StringUtilities.stripIRI(solution.getValue("wsProfileId").stringValue().replaceAll("\\s+", "")), 
+							solution.getValue("byProductName").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("byProductSupplyType").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("byProductMinParticipants").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("byProductMaxParticipants").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("purchasingGroupAbilitation").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("byProductQuantity").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("byProductMinQuantity").stringValue().replaceAll("\\s+", ""), 
+							solution.getValue("byProductUOM").stringValue().replaceAll("\\s+", "")).
+							setCertification(certification).
+							setMaterial(material).
+							setAppearance(appearance).
+							setSupplierId(solution.getValue("supplierId").stringValue().replaceAll("\\s+", "")).
+							setSupplierName(solution.getValue("supplierName").stringValue().replaceAll("\\s+", "")).
+							build();
+
+					sparqlResults.add(sparqlResult);
+				}
+
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// close connection to KB repository
+			repository.shutDown();
+
+			// create list of suppliers according to the results from SPARQL
+			List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
+
+			return suppliersList;
+
+		}
 
 }

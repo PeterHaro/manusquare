@@ -140,9 +140,7 @@ public class Graph {
 	}
 
 	public static String getLCS (String sourceNode, String targetNode, MutableGraph<String> graph) {
-		
-		System.err.println("Graph: Getting LCS of " + sourceNode + " and " + targetNode);
-		
+				
 		//make all nodes lowercased
 		sourceNode = sourceNode.toLowerCase();
 		targetNode = targetNode.toLowerCase();
@@ -161,8 +159,6 @@ public class Graph {
 		//reverse the linked list to get the right order of generality of the parent nodes
 		Collections.reverse(sourceNodeList);
 		
-		System.err.println("sourceNodeList: " + sourceNodeList);
-
 		//traverse the graph to get parents of targetNode
 		Iterator<String> iterTarget = Traverser.forGraph(graph).breadthFirst(targetNode).iterator();
 
@@ -177,8 +173,6 @@ public class Graph {
 		//reverse the linked list to get the right order of generality of the parent nodes
 		Collections.reverse(targetNodeList);
 
-		System.err.println("targetNodeList: " + targetNodeList);
-
 		String lcs = null;
 
 		for (String source : sourceNodeList) {
@@ -190,8 +184,6 @@ public class Graph {
 			}
 		}
 		
-		System.err.println("LCS: " + lcs);
-
 		return lcs;
 
 	}

@@ -69,28 +69,31 @@ public class Attribute {
 	}	
 
 	//TODO: Simplify and have the same method for both CS and BP
-	public static Map<String, String> createAttributeWeightMap (BindingSet solution, Attribute supplierAttribute, CSQuery query) {
-
-		//create supplierAttribute that can be compared to consumerAttribute
-		supplierAttribute.setKey(StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")));
-		supplierAttribute.setUnitOfMeasurement(solution.getValue("uomStr").stringValue().replaceAll("\\s+", ""));
-		supplierAttribute.setValue(solution.getValue("attributeValue").stringValue().replaceAll("\\s+", ""));
-
-		Set<Attribute> consumerAttributes = query.getAttributes();
-
-		String condition = mapAttributeConditions(supplierAttribute.getKey());
-
+	public static Map<String, String> createCSAttributeWeightMap (Attribute supplierAttribute, CSQuery query) {
+		
+		Set<Attribute> consumerAttributes = new HashSet<Attribute>();
+		for (Attribute ca : query.getAttributes()) {
+			if (!ca.getKey().equals("AttributeMaterial") && !ca.getKey().equals("Appearance")) {
+				consumerAttributes.add(ca);
+			}
+		}
+		
 		Attribute updatedSupplierAttribute = new Attribute();
 
 		Map<String, String> attributeMap = null;
-
+	
 		for (Attribute bpa : consumerAttributes) {
-
-			if (StringUtilities.stripIRI(solution.getValue("attributeType").stringValue().replaceAll("\\s+", "")).equals(bpa.getKey())) {
+									
+			if (!bpa.getKey().equals("Appearance") 
+					&& !bpa.getKey().equals("AttributeMaterial") 
+					&& supplierAttribute.getKey().equals(bpa.getKey())) {
+				
+				
+				String condition = mapAttributeConditions(StringUtilities.stripIRI(supplierAttribute.getKey()));
+				
 
 				updatedSupplierAttribute = alignAttributeValues(supplierAttribute, bpa);
-
-
+				
 				if (condition.equals(">=")) {
 					attributeMap = new HashMap<String, String>();
 
@@ -134,18 +137,20 @@ public class Attribute {
 					}
 
 				}
-
+				
 				else if (condition.equals("T")) {
 					attributeMap.put(updatedSupplierAttribute.getKey(), "Y");
 				}
 
-			} else {
-
+			 else {
+				
 				attributeMap = new HashMap<String, String>();
-				attributeMap.put(bpa.getKey(), "N");
-
+				attributeMap.put(supplierAttribute.getKey(), "N");
+				
+			}
 			}
 		}
+		
 
 		return attributeMap;
 	}
