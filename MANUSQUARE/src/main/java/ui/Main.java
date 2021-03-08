@@ -37,7 +37,7 @@ public class Main {
 		switch (functionality) {
 
 		case "CS":
-			String jsonIn = "./files/TESTING_02032021/Milling_multipleMaterials_multipleAttributes.json";
+			String jsonIn = "./files/TESTING_02032021/CNCMilling.json";
 			//String jsonIn = "./files/ATTRIBUTEWEIGHTMAP/Test_CS_1.json";
 			CSSemanticMatching.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;

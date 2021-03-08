@@ -131,6 +131,7 @@ public class CSSemanticMatching extends SemanticMatching {
 			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
 
 			//prints the n best suppliers in ranked order to JSON
+			System.out.println("Writing results to output!");
 			writeResultToOutput(bestSuppliers, writer);
 
 			//prints additional data to console for testing/validation
