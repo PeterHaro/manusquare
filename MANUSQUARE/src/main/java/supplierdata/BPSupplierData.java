@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.jena.ext.com.google.common.collect.TreeMultimap;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
 import org.eclipse.rdf4j.query.TupleQueryResult;
@@ -22,10 +20,8 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.SetMultimap;
 
 import edm.Attribute;
 import edm.ByProduct;
@@ -162,7 +158,7 @@ public class BPSupplierData {
 		repository.shutDown();
 
 		// create list of suppliers according to the results from SPARQL
-		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
+		List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults);		
 
 
 		return suppliersList;
@@ -176,7 +172,7 @@ public class BPSupplierData {
 	   Dec 9, 2020
 	 * @throws IOException 
 	 */
-	public static List<BPSupplier> consolidateSuppliers (Set<BPSparqlResult> sparqlResults, OWLOntology onto) throws IOException {
+	public static List<BPSupplier> consolidateSuppliers (Set<BPSparqlResult> sparqlResults) throws IOException {
 
 		List<BPSupplier> supplierList = new ArrayList<BPSupplier>();
 
@@ -187,7 +183,7 @@ public class BPSupplierData {
 		}
 
 		//consolidate by-products
-		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (sparqlResults, onto);
+		Map<String, List<ByProduct>> consolidatedByProducts = consolidateByProducts (sparqlResults);
 
 		BPSupplier supplier = null;
 
@@ -236,7 +232,7 @@ public class BPSupplierData {
 	   Dec 9, 2020
 	 * @throws IOException 
 	 */
-	private static Map<String, List<ByProduct>> consolidateByProducts (Set<BPSparqlResult> sparqlResults, OWLOntology onto) throws IOException {
+	private static Map<String, List<ByProduct>> consolidateByProducts (Set<BPSparqlResult> sparqlResults) throws IOException {
 
 		//look-up table for getting valid attributeWeightMaps per WSProfile		
 		Map<String, Map<String, String>> attributeWeightMapLookup = createAttributeMapLookupMap(sparqlResults);
@@ -495,7 +491,7 @@ public class BPSupplierData {
 			repository.shutDown();
 
 			// create list of suppliers according to the results from SPARQL
-			List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults, onto);		
+			List<BPSupplier> suppliersList = consolidateSuppliers(sparqlResults);		
 
 			return suppliersList;
 

@@ -1,0 +1,28 @@
+{
+   "projectName":"Robotics",
+   "projectDescription":"",
+   "selectionType":"Manual",
+   "projectId":"dfa325eb-4eb8-4fa3-b7e0-ac92eb01de2a",
+   "projectType":"innovationManagement",
+   "projectInnovationPhases":[
+      "EngineeringPhase"
+   ],
+   "projectInnovationTypes":[
+      "TechnologyInnovation"
+   ],
+   "innovationManagerSkills":[
+      {
+         "id":"1b80221f-776c-42de-9fc2-9f5cee4cd7a2",
+         "skill":"Automation"
+      }
+   ],
+   "innovationManagerSectors":[
+      {
+         "id":"6455a298-f7eb-4d82-b12c-0383804e4458",
+         "sector":"Automotive"
+      }
+   ],
+   "innovationManagerAttributes":[
+      
+   ]
+}

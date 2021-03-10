@@ -32,7 +32,7 @@ public class Main {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "CS";
+		String functionality = "BP";
 
 		switch (functionality) {
 
@@ -43,12 +43,12 @@ public class Main {
 			return;
 
 		case "IM":
-			jsonIn = "./files/TESTING_INNOVATION_MANAGEMENT/Test_IM_7.json";
+			jsonIn = "./files/10032021/elias.json";
 			IMSemanticMatching.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 
 		case "BP":
-			jsonIn = "./files/TESTING_02032021/Sawdust_no-pg.json";
+			jsonIn = "./files/TESTING_02032021/Aluminium.json";
 			BPSemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
 

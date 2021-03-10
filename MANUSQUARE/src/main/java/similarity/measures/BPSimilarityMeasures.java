@@ -154,11 +154,11 @@ public class BPSimilarityMeasures {
 						System.out.println("BPSimilarityMeasures: attributeWeightMap for by-product " + bps.getId() + ": " + attributeWeightMap);
 						double avgAttributeSim = AttributeSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
 						System.out.println("avgAttributeSim: " + avgAttributeSim);
-						finalByProductSim = (materialSim * 0.6) + (appearanceSim * 0.2) + (avgAttributeSim * 0.2);
+						finalByProductSim = (materialSim * 0.7) + (appearanceSim * 0.1) + (avgAttributeSim * 0.2);
 					
 					} else {
 						
-						finalByProductSim = (materialSim * 0.8) + (appearanceSim * 0.2);
+						finalByProductSim = (materialSim * 0.9) + (appearanceSim * 0.1);
 					}
 					
 

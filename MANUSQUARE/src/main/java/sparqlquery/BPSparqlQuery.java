@@ -49,8 +49,7 @@ public class BPSparqlQuery {
 		Set<edm.ByProduct> byProducts = bpq.getByProducts();
 		String mode = bpq.getMode();
 				
-		Set<String> languages = bpq.getLanguage();        
-		
+		Set<String> languages = bpq.getLanguage();        		
 		Set<String> countries = bpq.getCountry();
 
 		Set<ByProduct> byProductSet = bpq.getByProducts();

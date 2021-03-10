@@ -1,0 +1,47 @@
+{
+    "projectName": "CarbonSteel no-pg",
+    "projectDescription": "",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {},
+    "projectId": "20d82573-b5a6-4dc9-aa1a-7fb6e049a468",
+    "projectType": "By-product",
+    "mode": "sell",
+    "minNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 0,
+    "purchasingGroupAbilitation": "",
+    "byProductElements": [{
+        "byProductId": "20934888-a7f0-41fa-818c-3e440e7ded95",
+        "byProductName": "Aluminium",
+        "supplyType": "Single batch",
+        "quantity": "70",
+        "unitOfMeasureQuantity": "kg",
+        "byProductAttributes": [
+            {
+                "id": "d6ef1d91-af8a-428c-aa2c-e76a8e6af4a5",
+                "attributeKey": "Appearance",
+                "attributeValue": "Sheets",
+                "unitOfMeasure": "N/D"
+            },
+            {
+                "id": "378766c4-6c70-43b0-a3f5-b77eb76e8a5c",
+                "attributeKey": "AttributeMaterial",
+                "attributeValue": "Aluminium",
+                "unitOfMeasure": "N/D"
+            },
+             {
+                "id": "378766c4-6c70-43b0-a3f5-b77eb76e8a5c",
+                "attributeKey": "Length",
+                "attributeValue": "50",
+                "unitOfMeasure": "cm"
+            },
+             {
+                "id": "378766c4-6c70-43b0-a3f5-b77eb76e8a5c",
+                "attributeKey": "Width",
+                "attributeValue": "40",
+                "unitOfMeasure": "mm"
+            }
+        ]
+    }],
+    "supplierAttributes": []
+}
