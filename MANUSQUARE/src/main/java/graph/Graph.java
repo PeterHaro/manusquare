@@ -4,6 +4,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 import com.google.common.graph.Traverser;
+import com.ontotext.trree.virtual.ParentRegistry;
 
 import ontology.OntologyOperations;
 
@@ -154,7 +155,7 @@ public class Graph {
 		}
 
 		//remove the sourceNode from the list so that only parents remain
-		//sourceNodeList.remove(sourceNode);
+		sourceNodeList.remove(sourceNode);
 
 		//reverse the linked list to get the right order of generality of the parent nodes
 		Collections.reverse(sourceNodeList);
@@ -168,7 +169,7 @@ public class Graph {
 		}
 
 		//remove the targetNode from the list so that only parents remain
-		//targetNodeList.remove(targetNode);
+		targetNodeList.remove(targetNode);
 
 		//reverse the linked list to get the right order of generality of the parent nodes
 		Collections.reverse(targetNodeList);
@@ -191,10 +192,17 @@ public class Graph {
 	public static void printParents (String node, MutableGraph<String> graph) {
 
 		Iterator<String> iter = Traverser.forGraph(graph).breadthFirst(node).iterator();
+		List<String> parents = new LinkedList<String>();
 
+		String thisNode;
 		while (iter.hasNext()) {
-			System.out.print(" " + iter.next());
+			thisNode = iter.next();
+			parents.add(thisNode);
 		}
+				
+		parents.remove(node);
+		
+		System.out.println("Parents (" + parents.size() + ")  of " + node + " are: " + parents);
 	}
 
 	public static Map<String, Integer> getOntologyHierarchy (OWLOntology onto, MutableGraph<String> graph) {

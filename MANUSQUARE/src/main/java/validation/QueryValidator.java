@@ -28,7 +28,7 @@ import utilities.StringUtilities;
 public class QueryValidator {
 
 	final static double SEMANTIC_SIMILARITY_TRESHOLD = 0.9;
-	final static double SYNTACTIC_SIMILARITY_TRESHOLD = 0.8;
+	final static double SYNTACTIC_SIMILARITY_TRESHOLD = 0.85;
 	
 	public static void main(String[] args) {
 		
@@ -377,7 +377,7 @@ public class QueryValidator {
 
 			String preProcessedConsumerInput = preProcess(consumerInput);			
 			mostSyntacticallySimilarConcept = getMostSimilarConceptSyntactically(preProcessedConsumerInput, classes, SYNTACTIC_SIMILARITY_TRESHOLD);
-
+			
 			if (mostSyntacticallySimilarConcept != null) {
 
 				mostSimilarConcept = mostSyntacticallySimilarConcept;
@@ -495,8 +495,7 @@ public class QueryValidator {
 			similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
 		}
 
-		mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-		
+		mostSimilarConcept = getConceptWithHighestSim(similarityMap);		
 
 		//only return if similarity is higher than threshold
 		if (similarityMap.get(mostSimilarConcept) >= SYNTACTIC_SIMILARITY_TRESHOLD) {

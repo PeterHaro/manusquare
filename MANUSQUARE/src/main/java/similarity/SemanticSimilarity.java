@@ -1,19 +1,18 @@
 package similarity;
 
-import java.util.Comparator;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 
-import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import com.google.common.graph.MutableGraph;
 
+import edm.Certification;
 import ontology.OntologyOperations;
 import similarity.methodologies.ISimilarity;
 import similarity.methodologies.SimilarityFactory;
@@ -24,6 +23,123 @@ import utilities.StringUtilities;
 
 
 public class SemanticSimilarity {
+	
+	public static double computeResourceSimilarity(Collection<String> consumerResources, Collection<String> supplierResources, OWLOntology onto, ISimilarity similarityMethodology, SimilarityMethods similarityMethod, MutableGraph<String> graph) throws IOException {
+
+		double similarity = 0;
+		List<Double> similarityList = new ArrayList<Double>();
+				
+		SimilarityParameters parameters = null;
+		
+		//if consumer hasn´t specified any resource we should return sim 1
+		if (consumerResources.isEmpty() || consumerResources == null) {
+			similarity = 1.0;
+		}
+		
+		//if the consumer has specified any resource and the supplier hasn´t, we should return sim 0
+		else if (supplierResources.isEmpty() || supplierResources == null) {
+			similarity = 0.0;
+		}
+
+		//if both the consumer and the supplier has specified resources we do a pairwise comparison of all consumer resources and all supplier resources
+		else {
+			
+			for (String consumerResource : consumerResources) {
+
+				for (String supplierResource : supplierResources) {
+					
+					//if this particular consumer resource or this particular supplier resource is null or empty we add a sim of 0
+					if (consumerResource == null || consumerResource.isEmpty() || supplierResource == null || supplierResource.isEmpty()) {
+						similarityList.add(0.0);
+					}
+					
+					//if this particular consumer resource is syntactical equal to supplier resource we add a sim of 1
+					else if (consumerResource.equalsIgnoreCase(supplierResource)) {
+						similarityList.add(1.0);
+					}
+					
+					//if neither of the above applies, and both consumer resource and supplier resource reside in the graph, 
+					//we compute the semantic similarity between this particular consumer resource and this particular supplier resource
+					else {
+						
+						if (StringUtilities.containsIgnoreCase(graph.nodes(), consumerResource) && StringUtilities.containsIgnoreCase(graph.nodes(), supplierResource)) {
+							
+							parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerResource, supplierResource, onto, graph);
+							similarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
+						}
+						
+						//if for some reason the consumer resource and the supplier resource does not reside in the graph we add sim 0
+						else {
+							similarityList.add(0.0);
+						}
+					}
+
+				}
+
+			}
+
+			//we return the highest sim for all resources
+			similarity = MathUtilities.getMaxFromList(similarityList);
+		}
+
+
+		return similarity;
+
+	}
+	
+	public static double computeCertificationSimilarity(Collection<Certification> initialConsumerCertifications, Collection<Certification> supplierCertificationsList, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
+
+		double certificationSimilarity = 0;
+
+		Set<String> consumerCertifications = new HashSet<String>();
+		if (initialConsumerCertifications != null) {
+			for (Certification c : initialConsumerCertifications) {
+				if (c.getId() != null) {
+				consumerCertifications.add(c.getId());				
+			}
+			}
+		}
+
+		Set<String> supplierCertifications = new HashSet<String>();
+		if (supplierCertificationsList != null) {
+			for (Certification c : supplierCertificationsList) {
+				if (c.getId() != null) {
+				supplierCertifications.add(c.getId());
+				}
+			}
+		}
+		
+
+		if (consumerCertifications != null && supplierCertifications != null ) {
+			
+			certificationSimilarity = computeSemanticSetSimilarity(consumerCertifications, supplierCertifications, similarityMethod, onto, graph, hard_coded_weight);
+
+		} else if (supplierCertifications == null) {
+			certificationSimilarity = hard_coded_weight;
+		} else {
+			certificationSimilarity = 1.0;			
+		}
+
+
+		return certificationSimilarity;
+	}
+	
+	public static boolean containsCertifications (Set<Certification> initialConsumerCertifications) {
+		
+		int counter = 0;
+		
+		for (Certification cert : initialConsumerCertifications) {
+			if (cert.getId() != null && !cert.getId().isEmpty()) {
+				counter++;
+			} 
+		}
+				
+		if (counter > 0) {
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public static double computeSemanticSetSimilarity (Set<String> consumerSet, Set<String> supplierSet, SimilarityMethods similarityMethod, OWLOntology onto, MutableGraph<String> graph, double hard_coded_weight) {
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
@@ -62,7 +178,7 @@ public class SemanticSimilarity {
 						} else {
 
 
-							s = getMostSimilarConceptSyntactically(s, classes);
+							s = SyntacticSimilarity.getMostSimilarConceptSyntactically(s, classes);
 
 							parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, c, s, onto, graph);			
 							simList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
@@ -90,67 +206,5 @@ public class SemanticSimilarity {
 
 	}
 
-	/* FIXME: THESE SHOULD NOT BE HERE, ONLY FOR RESOLVING THE ISSUE WITH SUPSI/HOLONIX TYPING INSTANCES USING CONCEPTS NOT WITHIN THE ONTOLOGY /GRAPH */
-
-	/**
-	 * Uses (string) similarity techniques to find most similar ontology concept to a consumer-specified process/material/certification
-	 *
-	 * @param input                   the input process/material/certification specified by the consumer
-	 * @param ontologyClassesAsString set of ontology concepts represented as strings
-	 * @return the best matching concept from the MANUSQUARE ontology
-	 * Nov 13, 2019
-	 */
-	public static String getMostSimilarConceptSyntactically(String input, Set<String> ontologyClassesAsString) {
-
-		Map<String, Double> similarityMap = new HashMap<String, Double>();
-		String mostSimilarConcept = null;
-
-		for (String s : ontologyClassesAsString) {
-
-			similarityMap.put(s, new JaroWinklerSimilarity().apply(input, s));
-		}
-
-		mostSimilarConcept = getConceptWithHighestSim(similarityMap);
-
-
-		return mostSimilarConcept;
-
-	}
-
-	/**
-	 * Returns the concept (name) with the highest (similarity) score from a map of concepts
-	 *
-	 * @param similarityMap a map of concepts along with their similarity scores
-	 * @return single concept (name) with highest similarity score
-	 * Nov 13, 2019
-	 */
-	private static String getConceptWithHighestSim(Map<String, Double> similarityMap) {
-		Map<String, Double> rankedResults = sortDescending(similarityMap);
-		Entry<String, Double> entry = rankedResults.entrySet().iterator().next();
-		String conceptWithHighestSim = entry.getKey();
-		return conceptWithHighestSim;
-	}
-
-	/**
-	 * Sorts a map based on similarity scores (values in the map)
-	 *
-	 * @param map the input map to be sorted
-	 * @return map with sorted values
-	 * May 16, 2019
-	 */
-	private static <K, V extends Comparable<V>> Map<K, V> sortDescending(final Map<K, V> map) {
-		Comparator<K> valueComparator = new Comparator<K>() {
-			public int compare(K k1, K k2) {
-				int compare = map.get(k2).compareTo(map.get(k1));
-				if (compare == 0) return 1;
-				else return compare;
-			}
-		};
-		Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
-
-		sortedByValues.putAll(map);
-
-		return sortedByValues;
-	}
 
 }

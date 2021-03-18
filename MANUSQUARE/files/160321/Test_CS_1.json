@@ -1,0 +1,53 @@
+{
+	"nda": "",
+	"projectName": "Prova",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+		"customer": {
+		"customerInfo": {
+			"location": "",
+			"lat": "",
+			"lon": ""
+		}
+	},
+	"servicePolicy": "true",
+	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"id": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"projectType": "DEMO - Capacity Sharing",
+	"projectAttributes": [
+	{
+		"unitOfMeasure": "",
+		"attributeId": "29837492834734",
+		"processName": "CNCMilling",
+		"attributeKey": "Axis",
+		"attributeValue": "5"
+	},
+	{
+		"unitOfMeasure": "",
+		"attributeId": "29837492834734",
+		"processName": "CNCMilling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "Aluminium"
+	},
+	{
+		"unitOfMeasure": "",
+		"attributeId": "29837492834734",
+		"processName": "CNCMilling",
+		"attributeKey": "AttributeMaterial",
+		"attributeValue": "CarbonSteel"
+	}
+	],
+	"supplierAttributes": [
+	{
+	"id": "1b39fb24-bb4d-46ef-a492-6b760ad429ca",
+	"attributeKey": "Certification",
+	"attributeValue": "ISO9000"	
+	},
+	{
+	"id": "1b39fb24-bb4d-46ef-a492-6b760ad429ca",
+	"attributeKey": "Language",
+	"attributeValue": "English"	
+	}
+	]
+}

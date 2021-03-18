@@ -15,9 +15,7 @@ import edm.Attribute;
 import edm.Certification;
 import edm.Process;
 import graph.Graph;
-import ontology.OntologyOperations;
 import query.CSQuery;
-import similarity.MaterialSimilarity;
 import similarity.SemanticSimilarity;
 import similarity.SimilarityMethods;
 import similarity.methodologies.ISimilarity;
@@ -30,8 +28,6 @@ import utilities.MathUtilities;
 public class CSSimilarityMeasures {
 
 	public static List<Double> computeSemanticSimilarity (CSQuery query, CSSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
-
-		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
 
 		List<Process> processList = supplier.getProcesses();
 		List<Certification> certificationList = supplier.getCertifications();
@@ -110,7 +106,7 @@ public class CSSimilarityMeasures {
 				System.out.println("consumerMaterials: " + consumerMaterials);
 				System.out.println("supplierMaterials: " + supplierMaterials);
 
-				materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);
+				materialSim = SemanticSimilarity.computeResourceSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph);
 				
 				System.out.println("materialSim for supplier " + supplier.getSupplierId() + ": " + materialSim);
 

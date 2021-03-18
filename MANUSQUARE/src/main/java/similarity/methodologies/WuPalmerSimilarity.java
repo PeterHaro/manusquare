@@ -13,7 +13,7 @@ public class WuPalmerSimilarity implements ISimilarity<WuPalmerParameters> {
         int sourceNodeDepth = Graph.getNodeDepth(params.sourceNode, params.graph);
         int targetNodeDepth = Graph.getNodeDepth(params.targetNode, params.graph);
         int lcsNodeDepth = Graph.getNodeDepth(LCS, params.graph);        
-
+                
         if (params.sourceNode.equals(params.targetNode)) {
             return 1.0;
         } else {

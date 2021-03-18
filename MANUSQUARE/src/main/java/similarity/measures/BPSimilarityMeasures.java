@@ -21,11 +21,9 @@ import edm.Certification;
 import graph.Graph;
 import ontology.OntologyOperations;
 import query.BPQuery;
-import similarity.AppearanceSimilarity;
-import similarity.AttributeSimilarity;
-import similarity.CertificationSimilarity;
-import similarity.MaterialSimilarity;
+import similarity.SemanticSimilarity;
 import similarity.SimilarityMethods;
+import similarity.SyntacticSimilarity;
 import similarity.methodologies.ISimilarity;
 import similarity.methodologies.SimilarityFactory;
 import similarity.methodologies.parameters.SimilarityParameters;
@@ -134,25 +132,25 @@ public class BPSimilarityMeasures {
 					System.out.println("consumerMaterials: " + consumerMaterials);
 					System.out.println("supplierMaterials: " + supplierMaterials);
 					
-					materialSim = MaterialSimilarity.computeMaterialSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph, allOntologyClasses);				
+					materialSim = SemanticSimilarity.computeResourceSimilarity(consumerMaterials, supplierMaterials, onto, similarityMethodology, similarityMethod, graph);				
 					System.out.println("materialSim: " + materialSim);
 					
 					/* APPEARANCE SIMILARITY */
-					appearanceSim = AppearanceSimilarity.computeAppearanceSimilarity(consumerByProductAppearances, supplierByProductAppearances);					
+					appearanceSim = SyntacticSimilarity.computeAppearanceSimilarity(consumerByProductAppearances, supplierByProductAppearances);					
 					System.out.println("appearanceSim for consumer appearancaes ( " + consumerByProductAppearances + " ) and supplier appearances (" +  supplierByProductAppearances + " : " + appearanceSim);
 					
 					/* ATTRIBUTE SIMILARITY */		
 
 					Set<Attribute> consumerAttributes = bpc.getAttributes();
 					
-					if (AttributeSimilarity.containsAttributes(consumerAttributes)) {
+					if (SyntacticSimilarity.containsAttributes(consumerAttributes)) {
 						
 						Map<String, String> attributeWeightMap = bps.getAttributeWeightMap();
 						if (attributeWeightMap != null) {
 						System.out.println("BPSimilarityMeasures: bps.getAttributeWeightMap() contains " + attributeWeightMap.size() + " entry.");
 						}
 						System.out.println("BPSimilarityMeasures: attributeWeightMap for by-product " + bps.getId() + ": " + attributeWeightMap);
-						double avgAttributeSim = AttributeSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
+						double avgAttributeSim = SyntacticSimilarity.computeAttributeSimilarity(consumerAttributes, attributeWeightMap, hard_coded_weight);
 						System.out.println("avgAttributeSim: " + avgAttributeSim);
 						finalByProductSim = (materialSim * 0.7) + (appearanceSim * 0.1) + (avgAttributeSim * 0.2);
 					
@@ -170,9 +168,9 @@ public class BPSimilarityMeasures {
 
 					Set<Certification> initialConsumerCertifications = query.getCertifications();
 										
-					if (CertificationSimilarity.containsCertifications(initialConsumerCertifications)) {
+					if (SemanticSimilarity.containsCertifications(initialConsumerCertifications)) {
 						
-						certificationSim = CertificationSimilarity.computeCertificationSimilarity(initialConsumerCertifications, supplierCertificationsList, similarityMethod, onto, graph, hard_coded_weight);
+						certificationSim = SemanticSimilarity.computeCertificationSimilarity(initialConsumerCertifications, supplierCertificationsList, similarityMethod, onto, graph, hard_coded_weight);
 						finalByProductSim = (finalByProductSim * 0.7) + (certificationSim * 0.3);
 						System.out.println("finalByProductSim (after certificationSim): " + finalByProductSim);
 						

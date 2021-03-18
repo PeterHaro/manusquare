@@ -32,12 +32,12 @@ public class Main {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "BP";
+		String functionality = "IM";
 
 		switch (functionality) {
 
 		case "CS":
-			String jsonIn = "./files/TESTING_02032021/CNCMilling.json";
+			String jsonIn = "./files/160321/Test_CS_1.json";
 			//String jsonIn = "./files/ATTRIBUTEWEIGHTMAP/Test_CS_1.json";
 			CSSemanticMatching.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight);
 			return;
