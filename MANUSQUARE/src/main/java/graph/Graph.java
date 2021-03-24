@@ -1,21 +1,26 @@
 package graph;
 
-import com.google.common.collect.Iterators;
-import com.google.common.graph.GraphBuilder;
-import com.google.common.graph.MutableGraph;
-import com.google.common.graph.Traverser;
-import com.ontotext.trree.virtual.ParentRegistry;
-
-import ontology.OntologyOperations;
+import java.io.File;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
+import com.google.common.collect.Iterators;
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.MutableGraph;
+import com.google.common.graph.Traverser;
+
+import ontology.OntologyOperations;
 
 public class Graph {
 
@@ -24,9 +29,9 @@ public class Graph {
 	public static void addProcessesToGraph (MutableGraph<String> graph, List<String> supplierDefinedProcesses) {
 		
 		for (String s : supplierDefinedProcesses) {
-						
+									
 			if (!graph.nodes().contains(s.toLowerCase())) {
-				graph.putEdge(s.toLowerCase(), "mfgprocess");
+				graph.putEdge(s.toLowerCase().concat("_NEW"), "mfgprocess");
 			}
 		}
 	}
@@ -35,7 +40,7 @@ public class Graph {
 		
 		for (String s : supplierDefinedMaterials) {
 			if (!graph.nodes().contains(s.toLowerCase())) {
-				graph.putEdge(s.toLowerCase(), "materialtype");
+				graph.putEdge(s.toLowerCase().concat("_NEW"), "materialtype");
 			}
 		}
 	}
@@ -44,7 +49,7 @@ public class Graph {
 		
 		for (String s : supplierDefinedInnovationTypes) {
 			if (!graph.nodes().contains(s.toLowerCase())) {
-				graph.putEdge(s.toLowerCase(), "innovationtype");
+				graph.putEdge(s.toLowerCase().concat("_NEW"), "innovationtype");
 			}
 		}
 	}
@@ -53,7 +58,7 @@ public class Graph {
 		
 		for (String s : supplierDefinedInnovationPhases) {
 			if (!graph.nodes().contains(s.toLowerCase())) {
-				graph.putEdge(s.toLowerCase(), "innovationphase");
+				graph.putEdge(s.toLowerCase().concat("_NEW"), "innovationphase");
 			}
 		}
 	}
@@ -62,7 +67,7 @@ public class Graph {
 		
 		for (String s : supplierDefinedSkills) {
 			if (!graph.nodes().contains(s.toLowerCase())) {
-				graph.putEdge(s.toLowerCase(), "capabilitytype");
+				graph.putEdge(s.toLowerCase().concat("_NEW"), "capabilitytype");
 			}
 		}
 	}
@@ -71,7 +76,7 @@ public class Graph {
 		
 		for (String s : supplierDefinedSectors) {
 			if (!graph.nodes().contains(s.toLowerCase())) {
-				graph.putEdge(s.toLowerCase(), "industry");
+				graph.putEdge(s.toLowerCase().concat("_NEW"), "industry");
 			}
 		}
 	}
@@ -144,7 +149,7 @@ public class Graph {
 				
 		//make all nodes lowercased
 		sourceNode = sourceNode.toLowerCase();
-		targetNode = targetNode.toLowerCase();
+		targetNode = targetNode.toLowerCase();		
 
 		//traverse the graph to get parents of sourceNode
 		Iterator<String> iterSource = Traverser.forGraph(graph).breadthFirst(sourceNode).iterator();

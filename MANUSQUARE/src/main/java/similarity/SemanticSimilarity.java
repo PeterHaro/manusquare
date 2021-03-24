@@ -12,17 +12,27 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import com.google.common.graph.MutableGraph;
 
+import data.EmbeddingSingletonDataManager;
 import edm.Certification;
 import ontology.OntologyOperations;
 import similarity.methodologies.ISimilarity;
 import similarity.methodologies.SimilarityFactory;
 import similarity.methodologies.parameters.SimilarityParameters;
 import similarity.methodologies.parameters.SimilarityParametersFactory;
+import similarity.techniques.Cosine;
 import utilities.MathUtilities;
 import utilities.StringUtilities;
 
 
 public class SemanticSimilarity {
+	
+	public static double computeWESimilarity (String consumerResource, String supplierResource) {
+		EmbeddingSingletonDataManager embeddingManager = EmbeddingSingletonDataManager.getInstance();
+		double[] consumerResourceVectors = embeddingManager.getLabelVector(consumerResource, EmbeddingSingletonDataManager.VAM);
+		double[] supplierResourceVectors = embeddingManager.getLabelVector(supplierResource, EmbeddingSingletonDataManager.VAM);
+		
+		return Cosine.cosineSimilarity(consumerResourceVectors, supplierResourceVectors);
+	}
 	
 	public static double computeResourceSimilarity(Collection<String> consumerResources, Collection<String> supplierResources, OWLOntology onto, ISimilarity similarityMethodology, SimilarityMethods similarityMethod, MutableGraph<String> graph) throws IOException {
 
@@ -49,14 +59,14 @@ public class SemanticSimilarity {
 				for (String supplierResource : supplierResources) {
 					
 					//if this particular consumer resource or this particular supplier resource is null or empty we add a sim of 0
-					if (consumerResource == null || consumerResource.isEmpty() || supplierResource == null || supplierResource.isEmpty()) {
+					if (consumerResource == null || consumerResource.isEmpty() ||  supplierResource == null || supplierResource.isEmpty()) {
 						similarityList.add(0.0);
 					}
 					
 					//if this particular consumer resource is syntactical equal to supplier resource we add a sim of 1
 					else if (consumerResource.equalsIgnoreCase(supplierResource)) {
 						similarityList.add(1.0);
-					}
+					}				
 					
 					//if neither of the above applies, and both consumer resource and supplier resource reside in the graph, 
 					//we compute the semantic similarity between this particular consumer resource and this particular supplier resource
@@ -68,9 +78,9 @@ public class SemanticSimilarity {
 							similarityList.add(similarityMethodology.ComputeSimilaritySimpleGraph(parameters));
 						}
 						
-						//if for some reason the consumer resource and the supplier resource does not reside in the graph we add sim 0
+						//if the consumer resource and the supplier resource does not reside in the graph we compute syntactic similarity using Word Embeddings
 						else {
-							similarityList.add(0.0);
+							similarityList.add(computeWESimilarity(consumerResource, supplierResource));
 						}
 					}
 

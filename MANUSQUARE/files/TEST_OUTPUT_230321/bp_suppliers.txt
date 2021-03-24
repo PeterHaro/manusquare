@@ -1,0 +1,299 @@
+
+
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+
+Supplier Name: Techxtile srl
+Language: English
+Country: Algeria
+Certification ISO14000
+
+Supplier ID: stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970
+
+Supplier Name: Techxtile srl
+Language: German
+Country: Algeria
+Certification ISO14000
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: English
+Country: Portugal
+Certification ISO9001
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: English
+Country: Portugal
+Certification OHSAS18001
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: English
+Country: Portugal
+Certification ISO14001
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: English
+Country: Portugal
+Certification NP4457
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: Portuguese
+Country: Portugal
+Certification ISO9001
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: Portuguese
+Country: Portugal
+Certification OHSAS18001
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: Portuguese
+Country: Portugal
+Certification ISO14001
+
+Supplier ID: stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103
+
+Supplier Name: JPM - Automação e Equipamentos Industriais, S.A.
+Language: Portuguese
+Country: Portugal
+Certification NP4457
+
+Supplier ID: stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5
+
+Supplier Name: Advanced Milling srl
+Language: Italian
+Country: Italy
+
+Supplier ID: stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5
+
+Supplier Name: Advanced Milling srl
+Language: English
+Country: Italy
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: Italian
+Country: Switzerland
+Certification ISO14001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: Italian
+Country: Switzerland
+Certification ISO9001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: English
+Country: Switzerland
+Certification ISO14001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: English
+Country: Switzerland
+Certification ISO9001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: German
+Country: Switzerland
+Certification ISO14001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: German
+Country: Switzerland
+Certification ISO9001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: French
+Country: Switzerland
+Certification ISO14001
+
+Supplier ID: stakeholders:212049ea-036a-4911-b8b0-67883605e082
+
+Supplier Name: MRT-3DPrint
+Language: French
+Country: Switzerland
+Certification ISO9001
+
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+
+Supplier Name: davCusCompany
+Language: Italian
+Country: Switzerland
+Certification ISO14001
+
+Supplier ID: stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7
+
+Supplier Name: davCusCompany
+Language: German
+Country: Switzerland
+Certification ISO14001
+
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+
+Supplier Name: davSupCompany
+Language: English
+Country: Switzerland
+Certification ISO9000
+
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+
+Supplier Name: davSupCompany
+Language: English
+Country: Switzerland
+Certification ISO14000
+
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+
+Supplier Name: davSupCompany
+Language: Italian
+Country: Switzerland
+Certification ISO9000
+
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+
+Supplier Name: davSupCompany
+Language: Italian
+Country: Switzerland
+Certification ISO14000
+
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+
+Supplier Name: davSupCompany
+Language: German
+Country: Switzerland
+Certification ISO9000
+
+Supplier ID: stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b
+
+Supplier Name: davSupCompany
+Language: German
+Country: Switzerland
+Certification ISO14000
+
+Supplier ID: stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25
+
+Supplier Name: PRODUTECH | Production Technologies Cluster
+Language: Portuguese
+Country: Portugal
+
+Supplier ID: stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25
+
+Supplier Name: PRODUTECH | Production Technologies Cluster
+Language: English
+Country: Portugal
+
+Supplier ID: stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e
+
+Supplier Name: SINTEF4
+Language: Spanish
+Country: Norway
+Certification ISO9000
+
+Supplier ID: stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e
+
+Supplier Name: SINTEF4
+Language: Italian
+Country: Norway
+Certification ISO9000
+
+Supplier ID: stakeholders:ed18dadf-3100-4b77-9a37-95a3db60467a
+
+Supplier Name: InnovHub 
+Language: English
+Country: Italy
+
+Supplier ID: stakeholders:ed18dadf-3100-4b77-9a37-95a3db60467a
+
+Supplier Name: InnovHub 
+Language: Italian
+Country: Italy
+
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+
+Supplier Name: Cosmetics Innovation spa
+Language: Italian
+Country: Italy
+Certification ISO9001
+
+Supplier ID: stakeholders:32d3914b-f508-4ec2-88c4-e1d6e1e8950f
+
+Supplier Name: Cosmetics Innovation spa
+Language: English
+Country: Italy
+Certification ISO9001
+
+Supplier ID: stakeholders:7c13a8ab-c67d-4e5d-8a54-de5f7454b03b
+
+Supplier Name: NewcoCus
+Language: English
+Country: Belgium
+Certification ISO9000
+
+Supplier ID: stakeholders:7c13a8ab-c67d-4e5d-8a54-de5f7454b03b
+
+Supplier Name: NewcoCus
+Language: English
+Country: Belgium
+Certification ISO9001
+
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+
+Supplier Name: Made in Swiss Furniture SA
+Language: German
+Country: Italy
+
+Supplier ID: stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12
+
+Supplier Name: Made in Swiss Furniture SA
+Language: English
+Country: Italy
+
+Supplier ID: stakeholders:407d43b7-301d-4721-9fff-c14d5b2ffab2
+
+Supplier Name: Textile Industrial Innovation
+Language: English
+Country: Germany
+
+Supplier ID: stakeholders:407d43b7-301d-4721-9fff-c14d5b2ffab2
+
+Supplier Name: Textile Industrial Innovation
+Language: German
+Country: Germany
+
+Supplier ID: stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
+
+Supplier Name: SINTEF
+Language: Norwegian
+Country: Norway
+Certification ISO9001
+
+Supplier ID: stakeholders:a05136ea-b018-4c74-b33b-72eefc2e9f13
+
+Supplier Name: petzlSupCompany
+Language: Italian
+Country: Italy
+Certification ISO14000

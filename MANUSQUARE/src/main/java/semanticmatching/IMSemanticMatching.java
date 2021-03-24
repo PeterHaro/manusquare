@@ -48,8 +48,7 @@ public class IMSemanticMatching extends SemanticMatching {
 	static SimilarityMethods similarityMethod = SimilarityMethods.WU_PALMER;
 
 
-
-	public static void performSemanticMatching_IM (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performSemanticMatching_IM (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight, double cut_threshold) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
@@ -105,9 +104,15 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		for (IMSupplier innovationManager : innovationManagerData) {
 
-			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
-			//get the highest score for the process chains offered by supplier n
+			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight, cut_threshold);
+			//if there are any results for this innovation manager get the highest score for the innovation entries offered by supplier n
+			
+			//TODO: CHECK!
+			if (!innovationManagerSim.isEmpty()) {
+			
 			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
+			
+			}
 
 		}
 
@@ -125,7 +130,7 @@ public class IMSemanticMatching extends SemanticMatching {
 
 	}
 
-	public static Map<String, Double> testSemanticMatching (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static Map<String, Double> testSemanticMatching (String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight, double cut_threshold) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
@@ -181,9 +186,14 @@ public class IMSemanticMatching extends SemanticMatching {
 
 		for (IMSupplier innovationManager : innovationManagerData) {
 
-			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+			innovationManagerSim = IMSimilarityMeasures.computeSemanticSimilarity_IM(imq, innovationManager, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight, cut_threshold);
+			
+			if (innovationManagerSim != null && !innovationManagerSim.isEmpty()) {
+			
 			//get the highest score for the process chains offered by supplier n
 			innovationManagerScores.put(innovationManager, MathUtilities.getHighest(innovationManagerSim));	
+			
+			}
 
 		}
 
@@ -198,6 +208,26 @@ public class IMSemanticMatching extends SemanticMatching {
 			return null;
 		}
 
+
+	}
+	
+	private static Map<String, Double> extractBestInnovationManagers(Map<IMSupplier, Double> supplierScores, int numResults) {
+		
+		
+		//sort the results from highest to lowest score and return the [numResults] highest scores
+		Map<IMSupplier, Double> rankedResults = sortDescending(supplierScores);
+		Iterable<Entry<IMSupplier, Double>> firstEntries =
+				Iterables.limit(rankedResults.entrySet(), numResults);
+
+		//return the [numResults] best suppliers according to highest scores
+		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
+		for (Entry<IMSupplier, Double> e : firstEntries) {
+			
+			finalSupplierMap.put(e.getKey().getSupplierId(), e.getValue());
+
+		}
+
+		return finalSupplierMap;
 
 	}
 
@@ -263,21 +293,6 @@ public class IMSemanticMatching extends SemanticMatching {
 	}
 
 
-	private static Map<String, Double> extractBestInnovationManagers(Map<IMSupplier, Double> supplierScores, int numResults) {
-		//sort the results from highest to lowest score and return the [numResults] highest scores
-		Map<IMSupplier, Double> rankedResults = sortDescending(supplierScores);
-		Iterable<Entry<IMSupplier, Double>> firstEntries =
-				Iterables.limit(rankedResults.entrySet(), numResults);
-
-		//return the [numResults] best suppliers according to highest scores
-		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
-		for (Entry<IMSupplier, Double> e : firstEntries) {
-			finalSupplierMap.put(e.getKey().getSupplierId(), e.getValue());
-		}
-
-		return finalSupplierMap;
-
-	}
 
 	/**
 	 * Prints a ranked list of suppliers along with similarity scores to a JSON file

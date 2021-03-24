@@ -1,0 +1,93 @@
+
+
+Test_CS_1.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:771155dc-74be-462c-a51e-717061b839c4: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:71f9f13a-54f2-4ff9-8e7a-82127fd114f2: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 1.0
+
+Test_CS_6.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 0.9766666666666666
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 0.9766666666666666
+http://manusquare.project.eu/industrial-manusquare#stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e: 0.9757692307692307
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 0.9737499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5: 0.9737499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:bb4338b9-b939-4a82-95a8-6739f3febfd1: 0.9504166666666665
+http://manusquare.project.eu/industrial-manusquare#stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa: 0.9362820512820513
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970: 0.9362820512820513
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2bb4c022-3553-4064-a2e3-03340c895d30: 0.9362820512820513
+
+Test_CS_7.json( 0)
+
+Test_CS_4.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 0.9919230769230769
+http://manusquare.project.eu/industrial-manusquare#stakeholders:bb4338b9-b939-4a82-95a8-6739f3febfd1: 0.9737499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2bb4c022-3553-4064-a2e3-03340c895d30: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:771155dc-74be-462c-a51e-717061b839c4: 0.9434615384615384
+http://manusquare.project.eu/industrial-manusquare#stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e: 0.8999358974358973
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 0.8979166666666665
+
+Test_CS_8.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:212049ea-036a-4911-b8b0-67883605e082: 0.8757499999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 0.8757499999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 0.8757499999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 0.8454615384615383
+http://manusquare.project.eu/industrial-manusquare#stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5: 0.8243636363636362
+http://manusquare.project.eu/industrial-manusquare#stakeholders:a05136ea-b018-4c74-b33b-72eefc2e9f13: 0.8104166666666666
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7: 0.7969999999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12: 0.7293333333333333
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 0.7287499999999999
+
+Test_CS_9.json( 1)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 0.8757499999999998
+
+Test_CS_5.json( 1)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e: 0.9241666666666666
+
+Test_CS_10.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 0.9212499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:56fa156a-3d7a-4051-b467-fb9787a7bf12: 0.9212499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:a05136ea-b018-4c74-b33b-72eefc2e9f13: 0.9212499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5: 0.9212499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b: 0.8997727272727272
+http://manusquare.project.eu/industrial-manusquare#stakeholders:576cfb06-a71e-4886-899a-e7c1bb77fbe7: 0.8424999999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 0.8424999999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa: 0.8424999999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970: 0.8424999999999998
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 0.6607692307692308
+
+Test_CS_2.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 1.0
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 0.9919230769230769
+http://manusquare.project.eu/industrial-manusquare#stakeholders:bb4338b9-b939-4a82-95a8-6739f3febfd1: 0.9737499999999999
+http://manusquare.project.eu/industrial-manusquare#stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2bb4c022-3553-4064-a2e3-03340c895d30: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e: 0.9524358974358973
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 0.9504166666666665
+http://manusquare.project.eu/industrial-manusquare#stakeholders:d8ecffb5-0fbf-470b-8160-13f2564b79c5: 0.9504166666666665
+
+Test_CS_3.json( 10)
+http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7: 0.9919230769230769
+http://manusquare.project.eu/industrial-manusquare#stakeholders:405d8b9a-0683-4c58-8a88-0f7972bec2aa: 0.9596153846153845
+http://manusquare.project.eu/industrial-manusquare#stakeholders:5ec8cd95-f3cf-49e5-b93a-426a24ae6103: 0.9504166666666665
+http://manusquare.project.eu/industrial-manusquare#stakeholders:16c822d5-ad9c-43ac-ba79-e2b03335c68e: 0.9293589743589743
+http://manusquare.project.eu/industrial-manusquare#stakeholders:328510aa-d5f1-4d7d-85eb-dc28b1eed970: 0.8903846153846153
+http://manusquare.project.eu/industrial-manusquare#stakeholders:cc3b0579-13c9-42bd-8b0f-d1c8875f5d25: 0.85
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2ce7bdf6-7358-448d-b079-e6e6380c46b6: 0.85
+http://manusquare.project.eu/industrial-manusquare#stakeholders:c7bc62c9-568e-465d-899e-3aefbad9000b: 0.8488461538461538
+http://manusquare.project.eu/industrial-manusquare#stakeholders:bb4338b9-b939-4a82-95a8-6739f3febfd1: 0.82375
+http://manusquare.project.eu/industrial-manusquare#stakeholders:2bb4c022-3553-4064-a2e3-03340c895d30: 0.8096153846153846

@@ -47,7 +47,7 @@ public class ByProductSemanticMatching {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        BPSemanticMatching.performByProductMatching(jsonInput, 10, writer, false, true, 0.5);
+        BPSemanticMatching.performByProductMatching(jsonInput, 10, writer, false, true, 0.5, 0.75);
         System.out.println(sw.toString());
         ctx.json(sw.toString());
     };

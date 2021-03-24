@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,22 +18,18 @@ import edm.Attribute;
 import edm.ByProduct;
 import edm.Certification;
 import graph.Graph;
-import ontology.OntologyOperations;
 import query.BPQuery;
 import similarity.SemanticSimilarity;
 import similarity.SimilarityMethods;
 import similarity.SyntacticSimilarity;
 import similarity.methodologies.ISimilarity;
 import similarity.methodologies.SimilarityFactory;
-import similarity.methodologies.parameters.SimilarityParameters;
 import supplier.BPSupplier;
 
 public class BPSimilarityMeasures {
 
 
-	public static Map<String, Map<String, Double>> computeSemanticSimilarity (BPQuery query, BPSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
-		//for validation purposes
-		Set<String> allOntologyClasses = OntologyOperations.getClassesAsString(onto);
+	public static Map<String, Map<String, Double>> computeSemanticSimilarity (BPQuery query, BPSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight, double cut_threshold) throws IOException {
 
 		//for quantities and uoms
 		double consumerQuantity = 0;
@@ -44,7 +39,6 @@ public class BPSimilarityMeasures {
 		String supplierUOM = null;
 		String consumerSupplyType = null;
 		String supplierSupplyType = null;
-		String consumerByProductMaterial = null;
 		
 		//for purchasingGroupAbilitation
 		String consumerPurchasingGroupAbilitation = null;
@@ -60,9 +54,7 @@ public class BPSimilarityMeasures {
 		List<Certification> supplierCertificationsList = supplier.getCertifications();
 
 		ISimilarity similarityMethodology = SimilarityFactory.GenerateSimilarityMethod(similarityMethod);
-		SimilarityParameters parameters = null;
 
-		List<Double> similarityList = new LinkedList<Double>();
 		Map<String, Double> byProductScores = new HashMap<String, Double>();
 		Map<String, Map<String, Double>> supplierByProductScoresMapping = new HashMap<String, Map<String, Double>>();
 
@@ -160,8 +152,6 @@ public class BPSimilarityMeasures {
 					}
 					
 
-					
-					
 					System.out.println("finalByProductSim (before certificationSim): " + finalByProductSim);
 
 					/* CERTIFICATION SIMILARITY */
@@ -184,7 +174,7 @@ public class BPSimilarityMeasures {
 					finalByProductSim = 0;
 				}
 				
-				if (finalByProductSim != 0) {
+				if (finalByProductSim != 0 && finalByProductSim >= cut_threshold) {
 
 				byProductScores.put(bps.getId(), finalByProductSim);
 				

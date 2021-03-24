@@ -35,6 +35,7 @@ import supplierdata.BPSupplierData;
  * @author audunvennesland
  */
 public class BPSemanticMatching extends SemanticMatching {
+	
 
 	/**
 	 * Matches a consumer query against a set of resources offered by suppliers and returns a ranked list of the [numResult] suppliers having the highest semantic similarity as a JSON file.
@@ -49,7 +50,7 @@ public class BPSemanticMatching extends SemanticMatching {
 	 * @throws OWLOntologyCreationException
 	   Mar 5, 2020
 	 */
-	public static void performByProductMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performByProductMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight, double cut_threshold) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
@@ -103,7 +104,7 @@ public class BPSemanticMatching extends SemanticMatching {
 			TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
 
 			for (BPSupplier supplier : supplierData) {
-				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight, cut_threshold));
 
 			}
 
@@ -122,7 +123,7 @@ public class BPSemanticMatching extends SemanticMatching {
 
 	}
 
-	public static List<ExtendedMatchingResult> testByProductMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static List<ExtendedMatchingResult> testByProductMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight, double cut_threshold) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
@@ -176,11 +177,12 @@ public class BPSemanticMatching extends SemanticMatching {
 			TreeMap<String, Map<String, Double>> supplierByProductScoresMapping = new TreeMap<String, Map<String, Double>>();
 
 			for (BPSupplier supplier : supplierData) {
-				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight));
+				supplierByProductScoresMapping.putAll(BPSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight, cut_threshold));
 
 			}
 
 			List<ExtendedMatchingResult> results = ExtendedMatchingResult.computeExtendedMatchingResult(supplierByProductScoresMapping);
+			
 			return results;
 
 		} else {

@@ -24,10 +24,11 @@ import similarity.methodologies.parameters.SimilarityParameters;
 import similarity.methodologies.parameters.SimilarityParametersFactory;
 import supplier.CSSupplier;
 import utilities.MathUtilities;
+import utilities.StringUtilities;
 
 public class CSSimilarityMeasures {
 
-	public static List<Double> computeSemanticSimilarity (CSQuery query, CSSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight) throws IOException {
+	public static List<Double> computeSemanticSimilarity (CSQuery query, CSSupplier supplier, OWLOntology onto, SimilarityMethods similarityMethod, boolean weighted, MutableGraph<String> graph, boolean testing, double hard_coded_weight, double cut_threshold) throws IOException {
 
 		List<Process> processList = supplier.getProcesses();
 		List<Certification> certificationList = supplier.getCertifications();
@@ -91,9 +92,11 @@ public class CSSimilarityMeasures {
 				//if supplier process ps is a part of the equivalent process concepts of consumer process pc, the processSim is 1.0
 				if (equivalentProcesses != null && equivalentProcesses.contains(ps.getName())) {
 					processSim = 1.0;
-				} else {
+				} else if (StringUtilities.containsIgnoreCase(graph.nodes(), consumerQueryProcessNode) && StringUtilities.containsIgnoreCase(graph.nodes(), supplierResourceProcessNode)) {
 					parameters = SimilarityParametersFactory.CreateSimpleGraphParameters(similarityMethod, consumerQueryProcessNode, supplierResourceProcessNode, onto, graph);
 					processSim = similarityMethodology.ComputeSimilaritySimpleGraph(parameters);
+				} else {
+					processSim = SemanticSimilarity.computeWESimilarity(consumerQueryProcessNode, supplierResourceProcessNode);
 				}
 
 				System.out.println("processSim for supplier " + supplier.getSupplierId() + ": " + processSim);
@@ -187,16 +190,30 @@ public class CSSimilarityMeasures {
 				double finalSim = (finalProcessSim * 0.7) + (certificationSim * 0.3);
 
 				System.out.println("finalSim for supplier " + supplier.getSupplierId() + ": " + finalSim);
-
+				
+				//TODO: CHECK!
+				if (finalSim >= cut_threshold) {
+					
+					System.out.println("Adding score " + finalSim + " to simList");
+					
 				processSimList.add(finalSim);
+				
+				}
 
 			}		
+			
+			
 
+			if (processSimList != null && !processSimList.isEmpty()) {
+				
 			similarityList.add(MathUtilities.getHighest(processSimList));
 
 			System.out.println("FINAL AND BEST SIMILARITY for supplier " + supplier.getSupplierId() + ": " + MathUtilities.getHighest(processSimList));
 
+			}
 		}	
+		
+		System.out.println("similarityList: " + similarityList);
 
 		return similarityList;
 

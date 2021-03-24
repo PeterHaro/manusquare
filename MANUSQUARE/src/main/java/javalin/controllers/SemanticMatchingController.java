@@ -48,7 +48,7 @@ public class SemanticMatchingController {
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
 
-        CSSemanticMatching.performSemanticMatching(jsonInput, 10, writer, false, true, 0.5);
+        CSSemanticMatching.performSemanticMatching(jsonInput, 10, writer, false, true, 0.5, 0.75);
         System.out.println(sw.toString());
         ctx.json(sw.toString());
     };

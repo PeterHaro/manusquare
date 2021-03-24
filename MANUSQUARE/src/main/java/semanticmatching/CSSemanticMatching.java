@@ -58,7 +58,7 @@ public class CSSemanticMatching extends SemanticMatching {
 	 * @throws OWLOntologyCreationException
 	   Mar 5, 2020
 	 */
-	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static void performSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight, double cut_threshold) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
@@ -122,13 +122,14 @@ public class CSSemanticMatching extends SemanticMatching {
 			List<Double> supplierSim = new LinkedList<Double>();
 
 			for (CSSupplier supplier : supplierData) {
-				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight, cut_threshold);
+								
 				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, consumerDefinedProcesses.size()));	
 
 			}
 
 			//extract the n suppliers with the highest similarity scores
-			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
+			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults, cut_threshold);
 
 			//prints the n best suppliers in ranked order to JSON
 			writeResultToOutput(bestSuppliers, writer);
@@ -162,7 +163,7 @@ public class CSSemanticMatching extends SemanticMatching {
 	 * @throws IOException
 	   Jan 18, 2021
 	 */
-	public static Map<String, Double> testSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight) throws OWLOntologyStorageException, IOException {
+	public static Map<String, Double> testSemanticMatching(String inputJson, int numResults, BufferedWriter writer, boolean testing, boolean isWeighted, double hard_coded_weight, double cut_threshold) throws OWLOntologyStorageException, IOException {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		String sparql_endpoint_by_env = System.getenv("ONTOLOGY_ADDRESS");
 
@@ -226,13 +227,17 @@ public class CSSemanticMatching extends SemanticMatching {
 			List<Double> supplierSim = new LinkedList<Double>();
 
 			for (CSSupplier supplier : supplierData) {
-				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight);
+				supplierSim = CSSimilarityMeasures.computeSemanticSimilarity(query, supplier, ontology, similarityMethod, isWeighted, graph, testing, hard_coded_weight, cut_threshold);
+
+				//TODO: CHECK!
+				if (!supplierSim.isEmpty()) {
 				supplierScores.put(supplier, MathUtilities.getAverage(supplierSim, consumerDefinedProcesses.size()));	
+				}
 
 			}
 
 			//extract the n suppliers with the highest similarity scores
-			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults);
+			Map<String, Double> bestSuppliers = extractBestSuppliers(supplierScores, numResults, cut_threshold);
 
 			return bestSuppliers;
 
@@ -321,7 +326,7 @@ public class CSSemanticMatching extends SemanticMatching {
 		}
 	}
 
-	private static Map<String, Double> extractBestSuppliers(Map<CSSupplier, Double> supplierScores, int numResults) {
+	private static Map<String, Double> extractBestSuppliers(Map<CSSupplier, Double> supplierScores, int numResults, double cut_threshold) {
 		//sort the results from highest to lowest score and return the [numResults] highest scores
 		Map<CSSupplier, Double> rankedResults = sortDescending(supplierScores);
 		Iterable<Entry<CSSupplier, Double>> firstEntries =
@@ -330,7 +335,10 @@ public class CSSemanticMatching extends SemanticMatching {
 		//return the [numResults] best suppliers according to highest scores
 		Map<String, Double> finalSupplierMap = new LinkedHashMap<String, Double>();
 		for (Entry<CSSupplier, Double> e : firstEntries) {
+
+			if (e.getValue() >= cut_threshold)
 			finalSupplierMap.put(e.getKey().getSupplierId(), e.getValue());
+
 		}
 
 		return finalSupplierMap;

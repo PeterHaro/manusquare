@@ -23,6 +23,8 @@ import similarity.results.ExtendedMatchingResult;
 
 public class Test {
 	
+	final static double cut_threshold = 0.75;
+	
 	public static void main(String[] args) throws OWLOntologyCreationException, IOException, ParseException, /*JSONException,*/ OWLOntologyStorageException {
 		
 		String csFolder = "./files/TESTING_CAPACITY_SHARING";
@@ -40,7 +42,7 @@ public class Test {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "BP";
+		String functionality = "IM";
 
 
 		File folder = null;
@@ -61,7 +63,7 @@ public class Test {
 				
 				System.out.println("Testing " + f.getPath());
 				
-				csResult = CSSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
+				csResult = CSSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight, cut_threshold);
 				
 				if (csResult != null) {
 					bfwriter.append("\n\n" + f.getName() + "( " + csResult.size() + ")");
@@ -95,7 +97,7 @@ public class Test {
 				
 				System.out.println("Testing " + f.getPath());
 				
-				imResult = IMSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
+				imResult = IMSemanticMatching.testSemanticMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight, cut_threshold);
 				
 				if (imResult != null) {
 					bfwriter.append("\n\n" + f.getName() + " (" + imResult.size() + ")");
@@ -127,7 +129,7 @@ public class Test {
 				
 				System.out.println("Testing " + f.getPath());
 				
-				bpResult = BPSemanticMatching.testByProductMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight);
+				bpResult = BPSemanticMatching.testByProductMatching(f.getPath(), numMatchingResults, writer, testing, weighted, hard_coded_weight, cut_threshold);
 				
 				if (bpResult != null) {
 					bfwriter.append("\n\n" + f.getName() + " (" + bpResult.size() + ")");
