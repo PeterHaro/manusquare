@@ -1,0 +1,38 @@
+{
+	"projectName": "projectName",
+	"projectDescription": "some project description",
+	"selectionType": "Manual",
+	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"projectType": "DEMO - Innovation Management",
+	"customer": {},
+	"projectInnovationPhases": [
+		"Idea Development Phase",
+		"Concept Development Phase",
+		"Engineering Phase"
+	],
+	"projectInnovationTypes": [
+		"TechnologyInnovation",
+		"MaterialInnovation"
+	],
+	"innovationManagerSkills": [
+		{
+			"id": "23536675",
+			"skill": "3DModeling"
+		},
+		{
+			"id": "23536676",
+			"skill": "3DDrawing"
+		}
+	],
+	"innovationManagerSectors": [
+		{
+			"id": "659cc6fc-0846-4198-9d16-147662456432",
+			"sector": "Textile Machinery Parts"
+		},
+		{
+			"id": "659cc6fc-0846-4198-9d16-147662456433",
+			"sector": "Textile Machinery Manufacturing"
+		}
+	],
+	"innovationManagerAttributes": []
+}

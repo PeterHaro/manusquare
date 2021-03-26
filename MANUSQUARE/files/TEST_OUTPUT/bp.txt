@@ -1,8 +1,6 @@
-Test_BP_1.json (0)
 
-Test_BP_2.json (0)
 
-Test_BP_3.json (0)
+Test_BP_8.json (0)
 
 Test_BP_4.json (1)
 http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
@@ -12,13 +10,13 @@ Test_BP_5.json (1)
 http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
 wsprofiles:2a231f99-975f-4539-92ff-b371322749ab: 0.9307692307692308
 
-Test_BP_6.json (0)
-
-Test_BP_7.json (0)
-
-Test_BP_8.json (0)
-
 Test_BP_9.json (0)
+
+Test_BP_2.json (0)
+
+Test_BP_12.json (0)
+
+Test_BP_3.json (0)
 
 Test_BP_10.json (1)
 http://manusquare.project.eu/industrial-manusquare#stakeholders:297172ec-8078-4f69-a1e4-55345dc7aaa7
@@ -26,12 +24,8 @@ wsprofiles:8a55bde8-071e-49a9-b5e3-1373fd1b3345: 1.0
 
 Test_BP_11.json (0)
 
-Test_BP_12.json (0)
+Test_BP_1.json (0)
 
+Test_BP_6.json (0)
 
-
-
-
-
-
-
+Test_BP_7.json (0)

@@ -4,7 +4,7 @@
 	"projectDescription": "",
 	"selectionType": "Manual",
 	"supplierMaxDistance": "0",
-		"customer": {
+	"customer": {
 		"customerInfo": {
 			"location": "",
 			"lat": "",

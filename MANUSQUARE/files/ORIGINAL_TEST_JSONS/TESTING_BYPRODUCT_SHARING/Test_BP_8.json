@@ -1,0 +1,38 @@
+{
+    "projectName": "Polias XPTO",
+    "projectDescription": "XPTO",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {},
+    "projectId": "82ae7be0-80a7-4065-b4ee-d3980f813e60",
+    "projectType": "By-product",
+    "mode":"Sell",
+    "minNumberOfParticipants":"0",
+    "maxNumberOfParticipants":"0",
+    "purchasingGroupAbilitation": "",
+    "byProductElements": [{
+        "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
+        "byProductName": "Silk",
+        "supplyType": "Single batch",
+        "quantity": "500",
+        "unitOfMeasureQuantity": "Kg",
+        "byProductAttributes": [{
+                "attributeKey": "AttributeMaterial",
+                "attributeValue": "silk",
+                "unitOfMeasure": ""
+            },
+            {
+                "attributeKey": "Appearance",
+                "attributeValue": "sheets",
+                "unitOfMeasure": ""
+            },
+            {
+                "attributeKey": "MinLayerThickness",
+                "attributeValue": "3",
+                "unitOfMeasure": "mm"
+            }
+        ]
+
+    }],
+    "supplierAttributes": []
+}

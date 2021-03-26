@@ -1,0 +1,51 @@
+{
+	"projectName": "Test_BP_03",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		
+	},
+	"projectId": "abdb322f-be43-4b38-bfb9-08266235f5be",
+	"projectType": "By-product",
+	"mode": "sell",
+	"minNumberOfParticipants": 0,
+	"maxNumberOfParticipants": 0,
+	"purchasingGroupAbilitation": "",
+	"byProductElements": [
+		{
+			"byProductId": "95be535d-e45d-4d71-9f5d-25d06817e2f7",
+			"byProductName": "steel",
+			"supplyType": "Single batch",
+			"quantity": "300",
+			"unitOfMeasureQuantity": "kg",
+			"byProductAttributes": [
+				{
+					"id": "a4cd50aa-db80-47b6-aa14-bcbb23eea166",
+					"attributeKey": "Appearance",
+					"attributeValue": "sheets",
+					"unitOfMeasure": "N/D"
+				},
+				{
+					"id": "3b6297a4-3cac-4431-abd0-a0c6a4986b1c",
+					"attributeKey": "AttributeMaterial",
+					"attributeValue": "Steel",
+					"unitOfMeasure": "N/D"
+				},
+				{
+					"id": "6f54d425-02ed-4e74-aa15-d4e969b92481",
+					"attributeKey": "Min Layer Thickness",
+					"attributeValue": "3",
+					"unitOfMeasure": "mm"
+				},
+				{
+					"id": "ed77ab5b-9fe8-4441-bf04-7c260862dcfa",
+					"attributeKey": "Min Kerf Width",
+					"attributeValue": "3",
+					"unitOfMeasure": "mm"
+				}
+			]
+		}
+	],
+	"supplierAttributes": []
+}

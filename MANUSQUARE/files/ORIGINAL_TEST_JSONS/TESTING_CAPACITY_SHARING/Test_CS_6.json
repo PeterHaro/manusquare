@@ -14,7 +14,7 @@
 		"unitOfMeasure": "mm",
 		"attributeId": "37561f1f-0976-4d6e-86dc-0ac0e99f0d6a",
 		"processName": "CNCMilling",
-		"attributeKey": "Max Part Size X",
+		"attributeKey": "MaxPartSizeX",
 		"attributeValue": "1.0"
 	}
 	],

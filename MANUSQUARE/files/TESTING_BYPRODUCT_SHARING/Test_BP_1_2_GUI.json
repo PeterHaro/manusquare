@@ -1,0 +1,45 @@
+{
+	"projectName": "Test_BP_1_2",
+	"projectDescription": "",
+	"selectionType": "Manual",
+	"supplierMaxDistance": "0",
+	"customer": {
+		
+	},
+	"projectId": "02682fdc-2537-464c-81f5-48df8b1d1b91",
+	"projectType": "By-product",
+	"mode": "sell",
+	"minNumberOfParticipants": 0,
+	"maxNumberOfParticipants": 0,
+	"purchasingGroupAbilitation": "",
+	"byProductElements": [
+		{
+			"byProductId": "0e11d18a-bca2-442c-af31-fa01231ea54d",
+			"byProductName": "Carbon steel",
+			"supplyType": "Single batch",
+			"quantity": "1000",
+			"unitOfMeasureQuantity": "kg",
+			"byProductAttributes": [
+				{
+					"id": "aa2d0b90-4d5e-4865-a736-5c9c29c2179c",
+					"attributeKey": "Appearance",
+					"attributeValue": "sheets",
+					"unitOfMeasure": "N/D"
+				},
+				{
+					"id": "78c3bcbb-c40c-45a6-9cc2-302f44d86984",
+					"attributeKey": "AttributeMaterial",
+					"attributeValue": "Carbon Steel",
+					"unitOfMeasure": "N/D"
+				},
+				{
+					"id": "05e21c83-d21a-431d-9247-f4cadfadafaa",
+					"attributeKey": "Min Layer Thickness",
+					"attributeValue": "3",
+					"unitOfMeasure": "mm"
+				}
+			]
+		}
+	],
+	"supplierAttributes": []
+}

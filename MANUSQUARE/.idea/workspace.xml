@@ -29,9 +29,15 @@
   <component name="ChangeListManager">
     <list default="true" id="951606be-ef7c-40f1-ab66-79b5d6cbfa71" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sparqlquery/BPSparqlQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sparqlquery/BPSparqlQuery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/supplierdata/BPSupplierData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/supplierdata/BPSupplierData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/160321/Test_CS_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/files/160321/Test_CS_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/TEST_OUTPUT/bp.txt" beforeDir="false" afterPath="$PROJECT_DIR$/files/TEST_OUTPUT/bp.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/TEST_OUTPUT/cs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/files/TEST_OUTPUT/cs.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/TEST_OUTPUT/im.txt" beforeDir="false" afterPath="$PROJECT_DIR$/files/TEST_OUTPUT/im.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/EmbeddingSingletonDataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/EmbeddingSingletonDataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/similarity/measures/IMSimilarityMeasures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/similarity/measures/IMSimilarityMeasures.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,33 +246,33 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2518" height="437" key="GridCell.Tab.0.bottom" timestamp="1615245521466">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state width="1750" height="324" key="GridCell.Tab.0.bottom" timestamp="1616661497661">
+      <screen x="1792" y="124" width="2560" height="1417" />
     </state>
     <state width="2518" height="454" key="GridCell.Tab.0.bottom/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683563" />
     <state width="1750" height="134" key="GridCell.Tab.0.bottom/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085973" />
-    <state width="2518" height="437" key="GridCell.Tab.0.bottom/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1615189943911" />
+    <state width="1750" height="324" key="GridCell.Tab.0.bottom/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1616661497661" />
     <state width="2518" height="437" key="GridCell.Tab.0.bottom/0.23.1792.1097@0.23.1792.1097" timestamp="1615245521466" />
-    <state width="2518" height="437" key="GridCell.Tab.0.center" timestamp="1615245521465">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state width="1750" height="324" key="GridCell.Tab.0.center" timestamp="1616661497660">
+      <screen x="1792" y="124" width="2560" height="1417" />
     </state>
     <state width="2518" height="454" key="GridCell.Tab.0.center/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683562" />
     <state width="1750" height="134" key="GridCell.Tab.0.center/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085972" />
-    <state width="2518" height="437" key="GridCell.Tab.0.center/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1615189943910" />
+    <state width="1750" height="324" key="GridCell.Tab.0.center/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1616661497660" />
     <state width="2518" height="437" key="GridCell.Tab.0.center/0.23.1792.1097@0.23.1792.1097" timestamp="1615245521465" />
-    <state width="2518" height="437" key="GridCell.Tab.0.left" timestamp="1615245521465">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state width="1750" height="324" key="GridCell.Tab.0.left" timestamp="1616661497660">
+      <screen x="1792" y="124" width="2560" height="1417" />
     </state>
     <state width="2518" height="454" key="GridCell.Tab.0.left/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683562" />
     <state width="1750" height="134" key="GridCell.Tab.0.left/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085972" />
-    <state width="2518" height="437" key="GridCell.Tab.0.left/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1615189943909" />
+    <state width="1750" height="324" key="GridCell.Tab.0.left/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1616661497660" />
     <state width="2518" height="437" key="GridCell.Tab.0.left/0.23.1792.1097@0.23.1792.1097" timestamp="1615245521465" />
-    <state width="2518" height="437" key="GridCell.Tab.0.right" timestamp="1615245521466">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state width="1750" height="324" key="GridCell.Tab.0.right" timestamp="1616661497661">
+      <screen x="1792" y="124" width="2560" height="1417" />
     </state>
     <state width="2518" height="454" key="GridCell.Tab.0.right/0.0.1792.1120/1792.101.2560.1440@1792.101.2560.1440" timestamp="1613028683563" />
     <state width="1750" height="134" key="GridCell.Tab.0.right/0.0.1792.1120@0.0.1792.1120" timestamp="1611435085973" />
-    <state width="2518" height="437" key="GridCell.Tab.0.right/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1615189943911" />
+    <state width="1750" height="324" key="GridCell.Tab.0.right/0.23.1792.1097/1792.124.2560.1417@1792.124.2560.1417" timestamp="1616661497661" />
     <state width="2518" height="437" key="GridCell.Tab.0.right/0.23.1792.1097@0.23.1792.1097" timestamp="1615245521466" />
   </component>
   <component name="XDebuggerManager">

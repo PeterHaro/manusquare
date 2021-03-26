@@ -26,7 +26,7 @@ public class Test {
 	final static double cut_threshold = 0.75;
 	
 	public static void main(String[] args) throws OWLOntologyCreationException, IOException, ParseException, /*JSONException,*/ OWLOntologyStorageException {
-		
+
 		String csFolder = "./files/TESTING_CAPACITY_SHARING";
 		String bpFolder = "files/TESTING_BYPRODUCT_SHARING";
 		String imFolder = "./files/TESTING_INNOVATION_MANAGEMENT";
@@ -42,7 +42,7 @@ public class Test {
 		BufferedWriter writer = testing ? new BufferedWriter(new FileWriter(jsonOut)) : new BufferedWriter(new OutputStreamWriter(System.out));
 
 		//either "CS", "IM" or "BP"
-		String functionality = "IM";
+		String functionality = "BP";
 
 
 		File folder = null;
@@ -51,6 +51,8 @@ public class Test {
 		switch (functionality) {
 
 		case "CS":
+			
+			long csStartTime = System.nanoTime();
 			
 			//iterate all test files and return number of matching results
 			folder = new File(csFolder);
@@ -80,9 +82,15 @@ public class Test {
 			
 			bfwriter.close();
 			
+			long csStopTime = System.nanoTime();
+			
+			System.out.println("Runtime for by-product sharing test is " + ((csStopTime-csStartTime) / 1000000000));
+			
 			return;
 
 		case "IM":
+			
+			long imStartTime = System.nanoTime();
 				
 			//iterate all test files and return number of matching results
 			folder = new File(imFolder);
@@ -112,9 +120,15 @@ public class Test {
 			
 			bfwriter.close();
 			
+			long imStopTime = System.nanoTime();
+			
+			System.out.println("Runtime for by-product sharing test is " + ((imStopTime-imStartTime)/ 1000000000));
+			
 			return;
 
 		case "BP":
+			
+			long startTime = System.nanoTime();
 				
 			//iterate all test files and return number of matching results
 			folder = new File(bpFolder);
@@ -147,15 +161,23 @@ public class Test {
 			
 			bfwriter.close();
 			
+			long stopTime = System.nanoTime();
+			
+			System.out.println("Runtime for by-product sharing test is " + ((stopTime-startTime) / 1000000000));
+			
 			return;
 
 		default:
 			throw new UnsupportedOperationException("Invalid functionality for the semantic matching: " + functionality);
 
 
+			
+			
 		}
-
+		
+		
+		
 	}
 
-
+	
 }

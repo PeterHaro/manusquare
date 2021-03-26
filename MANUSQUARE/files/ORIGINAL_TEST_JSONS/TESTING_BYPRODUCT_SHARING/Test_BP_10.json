@@ -1,0 +1,29 @@
+{
+    "projectName": "Carbon steel match t1",
+    "projectDescription": "",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {},
+    "projectId": "7a82fc73-0c2c-4a89-a0f5-86d850b077c7",
+    "projectType": "By-product",
+    "mode": "Sell",
+    "minNumberOfParticipants": 0,
+    "maxNumberOfParticipants": 0,
+    "purchasingGroupAbilitation": "true",
+    "byProductElements": [{
+        "byProductId": "8beab8d8-88d3-4ba2-8a6d-27b26ebee753",
+        "byProductName": "Steel",
+        "supplyType": "SINGLE_BATCH",
+        "quantity": "300",
+        "unitOfMeasureQuantity": "kg",
+        "byProductAttributes": [
+        {
+            "id": "6fa845d9-dd23-4d62-8da9-31a6569db4ea",
+            "attributeKey": "AttributeMaterial",
+            "attributeValue": "Steel",
+            "unitOfMeasure": ""
+        }
+        ]
+    }],
+    "supplierAttributes": []
+}

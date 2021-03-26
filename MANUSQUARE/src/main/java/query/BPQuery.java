@@ -173,6 +173,7 @@ public class BPQuery {
 		Set<Attribute> normalisedAttributes = new HashSet<Attribute>();
 
 		for (Attribute bpa : attributes) {
+						
 			normalisedAttributes.add(new Attribute(bpa.getKey(), bpa.getValue(), bpa.getUnitOfMeasurement()));
 		}
 
@@ -346,7 +347,7 @@ public class BPQuery {
 
 		for (ByProductAttribute bp : bps) {
 			Attribute attr = new Attribute();
-			attr.setKey(bp.getKey());
+			attr.setKey(bp.getKey().replaceAll("\\s", ""));
 			attr.setValue(bp.getValue());
 			attr.setUnitOfMeasurement(bp.getUnitOfMeasurement());
 			attrs.add(attr);

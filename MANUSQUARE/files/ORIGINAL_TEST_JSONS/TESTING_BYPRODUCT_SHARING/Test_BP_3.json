@@ -1,0 +1,31 @@
+{
+    "projectName": "Polias XPTO",
+    "projectDescription": "XPTO",
+    "selectionType": "Manual",
+    "supplierMaxDistance": "0",
+    "customer": {},
+    "projectId": "82ae7be0-80a7-4065-b4ee-d3980f813e60",
+    "projectType": "By-product",
+    "mode":"sell",
+    "minNumberOfParticipants":"0",
+    "maxNumberOfParticipants":"0",
+    "purchasingGroupAbilitation": "true",
+    "byProductElements": [{
+        "byProductId": "e936a69f-015d-4739-9070-809cef03b847",
+        "byProductName": "Bullshit",
+        "supplyType": "Single batch",
+        "quantity": "150",
+        "unitOfMeasureQuantity": "Kg",
+        "byProductAttributes": [{
+                "attributeKey": "",
+                "attributeValue": "",
+                "unitOfMeasure": ""
+            }
+        ]
+
+    }],
+    "supplierAttributes": []
+}
+
+
+

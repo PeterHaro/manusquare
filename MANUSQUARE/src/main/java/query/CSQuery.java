@@ -215,13 +215,13 @@ public class CSQuery {
 							if (projectAttributes.unitOfMeasure != null) {
 								if (StringUtilities.isValidNumber(projectAttributes.attributeValue)) {
 //									attributeSet.add(new Attribute(projectAttributes.attributeKey, UnitOfMeasurementConverter.convertUnitOfMeasurement(projectAttributes.attributeValue, projectAttributes.unitOfMeasure), projectAttributes.unitOfMeasure));
-									attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
+									attributeSet.add(new Attribute(projectAttributes.attributeKey.replaceAll("\\s", ""), projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 
 								} else {
-									attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
+									attributeSet.add(new Attribute(projectAttributes.attributeKey.replaceAll("\\s", ""), projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 								}
 							} else {
-								attributeSet.add(new Attribute(projectAttributes.attributeKey, projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
+								attributeSet.add(new Attribute(projectAttributes.attributeKey.replaceAll("\\s", ""), projectAttributes.attributeValue, projectAttributes.unitOfMeasure));
 							}
 						} else if ((projectAttributes.attributeKey.equalsIgnoreCase("AttributeMaterial")) && validatedProcessName.equals(process)) { //get the materials
 
@@ -369,7 +369,7 @@ public class CSQuery {
 
 	//test method
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
-		String filename = "./files/ATTRIBUTEWEIGHTMAP/Test_CS_3.json";
+		String filename = "./files/TESTING_CAPACITY_SHARING/Test_CS_5.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology onto = manager.loadOntologyFromOntologyDocument(new File(ontology));

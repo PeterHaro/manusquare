@@ -124,10 +124,16 @@ public class IMSimilarityMeasures {
 
 		//FIXME: Find a better solution to ensure that suppliers having innovationPhaseSim / innovationTypeSim = 1.0 are included in the returned list of suppliers
 
+//		if (innovationPhaseSim == 1.0 || innovationTypeSim == 1.0) {
+//			finalSim = (((innovationPhaseSim + innovationTypeSim) / 2) * 0.8) + (((sectorSim + skillSim) / 2) * 0.15) + (certificationSim * 0.05);
+//		} else {
+//			finalSim = (((innovationPhaseSim + innovationTypeSim + sectorSim) / 3) * 0.3) + (skillSim * 0.5) + (certificationSim * 0.2);
+//		}
+		
 		if (innovationPhaseSim == 1.0 || innovationTypeSim == 1.0) {
-			finalSim = (((innovationPhaseSim + innovationTypeSim) / 2) * 0.8) + (((sectorSim + skillSim) / 2) * 0.15) + (certificationSim * 0.05);
+			finalSim = (((innovationPhaseSim + innovationTypeSim) / 2) * 0.7) + (((sectorSim + skillSim) / 2) * 0.25) + (certificationSim * 0.05);
 		} else {
-			finalSim = (((innovationPhaseSim + innovationTypeSim + sectorSim) / 3) * 0.3) + (skillSim * 0.5) + (certificationSim * 0.2);
+			finalSim = (((innovationPhaseSim + innovationTypeSim + sectorSim + skillSim ) / 4) * 0.9) + (certificationSim * 0.1);
 		}
 
 		//TODO: CHECK!

@@ -7,8 +7,8 @@ public class TestEmbeddings {
 	public static void main(String[] args) {
 		
 		
-		String concept1 = "rayon";
-		String concept2 = "nylon";
+		String concept1 = "viscose";
+		String concept2 = "rayon";
 		
 		double sim = SemanticSimilarity.computeWESimilarity (concept1, concept2);
 		

@@ -38,18 +38,19 @@ public class Main {
 		switch (functionality) {
 
 		case "CS":
-			String jsonIn = "./files/160321/Test_CS_1.json";
-			//String jsonIn = "./files/ATTRIBUTEWEIGHTMAP/Test_CS_1.json";
+			String jsonIn = "./files/ORIGINAL_TEST_JSONS/TESTING_CAPACITY_SHARING/Test_CS_4.json";
 			CSSemanticMatching.performSemanticMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight, cut_threshold);
 			return;
 
 		case "IM":
+//			jsonIn = "./files/ORIGINAL_TEST_JSONS/TESTING_INNOVATION_MANAGEMENT/Test_IM_1.json";
 			jsonIn = "./files/10032021/elias.json";
 			IMSemanticMatching.performSemanticMatching_IM(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight, cut_threshold);
 			return;
 
 		case "BP":
-			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_9.json";
+			jsonIn = "./files/TESTING_BYPRODUCT_SHARING/Test_BP_1_2.json";
+			
 			BPSemanticMatching.performByProductMatching(jsonIn, numMatchingResults, writer, testing, weighted, hard_coded_weight, cut_threshold);
 			return;
 

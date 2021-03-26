@@ -1,0 +1,27 @@
+{
+	"projectName": "projectName",
+	"projectDescription": "some project description",
+	"selectionType": "Manual",
+	"projectId": "226214c6-af97-4c04-a7a2-08d7b712af5a",
+	"projectType": "DEMO - Innovation Management",
+	"customer": {},
+	"projectInnovationPhases": [
+		"Bullshit"
+	],
+	"projectInnovationTypes": [
+		"Ballony"
+	],
+	"innovationManagerSkills": [
+		{
+			"id": "23536675",
+			"skill": "WhatTheHeck"
+		}
+	],
+	"innovationManagerSectors": [
+		{
+			"id": "659cc6fc-0846-4198-9d16-147662456432",
+			"sector": "SayWhat??"
+		}
+	],
+  "innovationManagerAttributes": []
+}
