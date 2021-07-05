@@ -26,7 +26,7 @@ public class BPSparqlQuery {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, OWLOntologyCreationException, IOException {
 
-		String filename = "./files/TESTING_BYPRODUCT_SHARING/Radostin_13012021.json";
+		String filename = "./files/Davide_02072021/Davide_02072021.json";
 		String ontology = "./files/ONTOLOGIES/updatedOntology.owl";
 
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -133,7 +133,8 @@ public class BPSparqlQuery {
 		strQuery +="?wsProfileId core:hasMaxParticipants ?byProductMaxParticipants . \n";		
 		strQuery +="?wsProfileId core:hasPurchasingGroupAbilitation ?purchasingGroupAbilitation . \n";
 		//fixed filter not from consumer query
-		//strQuery +="FILTER ( regex(?byProductMode, \""+mode+"\", \"i\") ) \n";		
+		strQuery +="FILTER (?byProductMode = \""+mode+"\"^^rdfs:Literal) \n";		
+		
 		strQuery +="?wsProfileId core:hasStatus ?byProductStatus . \n";
 		//fixed filter not from consumer query
 //		strQuery +="FILTER ( regex(?byProductStatus, \"Available\", \"i\") ) \n";		//FIXME: not sure why, but string matching using either = or regex doesn´t work
